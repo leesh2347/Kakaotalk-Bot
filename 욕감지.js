@@ -1,5 +1,7 @@
 const words=["병신","븅신","씨발","시발","시팔","시벌","씨벌","씨팔","새끼","좆","니미","느금","애미","애비","꺼져","지랄","닥쳐","아가리"];
 const ban_words=["헤비","ㅎㅂ","메린이","라이트","ㄹㅇㅌ","메린","헵이"];
+const wrongspell=["됬","됌","됄","되요","몇일"];
+const answer=["됐","됨","될","돼요","며칠"];
 
 function read(target, res){
    return JSON.parse(FileStream.read("sdcard/Kineroom/Data/"+target+".json"))[res];
@@ -42,8 +44,20 @@ else {
 		if(listt.length>0)
 			replier.reply("'"+listt[0]+"'은(는) 금지어 입니다.\n공지를 읽고 주의해 주세요.");
 	}
+	else if(room=="스카니아 리사 수다방🍀") {
+		let listw = [];
+		let lista=[];
+		for(let i in wrongspell) {
+			if(msgg.indexOf(wrongspell[i]) != -1) 
+			{
+				listw.push(wrongspell[i]);
+				lista.push(answer[i]);
+			}
+		}
+		if(listw.length>0)
+			replier.reply("'"+listw[0]+"'은(는) 없는 말이에요 '"+lista[0]+"'라고 써주세요");
+	}
 	
 }
-		
 	}
 }
