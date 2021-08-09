@@ -1,7 +1,7 @@
 const scriptName = "maplegg";
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("2e2549bbfab7c0a3c7e6bf230e0ff54f","http://bigmoonworld.p-e.kr");
-Kakao.login('2leesh2347@gmail.com','l6372325');
+const Kakao =new KakaoLinkClient("aaa","bbb");
+Kakao.login('aaa','bbb');
  
 function skipnick(sender) //단축어
 {
@@ -67,6 +67,7 @@ Kakao.sendLink(room, {
 "link_ver":"4.0",
 "template_id":(58792),
 "template_args":{
+//이곳에 템플릿 정보를 입력하세요.
 'CHARIMG':img,
 'CHARNAME':nick+" │ "+job,
 'SERVER':serverimg,
