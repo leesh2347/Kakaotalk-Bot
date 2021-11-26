@@ -100,9 +100,12 @@ if(msg.startsWith("@레벨")){
 var nick = msg.split(" ")[1];
 if(nick==undefined)
 		  nick=skipnick(sender);
+if(nick=="") replier.reply("닉네임을 입력해 주세요.");
+else
+{
 var data = Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nick).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(4)").text();      
 var level=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nick).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");      
-if(level>300){
+if(level>299){
 replier.reply("["+nick+"]\nLv."+level);
 }else{
 var exp=data.replace(/,/g, "");     
@@ -114,6 +117,7 @@ replier.reply("["+nick+"]\nLv."+level+"("+per+"%)\n다음 레벨까지 경험치
 "\n만렙까지 : "+(Math.ceil(remaintomax/10000000000000000)-1)+"경 "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠");
 }else{
 replier.reply("["+nick+"]\nLv."+level+"("+per+"%)\n다음 레벨까지 경험치\n"+unitExp(remaintonext)+"\n만렙까지 : "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠");
+}
 }
 }
 }

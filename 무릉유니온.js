@@ -58,6 +58,9 @@ if(msg.split(" ")[0]=="@무릉")
 var nick=msg.split(" ")[1];
 if(nick==undefined)
 	 nick=skipnick(sender);
+if(nick=="") replier.reply("닉네임을 입력해 주세요.");
+else
+{
 var url="https://maple.gg/u/"+nick;
 var data=Jsoup.connect(url).get();
 var a=data.select(".character-card-additional>li>b").get(0).text();
@@ -70,11 +73,14 @@ text=text+"기록이 없습니다.\n\n개편전 무릉 기록\n";
 text=text+"층수: "+data.select(".character-card-additional>li>span").get(0).text()+"\n시간: "+data.select(".character-card-additional>li>small").get(1).text();
 replier.reply("["+nick+"]\n"+text);
 }
+}
 if(msg.split(" ")[0]=="@유니온")
 {
 var nick=msg.split(" ")[1];
 if(nick==undefined)
 	 nick=skipnick(sender);
+if(nick=="") replier.reply("닉네임을 입력해 주세요.");
+{
 var url="https://maple.gg/u/"+nick;
 var data=Jsoup.connect(url).get();
 var a=data.select(".character-card-additional>li>span").get(1).text();
@@ -89,6 +95,7 @@ replier.reply("["+nick+"]\n"+text);
 }
 else
 replier.reply("["+nick+"]\n기록이 없습니다.\n유니온은 본캐만 조회가 가능합니다. 본캐인지 확인해주세요!");
+}
 }
 
 }
