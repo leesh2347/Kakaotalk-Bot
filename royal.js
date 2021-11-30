@@ -35,9 +35,13 @@ if(msg=="@로얄업뎃"){
 		rd["itemname"].push(n1);
 		rd["itemrate"].push(Number(np1));
 	}
-
-	FS.write(loc, JSON.stringify(rd));
-	replier.reply("로얄 목록 업데이트 완료");
+	if(rd["itemname"].length!=rd["itemrate"].length)
+		replier.reply("공홈의 로얄 확률표에 문제가 있습니다.");
+	else
+	{
+		FS.write(loc, JSON.stringify(rd));
+		replier.reply("로얄 목록 업데이트 완료");
+	}
 }
    
     if(msg=="@로얄확률"){
@@ -84,6 +88,7 @@ var item_rate=JSON.parse(FS.read(loc))["itemrate"];
       }
       else
       {
+		  if(num>10000) num=10000;
          var res2="";
          var res=[];
          var resn=[];
