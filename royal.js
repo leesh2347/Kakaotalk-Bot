@@ -95,7 +95,7 @@ var item_rate=JSON.parse(FS.read(loc))["itemrate"];
 			b = item_rate[0];
             for(var j = 0 ; j < item_rate.length ; j++){   
                if(my_rate>=a && my_rate<b){
-                  t=item_name[j].replace("(남자만 획득가능) ", "(남)").replace("(여자만 획득가능)", "(여)")+"/"+item_rate[j];
+                  t=item_name[j].replace("(남자만 획득가능) ", "(남)").replace("(여자만 획득가능)", "(여)")+":"+item_rate[j];
                   if(res.indexOf(t)!=(-1))
                   {
                      resn[res.indexOf(t)]=resn[res.indexOf(t)]+1;
@@ -115,7 +115,7 @@ var item_rate=JSON.parse(FS.read(loc))["itemrate"];
          }
          for(var j=0;j<res.length;j++)
          {
-			 var t2=res[j].split("/");
+			 var t2=res[j].split(":");
             res2=res2+"\n"+t2[0]+"X"+resn[j]+" ("+t2[1]+"%)";
          }
          replier.reply("[루시] '" + sender +"' 님의 로얄스타일 "+num+"개 결과\n━━━━━━━━━━━━━━\n"+"\u200b".repeat(500)+res2);
