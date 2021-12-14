@@ -52,7 +52,7 @@ recordnick(sender,name);
 try{
 var url="https://maple.gg/u/"+name;
 var data = org.jsoup.Jsoup.connect(url).get();
-var s=data.getElementsByTag("script").select("script").get(26).toString()
+var s=data.getElementsByTag("script").select("script").get(25).toString()
 
 var a=s.split("var expHistoryLabels = ")[1].split("c3.generate")[0]
 var b=s.split("columns: ")[1].split("\"exp\"")[0]
