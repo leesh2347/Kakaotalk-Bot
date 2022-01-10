@@ -783,9 +783,6 @@ function getprob(sender,replier){ //포켓몬 출현률
 	i=setting.p.g;
 	ran=ran-i;
 	if(ran<0) return 2;
-	i=10;
-	ran=ran-i;
-	if(ran<0) return 7;
 	i=pokUser[sender].stat.g4+setting.eventp.g4;
 	ran=ran-i;
 	if(ran<0) return 3;
@@ -795,6 +792,9 @@ function getprob(sender,replier){ //포켓몬 출현률
 	i=setting.p.g2;
 	ran=ran-i;
 	if(ran<0) return 5;
+	i=Math.ceil(pokUser[sender].stat.g4/2);
+	ran=ran-i;
+	if(ran<0) return 7;
 	else return 6;
 	//i:1 g:2 g4:3 g3:4 g2:5 g1:6
 	//7: 계절포켓몬
@@ -1731,6 +1731,7 @@ if(msg==cmds.rest)//휴식
         replier.reply('@'+sender+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
         return;
     }
+	if(advOn[sender]==undefined) advOn[sender]=0;
 	if(advOn[sender]!=0)
 	{
 		replier.reply('@'+sender+'\n탐험 및 배틀 중엔 휴식을 할 수가 없어요.');
@@ -1908,6 +1909,7 @@ if(msg==cmds.battleexit)//배틀취소
 	if(player2==""&&player1==sender&&isbattle==0)
 	{
 		player1="";
+		advOn[player1]=0;
 		replier.reply('@'+sender+'\n배틀에서 퇴장했어요.');
 	}
 	else replier.reply('@'+sender+'\n배틀에 입장하지 않았거나 이미 배틀이 시작됐어요.');
@@ -1926,10 +1928,15 @@ if(msg==cmds.battlejoin)//배틀참가
         return;
     }
 	if(advOn[sender]==undefined) advOn[sender]=0;
-	if(advOn[sender]!=0){
+	if(advOn[sender]==3){
+        replier.reply('@'+sender+'\n이미 배틀에 참가한 상태에요.');
+        return;
+    }
+	else if(advOn[sender]!=0){
         replier.reply('@'+sender+'\n탐험 중에는 배틀에 참가할 수 없어요.');
         return;
     }
+	
 	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
 	if(pokInv[sender].deck.length<1)
 		replier.reply("@"+sender+"\n덱에 장착한 포켓몬이 없어요.\n배틀에 내보낼 포켓몬을 선택해서 덱으로 이동시켜 주세요.");
@@ -1939,12 +1946,12 @@ if(msg==cmds.battlejoin)//배틀참가
 		{
 			player1=sender;
 			replier.reply("["+sender+"]님이 배틀에 입장하셨습니다!\n다른 참가자가 입장할때까지 대기해 주세요.\n"+cmds.battleexit+" 명령어로 매칭을 취소할 수 있습니다.");
+			advOn[player1]=3;
 		}
 		else if(player2==""&&isbattle==0)
 		{
 			player2=sender;
 			isbattle=1;
-			advOn[player1]=3;
 			advOn[player2]=3;
 			player1retire=[];
 			player2retire=[];
@@ -1985,13 +1992,25 @@ if(msg==cmds.battlejoin)//배틀참가
 			for(var j=0;j<player2pok.skillslocked.length;j++)
 				player2skillsarr.push(player2pok.skillslocked[j]);
 			if(player1pok.name=="메타몽"){
-				player1pok=player2pok;
+				player1pok.name=player2pok.name;
+				player1pok.hp=player2maxhp;
+				player1pok.skills=player2pok.skills;
+				player1pok.skillslocked=player2pok.skillslocked;
+				player1pok.atk=player2pok.atk;
+				player1pok.def=player2pok.def;
+				player1pok.spd=player2pok.spd;
 				player1skillsarr=player2skillsarr;
 				player1maxhp=player2maxhp;
 				replier.reply("@"+player1+"\n메타몽은 "+player1pok.name+"의 모습으로 변신했어요!");
 			}
 			else if(player2pok.name=="메타몽"){
-				player2pok=player1pok;
+				player2pok.name=player1pok.name;
+				player2pok.hp=player1maxhp;
+				player2pok.skills=player1pok.skills;
+				player2pok.skillslocked=player1pok.skillslocked;
+				player2pok.atk=player1pok.atk;
+				player2pok.def=player1pok.def;
+				player2pok.spd=player1pok.spd;
 				player2skillsarr=player1skillsarr;
 				player2maxhp=player1maxhp;
 				replier.reply("@"+player2+"\n메타몽은 "+player2pok.name+"의 모습으로 변신했어요!");
@@ -2275,10 +2294,15 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 					for(var j=0;j<player1pok.skillslocked.length;j++)
 						player1skillsarr.push(player1pok.skillslocked[j]);
 					if(player1pok.name=="메타몽"){
-						player1pok=player2pok;
+						player1pok.name=player2pok.name;
+						player1pok.hp=player2maxhp;
+						player1pok.skills=player2pok.skills;
+						player1pok.skillslocked=player2pok.skillslocked;
+						player1pok.atk=player2pok.atk;
+						player1pok.def=player2pok.def;
+						player1pok.spd=player2pok.spd;
 						player1skillsarr=player2skillsarr;
 						player1maxhp=player2maxhp;
-						if(player1pok.hp<player1maxhp) player1pok.hp=player1maxhp;
 						replier.reply("@"+player1+"\n메타몽은 "+player1pok.name+"의 모습으로 변신했어요!");
 					}
 					for(var i=0;i<player1skillsarr.length;i++)
@@ -2327,10 +2351,15 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 					for(var j=0;j<player2pok.skillslocked.length;j++)
 						player2skillsarr.push(player2pok.skillslocked[j]);
 					if(player2pok.name=="메타몽"){
-						player2pok=player1pok;
+						player2pok.name=player1pok.name;
+						player2pok.hp=player1maxhp;
+						player2pok.skills=player1pok.skills;
+						player2pok.skillslocked=player1pok.skillslocked;
+						player2pok.atk=player1pok.atk;
+						player2pok.def=player1pok.def;
+						player2pok.spd=player1pok.spd;
 						player2skillsarr=player1skillsarr;
 						player2maxhp=player1maxhp;
-						if(player2pok.hp<player2maxhp) player2pok.hp=player2maxhp;
 						replier.reply("@"+player2+"\n메타몽은 "+player2pok.name+"의 모습으로 변신했어요!");
 					}
 					for(var i=0;i<player2skillsarr.length;i++)
@@ -2916,7 +2945,13 @@ if(msg=="@확률업뎃")//확률수정 이후 업뎃용
 if(msg=="@포켓몬리셋") //강제리셋
 {
 	replier.reply("강제 리로드. 비상시에만 사용해 주세요.");
-	Api.reload("포켓몬 게임");
+	Api.reload("pok");
 }
 
+}
+
+function onStartCompile() {
+	var seasontext=["","봄","여름","가을","겨울"];
+	if(month>4) month=month-4;
+    Api.replyRoom("낚시터","포켓몬 게임 리로드.\n현재 계절: "+seasontext[month]);
 }
