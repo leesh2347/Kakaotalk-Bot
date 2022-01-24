@@ -13,8 +13,9 @@ const ballfail=config.ballfail;
 const setting=config.setting;
 const advfail=config.advfail;
 const seasons=config.seasons;
-var month=Math.floor((new Date().getDay()+1)/7)+1;
+var month=0;
 const pathRank="sdcard/Devel/Pokemon/Data/ranking.json";  //랭킹파일경로
+const pathseason="sdcard/Devel/Pokemon/Data/season.json";  //랭킹파일경로
 var typetexts=[" ","[⚪노말]","[🔥불]","[🌊물]","[🌿풀]","[🕊비행]","[🪨바위]","[⛰땅]","[✊격투]","[⛓강철]","[🐞벌레]","[❄얼음]","[⚡전기]","[🧪독]","[👽에스퍼]","[☠고스트]","[😈악]","[🌠드래곤]"];
 var weathertexts=["[맑음]","[🌞햇살이 강함]","[☔비]","[🌪모래바람]","[☃️싸라기눈]"];
 var weatherdesc=["","🌞햇살이 강해요.","☔비가 내리고 있어요.","🌪모래바람이 세차게 불고 있어요.","☃️싸라기눈이 내리고 있어요."];
@@ -125,40 +126,40 @@ function giveleaguecharacter(username){
 function giveribbonreward(username,ribbonname,replier){
 	if(ribbonname==setting.ribbon.name[3]){
 		pokInv[username].item.push("일반알");
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(data));
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(inv));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		replier.reply("@"+username+"\n리본 등급업 보상으로 포켓몬의 알이 지급되었습니다.\n"+cmds.egg+" 명령어로 알을 부화시키세요.");
 	}
 	else if(ribbonname==setting.ribbon.name[4]){
 		pokUser[username].gold=pokUser[username].gold+19999999;
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(data));
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(inv));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		replier.reply("@"+username+"\n리본 등급업 보상으로 2000만 원이 지급되었습니다.");
 	}
 	if(ribbonname==setting.ribbon.name[5]){
 		pokInv[username].item.push("전설알");
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(data));
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(inv));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		replier.reply("@"+username+"\n리본 등급업 보상으로 전설의 포켓몬의 알이 지급되었습니다.\n"+cmds.legendegg+" 명령어로 알을 부화시키세요.");
 	}
 	else if(ribbonname==setting.ribbon.name[6]){
 		pokUser[username].gold=pokUser[username].gold+299999999;
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(data));
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(inv));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		replier.reply("@"+username+"\n리본 등급업 보상으로 3억 원이 지급되었습니다.");
 	}
 	else if(ribbonname==setting.ribbon.name[7]){
 		pokInv[username].item.push("전설알");
 		pokInv[username].item.push("전설알");
 		pokInv[username].item.push("전설알");
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(data));
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(inv));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		replier.reply("@"+username+"\n리본 등급업 보상으로 전설의 포켓몬의 알 3개가 지급되었습니다.\n"+cmds.legendegg+" 명령어로 알을 부화시키세요.");
 	}
 	else if(ribbonname==setting.ribbon.name[8]){
 		pokUser[username].gold=pokUser[username].gold+999999999;
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(data));
-		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(inv));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		replier.reply("@"+username+"\n리본 등급업 보상으로 10억 원이 지급되었습니다.");
 	}
 	else if(ribbonname==setting.ribbon.name[9]){
@@ -173,30 +174,40 @@ function printskills(skills,locked){
 	var accr="";
 	for(var i=0;i<(locked.length);i++)
 	{
-		if(read("기술/"+locked[i],"damage")==9999)
-			power="일격필살";
-		else power=read("기술/"+locked[i],"damage");
-		if(read("기술/"+locked[i],"accr")==9999)
-			accr="반드시 명중";
-		else accr=read("기술/"+locked[i],"accr")+"%";
-		res=res+"🔒"+locked[i]+" "+typetexts[read("기술/"+locked[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+locked[i],"pp")+"  명중률:"+accr+"\n\n";
+		try{
+			if(read("기술/"+locked[i],"damage")==9999)
+				power="일격필살";
+			else power=read("기술/"+locked[i],"damage");
+			if(read("기술/"+locked[i],"accr")==9999)
+				accr="반드시 명중";
+			else accr=read("기술/"+locked[i],"accr")+"%";
+			res=res+"🔒"+locked[i]+" "+typetexts[read("기술/"+locked[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+locked[i],"pp")+"  명중률:"+accr+"\n\n";
+		}catch(e){
+			res=res+"🔒"+locked[i]+" (데이터 읽기 오류)\n\n";
+		}
 	}
 	for(var i=0;i<(skills.length);i++)
 	{
-		if(read("기술/"+skills[i],"damage")==9999)
-			power="일격필살";
-		else power=read("기술/"+skills[i],"damage");
-		if(read("기술/"+skills[i],"accr")==9999)
-			accr="반드시 명중";
-		else accr=read("기술/"+skills[i],"accr")+"%";
-		res=res+skills[i]+" "+typetexts[read("기술/"+skills[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+skills[i],"pp")+"  명중률:"+accr+"\n\n";
+		try{
+			if(read("기술/"+skills[i],"damage")==9999)
+				power="일격필살";
+			else power=read("기술/"+skills[i],"damage");
+			if(read("기술/"+skills[i],"accr")==9999)
+				accr="반드시 명중";
+			else accr=read("기술/"+skills[i],"accr")+"%";
+			res=res+skills[i]+" "+typetexts[read("기술/"+skills[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+skills[i],"pp")+"  명중률:"+accr+"\n\n";
+		}catch(e){
+			res=res+skills[i]+" (데이터 읽기 오류)\n\n";
+		}
 	}
 	return res;
 }
 
 function printbattlekakaolink(room,replier){
+	try{
 	var img1=Jsoup.connect("https://librewiki.net/wiki/"+player1pok.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
 	var img2=Jsoup.connect("https://librewiki.net/wiki/"+player2pok.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
+	
 	Kakao.sendLink(room, {
 			"link_ver":"4.0",
 			"template_id":(67300),
@@ -210,6 +221,9 @@ function printbattlekakaolink(room,replier){
 			'player2desc':"["+player2pok.hp+"/"+player2maxhp+"]"
 			}
 			}, "custom")
+	}catch(e){
+		replier.reply("카카오링크 오류. 리셋 한번 해주세요.\n\nLv."+player1pok.level+" "+player1pok.name+"\n["+player1pok.hp+"/"+player1maxhp+"]\n\nLv."+player2pok.level+" "+player2pok.name+"\n["+player2pok.hp+"/"+player2maxhp+"]")
+	}
 }
 
 function battleturn(room,replier) //배틀 구현 함수
@@ -982,12 +996,12 @@ if(msg==cmds.leave) //탈퇴
 	pokleave(sender,replier);
 if(cmds.play.includes(msg)){
 	/* 디바이스 온도 체크 */
-    if(Device.getBatteryTemperature()>=390){
-        replier.reply('@'+sender+' \n루시가 과열되었어요!\n조금만 쉬었다가 다시 해 주세요.');
+    if(Device.getBatteryTemperature()>=450){
+        replier.reply('@'+sender+' \n봇이 과열되었어요!\n조금만 쉬었다가 다시 해 주세요.');
         return;
     }
     /* 쓰레드감지 */
-    if(Api.getActiveThreadsCount()>=5){
+    if(Api.getActiveThreadsCount()>=7){
         replier.reply('@'+sender+' \n사용자 폭주중이예요.\n잠시후에 다시 시도해 주세요.');
         return;
     }
@@ -1052,7 +1066,7 @@ if(cmds.play.includes(msg)){
 		{
 			
 			var money=Math.floor(Math.random()*100)*100;//100~10000
-			money=money*(ballArr.indexOf(pokUser[sender].Ball)+1)*10; //볼 강화당 돈발견 금액 증가
+			money=money*(ballArr.indexOf(pokUser[sender].Ball)+1)*30; //볼 강화당 돈발견 금액 증가
 			money=money*setting.eventp.goldX;
 			pokUser[sender].gold=pokUser[sender].gold+money;
 			replier.reply("@"+sender+"\n"+pokArr.gold[Math.floor(Math.random()*pokArr.gold.length)]+"를(을) 발견했어요!\n상점에 팔아 "+money.comma()+"원을 획득했어요.");
@@ -1082,17 +1096,17 @@ if(cmds.play.includes(msg)){
 				}
 				else if(ran==98)
 				{
-					var money=199999999;
+					var money=499999999;
 					money=money*setting.eventp.goldX;
 					pokUser[sender].gold=pokUser[sender].gold+money;
-					replier.reply("@"+sender+"\n축하합니다!\n👑마제스티의 키를 발견했어요!\n상점에 팔아 2억 원을 획득했어요.");
+					replier.reply("@"+sender+"\n축하합니다!\n👑마제스티의 키를 발견했어요!\n상점에 팔아 5억 원을 획득했어요.");
 				}	
 				else
 				{
-					var money=19999999;
+					var money=49999999;
 					money=money*setting.eventp.goldX;
 					pokUser[sender].gold=pokUser[sender].gold+money;
-					replier.reply("@"+sender+"\n축하합니다!\n🪨알 수 없는 돌을 발견했어요!\n상점에 팔아 2000만 원을 획득했어요.");
+					replier.reply("@"+sender+"\n축하합니다!\n🪨알 수 없는 돌을 발견했어요!\n상점에 팔아 5000만 원을 획득했어요.");
 				}	
 			}
 		}
@@ -1112,9 +1126,30 @@ if(cmds.play.includes(msg)){
 	}
 	let pokname="";
 	var lev=0;
+	if(Math.floor(Math.random()*100)==1)
+	{
+		month=month+1;
+		if(month>4) month=month-4;
+		let pokseason=JSON.parse(FileStream.read(pathseason));
+		if(pokseason==null){
+			let data={"month":1};
+			FileStream.write(pathseason, JSON.stringify(data));
+			pokseason=JSON.parse(FileStream.read(pathseason));
+		}
+		pokseason["month"]=month;
+		FileStream.write(pathseason, JSON.stringify(pokseason));
+		var seasontext=["","봄","여름","가을","겨울"];
+		replier.reply("현재 계절: "+seasontext[month]);
+	}
 	if(prob==7)
 	{
-		if(month>4) month=1;
+		let pokseason=JSON.parse(FileStream.read(pathseason));
+		if(pokseason==null){
+			let data={"month":1};
+			FileStream.write(pathseason, JSON.stringify(data));
+			pokseason=JSON.parse(FileStream.read(pathseason));
+		}
+		month=pokseason["month"];
 		
 		if(month==1)
 			pokname=seasons.spring[Math.floor(Math.random()*seasons.spring.length)];
@@ -1136,7 +1171,7 @@ if(cmds.play.includes(msg)){
 	else
 		pokname=pokArr.group1[Math.floor(Math.random()*pokArr.group1.length)];
 	let lt=pokname.length-1;
-	lev=lev+(ballArr.indexOf(pokUser[sender].Ball)+1)*8; //볼 강화당 출현레벨 8씩 증가
+	lev=lev+(ballArr.indexOf(pokUser[sender].Ball)+1)*setting.balluplev; //볼 강화당 출현레벨 8씩 증가
 	lev=lev+Math.floor(Math.random()*10)+1;
 	if(pokArr.group4.includes(pokname))
 		replier.reply("@"+sender+"\n<⭐전설⭐> "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
@@ -1148,8 +1183,18 @@ if(cmds.play.includes(msg)){
 		replier.reply("@"+sender+"\n[일반] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 튀어나왔어요!");
 	++pokUser[sender].count.total;
 	
-	parse = Jsoup.connect("https://librewiki.net/wiki/"+pokname+"_(포켓몬)").get()
-	img = parse.select("meta[property=og:image]").attr("content")
+	let pokinfo={
+		'name':pokname,
+		'level':lev
+	};
+	ispokfind.push(sender);
+	battlepokinfo.push(pokinfo);
+	isballwaiting=[];
+	advOn[sender]=2;
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
+    FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
+	try{
+	img=Jsoup.connect("https://librewiki.net/wiki/"+pokname+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
 	//
 		
 		Kakao.sendLink(room, {
@@ -1163,27 +1208,20 @@ if(cmds.play.includes(msg)){
 			}
 			}, "custom")
 	//
-	let pokinfo={
-		'name':pokname,
-		'level':lev
-	};
-	ispokfind.push(sender);
-	battlepokinfo.push(pokinfo);
-	isballwaiting=[];
-	advOn[sender]=2;
-	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
-    FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
+	}catch(e){
+		replier.reply("카카오링크 오류. 리셋 한번 해주세요.\n(볼은 던질수 있음)\n\n"+"Lv."+lev+"  "+pokname+"\n볼던지기: "+cmds.ballthrow.join("/")+"\n도망가기: "+cmds.esc.join("/"));
+	}
 
 }
 
 if(cmds.ballthrow.includes(msg)){ //볼던지기
 	/* 디바이스 온도 체크 */
-    if(Device.getBatteryTemperature()>=390){
-        replier.reply('@'+sender+'\n루시가 과열되었어요!\n조금만 쉬었다가 다시 해 주세요.');
+    if(Device.getBatteryTemperature()>=450){
+        replier.reply('@'+sender+'\n봇이 과열되었어요!\n조금만 쉬었다가 다시 해 주세요.');
         return;
     }
     /* 쓰레드감지 */
-    if(Api.getActiveThreadsCount()>=5){
+    if(Api.getActiveThreadsCount()>=7){
         replier.reply('@'+sender+' \n사용자 폭주중이예요.\n잠시후에 다시 시도해 주세요.');
         return;
     }
@@ -1406,7 +1444,7 @@ if(msg.split(" ")[0]==cmds.sell)//놓아주기
 	{
 		if(pokInv[sender].box[i].islocked==0)
 		{
-			money=money+300*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
+			money=money+600*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
 			
 		}
 		else{
@@ -1672,8 +1710,8 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 	var n=msg.split(" ")[1];
 	let p;
 	p=pokInv[sender].box[n-1];
-	parse = Jsoup.connect("https://librewiki.net/wiki/"+p.name+"_(포켓몬)").get()
-	img = parse.select("meta[property=og:image]").attr("content")
+	try{
+		img=Jsoup.connect("https://librewiki.net/wiki/"+p.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
 //  
 		
 		
@@ -1690,6 +1728,9 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 
 	
 	//
+	}catch(e){
+		replier.reply("카카오링크 오류. 리셋 한번 해주세요.\n\nLv."+p.level+" "+p.name+"  "+typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")]+"\n"+"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd);
+	}
 	if(p.name=="메타몽") replier.reply("보유 기술\n"+"\u200b".repeat(500)+"\n변신 [⚪노말]\n상대 포켓몬으로 변신");
 	else replier.reply("보유 기술\n"+"\u200b".repeat(500)+"\n"+printskills(p.skills,p.skillslocked));
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
@@ -1737,8 +1778,8 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 	var n=msg.split(" ")[1];
 	let p;
 	p=pokInv[sender].deck[n-1];
-	parse = Jsoup.connect("https://librewiki.net/wiki/"+p.name+"_(포켓몬)").get()
-	img = parse.select("meta[property=og:image]").attr("content")
+	try{
+	img=Jsoup.connect("https://librewiki.net/wiki/"+p.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
 	//    
 		
 		Kakao.sendLink(room, {
@@ -1753,6 +1794,9 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 			}, "custom")
 	
 	//
+	}catch(e){
+		replier.reply("카카오링크 오류. 리셋 한번 해주세요.\n\nLv."+p.level+" "+p.name+"  "+typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")]+"\n"+"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd);
+	}
 	if(p.name=="메타몽") replier.reply("보유 기술\n"+"\u200b".repeat(500)+"\n변신 [⚪노말]\n상대 포켓몬으로 변신");
 	else replier.reply("보유 기술\n"+"\u200b".repeat(500)+"\n"+printskills(p.skills,p.skillslocked));
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
@@ -1778,7 +1822,7 @@ if(msg.startsWith(cmds.info))//트레이너정보
 	"보유금액: "+pokUser[name].gold.comma()+"원",
 	"볼: "+pokUser[name].Ball,
 	"볼 1개당 가격: "+Math.ceil(setting.ballPrice[ballArr.indexOf(pokUser[name].Ball)]*(100-pokUser[name].balldc)/100).comma()+"원("+pokUser[name].balldc+"% 할인)",
-	"야생 포켓몬 레벨: "+((ballArr.indexOf(pokUser[name].Ball)+1)*8+1)+"~"+((ballArr.indexOf(pokUser[name].Ball)+1)*8+10),
+	"야생 포켓몬 레벨: "+((ballArr.indexOf(pokUser[name].Ball)+1)*10+1)+"~"+((ballArr.indexOf(pokUser[name].Ball)+1)*10+10),
 	"현재 볼 갯수: "+pokUser[name].balls,
 	"\n",
 	"포켓몬 조우 횟수: "+pokUser[name].count.total,
@@ -1861,7 +1905,7 @@ if(msg==cmds.egg)//알(아이템)
 			var skillsarr=read("포켓몬/"+pokname,"skills");
 			var caughtpokskills=[];
 			var poklev=0;
-			poklev=((ballArr.indexOf(pokUser[sender].Ball)+1)*8)+10;
+			poklev=((ballArr.indexOf(pokUser[sender].Ball)+1)*setting.balluplev)+10;
 			if(skillsarr.length<5)
 				caughtpokskills=skillsarr;
 			else
@@ -1911,7 +1955,7 @@ if(msg==cmds.legendegg)//전설알(아이템)
 			var skillsarr=read("포켓몬/"+pokname,"skills");
 			var caughtpokskills=[];
 			var poklev=0;
-			poklev=((ballArr.indexOf(pokUser[sender].Ball)+1)*8)+10;
+			poklev=((ballArr.indexOf(pokUser[sender].Ball)+1)*setting.balluplev)+10;
 			if(skillsarr.length<5)
 				caughtpokskills=skillsarr;
 			else
@@ -2063,7 +2107,7 @@ if(msg==cmds.battlejoin)//배틀참가
 				player2ball=player2ball+"○";
 			for(var i=0;i<player2retire.length;i++)
 				player2ball=player2ball+"●";
-			java.lang.Thread.sleep(10000);
+			java.lang.Thread.sleep(3000);
 			replier.reply("["+player1+"]\n"+player1ball+"\n\n["+player2+"]\n"+player2ball);
 			player1pok=pokInv[player1].deck[0];
 			player2pok=pokInv[player2].deck[0];
@@ -2104,7 +2148,13 @@ if(msg==cmds.battlejoin)//배틀참가
 			for(var i=0;i<player2skillsarr.length;i++)
 				player2pp.push(Number(read("기술/"+player2skillsarr[i]),"pp"));
 			if(Math.floor(Math.random()*3)==1){
-				if(month>4) month=1;
+				let pokseason=JSON.parse(FileStream.read(pathseason));
+				if(pokseason==null){
+					let data={"month":1};
+					FileStream.write(pathseason, JSON.stringify(data));
+					pokseason=JSON.parse(FileStream.read(pathseason));
+				}
+				month=pokseason["month"];
 				weather=month;
 				if(weather==1) replier.reply("햇살이 강해졌어요!\n현재 날씨: "+weathertexts[weather]);
 				else if(weather==2) replier.reply("비가 내리기 시작했어요!\n현재 날씨: "+weathertexts[weather]);
@@ -2122,7 +2172,7 @@ if(msg==cmds.battlejoin)//배틀참가
 				player1retire.push(pokInv[player1].deck.indexOf(player1pok));
 				let lt=player1pok.name.length-1;
 				replier.reply("@"+player1+"\n"+player1pok.name+(player1pok.name[lt].normalize("NFD").length == 3 ? '이' : '가')+" 쓰러졌어요!");
-				java.lang.Thread.sleep(2000);
+				java.lang.Thread.sleep(1000);
 				if(player1retire.length==pokInv[player1].deck.length)
 				{
 					var reward=Math.ceil(pokUser[player1].gold/10);
@@ -2223,7 +2273,7 @@ if(msg==cmds.battlejoin)//배틀참가
 				player2retire.push(pokInv[player2].deck.indexOf(player2pok));
 				let lt=player2pok.name.length-1;
 				replier.reply("@"+player2+"\n"+player2pok.name+(player2pok.name[lt].normalize("NFD").length == 3 ? '이' : '가')+" 쓰러졌어요!");
-				java.lang.Thread.sleep(2000);
+				java.lang.Thread.sleep(1000);
 				if(player2retire.length==pokInv[player2].deck.length)
 				{
 					var reward=Math.ceil(pokUser[player2].gold/10);
@@ -2370,7 +2420,7 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 						player2ball=player2ball+"○";
 					for(var i=0;i<player2retire.length;i++)
 						player2ball=player2ball+"●";
-					java.lang.Thread.sleep(3000);
+					java.lang.Thread.sleep(2000);
 					replier.reply("["+player1+"]\n"+player1ball+"\n\n["+player2+"]\n"+player2ball);
 					player1pok=pokInv[player1].deck[nextpoknum-1];
 					player1maxhp=player1pok.hp;
@@ -2427,7 +2477,7 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 						player2ball=player2ball+"○";
 					for(var i=0;i<player2retire.length;i++)
 						player2ball=player2ball+"●";
-					java.lang.Thread.sleep(3000);
+					java.lang.Thread.sleep(1000);
 					replier.reply("["+player1+"]\n"+player1ball+"\n\n["+player2+"]\n"+player2ball);
 					player2pok=pokInv[player2].deck[nextpoknum-1];
 					player2maxhp=player2pok.hp;
@@ -2467,7 +2517,7 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 				player1retire.push(pokInv[player1].deck.indexOf(player1pok));
 				let lt=player1pok.name.length-1;
 				replier.reply("@"+player1+"\n"+player1pok.name+(player1pok.name[lt].normalize("NFD").length == 3 ? '이' : '가')+" 쓰러졌어요!");
-				java.lang.Thread.sleep(2000);
+				java.lang.Thread.sleep(1000);
 				if(player1retire.length==pokInv[player1].deck.length)
 				{
 					var reward=Math.ceil(pokUser[player1].gold/10);
@@ -2569,7 +2619,7 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 				player2retire.push(pokInv[player2].deck.indexOf(player2pok));
 				let lt=player2pok.name.length-1;
 				replier.reply("@"+player2+"\n"+player2pok.name+(player2pok.name[lt].normalize("NFD").length == 3 ? '이' : '가')+" 쓰러졌어요!");
-				java.lang.Thread.sleep(2000);
+				java.lang.Thread.sleep(1000);
 				if(player2retire.length==pokInv[player2].deck.length)
 				{
 					var reward=Math.ceil(pokUser[player2].gold/10);
@@ -2675,7 +2725,7 @@ if(msg==cmds.giveup)//배틀 기권
 		if(sender==player1)
 			{
 				replier.reply(player1+"님이 배틀을 기권했어요.");
-				java.lang.Thread.sleep(2000);
+				java.lang.Thread.sleep(1000);
 				var reward=Math.ceil(pokUser[player1].gold/10);
 				isbattle=0;
 				player1retire=[];
@@ -2761,7 +2811,7 @@ if(msg==cmds.giveup)//배틀 기권
 			else if(sender==player2)
 			{
 					replier.reply(player2+"님이 배틀을 기권했어요.");
-					java.lang.Thread.sleep(2000);
+					java.lang.Thread.sleep(1000);
 					var reward=Math.ceil(pokUser[player2].gold/10);
 					isbattle=0;
 					player1retire=[];
@@ -2873,9 +2923,9 @@ if(msg==cmds.ballinfo)//볼강화 종류
 	var res=[];
 	for(var i=0;i<10;i++)
 	{
-		res.push("["+ballArr[i]+"]\n업그레이드 비용: "+setting.ballupPrice[i].comma()+"\n업그레이드에 필요한 포켓몬 발견 횟수: "+setting.ballupsucc[i]+"\n볼 1개당 가격: "+setting.ballPrice[i].comma()+"\n야생 포켓몬 레벨: "+((i+1)*8+1)+"~"+((i+1)*8+10)+"\n추가 포획률\n전설: +"+(setting.ballcatch[0]*i)+"%\n레어: +"+(setting.ballcatch[1]*i)+"%\n고급: +"+(setting.ballcatch[2]*i)+"%\n일반: +"+(setting.ballcatch[3]*i)+"%\n전설 포켓몬 출현률: +"+(setting.ballg4[i])+"%\n레어 포켓몬 출현률: +"+(setting.ballg3[i])+"%\n");
+		res.push("["+ballArr[i]+"]\n업그레이드 비용: "+setting.ballupPrice[i].comma()+"\n업그레이드에 필요한 포켓몬 발견 횟수: "+setting.ballupsucc[i]+"\n볼 1개당 가격: "+setting.ballPrice[i].comma()+"\n야생 포켓몬 레벨: "+((i+1)*setting.balluplev+1)+"~"+((i+1)*setting.balluplev+10)+"\n추가 포획률\n전설: +"+(setting.ballcatch[0]*i)+"%\n레어: +"+(setting.ballcatch[1]*i)+"%\n고급: +"+(setting.ballcatch[2]*i)+"%\n일반: +"+(setting.ballcatch[3]*i)+"%\n전설 포켓몬 출현률: +"+(setting.ballg4[i])+"%\n레어 포켓몬 출현률: +"+(setting.ballg3[i])+"%\n");
 	}
-	res.push("["+ballArr[10]+"]\n업그레이드 비용: -\n업그레이드에 필요한 포켓몬 발견 횟수: -\n볼 1개당 가격: "+setting.ballPrice[10].comma()+"\n야생 포켓몬 레벨: "+89+"~"+98+"\n추가 포획률\n전설: +"+(setting.ballcatch[0]*10)+"%\n레어: +"+(setting.ballcatch[1]*10)+"%\n고급: +"+(setting.ballcatch[2]*10)+"%\n일반: +"+(setting.ballcatch[3]*10)+"%\n전설 포켓몬 출현률: +"+(setting.ballg4[10])+"%\n레어 포켓몬 출현률: +"+(setting.ballg3[10])+"%\n");
+	res.push("["+ballArr[10]+"]\n업그레이드 비용: -\n업그레이드에 필요한 포켓몬 발견 횟수: -\n볼 1개당 가격: "+setting.ballPrice[10].comma()+"\n야생 포켓몬 레벨: "+(11*setting.balluplev+1)+"~"+(11*setting.balluplev+10)+"\n추가 포획률\n전설: +"+(setting.ballcatch[0]*10)+"%\n레어: +"+(setting.ballcatch[1]*10)+"%\n고급: +"+(setting.ballcatch[2]*10)+"%\n일반: +"+(setting.ballcatch[3]*10)+"%\n전설 포켓몬 출현률: +"+(setting.ballg4[10])+"%\n레어 포켓몬 출현률: +"+(setting.ballg3[10])+"%\n");
 	replier.reply("포켓몬스터 게임 볼 강화 목록"+"\u200b".repeat(500)+"\n"+res.join("\n"));
 }
 
@@ -2907,9 +2957,9 @@ if(msg==cmds.rank)//배틀 랭킹
 if(msg==cmds.leaguechar)//리그캐
 {
 	var pname=setting.leaguecharacter;
-	parse = Jsoup.connect("https://librewiki.net/wiki/"+pname+"_(포켓몬)").get()
-	img = parse.select("meta[property=og:image]").attr("content")
-		Kakao.sendLink(room, {
+	img=Jsoup.connect("https://librewiki.net/wiki/"+pname+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
+
+	Kakao.sendLink(room, {
 			"link_ver":"4.0",
 			"template_id":(58796),
 			"template_args":{
@@ -2951,7 +3001,8 @@ if(msg==cmds.uphelp)//명령어
 	cmds.ribbon+": 리본 목록",
 	cmds.leaguechar+": 현재 리그 보상 포켓몬 보기",
 	cmds.rank+": 트레이너 배틀 랭킹",
-	cmds.giveup+": 배틀 기권"
+	cmds.giveup+": 배틀 기권",
+	cmds.seasoninfo+": 현재 계절 보기(계절은 이틀마다 순환)"
 	].join("\n"));
 }
 
@@ -2996,9 +3047,9 @@ if(msg==cmds.eventinfo)//이벤트 보기
 	if(setting.eventp.goldX!=1)
 		res=res+"모든 돈 획득량: X"+setting.eventp.goldX+"배\n";
 	if(res=="")
-		replier.reply("포켓몬스터 게임 이벤트 목록\n"+"\u200b".repeat(500)+"\n\n현재 진행중인 이벤트가 없습니다.");
+		replier.reply("포켓몬스터 게임 이벤트 목록\n\n현재 진행중인 이벤트가 없습니다.");
 	else
-		replier.reply("포켓몬스터 게임 이벤트 목록\n"+"\u200b".repeat(500)+"\n"+res);
+		replier.reply("포켓몬스터 게임 이벤트 목록\n\n"+res);
 }
 
 if(msg=="@확률업뎃")//확률수정 이후 업뎃용
@@ -3054,6 +3105,24 @@ if(msg=="@확률업뎃")//확률수정 이후 업뎃용
 	replier.reply("@"+sender+"\n수정된 확률 반영 완료.");
 }
 
+if(msg==cmds.seasoninfo) //계절
+{
+	let pokseason=JSON.parse(FileStream.read(pathseason));
+	if(pokseason==null){
+		let data={"month":1};
+		FileStream.write(pathseason, JSON.stringify(data));
+		pokseason=JSON.parse(FileStream.read(pathseason));
+	}
+	month=pokseason["month"];
+	var seasontext=["","봄","여름","가을","겨울"];
+	var res="";
+	if(month==1) res=res+"출현률 증가 포켓몬: "+seasons.spring.join(", ")+"\n\n배틀 시 1/3 확률로 날씨가 "+weathertexts[month]+" 상태로 변함\n";
+	else if(month==2) res=res+"출현률 증가 포켓몬: "+seasons.summer.join(", ")+"\n\n배틀 시 1/3 확률로 날씨가 "+weathertexts[month]+" 상태로 변함\n";
+	else if(month==3) res=res+"출현률 증가 포켓몬: "+seasons.autumn.join(", ")+"\n\n배틀 시 1/3 확률로 날씨가 "+weathertexts[month]+" 상태로 변함\n";
+	else if(month==4) res=res+"출현률 증가 포켓몬: "+seasons.winter.join(", ")+"\n\n배틀 시 1/3 확률로 날씨가 "+weathertexts[month]+" 상태로 변함\n";
+	replier.reply("현재 계절: "+seasontext[month]+"\n\n"+res);
+}
+
 if(msg=="@포켓몬리셋") //강제리셋
 {
 	replier.reply("강제 리로드. 비상시에만 사용해 주세요.");
@@ -3064,6 +3133,12 @@ if(msg=="@포켓몬리셋") //강제리셋
 
 function onStartCompile() {
 	var seasontext=["","봄","여름","가을","겨울"];
-	if(month>4) month=month-4;
+	let pokseason=JSON.parse(FileStream.read(pathseason));
+	if(pokseason==null){
+		let data={"month":1};
+		FileStream.write(pathseason, JSON.stringify(data));
+		pokseason=JSON.parse(FileStream.read(pathseason));
+	}
+	month=pokseason["month"];
     Api.replyRoom("낚시터","포켓몬 게임 리로드.\n현재 계절: "+seasontext[month]);
 }
