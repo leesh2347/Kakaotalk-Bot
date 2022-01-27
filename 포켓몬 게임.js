@@ -79,6 +79,29 @@ var write = FileStream.write("sdcard/Devel/Pokemon/Data/"+target+".json", result
 return write;
 }
 
+function pokimglink(pokename){//카링 이미지 주소. 이거로 메가뮤츠나 폼체인지 이미지 링크 변경
+	var imgg="";
+	if(pokename=="메가뮤츠X")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/f/f8/%EB%A9%94%EA%B0%80%EB%AE%A4%EC%B8%A0X_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/250?cb=20130916110725&path-prefix=ko";
+	else if(pokename=="히트로토무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/5/55/%EB%A1%9C%ED%86%A0%EB%AC%B4_%ED%9E%88%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073157&path-prefix=ko";
+	else if(pokename=="스핀로토무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/5/54/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%8A%A4%ED%95%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073201&path-prefix=ko";
+	else if(pokename=="프로스트로토무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/c/c7/%EB%A1%9C%ED%86%A0%EB%AC%B4_%ED%94%84%EB%A1%9C%EC%8A%A4%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073206&path-prefix=ko";
+	else if(pokename=="워시로토무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/4/4a/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%9B%8C%EC%8B%9C_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073210&path-prefix=ko";
+	else if(pokename=="커트로토무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/5/51/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%BB%A4%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073218&path-prefix=ko";
+	else if(pokename=="블랙큐레무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/0/0f/646%EB%B8%94%EB%9E%99%ED%81%90%EB%A0%88%EB%AC%B4.png/revision/latest/scale-to-width-down/200?cb=20170802060103&path-prefix=ko";
+	else if(pokename=="화이트큐레무")
+		imgg="https://static.wikia.nocookie.net/pokemon/images/a/a1/646%ED%99%94%EC%9D%B4%ED%8A%B8%ED%81%90%EB%A0%88%EB%AC%B4.png/revision/latest/scale-to-width-down/200?cb=20170802060325&path-prefix=ko";
+	else
+		imgg=Jsoup.connect("https://librewiki.net/wiki/"+pokename+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
+	return imgg;
+}
+
 function weatherjudge(atk,type){
 	var at=atk;
 	if(weather==1&&type==2)
@@ -96,7 +119,7 @@ function giveleaguecharacter(username){
 	let pokname=setting.leaguecharacter;
 	var skillsarr=read("포켓몬/"+pokname,"skills");
 	var caughtpokskills=[];
-	var poklev=100;
+	var poklev=setting.maxlevel;
 	if(skillsarr.length<5)
 		caughtpokskills=skillsarr;
 	else
@@ -208,8 +231,8 @@ function printskills(skills,locked){
 
 function printbattlekakaolink(room,replier){
 	try{
-	var img1=Jsoup.connect("https://librewiki.net/wiki/"+player1pok.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
-	var img2=Jsoup.connect("https://librewiki.net/wiki/"+player2pok.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
+	var img1=pokimglink(player1pok.name);
+	var img2=pokimglink(player2pok.name);
 	
 	Kakao.sendLink(room, {
 			"link_ver":"4.0",
@@ -273,6 +296,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player1skill,"accr"));
 					if(player1pok.level<player2pok.level)
 						accr=Math.ceil(accr*(100-(player2pok.level-player1pok.level)*2)/100);
+					if(accr<Number(read("기술/"+player1skill,"accr"))/2)
+						accr=Number(read("기술/"+player1skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
 						var atk=Math.ceil(player1pok.atk*read("기술/"+player1skill,"damage")/300*(1000-read("포켓몬/"+player2pok.name,"def"))/1000);
 						if(read("기술/"+player1skill,"addi")==4)
@@ -336,6 +361,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player2skill,"accr"));
 					if(player2pok.level<player1pok.level)
 						accr=Math.ceil(accr*(100-(player1pok.level-player2pok.level)*2)/100);
+					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
+						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
 						var atk=Math.ceil(player2pok.atk*read("기술/"+player2skill,"damage")/300*(1000-read("포켓몬/"+player1pok.name,"def"))/1000);
 						if(read("기술/"+player2skill,"addi")==4)
@@ -399,6 +426,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player2skill,"accr"));
 					if(player2pok.level<player1pok.level)
 						accr=Math.ceil(accr*(100-(player1pok.level-player2pok.level)*2)/100);
+					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
+						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
 						var atk=Math.ceil(player2pok.atk*read("기술/"+player2skill,"damage")/300*(1000-read("포켓몬/"+player1pok.name,"def"))/1000);
 						if(read("기술/"+player2skill,"addi")==4)
@@ -462,6 +491,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player1skill,"accr"));
 					if(player1pok.level<player2pok.level)
 						accr=Math.ceil(accr*(100-(player2pok.level-player1pok.level)*2)/100);
+					if(accr<Number(read("기술/"+player1skill,"accr"))/2)
+						accr=Number(read("기술/"+player1skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
 						var atk=Math.ceil(player1pok.atk*read("기술/"+player1skill,"damage")/300*(1000-read("포켓몬/"+player2pok.name,"def"))/1000);
 						if(read("기술/"+player1skill,"addi")==4)
@@ -1132,16 +1163,17 @@ if(cmds.play.includes(msg)){
 	}
 	let pokname="";
 	var lev=0;
-	if(Math.floor(Math.random()*30)==1)
+	if(Math.floor(Math.random()*50)==1)
 	{
-		month=month+1;
-		if(month>4) month=month-4;
 		let pokseason=JSON.parse(FileStream.read(pathseason));
 		if(pokseason==null){
 			let data={"month":1};
 			FileStream.write(pathseason, JSON.stringify(data));
 			pokseason=JSON.parse(FileStream.read(pathseason));
 		}
+		month=month+1;
+		if(month>4) month=month-4;
+		
 		pokseason["month"]=month;
 		FileStream.write(pathseason, JSON.stringify(pokseason));
 		var seasontext=["","봄","여름","가을","겨울"];
@@ -1200,8 +1232,8 @@ if(cmds.play.includes(msg)){
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
     FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	try{
-	img=Jsoup.connect("https://librewiki.net/wiki/"+pokname+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
-	//
+		img=pokimglink(pokname);
+		//
 		
 		Kakao.sendLink(room, {
 			"link_ver":"4.0",
@@ -1572,19 +1604,41 @@ if(msg.split(" ")[0]==cmds.levelup)//레벨업
 	if(0<msg.split(" ")[1]&&msg.split(" ")[1]<(pokInv[sender].deck.length+1)&&msg.indexOf(".")==(-1))
 	{
 	var n=msg.split(" ")[1];
+	var n2=Number(msg.split(" ")[2]);
+	if(n2>0){
+		
+	}
+	else n2=1;
+	if(n2<1||n2>(setting.maxlevel-1))
+	{
+		replier.reply('@'+sender+'\n다중 레벨업은 1~'+(setting.maxlevel-1)+'사이 숫자로만 입력해 주세요.');
+        return;
+	}
 	let p;
 	p=pokInv[sender].deck[n-1];
-	var skillcosts=10*p.level*p.level*p.level;
-	if(p.level>150) skillcosts=skillcosts*2;
-	else if(p.level>100) skillcosts=skillcosts*1.5;
-	skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc)/100);
-	if(pokUser[sender].gold<skillcosts)
-		replier.reply("@"+sender+"\n돈이 부족해요.\n\nLV."+p.level+" "+p.name+"의 다음 레벨업 비용: "+skillcosts.comma()+"원");
+	var skillcosts=0;
+	var totalcosts=0;
+	for(var j=0;j<n2;j++)
+	{
+		skillcosts=10*(p.level+j)*(p.level+j)*(p.level+j);
+		if((p.level+j)>150) skillcosts=skillcosts*2;
+		else if(p.level>100) skillcosts=skillcosts*1.5;
+		skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc)/100);
+		totalcosts=totalcosts+skillcosts;
+	}
+	if(pokUser[sender].gold<totalcosts)
+	{
+		if(n2<2)
+			replier.reply("@"+sender+"\n돈이 부족해요.\n\nLV."+p.level+" "+p.name+"의 다음 레벨업 비용: "+totalcosts.comma()+"원");
+		else
+			replier.reply("@"+sender+"\n돈이 부족해요.\n\nLV."+p.level+" "+p.name+"의 Lv."+(p.level+n2)+"까지의 레벨업 비용: "+totalcosts.comma()+"원");
+	}
 	else{
-	if(p.level>199) replier.reply("@"+sender+"\n해당 포켓몬은 이미 최대 레벨이에요.");
+	if(p.level>(setting.maxlevel-1)) replier.reply("@"+sender+"\n해당 포켓몬은 이미 최대 레벨이에요.");
+	else if((Number(p.level)+Number(n2))>setting.maxlevel) replier.reply("@"+sender+"\n최대 레벨을 초과하여 강화할 수 없어요.\n\nLV."+p.level+" "+p.name+"의 최대 레벨까지 남은 레벨업: "+(setting.maxlevel-p.level)+"회");
 	else
 	{
-	p.level=p.level+1;
+	p.level=Number(p.level)+Number(n2);
 	if(p.level>(read("포켓몬/"+p.name,"nextlv")-1)&&read("포켓몬/"+p.name,"nextup")!="x")
 	{
 		var preup=p.name;
@@ -1601,11 +1655,11 @@ if(msg.split(" ")[0]==cmds.levelup)//레벨업
 	p.spd=Math.ceil(read("포켓몬/"+p.name,"spd")*p.level/50);
 	
 	pokInv[sender].deck[n-1]=p;
-	pokUser[sender].gold=pokUser[sender].gold-skillcosts;
+	pokUser[sender].gold=pokUser[sender].gold-totalcosts;
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
 	var showstats="\n최대 HP: "+pokInv[sender].deck[n-1].hp+"\n공격력: "+pokInv[sender].deck[n-1].atk+"\n방어력: "+pokInv[sender].deck[n-1].def+"\n스피드: "+pokInv[sender].deck[n-1].spd;
-	replier.reply("@"+sender+"\n"+skillcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+(pokInv[sender].deck[n-1].level-1)+" > Lv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+"\n\n"+"\u200b".repeat(500)+showstats);
+	replier.reply("@"+sender+"\n"+totalcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+(pokInv[sender].deck[n-1].level-n2)+" > Lv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+"\n\n"+"\u200b".repeat(500)+showstats);
 	}
 	}
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
@@ -1713,7 +1767,7 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 	let p;
 	p=pokInv[sender].box[n-1];
 	try{
-		img=Jsoup.connect("https://librewiki.net/wiki/"+p.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
+		img=pokimglink(p.name);
 //  
 		
 		
@@ -1781,8 +1835,8 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 	let p;
 	p=pokInv[sender].deck[n-1];
 	try{
-	img=Jsoup.connect("https://librewiki.net/wiki/"+p.name+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
-	//    
+		img=pokimglink(p.name);
+		//    
 		
 		Kakao.sendLink(room, {
 			"link_ver":"4.0",
@@ -2056,7 +2110,7 @@ if(msg==cmds.battleexit)//배틀취소
 	if(player2==""&&player1==sender&&isbattle==0)
 	{
 		player1="";
-		advOn[player1]=0;
+		advOn[sender]=0;
 		replier.reply('@'+sender+'\n배틀에서 퇴장했어요.');
 	}
 	else replier.reply('@'+sender+'\n배틀에 입장하지 않았거나 이미 배틀이 시작됐어요.');
@@ -2568,7 +2622,7 @@ if(msg==cmds.gym)//체육관
 			
 			if(player1retire.length==trainerInv[player1].deck.length)
 			{
-					var reward=20000000*(gymnum+1)*(gymnum+1);
+					var reward=2000000*(gymnum+1)*(gymnum+1);
 					isbattle=0;
 					player1retire=[];
 					player2retire=[];
@@ -3112,7 +3166,7 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 			
 			if(player1retire.length==trainerInv[player1].deck.length)
 			{
-					var reward=20000000*(gymnum+1)*(gymnum+1);
+					var reward=2000000*(gymnum+1)*(gymnum+1);
 					isbattle=0;
 					player1retire=[];
 					player2retire=[];
@@ -3550,18 +3604,21 @@ if(msg==cmds.rank)//배틀 랭킹
 if(msg==cmds.leaguechar)//리그캐
 {
 	var pname=setting.leaguecharacter;
-	img=Jsoup.connect("https://librewiki.net/wiki/"+pname+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
-
+	img=pokimglink(pname);
+	try{
 	Kakao.sendLink(room, {
 			"link_ver":"4.0",
 			"template_id":(58796),
 			"template_args":{
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
-			'POKNAME':"Lv."+100+" "+pname+"  "+typetexts[read("포켓몬/"+pname,"type1")]+" "+typetexts[read("포켓몬/"+pname,"type2")],
-			'DESC':"최대 HP: "+(read("포켓몬/"+pname,"hp")*2)+" 공격력: "+(read("포켓몬/"+pname,"atk")*2)+" 방어력: "+(read("포켓몬/"+pname,"def")*2)+" 스피드: "+(read("포켓몬/"+pname,"spd")*2)
+			'POKNAME':"Lv."+setting.maxlevel+" "+pname+"  "+typetexts[read("포켓몬/"+pname,"type1")]+" "+typetexts[read("포켓몬/"+pname,"type2")],
+			'DESC':"최대 HP: "+(read("포켓몬/"+pname,"hp")*Math.ceil(setting.maxlevel/50))+" 공격력: "+(read("포켓몬/"+pname,"atk")*Math.ceil(setting.maxlevel/50))+" 방어력: "+(read("포켓몬/"+pname,"def")*Math.ceil(setting.maxlevel/50))+" 스피드: "+(read("포켓몬/"+pname,"spd")*Math.ceil(setting.maxlevel/50))
 			}
 			}, "custom")
+	}catch(e){
+		replier.reply("카카오링크 오류. 리셋 한번 해주세요.\n\nLv."+setting.maxlevel+" "+pname+"  "+typetexts[read("포켓몬/"+pname,"type1")]+" "+typetexts[read("포켓몬/"+pname,"type2")]+"\n\n최대 HP: "+(read("포켓몬/"+pname,"hp")*Math.ceil(setting.maxlevel/50))+" 공격력: "+(read("포켓몬/"+pname,"atk")*Math.ceil(setting.maxlevel/50))+" 방어력: "+(read("포켓몬/"+pname,"def")*Math.ceil(setting.maxlevel/50))+" 스피드: "+(read("포켓몬/"+pname,"spd")*Math.ceil(setting.maxlevel/50)));
+	}
 	replier.reply("리그 캐릭터 획득 방법: 챔피언리그 우승 또는\n리본 ["+setting.ribbon.name[9]+"] 단계 업그레이드 보상");
 }
 
@@ -3596,7 +3653,7 @@ if(msg==cmds.uphelp)//명령어
 	cmds.rank+": 트레이너 배틀 랭킹",
 	cmds.giveup+": 배틀 기권",
 	cmds.gym+": 체육관 도전",
-	cmds.seasoninfo+": 현재 계절 보기(계절은 이틀마다 순환)"
+	cmds.seasoninfo+": 현재 계절 보기(계절은 포켓몬 출현 시 2%확률로 순환)"
 	].join("\n"));
 }
 
@@ -3621,7 +3678,8 @@ if(msg==cmds.help)//소개
 	"포켓몬 포획 수 충족 시 일정 금액을 투자하여 볼 종류를 업그레이드하여 더 좋은 포켓몬의 출현률 및 포획률을 올릴 수도 있습니다.",
 	"※전설의 포켓몬은 볼 업그레이드 ["+ballArr[3]+"] 부터 등장합니다.",
 	"",
-	"포획한 포켓몬으로 덱을 꾸민 후에는 다른 유저와의 배틀(PVP) 를 통해 겨룰 수 있습니다.",
+	"포획한 포켓몬으로 덱을 꾸민 후에는 다른 유저와의 배틀(PVP) 를 통해 겨룰 수 있으며,",
+	"체육관에 도전하여 배지와 상금 보상을 획득할 수 있고 모든 배지를 획득 시 챔피언리그 도전권이 주어집니다.",
 	"",
 	"전체 명령어 보기: "+cmds.uphelp
 	].join("\n"));
