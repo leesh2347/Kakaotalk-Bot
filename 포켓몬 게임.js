@@ -13,6 +13,8 @@ const ballfail=config.ballfail;
 const setting=config.setting;
 const advfail=config.advfail;
 const seasons=config.seasons;
+const collectionnames=config.collectionnames;
+const collectioncontents=config.collectioncontents;
 var month=0;
 const pathRank="sdcard/Devel/Pokemon/Data/ranking.json";  //랭킹파일경로
 const pathseason="sdcard/Devel/Pokemon/Data/season.json";  //랭킹파일경로
@@ -296,6 +298,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player1skill,"accr"));
 					if(player1pok.level<player2pok.level)
 						accr=Math.ceil(accr*(100-(player2pok.level-player1pok.level)*2)/100);
+					if(Number(pokUser[player2].activecollection.includes(7)))
+						accr=Math.ceil(accr*(100-pokUser[player2].collectionlev*3)/100);
 					if(accr<Number(read("기술/"+player1skill,"accr"))/2)
 						accr=Number(read("기술/"+player1skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
@@ -307,8 +311,29 @@ function battleturn(room,replier) //배틀 구현 함수
 						atk=weatherjudge(atk,read("기술/"+player1skill,"type"));
 						var judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
 						atk=atk*judge;
+						if(pokUser[player1].activecollection.includes(1)||pokUser[player1].activecollection.includes(2))
+							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						if(pokUser[player1].activecollection.includes(3)||pokUser[player1].activecollection.includes(4))
+							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						if(pokUser[player1].activecollection.includes(5))
+							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						if(pokUser[player2].activecollection.includes(13)&&judge>1)
+							atk=atk*(100-pokUser[player2].collectionlev*5)/100;
 						player2pok.hp=Math.ceil(player2pok.hp-atk);
-						if(player2pok.hp<0) player2pok.hp=0;
+						if(player2pok.hp<0){
+							if(Number(pokUser[player2].activecollection.includes(12)))
+							{
+								if(Math.floor(Math.random()*100)<pokUser[player2].collectionlev*4)
+								{
+									player2pok.hp=1;
+									battleres=battleres+"["+player2+"] "+player2pok.name+"는 치명적인 공격으로부터 가까스로 버텼어요!\n";
+								}
+								else
+									player2pok.hp=0;
+							}
+							else
+								player2pok.hp=0;
+						}
 						if(judge>1) battleres=battleres+"["+player1+"] 효과가 굉장했어요!\n";
 						else if(judge==0) battleres=battleres+"["+player1+"] 상대에겐 효과가 없는 듯해요...\n";
 						else if(judge<1) battleres=battleres+"["+player1+"] 효과가 별로인 듯해요\n";
@@ -361,6 +386,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player2skill,"accr"));
 					if(player2pok.level<player1pok.level)
 						accr=Math.ceil(accr*(100-(player1pok.level-player2pok.level)*2)/100);
+					if(pokUser[player1].activecollection.includes(7))
+						accr=Math.ceil(accr*(100-pokUser[player1].collectionlev*3)/100);
 					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
 						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
@@ -372,8 +399,29 @@ function battleturn(room,replier) //배틀 구현 함수
 						atk=weatherjudge(atk,read("기술/"+player2skill,"type"));
 						var judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name,"type1"),read("포켓몬/"+player1pok.name,"type2"));
 						atk=atk*judge;
+						if(pokUser[player2].activecollection.includes(1)||pokUser[player2].activecollection.includes(2))
+							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(pokUser[player2].activecollection.includes(3)||pokUser[player2].activecollection.includes(4))
+							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(pokUser[player2].activecollection.includes(5))
+							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(pokUser[player1].activecollection.includes(13)&&judge>1)
+							atk=atk*(100-pokUser[player1].collectionlev*5)/100;
 						player1pok.hp=Math.ceil(player1pok.hp-atk);
-						if(player1pok.hp<0) player1pok.hp=0;
+						if(player1pok.hp<0){
+							if(pokUser[player1].activecollection.includes(12))
+							{
+								if(Math.floor(Math.random()*100)<pokUser[player1].collectionlev*4)
+								{
+									player1pok.hp=1;
+									battleres=battleres+"["+player1+"] "+player1pok.name+"는 치명적인 공격으로부터 가까스로 버텼어요!\n";
+								}
+								else
+									player1pok.hp=0;
+							}
+							else
+								player1pok.hp=0;
+						}
 						if(judge>1) battleres=battleres+"["+player2+"] 효과가 굉장했어요!\n";
 						else if(judge==0) battleres=battleres+"["+player2+"] 상대에겐 효과가 없는 듯해요...\n";
 						else if(judge<1) battleres=battleres+"["+player2+"] 효과가 별로인 듯해요\n";
@@ -426,6 +474,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player2skill,"accr"));
 					if(player2pok.level<player1pok.level)
 						accr=Math.ceil(accr*(100-(player1pok.level-player2pok.level)*2)/100);
+					if(pokUser[player1].activecollection.includes(7))
+						accr=Math.ceil(accr*(100-pokUser[player1].collectionlev*3)/100);
 					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
 						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
@@ -437,8 +487,29 @@ function battleturn(room,replier) //배틀 구현 함수
 						atk=weatherjudge(atk,read("기술/"+player2skill,"type"));
 						var judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name,"type1"),read("포켓몬/"+player1pok.name,"type2"));
 						atk=atk*judge;
+						if(pokUser[player2].activecollection.includes(1)||pokUser[player2].activecollection.includes(2))
+							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(pokUser[player2].activecollection.includes(3)||pokUser[player2].activecollection.includes(4))
+							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(pokUser[player2].activecollection.includes(5))
+							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(pokUser[player1].activecollection.includes(13)&&judge>1)
+							atk=atk*(100-pokUser[player1].collectionlev*5)/100;
 						player1pok.hp=Math.ceil(player1pok.hp-atk);
-						if(player1pok.hp<0) player1pok.hp=0;
+						if(player1pok.hp<0){
+							if(pokUser[player1].activecollection.includes(12))
+							{
+								if(Math.floor(Math.random()*100)<pokUser[player1].collectionlev*4)
+								{
+									player1pok.hp=1;
+									battleres=battleres+"["+player1+"] "+player1pok.name+"는 치명적인 공격으로부터 가까스로 버텼어요!\n";
+								}
+								else
+									player1pok.hp=0;
+							}
+							else
+								player1pok.hp=0;
+						}
 						if(judge>1) battleres=battleres+"["+player2+"] 효과가 굉장했어요!\n";
 						else if(judge==0) battleres=battleres+"["+player2+"] 상대에겐 효과가 없는 듯해요...\n";
 						else if(judge<1) battleres=battleres+"["+player2+"] 효과가 별로인 듯해요\n";
@@ -491,6 +562,8 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player1skill,"accr"));
 					if(player1pok.level<player2pok.level)
 						accr=Math.ceil(accr*(100-(player2pok.level-player1pok.level)*2)/100);
+					if(Number(pokUser[player2].activecollection.includes(7)))
+						accr=Math.ceil(accr*(100-pokUser[player2].collectionlev*3)/100);
 					if(accr<Number(read("기술/"+player1skill,"accr"))/2)
 						accr=Number(read("기술/"+player1skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
@@ -502,8 +575,29 @@ function battleturn(room,replier) //배틀 구현 함수
 						atk=weatherjudge(atk,read("기술/"+player1skill,"type"));
 						var judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
 						atk=atk*judge;
+						if(pokUser[player1].activecollection.includes(1)||pokUser[player1].activecollection.includes(2))
+							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						if(pokUser[player1].activecollection.includes(3)||pokUser[player1].activecollection.includes(4))
+							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						if(pokUser[player1].activecollection.includes(5))
+							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						if(pokUser[player2].activecollection.includes(13)&&judge>1)
+							atk=atk*(100-pokUser[player2].collectionlev*5)/100;
 						player2pok.hp=player2pok.hp-atk;
-						if(player2pok.hp<0) player2pok.hp=0;
+						if(player2pok.hp<0){
+							if(Number(pokUser[player2].activecollection.includes(12)))
+							{
+								if(Math.floor(Math.random()*100)<pokUser[player2].collectionlev*4)
+								{
+									player2pok.hp=1;
+									battleres=battleres+"["+player2+"] "+player2pok.name+"는 치명적인 공격으로부터 가까스로 버텼어요!\n";
+								}
+								else
+									player2pok.hp=0;
+							}
+							else
+								player2pok.hp=0;
+						}
 						if(judge>1) battleres=battleres+"["+player1+"] 효과가 굉장했어요!";
 						else if(judge==0) battleres=battleres+"["+player1+"] 상대에겐 효과가 없는 듯해요...\n";
 						else if(judge<1) battleres=battleres+"["+player1+"] 효과가 별로인 듯해요\n";
@@ -631,6 +725,40 @@ function updateribbon(replier,player) //리본
 				
 		}
 		
+	}
+}
+
+function updatecollection(replier,player) //컬렉션 업데이트
+{
+	pokUser[player].activecollection=[];
+	var temparr=[];
+	for(var i=0;i<collectioncontents.length;i++)
+		temparr.push(0);
+	for(var i=0;i<collectioncontents.length;i++)
+	{
+		for(var j=0;j<collectioncontents[i].length;j++)
+		{
+			for(var k=0;k<pokInv[player].collection.length;k++)
+			{
+				if(pokInv[player].collection[k].name==collectioncontents[i][j])
+					temparr[i]++;
+			}
+		}
+		if(temparr[i]==collectioncontents[i].length)
+			pokUser[player].activecollection.push(Number(i+1));	
+	}
+	var levsum=0;
+	for(var i=0;i<pokInv[player].collection.length;i++)
+		levsum=levsum+Number(pokInv[player].collection[i].level);
+	if(levsum>1)
+		pokUser[player].collectionlev=Math.floor(levsum/350)+1;
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+player+'.json', JSON.stringify(pokUser[player]));
+	if(pokUser[player].activecollection.length>0){
+		var res="";
+		for(var i=0;i<pokUser[player].activecollection.length;i++)
+			res=res+collectionnames[Number(pokUser[player].activecollection[i])-1]+" Lv."+pokUser[player].collectionlev+"\n";
+		java.lang.Thread.sleep(1000);
+		replier.reply("@"+player+"\n현재 적용된 컬렉션 효과\n\n"+res);
 	}
 }
 
@@ -918,6 +1046,8 @@ function getprob(sender,replier){ //포켓몬 출현률
 	ran=ran-i;
 	if(ran<0) return 2;
 	i=pokUser[sender].stat.g4+setting.eventp.g4;
+	if(Number(pokUser[sender].activecollection.includes(15)))
+		i=i+pokUser[sender].collectionlev;
 	if(i<0) i=0;
 	ran=ran-i;
 	if(ran<0) return 3;
@@ -952,6 +1082,8 @@ function catchjudge(group,sender,replier){
 	if(group==4) iscatch=iscatch+setting.eventp.g4catch;
 	else if(group==3) iscatch=iscatch+setting.eventp.g3catch;
 	else iscatch=iscatch+setting.eventp.allcatch;
+	if(Number(pokUser[sender].activecollection.includes(10)))
+		iscatch=Number(iscatch+pokUser[sender].collectionlev);
 	if(iscatch<0) iscatch=1;
 	if(iscatch<ran) 
 		return false;
@@ -994,6 +1126,8 @@ function pokjoin(sender, replier){
                 'lose':0  //배틀 패배횟수
             },
 			'badge':0,
+			'activecollection':[],
+			'collectionlev':0,
             'success':setting.success,  //탐방성공률
 			'successcatch':{
 				'g4':setting.catchsuccess[0], 'g3':setting.catchsuccess[1], 'g2':setting.catchsuccess[2], 'g1':setting.catchsuccess[3]
@@ -1002,7 +1136,7 @@ function pokjoin(sender, replier){
             'castT':0,  //캐스팅시간
             'restOn':{'on':0, 'time':0}  //휴식객체
         };
-        let inv={'deck':[],'box':[],'item':[]};
+        let inv={'deck':[],'box':[],'item':[],'collection':[]};
         FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(data));
         FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(inv));
         replier.reply('@'+sender+'\n포켓몬의 세계에 오신 것을 환영합니다!\n\n@야생 명령어를 입력하면 탐험을 시작하게 됩니다.');
@@ -1104,6 +1238,10 @@ if(cmds.play.includes(msg)){
 			
 			var money=Math.floor(Math.random()*100)*100;//100~10000
 			money=money*(ballArr.indexOf(pokUser[sender].Ball)+1)*30; //볼 강화당 돈발견 금액 증가
+			if(Number(pokUser[sender].activecollection.includes(14)))
+				money=money*(pokUser[sender].collectionlev*10+100)/100;
+			if(Number(pokUser[sender].activecollection.includes(16)))
+				money=money*(pokUser[player].collectionlev+1);
 			money=money*setting.eventp.goldX;
 			pokUser[sender].gold=pokUser[sender].gold+money;
 			replier.reply("@"+sender+"\n"+pokArr.gold[Math.floor(Math.random()*pokArr.gold.length)]+"를(을) 발견했어요!\n상점에 팔아 "+money.comma()+"원을 획득했어요.");
@@ -1134,6 +1272,8 @@ if(cmds.play.includes(msg)){
 				else if(ran==98)
 				{
 					var money=499999999;
+					if(Number(pokUser[sender].activecollection.includes(14)))
+						money=money*(pokUser[sender].collectionlev*10+100)/100;
 					money=money*setting.eventp.goldX;
 					pokUser[sender].gold=pokUser[sender].gold+money;
 					replier.reply("@"+sender+"\n축하합니다!\n👑마제스티의 키를 발견했어요!\n상점에 팔아 5억 원을 획득했어요.");
@@ -1141,6 +1281,8 @@ if(cmds.play.includes(msg)){
 				else
 				{
 					var money=49999999;
+					if(Number(pokUser[sender].activecollection.includes(14)))
+						money=money*(pokUser[sender].collectionlev*10+100)/100;
 					money=money*setting.eventp.goldX;
 					pokUser[sender].gold=pokUser[sender].gold+money;
 					replier.reply("@"+sender+"\n축하합니다!\n🪨알 수 없는 돌을 발견했어요!\n상점에 팔아 5000만 원을 획득했어요.");
@@ -1427,7 +1569,7 @@ if(msg==cmds.box)//포켓몬 보관함
 		for(var i=0;i<pokInv[sender].box.length;i++)
 			str2=str2+(i+1)+".  Lv."+pokInv[sender].box[i].level+" "+pokInv[sender].box[i].name+" "+showlocked[pokInv[sender].box[i].islocked]+"\n";
 	}
-	replier.reply("["+sender+"] 님의 포켓몬 목록\n"+"\u200b".repeat(500)+"\n포켓몬 정보 자세히 보기: "+cmds.pokinfo+" (숫자)\n(덱에 장착 중인 포켓몬은 "+cmds.dpokinfo+" 를 이용)\n※포켓몬 스킬 뽑기, 레벨업은 덱에 장착된 상태여야 가능\n\n덱 장착: "+cmds.lock+" (번호)\n덱 장착해제: "+cmds.unlock+" (번호)\n덱 순서 변경: "+cmds.swap+" (번호1) (번호2)\n보관함 포켓몬 잠금: "+cmds.boxlock+" (번호)\n보관함 포켓몬 잠금해제: "+cmds.boxunlock+" (번호)\n\n-----[배틀 덱]-----\n"+str+"\n----------\n\n\n-----[보관함]-----\n"+str2+"\n----------");
+	replier.reply("["+sender+"] 님의 포켓몬 목록\n"+"\u200b".repeat(500)+"\n포켓몬 정보 자세히 보기: "+cmds.pokinfo+" (숫자)\n(덱에 장착 중인 포켓몬은 "+cmds.dpokinfo+" 를 이용)\n※포켓몬 스킬 뽑기, 레벨업은 덱에 장착된 상태여야 가능\n\n덱 장착: "+cmds.lock+" (번호)\n덱 장착해제: "+cmds.unlock+" (번호)\n덱 순서 변경: "+cmds.swap+" (번호1) (번호2)\n컬렉션으로 이동: "+cmds.collectionput+" (번호)\n보관함 포켓몬 잠금: "+cmds.boxlock+" (번호)\n보관함 포켓몬 잠금해제: "+cmds.boxunlock+" (번호)\n\n-----[배틀 덱]-----\n"+str+"\n----------\n\n\n-----[보관함]-----\n"+str2+"\n----------");
 }
 
 if(msg.split(" ")[0]==cmds.boxlock)//잠금
@@ -1475,12 +1617,16 @@ if(msg.split(" ")[0]==cmds.sell)//놓아주기
 	if(pokInv[sender].box.length>0)
 	{
 		var money=0;
+		var pokmoney=0;
 		let tempbox=[];
 	for(var i=0;i<pokInv[sender].box.length;i++)
 	{
 		if(pokInv[sender].box[i].islocked==0)
 		{
-			money=money+600*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
+			pokmoney=600*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
+			if(pokArr.group4.includes(pokInv[sender].box[i].name)||pokInv[sender].box[i].name=="다부니")
+				pokmoney=pokmoney*5;
+			money=money+pokmoney;
 			
 		}
 		else{
@@ -1492,6 +1638,8 @@ if(msg.split(" ")[0]==cmds.sell)//놓아주기
 		for(var i=0;i<tempbox.length;i++)
 			pokInv[sender].box.push(tempbox[i]);
 	}
+	if(Number(pokUser[sender].activecollection.includes(14)))
+		money=money*(pokUser[sender].collectionlev*10+100)/100;
 	money=money*setting.eventp.goldX;
 	pokUser[sender].gold=pokUser[sender].gold+money;
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
@@ -1540,6 +1688,83 @@ if(msg.split(" ")[0]==cmds.unlock)//박스로 이동
 	pokInv[sender].box.push(p);
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	replier.reply("@"+sender+"\nLv."+p.level+" "+p.name+"(을)를 보관함으로 이동했어요!");
+	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
+}
+
+if(msg.split(" ")[0]==cmds.collectionput)//컬렉션 넣기
+{
+	pokUser[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
+	if(pokUser[sender]==null){
+        replier.reply('@'+sender+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
+        return;
+    }
+	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
+	if(0<msg.split(" ")[1]&&msg.split(" ")[1]<(pokInv[sender].box.length+1)&&msg.indexOf(".")==(-1))
+	{
+	if(pokInv[sender].collection==undefined||pokInv[sender].collection==null)
+	{
+		pokInv[sender].collection=null;
+		pokInv[sender].collection=[];
+	}
+	if(pokInv[sender].activecollection==undefined||pokInv[sender].activecollection==null)
+	{
+		pokUser[sender].activecollection=null;
+		pokUser[sender].activecollection=[];
+	}
+	if(pokInv[sender].collectionlev==undefined||pokInv[sender].collectionlev==null)
+	{
+		pokUser[sender].collectionlev=null;
+		pokUser[sender].collectionlev=0;
+	}
+	if(pokInv[sender].collection.length<7){
+	var n=msg.split(" ")[1];
+	let p;
+	p=pokInv[sender].box[n-1];
+	pokInv[sender].box.splice((n-1),1);
+	pokInv[sender].collection.push(p);
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
+	replier.reply("@"+sender+"\nLv."+p.level+" "+p.name+"(을)를 컬렉션에 넣었어요!");
+	updatecollection(replier,player);
+	}else replier.reply("@"+sender+"\n컬렉션은 7마리까지만 장착할 수 있어요.");
+	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
+}
+
+if(msg.split(" ")[0]==cmds.collectionout)//컬렉션에서 박스 이동
+{
+	pokUser[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
+	if(pokUser[sender]==null){
+        replier.reply('@'+sender+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
+        return;
+    }
+	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
+	
+	if(0<msg.split(" ")[1]&&msg.split(" ")[1]<(pokInv[sender].collection.length+1)&&msg.indexOf(".")==(-1))
+	{
+	if(pokInv[sender].collection.length>(-1))
+	{
+		
+	}
+	else
+	{
+		pokInv[sender].collection=null;
+		pokInv[sender].collection=[];
+	}
+	if(pokUser[sender].collectionlev>(-1))
+	{
+		
+	}
+	else{
+		pokUser[sender].collectionlev=null;
+		pokUser[sender].collectionlev=0;
+	}
+	var n=msg.split(" ")[1];
+	let p;
+	p=pokInv[sender].collection[n-1];
+	pokInv[sender].collection.splice((n-1),1);
+	pokInv[sender].box.push(p);
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
+	replier.reply("@"+sender+"\nLv."+p.level+" "+p.name+"(을)를 보관함으로 이동했어요!");
+	updatecollection(replier,player);
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
 }
 
@@ -1623,7 +1848,10 @@ if(msg.split(" ")[0]==cmds.levelup)//레벨업
 		skillcosts=10*(p.level+j)*(p.level+j)*(p.level+j);
 		if((p.level+j)>150) skillcosts=skillcosts*2;
 		else if(p.level>100) skillcosts=skillcosts*1.5;
-		skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc)/100);
+		if(Number(pokUser[sender].activecollection.includes(18)))
+			skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc-pokUser[sender].collectionlev*5)/100);
+		else
+			skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc)/100);
 		totalcosts=totalcosts+skillcosts;
 	}
 	if(pokUser[sender].gold<totalcosts)
@@ -1661,6 +1889,78 @@ if(msg.split(" ")[0]==cmds.levelup)//레벨업
 	var showstats="\n최대 HP: "+pokInv[sender].deck[n-1].hp+"\n공격력: "+pokInv[sender].deck[n-1].atk+"\n방어력: "+pokInv[sender].deck[n-1].def+"\n스피드: "+pokInv[sender].deck[n-1].spd;
 	replier.reply("@"+sender+"\n"+totalcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+(pokInv[sender].deck[n-1].level-n2)+" > Lv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+"\n\n"+"\u200b".repeat(500)+showstats);
 	}
+	}
+	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
+	}
+}
+
+if(msg.split(" ")[0]==cmds.formchange)//폼체인지
+{
+	pokUser[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
+	if(pokUser[sender]==null){
+        replier.reply('@'+sender+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
+        return;
+    }
+	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
+	if(pokInv[sender].deck.length<1)
+		replier.reply("@"+sender+"\n폼체인지는 덱에 장착된 포켓몬만 가능해요.\n먼저 포켓몬을 덱에 장착해 주세요.");
+	else
+	{
+	if(0<msg.split(" ")[1]&&msg.split(" ")[1]<(pokInv[sender].deck.length+1)&&msg.indexOf(".")==(-1))
+	{
+	var n=msg.split(" ")[1];
+	let p;
+	p=pokInv[sender].deck[n-1];
+	var rotom=["로토무","히트로토무","워시로토무","프로스트로토무","스핀로토무","커트로토무"];
+	var curem=["큐레무","블랙큐레무","화이트큐레무"];
+	if(rotom.indexOf(p.name)==(-1)&&curem.indexOf(p.name)==(-1))
+	{
+		replier.reply("@"+sender+"\n폼체인지를 할 수 없는 포켓몬이에요.");
+		return;
+	}
+	var skillcosts=10000000;
+	skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc)/100);
+	if(pokUser[sender].gold<skillcosts)
+	{
+		replier.reply("@"+sender+"\n돈이 부족해요.\n\nLV."+p.level+" "+p.name+"의 폼체인지 비용: "+skillcosts.comma()+"원");
+	}
+	else{
+	var oldname=p.name;
+	if(rotom.indexOf(p.name)!=(-1))
+	{
+		var newname="";
+		do{
+			newname=rotom[Math.floor(Math.random()*rotom.length)];
+		}while(newname==p.name);
+		p.name=newname;
+	}
+	else if(curem.indexOf(p.name)!=(-1))
+	{
+		if(pokUser[sender].activecollection.includes(19)){
+		var newname="";
+		do{
+			newname=curem[Math.floor(Math.random()*curem.length)];
+		}while(newname==p.name);
+		p.name=newname;
+		}
+		else
+		{
+			replier.reply("큐레무의 폼체인지는 제크로무, 레시라무를 모두 컬렉션에 장착해야 가능합니다.");
+			return;
+		}
+	}
+	p.hp=Math.ceil(read("포켓몬/"+p.name,"hp")*p.level/50);
+	p.atk=Math.ceil(read("포켓몬/"+p.name,"atk")*p.level/50);
+	p.def=Math.ceil(read("포켓몬/"+p.name,"def")*p.level/50);
+	p.spd=Math.ceil(read("포켓몬/"+p.name,"spd")*p.level/50);
+	
+	pokInv[sender].deck[n-1]=p;
+	pokUser[sender].gold=pokUser[sender].gold-skillcosts;
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
+	var showstats="\n최대 HP: "+pokInv[sender].deck[n-1].hp+"\n공격력: "+pokInv[sender].deck[n-1].atk+"\n방어력: "+pokInv[sender].deck[n-1].def+"\n스피드: "+pokInv[sender].deck[n-1].spd;
+	replier.reply("@"+sender+"\n"+skillcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+pokInv[sender].deck[n-1].level+" "+oldname+" > Lv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+"\n\n"+"\u200b".repeat(500)+showstats);
+	
 	}
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
 	}
@@ -1926,6 +2226,67 @@ if(msg.startsWith(cmds.info))//트레이너정보
 	"레어: "+pokUser[name].successcatch.g3+"%(+"+(pokUser[name].successcatch.g3-setting.catchsuccess[1]).toFixed(1)+"%)",
 	"고급: "+pokUser[name].successcatch.g2+"%(+"+(pokUser[name].successcatch.g2-setting.catchsuccess[2]).toFixed(1)+"%)",
 	"일반: "+pokUser[name].successcatch.g1+"%(+"+(pokUser[name].successcatch.g1-setting.catchsuccess[3]).toFixed(1)+"%)"].join("\n"));
+}
+
+if(msg==cmds.mycollection)//내 컬렉션
+{
+	pokUser[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
+	if(pokUser[sender]==null){
+        replier.reply('@'+sender+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
+        return;
+    }
+	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
+	var str="";
+	if(pokInv[sender].collection.length<1) str="\n현재 장착 중인 컬렉션이 없습니다.\n";
+	else{
+		for(var i=0;i<pokInv[sender].collection.length;i++)
+			str=str+(i+1)+".  Lv."+pokInv[sender].collection[i].level+" "+pokInv[sender].collection[i].name+"\n";
+		if(pokInv[sender].collection.length<7)
+		{
+			for(var i=0;i<(7-pokInv[sender].collection.length);i++)
+				str=str+(pokInv[sender].collection.length+(i+1))+".  (비어 있음)\n";
+		}
+	}
+	var res="";
+	if(pokUser[sender].activecollection.length>0){
+		res=res+"---현재 적용중인 컬렉션 효과---\n";
+		
+		for(var i=0;i<pokUser[sender].activecollection.length;i++)
+		{
+			res=res+collectionnames[Number(pokUser[sender].activecollection[i])-1]+" Lv."+pokUser[sender].collectionlev+"\n";
+			if(Number(pokUser[sender].activecollection[i])>0&&Number(pokUser[sender].activecollection[i])<6)
+				res=res+"배틀 중 아군의 데미지 "+pokUser[sender].collectionlev*2+"% 증가\n";
+			else if(Number(pokUser[sender].activecollection[i])==6)
+				res=res+"배틀 중 아군의 스피드 "+pokUser[sender].collectionlev*5+" 증가\n";
+			else if(Number(pokUser[sender].activecollection[i])==7)
+				res=res+"배틀 중 상대방 명중률 "+pokUser[sender].collectionlev*3+"% 감소\n(렙차 패널티와 합해서 50%를 넘을 수 없음)\n";
+			else if(Number(pokUser[sender].activecollection[i])==8)
+				res=res+"PVP 배틀 상금 X"+(pokUser[sender].collectionlev+1)+" 배\n";
+			else if(Number(pokUser[sender].activecollection[i])==9)
+				res=res+"배틀 중 아군의 방어력 "+pokUser[sender].collectionlev*30+" 증가\n";
+			else if(Number(pokUser[sender].activecollection[i])==10)
+				res=res+"추가 포획률 "+pokUser[sender].collectionlev+"% 증가\n";
+			else if(Number(pokUser[sender].activecollection[i])==11)
+				res=res+"";
+			else if(Number(pokUser[sender].activecollection[i])==12)
+				res=res+"배틀에서 아군이 쓰러질 공격을 받을 시 "+pokUser[sender].collectionlev*4+"% 확률로 체력 1을 남기고 생존\n";
+			else if(Number(pokUser[sender].activecollection[i])==13)
+				res=res+"배틀 중 상대의 효과가 굉장한 공격의 데미지 "+pokUser[sender].collectionlev*5+"% 감소\n";
+			else if(Number(pokUser[sender].activecollection[i])==14)
+				res=res+"모든 돈 획득량 +"+pokUser[sender].collectionlev*10+"% 증가\n";
+			else if(Number(pokUser[sender].activecollection[i])==15)
+				res=res+"전설의 포켓몬 출현율 "+pokUser[sender].collectionlev+"% 증가\n";
+			else if(Number(pokUser[sender].activecollection[i])==16)
+				res=res+"탐험 중 돈 발견 시 획득량 X"+(pokUser[sender].collectionlev+1)+" 배\n";
+			else if(Number(pokUser[sender].activecollection[i])==17)
+				res=res+"";
+			else if(Number(pokUser[sender].activecollection[i])==18)
+				res=res+"포켓몬 레벨업 비용 "+pokUser[sender].collectionlev*5+"% 감소\n";
+			else if(Number(pokUser[sender].activecollection[i])==19)
+				res=res+"큐레무를 블랙큐레무, 화이트큐레무로 폼체인지가 가능해짐\n";
+		}
+	}
+	replier.reply("["+sender+"] 님의 현재 컬렉션\n"+"\u200b".repeat(500)+"\n박스로 포켓몬 이동: "+cmds.collectionout+" (숫자)\n(보관함에서 컬렉션으로의 이동은 보관함 참조)\n(컬렉션에는 7마리까지 장착 가능하며, 두 가지 이상의 컬렉션 효과 적용 시 중첩됩니다.)\n\n----[포켓몬 목록]----\n"+str+"\n----------\n\n\n"+res);
 }
 
 if(msg==cmds.rest)//휴식
@@ -2216,6 +2577,14 @@ if(msg==cmds.battlejoin)//배틀참가
 				player2maxhp=player1maxhp;
 				replier.reply("@"+player2+"\n메타몽은 "+player2pok.name+"의 모습으로 변신했어요!");
 			}
+			if(pokUser[player1].activecollection.includes(6))
+				player1pok.spd=player1pok.spd+pokUser[player1].collectionlev*5;
+			if(Number(pokUser[player2].activecollection.includes(6)))
+				player2pok.spd=player2pok.spd+pokUser[player2].collectionlev*5;
+			if(pokUser[player1].activecollection.includes(9))
+				player1pok.def=player1pok.def+pokUser[player1].collectionlev*30;
+			if(Number(pokUser[player2].activecollection.includes(9)))
+				player2pok.def=player2pok.def+pokUser[player2].collectionlev*30;
 			for(var i=0;i<player1skillsarr.length;i++)
 				player1pp.push(Number(read("기술/"+player1skillsarr[i]),"pp"));
 			for(var i=0;i<player2skillsarr.length;i++)
@@ -2249,6 +2618,8 @@ if(msg==cmds.battlejoin)//배틀참가
 				if(player1retire.length==pokInv[player1].deck.length)
 				{
 					var reward=Math.ceil(pokUser[player1].gold/10);
+					if(Number(pokUser[player2].activecollection.includes(18)))
+						reward=reward*(pokUser[player2].collectionlev+1);
 					isbattle=0;
 					player1retire=[];
 					player2retire=[];
@@ -2350,6 +2721,8 @@ if(msg==cmds.battlejoin)//배틀참가
 				if(player2retire.length==pokInv[player2].deck.length)
 				{
 					var reward=Math.ceil(pokUser[player2].gold/10);
+					if(pokUser[player1].activecollection.includes(18))
+						reward=reward*(pokUser[player1].collectionlev+1);
 					isbattle=0;
 					player1retire=[];
 					player2retire=[];
@@ -2554,6 +2927,10 @@ if(msg==cmds.gym)//체육관
 				player2maxhp=player1maxhp;
 				replier.reply("@"+player2+"\n메타몽은 "+player2pok.name+"의 모습으로 변신했어요!");
 			}
+			if(Number(pokUser[player2].activecollection.includes(6)))
+				player2pok.spd=player2pok.spd+pokUser[player2].collectionlev*5;
+			if(Number(pokUser[player2].activecollection.includes(9)))
+				player2pok.def=player2pok.def+pokUser[player2].collectionlev*30;
 			for(var i=0;i<player1skillsarr.length;i++)
 				player1pp.push(Number(read("기술/"+player1skillsarr[i]),"pp"));
 			for(var i=0;i<player2skillsarr.length;i++)
@@ -2829,6 +3206,10 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 						player1maxhp=player2maxhp;
 						replier.reply("@"+player1+"\n메타몽은 "+player1pok.name+"의 모습으로 변신했어요!");
 					}
+					if(pokUser[player1].activecollection.includes(6))
+						player1pok.spd=player1pok.spd+pokUser[player1].collectionlev*5;
+					if(pokUser[player1].activecollection.includes(9))
+						player1pok.def=player1pok.def+pokUser[player1].collectionlev*30;
 					for(var i=0;i<player1skillsarr.length;i++)
 						player1pp.push(Number(read("기술/"+player1skillsarr[i]),"pp"));
 					
@@ -2894,6 +3275,10 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 						player2maxhp=player1maxhp;
 						replier.reply("@"+player2+"\n메타몽은 "+player2pok.name+"의 모습으로 변신했어요!");
 					}
+					if(Number(pokUser[player2].activecollection.includes(6)))
+						player2pok.spd=player2pok.spd+pokUser[player2].collectionlev*5;
+					if(Number(pokUser[player2].activecollection.includes(9)))
+						player2pok.def=player2pok.def+pokUser[player2].collectionlev*30;
 					for(var i=0;i<player2skillsarr.length;i++)
 						player2pp.push(Number(read("기술/"+player2skillsarr[i]),"pp"));
 					
@@ -2920,6 +3305,8 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 					if(player1retire.length==pokInv[player1].deck.length)
 					{
 						var reward=Math.ceil(pokUser[player1].gold/10);
+						if(Number(pokUser[player2].activecollection.includes(18)))
+							reward=reward*(pokUser[player2].collectionlev+1);
 						isbattle=0;
 						player1retire=[];
 						player2retire=[];
@@ -3022,6 +3409,8 @@ if(msg.split(" ")[0]==cmds.battlenext&&isbattle!=0)//배틀 다음포켓몬
 					if(player2retire.length==pokInv[player2].deck.length)
 					{
 						var reward=Math.ceil(pokUser[player2].gold/10);
+						if(pokUser[player1].activecollection.includes(18))
+							reward=reward*(pokUser[player1].collectionlev+1);
 						isbattle=0;
 						player1retire=[];
 						player2retire=[];
@@ -3315,6 +3704,8 @@ if(msg==cmds.giveup)//배틀 기권
 				replier.reply(player1+"님이 배틀을 기권했어요.");
 				java.lang.Thread.sleep(1000);
 				var reward=Math.ceil(pokUser[player1].gold/10);
+				if(Number(pokUser[player2].activecollection.includes(18)))
+					reward=reward*(pokUser[player2].collectionlev+1);
 				isbattle=0;
 				player1retire=[];
 				player2retire=[];
@@ -3402,6 +3793,8 @@ if(msg==cmds.giveup)//배틀 기권
 					java.lang.Thread.sleep(1000);
 					if(isbattle==1){
 						var reward=Math.ceil(pokUser[player2].gold/10);
+						if(pokUser[player1].activecollection.includes(18))
+							reward=reward*(pokUser[player1].collectionlev+1);
 						isbattle=0;
 						player1retire=[];
 						player2retire=[];
@@ -3576,6 +3969,48 @@ if(msg==cmds.ballinfo)//볼강화 종류
 	replier.reply("포켓몬스터 게임 볼 강화 목록"+"\u200b".repeat(500)+"\n"+res.join("\n"));
 }
 
+if(msg==cmds.collectioninfo)//컬렉션 목록
+{
+	var res=[];
+	var ress="";
+	for(var i=0;i<19;i++)
+	{
+		ress="";
+			if((i+1)>0&&(i+1)<6)
+				ress=ress+"배틀 중 아군의 데미지 2/4/6/8/10% 증가\n";
+			else if((i+1)==6)
+				ress=ress+"배틀 중 아군의 스피드 5/10/15/20/25 증가\n";
+			else if((i+1)==7)
+				ress=ress+"배틀 중 상대방 명중률 3/6/9/12/15% 감소\n(렙차 패널티와 합해서 50%를 넘을 수 없음)\n";
+			else if((i+1)==8)
+				ress=ress+"PVP 배틀 상금 X2/3/4/5/6 배\n";
+			else if((i+1)==9)
+				ress=ress+"배틀 중 아군의 방어력 30/60/90/120/150 증가\n";
+			else if((i+1)==10)
+				ress=ress+"추가 포획률 1/2/3/4/5% 증가\n";
+			else if((i+1)==11)
+				ress=ress+"";
+			else if((i+1)==12)
+				ress=ress+"배틀에서 아군이 쓰러질 공격을 받을 시 4/8/12/16/20% 확률로 체력 1을 남기고 생존\n";
+			else if((i+1)==13)
+				ress=ress+"배틀 중 상대의 효과가 굉장한 공격의 데미지 5/10/15/20/25% 감소\n";
+			else if((i+1)==14)
+				ress=ress+"모든 돈 획득량 +10/20/30/40/50% 증가\n";
+			else if((i+1)==15)
+				ress=ress+"전설의 포켓몬 출현율 1/2/3/4/5% 증가\n";
+			else if((i+1)==16)
+				ress=ress+"탐험 중 돈 발견 시 획득량 X2/3/4/5/6 배\n";
+			else if((i+1)==17)
+				ress=ress+"";
+			else if((i+1)==18)
+				ress=ress+"포켓몬 레벨업 비용 5/10/15/20/25% 감소\n";
+			else if((i+1)==19)
+				ress=ress+"큐레무를 블랙큐레무, 화이트큐레무로 폼체인지가 가능해짐\n";
+			res.push("["+collectionnames[i]+"]\n"+collectioncontents[i].join(", ")+"\n"+ress);
+	}
+	replier.reply("포켓몬스터 게임 컬렉션 효과 목록"+"\u200b".repeat(500)+"\n※컬렉션 레벨은 장착 중인 포켓몬 레벨 평균이 50의 배수를 넘을 때마다 1씩 오릅니다.\n\n"+res.join("\n"));
+}
+
 if(msg==cmds.rank)//배틀 랭킹
 {
 	let pokRank=JSON.parse(FileStream.read(pathRank));
@@ -3635,6 +4070,8 @@ if(msg==cmds.uphelp)//명령어
 	cmds.ballthrow.join("/")+": 볼 던지기",
 	cmds.esc.join("/")+": 도망가기",
 	cmds.box+": 포켓몬 보관함",
+	cmds.mycollection+": 적용 중인 컬렉션",
+	cmds.collectioninfo+": 컬렉션 종류",
 	cmds.info+": 내 트레이너 정보 (닉네임 같이 입력 시 해당 유저 정보)",
 	cmds.ball+" (숫자): 볼 구매",
 	cmds.rest+": 휴식(다시 사용시 휴식 종료)",
@@ -3711,6 +4148,8 @@ if(msg=="@확률업뎃")//확률수정 이후 업뎃용
         replier.reply('@'+sender+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
         return;
     }
+	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
+	
 	var b=0;
 	b=ballArr.indexOf(pokUser[sender].Ball);
 	var nowr=0;
@@ -3753,7 +4192,24 @@ if(msg=="@확률업뎃")//확률수정 이후 업뎃용
 		pokUser[sender].badge=null;
 		pokUser[sender].badge=0;
 	}
+	if(pokInv[sender].collection==undefined||pokInv[sender].collection==null)
+	{
+		pokInv[sender].collection=null;
+		pokInv[sender].collection=[];
+	}
+	if(pokInv[sender].activecollection==undefined||pokInv[sender].activecollection==null)
+	{
+		pokUser[sender].activecollection=null;
+		pokUser[sender].activecollection=[];
+	}
+	if(pokInv[sender].collectionlev==undefined||pokInv[sender].collectionlev==null)
+	{
+		pokUser[sender].collectionlev=null;
+		pokUser[sender].collectionlev=0;
+	}
+	
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
+	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	replier.reply("@"+sender+"\n수정된 확률 반영 완료.");
 }
 
