@@ -1,4 +1,7 @@
-const result=["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메벤 평균","메창","메아일체","메이플 인생 메생이","넥슨 VVIP 흑우"];
+const { KakaoLinkClient } = require('kakaolink');
+const Kakao =new KakaoLinkClient("aaa","http://asdf");
+Kakao.login('asdf','asdf');
+const result=["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메벤 평균","메창","결제태도 성실한 체리피커","메이플 인생 메생이","넥슨 VVIP 흑우"];
 Jsoup=org.jsoup.Jsoup
 var lev;
 var murung;
@@ -12,12 +15,15 @@ var union;
  * (string) imageDB.getProfileBase64()
  * (string) packageName
  */
-function calculate(nickname){
-	var url="https://maple.gg/u/"+nickname;
-	var data=Jsoup.connect(url).get();
-	murung=Number(data.select(".character-card-additional>li>span").get(0).text().replace("층", ""));
-	union=Number(data.select(".character-card-additional>li>small").get(2).text().replace("Lv.", ""));
-	lev=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nickname).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");
+function calculate(nickname,isrbt){
+   var url="https://maple.gg/u/"+nickname;
+   var data=Jsoup.connect(url).get();
+   murung=Number(data.select(".character-card-additional>li>span").get(0).text().replace("층", ""));
+   union=Number(data.select(".character-card-additional>li>small").get(2).text().replace("Lv.", ""));
+   if(isrbt==0)
+	   lev=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nickname).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");
+   else
+	   lev=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nickname+"&w=254").get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");
 }
  
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
@@ -32,19 +38,16 @@ murung=0;
 union=0;
 var nick=msg.split(" ")[1];
 try{
-calculate(nick);
-
-//replier.reply(lev);
+var isreboot=org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick).get().select("#container > div > div > div:nth-child(4)").text();
+if(isreboot!="랭킹정보가 없습니다.") calculate(nick,0);
+else calculate(nick,1);
 var judge=0;
 var res=0;
 if(murung>44) judge=judge+(murung*4);
 else judge=judge+(murung*3);
-//replier.reply(judge);
 if(union>7999) judge=judge+250;
 else judge=judge+(union/40);
-//replier.reply(judge);
 judge=Math.ceil(judge)+Number(lev)-100;
-//replier.reply(judge);
 if(judge<301) res=0;
 else if(judge<351) res=1;
 else if(judge<401) res=2;
@@ -53,27 +56,44 @@ else if(judge<551) res=4;
 else if(judge<601) res=5;
 else if(judge<701) res=6;
 else res=7;
-replier.reply("["+nick+"]님의 메창력 테스트 결과....\n\n3대 "+judge+" 치시는\n["+result[res]+"] 입니다.");
+if(isNaN(judge))
+replier.reply("본캐와 무릉 기록을 확인해주세요!\n본캐만 측정 가능하며 무릉 기록이 없으면 측정할 수 없습니다.");
+else
+{
+if(isreboot!="랭킹정보가 없습니다."){
+	var img = org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td.left > span > img:nth-child(1)").get(0).select("img").attr("src");
+	var datar = org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick).get().select("tr.search_com_chk").select("dd");//공홈파싱
+	var job = datar.get(0).text().split("/")[1].split("\">\"")[0];//직업
+	var serverimg=org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick).get().select("tr.search_com_chk").select("dt").select("img").attr("src")
+}
+else{
+	var img = org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick+"&w=254").get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td.left > span > img:nth-child(1)").get(0).select("img").attr("src");
+	var datar = org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick+"&w=254").get().select("tr.search_com_chk").select("dd");//공홈파싱
+	var job = datar.get(0).text().split("/")[1].split("\">\"")[0];//직업
+	var serverimg=org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick+"&w=254").get().select("tr.search_com_chk").select("dt").select("img").attr("src")
+}
+var desctext="직업: "+job+" │ 레벨: "+lev+"\n무릉: "+murung+"층 │ 유니온: "+union;
+var buttontext=result[res]+" ("+judge+"점)";
+
+Kakao.sendLink(room, {
+"link_ver":"4.0",
+"template_id":(58792),
+"template_args":{
+//이곳에 템플릿 정보를 입력하세요.
+'CHARIMG':img,
+'CHARNAME':"["+nick+"]님의 메창력",
+'SERVER':serverimg,
+'DESC':desctext,
+'BUTTON':buttontext,
+'LINK':"u/"+nick
+}
+}, "custom")
+
+}
 }catch(e)
 {
-	replier.reply("본캐인지 확인해주세요!\n본캐만 측정 가능합니다.")
+   replier.reply("본캐와 무릉 기록을 확인해주세요!\n본캐만 측정 가능하며 무릉 기록이 없으면 측정할 수 없습니다.");
 }
 }
 }
 }
-
-//아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
-function onCreate(savedInstanceState, activity) {
-  var textView = new android.widget.TextView(activity);
-  textView.setText("Hello, World!");
-  textView.setTextColor(android.graphics.Color.DKGRAY);
-  activity.setContentView(textView);
-}
-
-function onStart(activity) {}
-
-function onResume(activity) {}
-
-function onPause(activity) {}
-
-function onStop(activity) {}
