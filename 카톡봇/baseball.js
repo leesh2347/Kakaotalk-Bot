@@ -1,4 +1,4 @@
-const scriptName="baseball";
+var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 
 var num;
 var strike=0;
@@ -9,10 +9,8 @@ var play;
 var proom=" ";
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB) {
-if(room=="메이플 키네시스"||room=="메이플 크하 수다방")
-return;
-else
-{
+if(banrooms.includes(room)) return;
+
 
 if(msg=="/숫자야구시작")
 {
@@ -104,7 +102,6 @@ isplaying=0;
 }
 }
 
-}
 
 }
 
