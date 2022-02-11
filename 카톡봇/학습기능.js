@@ -1,3 +1,4 @@
+
 /**
  * (string) room
  * (string) sender
@@ -7,8 +8,10 @@
  * (string) imageDB.getProfileBase64()
  * (string) packageName
  */
+limit = 31
 commList = [];
 answList = [];
+var banrooms=["바다 월드","키네연구소","리부트 길드 <계란> 오픈채팅방","낚시터","메이플 키네시스"];
 var loc="sdcard/katalkbot/Bots/학습기능/";
 
 function read(target, res){
@@ -31,7 +34,7 @@ function user(target, res, to){
    }
 
 function response (room, msg, sender, isGroupChat, replier, ImageDB) {
-if(room=="바다 월드") return
+if(banrooms.includes(room)) return;
 
 if (msg.indexOf(" 라고하면 ")!=(-1)&&msg.indexOf(" 라고해")!=(-1)) {
 var comm="";
@@ -58,7 +61,7 @@ if (msg.indexOf("ㄴㅇㄱ 라고하지마")==(-1)&&msg.indexOf(" 라고하지�
 var comm="";
 var answer="";
 comm=msg.split(" 라고하지마")[0];
-if (commList.indexOf(comm)!=(-1)) {
+if (read("data", "command").indexOf(comm)!=(-1)) {
 commList=read("data", "command");
 answList=read("data", "answer");
 answList.splice(commList.indexOf(comm), 1);
@@ -78,8 +81,25 @@ if(read("data", "command").indexOf(msg)!=(-1))
 {
 	if(msg=="ㄴㅇㄱ")
 		replier.reply("ㄴㅇㄱ");
+	else if(msg=="ㄷ ㄷ")
+		replier.reply("ㄷ ㄷ");
 	else
 		replier.reply("[루시]  "+read("data", "answer")[read("data", "command").indexOf(msg)]);
+}
+
+if(msg=="!학습목록"){
+   if(sender.indexOf("디벨로이드")!=(-1)||sender=="이상훈")
+   {
+   var t="";
+   commList=read("data", "command");
+   answList=read("data", "answer");
+   for(var i=0;i<commList.length;i++){
+      t=t+commList[i]+":\n"+answList[i]+"\n\n";
+   }
+      replier.reply("현재 학습된 전체 목록\n"+"\u200b".repeat(500)+"\n\n"+t);
+   }
+   else
+      replier.reply("[루시] 학습어 목록은 관리자만 열람 가능해요!");
 }
 
 }

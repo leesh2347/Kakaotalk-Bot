@@ -1,9 +1,10 @@
 const { KakaoLinkClient } = require('kakaolink');
 const Kakao =new KakaoLinkClient("aaa","http://asdf");
 Kakao.login('asdf','asdf');
+var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
-if(room=="키네연구소") return;
+if(banrooms.includes(room)) return;
 if(msg=="!ㄷㄱㄷㄱ")
 {
 var n1=0;

@@ -1,9 +1,9 @@
-const scriptName="soragodong";
+var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 const ments=["그래.","그.....래.","그럼~","아니.","안돼.","아.....니.","안.....돼.","언젠가는.","가만히 있어.","그것도 안돼.","다시 한 번 물어봐.","그렇고 말고.","그러지 마.","물론~","하지 마."];
 
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB) {
-if(room == "메이플 키1네시스"||room=="바다 월드") return
+if(banrooms.includes(room)) return;
 else{
 if(msg=="소라고동님")
 replier.reply("왜.");
