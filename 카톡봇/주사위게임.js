@@ -2,6 +2,7 @@ const { KakaoLinkClient } = require('kakaolink');
 const Kakao =new KakaoLinkClient("aaa","http://asdf");
 Kakao.login('asdf','asdf');
 
+var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 playerList = [];
 isAI = 99;
 order = [];
@@ -77,7 +78,7 @@ function colmove(num){
 }
 
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
-	if(room=="키네연구소") return;
+	if(banrooms.includes(room)) return;
 	
 	if(msg=="/주사위게임 도움말")
 		replier.reply("추억의 주사위 보드게임\n\n/주사위게임 입장\n/주사위게임 퇴장\n/주사위게임 AI\n/주사위게임 시작\n\n*2인 이상부터 게임 진행이 가능합니다.");

@@ -4,6 +4,7 @@ var ans_fake="";
 var start_time=null;
 var isplaying=0;
 var playingroom="";
+var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 Jsoup = org.jsoup.Jsoup
 /**
  * (string) room
@@ -15,7 +16,8 @@ Jsoup = org.jsoup.Jsoup
  * (string) packageName
  */
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-if(msg=="!타자게임"&&room!="키네연구소"){
+if(msg=="!타자게임"){
+if(banrooms.includes(room)) return;
 if(isplaying==1)
 replier.reply("[루시] 이미 이 방 또는 다른 방에서 진행 중인 게임이 있습니다.");
 else{
@@ -38,7 +40,8 @@ replier.reply("[루시] 타자게임을 시작합니다!\n\n제시된 문장: "+
 }
 }
 
-if(room!="키네연구소"&&isplaying==1){
+if(isplaying==1){
+if(banrooms.includes(room)) return;
 if(room==playingroom){
 var n=Date.now();
 var playtime=((n-start_time)/1000).toFixed(2);
