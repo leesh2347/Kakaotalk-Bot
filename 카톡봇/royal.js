@@ -1,10 +1,11 @@
 Jsoup = org.jsoup.Jsoup;
 FS = FileStream;
+var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 var loc="sdcard/katalkbot/Bots/royal/contents.json";
 if (FS.read(loc)==null) FS.write(loc, "{}");
         
 function response(room, msg, sender, isGroupChat, replier, ImageDB, packageName, threadId){
-if(room=="키네연구소"||room=="바다 월드") return;
+if(banrooms.includes(room)) return;
 if(msg=="@로얄업뎃"){
 	var rd = JSON.parse(FS.read(loc));
 	rd["itemname"] = [];
