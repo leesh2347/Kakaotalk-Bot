@@ -82,7 +82,10 @@ if(a!="기록없음")
 var n=data.select("#app > div.card.border-bottom-0 > div > section > div.row.text-center > div:nth-child(3) > section > footer > div.d-block.mb-1 > span").text().split("전투력 ")[1];
 var num=Number(parseInt(n.replace(/,/g,"")));
 var coin=Math.ceil(num*864/1000000000);
+if(data.select(".character-card-additional>li>small").get(0).text()=="최고")
 text=text+data.select(".character-card-additional>li>span").get(1).text()+"\n"+data.select(".character-card-additional>li>small").get(2).text()+"\n전투력: "+n+"\n일일 코인 수급량: "+coin;
+else
+text=text+data.select(".character-card-additional>li>span").get(1).text()+"\n"+data.select(".character-card-additional>li>small").get(0).text()+"\n전투력: "+n+"\n일일 코인 수급량: "+coin;
 replier.reply("["+nick+"]\n"+text);
 }
 else

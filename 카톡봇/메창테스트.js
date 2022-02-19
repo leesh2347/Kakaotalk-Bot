@@ -19,7 +19,12 @@ function calculate(nickname,isrbt){
    var url="https://maple.gg/u/"+nickname;
    var data=Jsoup.connect(url).get();
    murung=Number(data.select(".character-card-additional>li>span").get(0).text().replace("층", ""));
-   union=Number(data.select(".character-card-additional>li>small").get(2).text().replace("Lv.", ""));
+   if(isNaN(murung))
+	   murung=0;
+   if(murung!=0)
+	   union=Number(data.select(".character-card-additional>li>small").get(2).text().replace("Lv.", ""));
+   else
+	   union=Number(data.select(".character-card-additional>li>small").get(0).text().replace("Lv.", ""));
    if(isrbt==0)
 	   lev=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nickname).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");
    else
@@ -57,7 +62,7 @@ else if(judge<601) res=5;
 else if(judge<701) res=6;
 else res=7;
 if(isNaN(judge))
-replier.reply("본캐와 무릉 기록을 확인해주세요!\n본캐만 측정 가능하며 무릉 기록이 없으면 측정할 수 없습니다.");
+replier.reply("본캐여부를 확인해주세요!\n본캐(월드 내 가장 레벨이 높은 캐릭터)가 아니면 측정할 수 없습니다.");
 else
 {
 if(isreboot!="랭킹정보가 없습니다."){
@@ -92,7 +97,7 @@ Kakao.sendLink(room, {
 }
 }catch(e)
 {
-   replier.reply("본캐와 무릉 기록을 확인해주세요!\n본캐만 측정 가능하며 무릉 기록이 없으면 측정할 수 없습니다.");
+   replier.reply("본캐여부를 확인해주세요!\n본캐(월드 내 가장 레벨이 높은 캐릭터)가 아니면 측정할 수 없습니다.");
 }
 }
 }
