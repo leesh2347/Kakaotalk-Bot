@@ -45,13 +45,14 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 if(room=="바다 월드") return
 if(msg.split(" ")[0]=="@무릉")
 {
-var nick=msg.split(" ")[1];
+var nick=msg.split("@무릉 ")[1];
 if(nick==undefined)
 	 nick=recommendnick(sender,replier);
 if(nick=="") replier.reply("닉네임을 입력해 주세요.");
 else
 {
-recordnick(sender,nick);
+if(nick.indexOf(" ")==(-1)){
+try{
 var url="https://maple.gg/u/"+nick;
 var data=Jsoup.connect(url).get();
 var a=data.select(".character-card-additional>li>b").get(0).text();
@@ -62,7 +63,40 @@ if(a=="예전무릉")
 text=text+"기록이 없습니다.\n\n개편전 무릉 기록\n";
 }
 text=text+"층수: "+data.select(".character-card-additional>li>span").get(0).text()+"\n시간: "+data.select(".character-card-additional>li>small").get(1).text();
+recordnick(sender,nick);
 replier.reply("["+nick+"]\n"+text);
+}catch(e){
+replier.reply("["+nick+"]\n없는 캐릭터명 입니다.");
+}
+}
+else
+{
+	var nickarr=nick.split(" ");
+	var res="";
+	var nickarrlen=nickarr.length;
+	if(nickarrlen>6) nickarrlen=6;
+	var text="";
+	for(var i=0;i<nickarrlen;i++)
+	{
+		try{
+			text="";
+			var url="https://maple.gg/u/"+nickarr[i];
+			var data=Jsoup.connect(url).get();
+			var a=data.select(".character-card-additional>li>b").get(0).text();
+			//text=text+data.select(".character-card-summary-item").get(1).text()+"/"+data.select(".character-card-summary-item").get(2).text()+"\n";
+			if(a=="예전무릉")
+			{
+			text=text+"기록없음 / 개편전 무릉 ";
+			}
+			text=text+data.select(".character-card-additional>li>span").get(0).text();
+		}
+		catch(e){
+			text="(기록없음)";
+		}
+		res=res+"["+nickarr[i]+"] "+text+"\n";
+	}
+	replier.reply(res);
+}
 }
 }
 if(msg.split(" ")[0]=="@유니온")
@@ -72,7 +106,7 @@ if(nick==undefined)
 	 nick=recommendnick(sender,replier);
 if(nick=="") replier.reply("닉네임을 입력해 주세요.");
 else{
-recordnick(sender,nick);
+try{
 var url="https://maple.gg/u/"+nick;
 var data=Jsoup.connect(url).get();
 var a=data.select(".character-card-additional>li>span").get(1).text();
@@ -86,10 +120,18 @@ if(data.select(".character-card-additional>li>small").get(0).text()=="최고")
 text=text+data.select(".character-card-additional>li>span").get(1).text()+"\n"+data.select(".character-card-additional>li>small").get(2).text()+"\n전투력: "+n+"\n일일 코인 수급량: "+coin;
 else
 text=text+data.select(".character-card-additional>li>span").get(1).text()+"\n"+data.select(".character-card-additional>li>small").get(0).text()+"\n전투력: "+n+"\n일일 코인 수급량: "+coin;
+recordnick(sender,nick);
 replier.reply("["+nick+"]\n"+text);
 }
 else
+{
+recordnick(sender,nick);
 replier.reply("["+nick+"]\n기록이 없습니다.\n유니온은 본캐만 조회가 가능합니다. 본캐인지 확인해주세요!");
+}
+}
+catch(e){
+	replier.reply("["+nick+"]\n없는 캐릭터명 입니다.");
+}
 }
 }
 
