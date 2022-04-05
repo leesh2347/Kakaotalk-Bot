@@ -1,7 +1,7 @@
 const { KakaoLinkClient } = require('kakaolink');
 const Kakao =new KakaoLinkClient("aaa","http://asdf");
 Kakao.login('asdf','asdf');
-const result=["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메벤 평균","메창","결제태도 성실한 체리피커","메이플 인생 메생이","넥슨 VVIP 흑우"];
+const result=["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메이플 평균","메창","메이플 인생 메생이","컨텐츠가 부족한 토끼공듀","넥슨 VVIP 흑우 ㅋㅋ"];
 Jsoup=org.jsoup.Jsoup
 var lev;
 var murung;
@@ -35,7 +35,22 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 if(room!="바다 월드"){
 if(msg=="!메창")
 {
-replier.reply("사용법: !메창 (닉네임)\n\n레벨-100+무릉x3+유니온/4\n※유니온 8000 이상=250으로 계산\n※무릉 45 이상=무릉x4로 계산\n\n200~300 : 메린이\n301~350 : 무자본 평균\n351~400 : 메른이\n401~500 : 메벤 평균\n501~550 : 메창\n551~600 : 일상생활 < 메이플\n601~700 : 메이플 인생.\n701+ : 넥슨 VVIP");
+replier.reply(["사용법: !메창 (닉네임)",
+	"",
+	"레벨-100+무릉x3+유니온/40",
+	"※유니온 8000 이상: 가중치 25%",
+	"※무릉 50 이상=무릉x4로 계산",
+	"※레벨 250 이상시 10, 260 이상시 20, 275 이상시 40 가중치 부여",
+	"",
+	"200~300 : 메린이",
+	"301~400 : 무자본 평균",
+	"401~450 : 메른이",
+	"451~550 : 메이플 평균",
+	"551~650 : 메창",
+	"651~700 : 메이플 인생.",
+	"701~750 : 토끼공듀",
+	"751+ : 넥슨 VVIP"
+	].join("\n"));
 }
 else if(msg.split(" ")[0]=="!메창"){
 lev=0;
@@ -48,18 +63,25 @@ if(isreboot!="랭킹정보가 없습니다.") calculate(nick,0);
 else calculate(nick,1);
 var judge=0;
 var res=0;
-if(murung>44) judge=judge+(murung*4);
+if(murung>49) judge=judge+(murung*4);
 else judge=judge+(murung*3);
-if(union>7999) judge=judge+250;
+if(union>7999) judge=judge+(union/32);
 else judge=judge+(union/40);
-judge=Math.ceil(judge)+Number(lev)-100;
+if(Number(lev)>274)
+	judge=Math.ceil(judge)+Number(lev)-60;
+else if(Number(lev)>259)
+	judge=Math.ceil(judge)+Number(lev)-80;
+else if(Number(lev)>249)
+	judge=Math.ceil(judge)+Number(lev)-90;
+else
+	judge=Math.ceil(judge)+Number(lev)-100;
 if(judge<301) res=0;
-else if(judge<351) res=1;
-else if(judge<401) res=2;
-else if(judge<501) res=3;
-else if(judge<551) res=4;
-else if(judge<601) res=5;
-else if(judge<701) res=6;
+else if(judge<401) res=1;
+else if(judge<451) res=2;
+else if(judge<551) res=3;
+else if(judge<651) res=4;
+else if(judge<701) res=5;
+else if(judge<751) res=6;
 else res=7;
 if(isNaN(judge))
 replier.reply("본캐여부를 확인해주세요!\n본캐(월드 내 가장 레벨이 높은 캐릭터)가 아니면 측정할 수 없습니다.");
