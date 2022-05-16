@@ -68,7 +68,7 @@ else if (msg.indexOf("ㄴㅇㄱ 라고하지마")==(-1)&&msg.indexOf(" 라고하
 	if(room=="키네연구소"&&k_managerlist.indexOf(sender)==(-1)){
 		replier.reply("[루시] 관리자만 가능한 기능이에요!");
 	}
-	{
+	else{
 		var comm="";
 		var answer="";
 		comm=msg.split(" 라고하지마")[0];
