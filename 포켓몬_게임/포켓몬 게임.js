@@ -311,12 +311,14 @@ function battleturn(room,replier) //배틀 구현 함수
 						atk=weatherjudge(atk,read("기술/"+player1skill,"type"));
 						var judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
 						atk=atk*judge;
+						if(player1!="체육관 관장"){
 						if(pokUser[player1].activecollection.includes(1)||pokUser[player1].activecollection.includes(2))
 							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
 						if(pokUser[player1].activecollection.includes(3)||pokUser[player1].activecollection.includes(4))
 							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
 						if(pokUser[player1].activecollection.includes(5))
 							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						}
 						if(pokUser[player2].activecollection.includes(13)&&judge>1)
 							atk=atk*(100-pokUser[player2].collectionlev*5)/100;
 						player2pok.hp=Math.ceil(player2pok.hp-atk);
@@ -386,8 +388,10 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player2skill,"accr"));
 					if(player2pok.level<player1pok.level)
 						accr=Math.ceil(accr*(100-(player1pok.level-player2pok.level)*2)/100);
+					if(player1!="체육관 관장"){
 					if(pokUser[player1].activecollection.includes(7))
 						accr=Math.ceil(accr*(100-pokUser[player1].collectionlev*3)/100);
+					}
 					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
 						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
@@ -405,12 +409,15 @@ function battleturn(room,replier) //배틀 구현 함수
 							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
 						if(pokUser[player2].activecollection.includes(5))
 							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(player1!="체육관 관장"){
 						if(pokUser[player1].activecollection.includes(13)&&judge>1)
 							atk=atk*(100-pokUser[player1].collectionlev*5)/100;
+						}
 						player1pok.hp=Math.ceil(player1pok.hp-atk);
 						if(player1pok.hp<0){
-							if(pokUser[player1].activecollection.includes(12))
+							if(player1!="체육관 관장")
 							{
+								if(pokUser[player1].activecollection.includes(12)){
 								if(Math.floor(Math.random()*100)<pokUser[player1].collectionlev*4)
 								{
 									player1pok.hp=1;
@@ -418,6 +425,7 @@ function battleturn(room,replier) //배틀 구현 함수
 								}
 								else
 									player1pok.hp=0;
+								}
 							}
 							else
 								player1pok.hp=0;
@@ -474,8 +482,10 @@ function battleturn(room,replier) //배틀 구현 함수
 					var accr=Number(read("기술/"+player2skill,"accr"));
 					if(player2pok.level<player1pok.level)
 						accr=Math.ceil(accr*(100-(player1pok.level-player2pok.level)*2)/100);
+					if(player1!="체육관 관장"){
 					if(pokUser[player1].activecollection.includes(7))
 						accr=Math.ceil(accr*(100-pokUser[player1].collectionlev*3)/100);
+					}
 					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
 						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
@@ -493,12 +503,15 @@ function battleturn(room,replier) //배틀 구현 함수
 							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
 						if(pokUser[player2].activecollection.includes(5))
 							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
+						if(player1!="체육관 관장"){
 						if(pokUser[player1].activecollection.includes(13)&&judge>1)
 							atk=atk*(100-pokUser[player1].collectionlev*5)/100;
+						}
 						player1pok.hp=Math.ceil(player1pok.hp-atk);
 						if(player1pok.hp<0){
-							if(pokUser[player1].activecollection.includes(12))
+							if(player1!="체육관 관장")
 							{
+								if(pokUser[player1].activecollection.includes(12)){
 								if(Math.floor(Math.random()*100)<pokUser[player1].collectionlev*4)
 								{
 									player1pok.hp=1;
@@ -506,6 +519,7 @@ function battleturn(room,replier) //배틀 구현 함수
 								}
 								else
 									player1pok.hp=0;
+								}
 							}
 							else
 								player1pok.hp=0;
@@ -575,12 +589,14 @@ function battleturn(room,replier) //배틀 구현 함수
 						atk=weatherjudge(atk,read("기술/"+player1skill,"type"));
 						var judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
 						atk=atk*judge;
+						if(player1!="체육관 관장"){
 						if(pokUser[player1].activecollection.includes(1)||pokUser[player1].activecollection.includes(2))
 							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
 						if(pokUser[player1].activecollection.includes(3)||pokUser[player1].activecollection.includes(4))
 							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
 						if(pokUser[player1].activecollection.includes(5))
 							atk=atk*(pokUser[player1].collectionlev*2+100)/100;
+						}
 						if(pokUser[player2].activecollection.includes(13)&&judge>1)
 							atk=atk*(100-pokUser[player2].collectionlev*5)/100;
 						player2pok.hp=player2pok.hp-atk;
@@ -1160,7 +1176,7 @@ function pokleave(sender,replier){
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB){
-if(room!="루시 포켓몬방"&&room!="낚시터") return;
+if(room!="낚시터") return;
 if(msg==cmds.join) //가입
 	pokjoin(sender,replier);
 if(msg==cmds.leave) //탈퇴
