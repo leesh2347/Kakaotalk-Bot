@@ -32,6 +32,7 @@ var pokdelay={};
 var advOn={};
 var parse;
 var img;
+var poklink;
 var isballwaiting=[];
 var player1="";
 var player2="";
@@ -1391,6 +1392,7 @@ if(cmds.play.includes(msg)){
     FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	try{
 		img=pokimglink(pokname);
+		poklink="ko/wiki/"+encodeURIComponent(pokname+"_(포켓몬)");
 		//
 		
 		Kakao.sendLink(room, {
@@ -1400,7 +1402,8 @@ if(cmds.play.includes(msg)){
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
 			'POKNAME':"Lv."+lev+"  "+pokname,
-			'DESC':"볼던지기: "+cmds.ballthrow.join("/")+"\n도망가기: "+cmds.esc.join("/")
+			'DESC':"볼던지기: "+cmds.ballthrow.join("/")+"\n도망가기: "+cmds.esc.join("/"),
+			'LINK':poklink
 			}
 			}, "custom")
 	//
@@ -2084,6 +2087,7 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 	p=pokInv[sender].box[n-1];
 	try{
 		img=pokimglink(p.name);
+		poklink="ko/wiki/"+encodeURIComponent(p.name+"_(포켓몬)");
 //  
 		
 		
@@ -2094,7 +2098,8 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
 			'POKNAME':"Lv."+p.level+" "+p.name+"  "+typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")],
-			'DESC':"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd
+			'DESC':"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd,
+			'LINK':poklink
 			}
 			}, "custom")
 
@@ -2152,6 +2157,7 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 	p=pokInv[sender].deck[n-1];
 	try{
 		img=pokimglink(p.name);
+		poklink="ko/wiki/"+encodeURIComponent(p.name+"_(포켓몬)");
 		//    
 		
 		Kakao.sendLink(room, {
@@ -2161,7 +2167,8 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
 			'POKNAME':"Lv."+p.level+" "+p.name+"  "+typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")],
-			'DESC':"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd
+			'DESC':"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd,
+			'LINK':poklink
 			}
 			}, "custom")
 	
@@ -4056,6 +4063,7 @@ if(msg==cmds.leaguechar)//리그캐
 {
 	var pname=setting.leaguecharacter;
 	img=pokimglink(pname);
+	poklink="ko/wiki/"+encodeURIComponent("뮤츠_(포켓몬)");
 	try{
 	Kakao.sendLink(room, {
 			"link_ver":"4.0",
@@ -4064,6 +4072,7 @@ if(msg==cmds.leaguechar)//리그캐
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
 			'POKNAME':"Lv."+setting.maxlevel+" "+pname+"  "+typetexts[read("포켓몬/"+pname,"type1")]+" "+typetexts[read("포켓몬/"+pname,"type2")],
+			'LINK':poklink,
 			'DESC':"최대 HP: "+(read("포켓몬/"+pname,"hp")*Math.ceil(setting.maxlevel/50))+" 공격력: "+(read("포켓몬/"+pname,"atk")*Math.ceil(setting.maxlevel/50))+" 방어력: "+(read("포켓몬/"+pname,"def")*Math.ceil(setting.maxlevel/50))+" 스피드: "+(read("포켓몬/"+pname,"spd")*Math.ceil(setting.maxlevel/50))
 			}
 			}, "custom")
