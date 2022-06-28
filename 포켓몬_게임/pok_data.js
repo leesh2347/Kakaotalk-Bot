@@ -37,6 +37,7 @@ exports.cmds={
 	'eventinfo':'@포켓몬이벤트',
 	'gym':'@체육관',
 	'champ':'@챔피언도전',
+	'champinfo':'@챔피언정보',
 	'collectioninfo':'@컬렉션목록',
 	'mycollection':'@내 컬렉션',
 	'collectionput':'@컬렉션',
@@ -68,8 +69,8 @@ exports.setting={
     'maxlevel':Number(200),  //포켓몬 만렙
     'castT':{'min':30,'max':40},  //탐험소요시간(30~40초사이 랜덤을 뜻함)
     'ranknum':Number(30),  //랭킹 출력갯수(개)
-	'balluplev':10,
-	'leaguecharacter':'메가뮤츠X',
+	'balluplev':12,
+	'leaguecharacter':'큐레무',
 	//eventp변수: 추가 부여 스탯(이벤트 개최 등에 사용) (이벤트가 없을 땐 모두 0으로 해두셈)
 	'eventp':{
 		'g4':10, //전설 추가 출현률
