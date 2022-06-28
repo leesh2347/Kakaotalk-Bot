@@ -172,6 +172,9 @@ function newChampion(username,replier){
 			java.lang.Thread.sleep(2000);
 			replier.reply("@"+oldchamp+"\n새로운 챔피언의 등장으로 챔피언의 자리에서 내려왔어요.");
 		}
+		var isfirstchamp=0;
+		if(chamRank["Champlogs"].indexOf(username)==(-1))
+			isfirstchamp=1;
 		chamRank["Champnum"]++;
 		chamRank["Champlogs"].push(username);
 		FileStream.write(pathchampRank, JSON.stringify(chamRank));
@@ -203,7 +206,7 @@ function newChampion(username,replier){
 		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		java.lang.Thread.sleep(2000);
 		replier.reply("@"+username+"\n⭐축하합니다!⭐\n"+chamRank["Champlogs"].length+"번째 챔피언이 되었습니다!\n챔피언 달성 보상으로 전설의 포켓몬의 알이 지급되었습니다.\n\n\n전당등록을 축하합니다!"+"\u200b".repeat(500)+"\n"+champdeckprint);
-		if(chamRank["Champlogs"].indexOf(username)==(-1))
+		if(isfirstchamp==0)
 		{
 			giveleaguecharacter(username);
 			replier.reply("@"+username+"\n챔피언 달성 보상으로 리그 캐릭터인 Lv."+setting.maxlevel+" <⭐전설⭐> "+setting.leaguecharacter+"(이)가 지급되었습니다.");
@@ -240,7 +243,6 @@ function giveleaguecharacter(username){
 		'islocked':0
 	};
 	pokInv[username].box.push(caughtpok);
-	let lt=pokname.length-1;
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 }
 
@@ -2501,13 +2503,14 @@ if(msg==cmds.legendegg)//전설알(아이템)
 	{
 		pokInv[sender].item.splice(pokInv[sender].item.indexOf("전설알"),1);
 		var rann=Math.floor(Math.random()*100);
+		let pokname="";
 		if(rann==1||rann==2)
 		{
-			let pokname=setting.leaguecharacter;
+			pokname=setting.leaguecharacter;
 		}
 		else
 		{
-			let pokname=pokArr.group4[Math.floor(Math.random()*pokArr.group4.length)];
+			pokname=pokArr.group4[Math.floor(Math.random()*pokArr.group4.length)];
 		}
 			var skillsarr=read("포켓몬/"+pokname,"skills");
 			var caughtpokskills=[];
@@ -4875,7 +4878,7 @@ if(msg==cmds.champinfo) //리그정보
 	}
 	var champrint="";
 	if(chamRank["Champlogs"].length>1){
-		for(var i=0;i<chamRank["Champlogs"].length;i++)
+		for(var i=1;i<chamRank["Champlogs"].length;i++)
 		{
 			champrint=champrint+i+"대 챔피언: "+chamRank["Champlogs"][i]+"\n";
 		}
