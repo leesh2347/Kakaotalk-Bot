@@ -5,7 +5,7 @@ var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시
 
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
 if(banrooms.includes(room)) return;
-if(msg=="!ㄷㄱㄷㄱ")
+if(msg=="!ㄷㄱㄷㄱ"||msg=="@ㄷㄱㄷㄱ")
 {
 var n1=0;
    var n2=0;

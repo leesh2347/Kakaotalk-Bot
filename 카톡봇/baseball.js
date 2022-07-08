@@ -12,7 +12,7 @@ function response(room, msg, sender, isGroupChat, replier, ImageDB) {
 if(banrooms.includes(room)) return;
 
 
-if(msg=="/숫자야구시작")
+if(msg=="@숫자야구시작")
 {
 if(isplaying==1)
 replier.reply("이미 진행 중인 게임이 있습니다.");
@@ -35,10 +35,10 @@ replier.reply("숫자 생성 완료!\n공을 3개 던져주세요!\n\n현재 도
 }
 }
 
-if(msg=="/숫자야구도움말")
-replier.reply("/숫자야구시작\n/숫자야구 (숫자) (숫자) (숫자)\n(1~9사이의 숫자만 가능합니다.)\n\n기회는 1게임당 10회씩 주어집니다.");
+if(msg=="@숫자야구도움말")
+replier.reply("@숫자야구시작\n@숫자야구 (숫자) (숫자) (숫자)\n(1~9사이의 숫자만 가능합니다.)\n\n기회는 1게임당 10회씩 주어집니다.");
 
-if(msg.split(' ')[0]=="/숫자야구")
+if(msg.split(' ')[0]=="@숫자야구")
 {
 if(isplaying==0)
 replier.reply("진행 중인 게임이 없습니다.");
@@ -104,22 +104,3 @@ isplaying=0;
 
 
 }
-
-function onStartCompile(){
-    /*컴파일 또는 Api.reload호출시, 컴파일 되기 이전에 호출되는 함수입니다.
-     *제안하는 용도: 리로드시 자동 백업*/
-    
-}
-
-//아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
-function onCreate(savedInstanceState,activity) {
-    var layout=new android.widget.LinearLayout(activity);
-    layout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-    var txt=new android.widget.TextView(activity);
-    txt.setText("액티비티 사용 예시입니다.");
-    layout.addView(txt);
-    activity.setContentView(layout);
-}
-function onResume(activity) {}
-function onPause(activity) {}
-function onStop(activity) {}

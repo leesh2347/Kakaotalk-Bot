@@ -6,15 +6,7 @@ Jsoup=org.jsoup.Jsoup
 var lev;
 var murung;
 var union;
-/**
- * (string) room
- * (string) sender
- * (boolean) isGroupChat
- * (void) replier.reply(message)
- * (boolean) replier.reply(room, message, hideErrorToast = false) // 전송 성공시 true, 실패시 false 반환
- * (string) imageDB.getProfileBase64()
- * (string) packageName
- */
+
 function calculate(nickname,isrbt){
    var url="https://maple.gg/u/"+nickname;
    var data=Jsoup.connect(url).get();
@@ -33,12 +25,12 @@ function calculate(nickname,isrbt){
  
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 if(room!="바다 월드"){
-if(msg=="!메창")
+if(msg=="!메창"||msg=="@메창")
 {
 replier.reply(["사용법: !메창 (닉네임)",
 	"",
-	"레벨-100+무릉x3+유니온/40",
-	"※유니온 8000 이상: 가중치 25%",
+	"레벨-100+무릉x3+유니온/45",
+	"※유니온 8500 이상: 유니온/35",
 	"※무릉 50 이상=무릉x4로 계산",
 	"※레벨 250 이상시 10, 260 이상시 20, 275 이상시 40 가중치 부여",
 	"",
@@ -49,7 +41,8 @@ replier.reply(["사용법: !메창 (닉네임)",
 	"551~650 : 메창",
 	"651~700 : 메이플 인생.",
 	"701~750 : 토끼공듀",
-	"751+ : 넥슨 VVIP"
+	"751~800 : 넥슨 VVIP",
+	"801+ : ?"
 	].join("\n"));
 }
 else if(msg.split(" ")[0]=="!메창"){
@@ -65,8 +58,8 @@ var judge=0;
 var res=0;
 if(murung>49) judge=judge+(murung*4);
 else judge=judge+(murung*3);
-if(union>7999) judge=judge+(union/32);
-else judge=judge+(union/40);
+if(union>8499) judge=judge+(union/35);
+else judge=judge+(union/45);
 if(Number(lev)>274)
 	judge=Math.ceil(judge)+Number(lev)-60;
 else if(Number(lev)>259)
@@ -82,7 +75,8 @@ else if(judge<551) res=3;
 else if(judge<651) res=4;
 else if(judge<701) res=5;
 else if(judge<751) res=6;
-else res=7;
+else if(judge<801) res=7;
+else res=8;
 if(isNaN(judge))
 replier.reply("본캐여부를 확인해주세요!\n본캐(월드 내 가장 레벨이 높은 캐릭터)가 아니면 측정할 수 없습니다.");
 else
@@ -100,7 +94,11 @@ else{
 	var serverimg=org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick+"&w=254").get().select("tr.search_com_chk").select("dt").select("img").attr("src")
 }
 var desctext="직업: "+job+" │ 레벨: "+lev+"\n무릉: "+murung+"층 │ 유니온: "+union;
-var buttontext=result[res]+" ("+judge+"점)";
+var buttontext="";
+if(res<8)
+	buttontext=result[res]+" ("+judge+"점)";
+else
+	buttontext="넥슨 창문 \""+judge+"\"개 오너";
 
 Kakao.sendLink(room, {
 "link_ver":"4.0",

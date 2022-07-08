@@ -3,9 +3,9 @@ FS=FileStream;
 var loc="sdcard/katalkbot/Bots/boss/보스데이터.json";
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName){
-	if(msg.split(" ")[0]=="!보스")
+	if(msg.split(" ")[0]=="!보스"||msg.split(" ")[0]=="@보스")
 	{
-		var bossname=msg.split("!보스 ")[1];
+		var bossname=msg.substr(4);
 		let bossdat=JSON.parse(FS.read(loc));
 		//replier.reply(bossdat["데이터"]);
 		if(bossdat["데이터"][bossname]!=null&&bossdat["데이터"][bossname]!=undefined)

@@ -2,8 +2,8 @@ const scriptName = "maplegg";
 FS = FileStream;
 //const kalingModule = require('kaling').Kakao();
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("aaaaa","aaaaa");
-Kakao.login('aaaaa','aaaaa');
+const Kakao =new KakaoLinkClient("aaa","http://asdf");
+Kakao.login('asdf','asdf');
  
 var loc="sdcard/katalkbot/Bots/maplelog.json";
 if (FS.read(loc)==null) FS.write(loc, "{}");
@@ -38,7 +38,7 @@ function recommendnick(sender,replier){
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
   if(room=="바다 월드") return;
-  if(msg.split(" ")[0]=="@메이플") {
+  if(msg.split(" ")[0]=="@메이플"||msg.split(" ")[0]=="!메이플") {
 	try{ 
 		  var nick = msg.split(" ")[1];
 		  if(nick==undefined)
@@ -83,7 +83,8 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 				'CHARNAME':nick+" │ "+job,
 				'SERVER':serverimg,
 				'DESC':unity,
-				'LINK':"u/"+nick
+				'LINK':"u/"+nick,
+				'BUTTON':'maple.gg 에서 보기'
 				}
 			}, "custom")
 		}
@@ -96,7 +97,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 }
 
 
-if(msg.split(" ")[0]=="@코디") {
+if(msg.split(" ")[0]=="@코디"||msg.split(" ")[0]=="!코디") {
 	try{ 
 		  var nick = msg.split(" ")[1];
 		  if(nick==undefined)
