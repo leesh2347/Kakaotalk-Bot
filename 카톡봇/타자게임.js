@@ -6,17 +6,9 @@ var isplaying=0;
 var playingroom="";
 var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 Jsoup = org.jsoup.Jsoup
-/**
- * (string) room
- * (string) sender
- * (boolean) isGroupChat
- * (void) replier.reply(message)
- * (boolean) replier.reply(room, message, hideErrorToast = false) // 전송 성공시 true, 실패시 false 반환
- * (string) imageDB.getProfileBase64()
- * (string) packageName
- */
+
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-if(msg=="!타자게임"){
+if(msg=="!타자게임"||msg=="@타자게임"){
 if(banrooms.includes(room)) return;
 if(isplaying==1)
 replier.reply("[루시] 이미 이 방 또는 다른 방에서 진행 중인 게임이 있습니다.");
@@ -64,19 +56,3 @@ replier.reply("[루시] 정답을 입력하지 않은 채로 2분이 지나 타�
 }
 }
 }
-
-//아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
-function onCreate(savedInstanceState, activity) {
-  var textView = new android.widget.TextView(activity);
-  textView.setText("Hello, World!");
-  textView.setTextColor(android.graphics.Color.DKGRAY);
-  activity.setContentView(textView);
-}
-
-function onStart(activity) {}
-
-function onResume(activity) {}
-
-function onPause(activity) {}
-
-function onStop(activity) {}

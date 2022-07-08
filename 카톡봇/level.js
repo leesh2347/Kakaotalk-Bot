@@ -86,7 +86,7 @@ return unit
 function response(room, msg, sender, isGroupChat, replier, ImageDB) {
 if(room=="바다 월드") return;
 try{
-if(msg.split(" ")[0]=="@레벨"){
+if(msg.split(" ")[0]=="@레벨"||msg.split(" ")[0]=="!레벨"){
 var nick = msg.split(" ")[1];
 if(nick==undefined)
 		  nick=recommendnick(sender,replier);

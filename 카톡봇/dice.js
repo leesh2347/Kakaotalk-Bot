@@ -3,7 +3,7 @@ var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시
 function response(room, msg, sender, isGroupChat, replier, ImageDB) {
 if(banrooms.includes(room)) return;
 else{
-if (msg == '@주사위') {
+if (msg == '@주사위'||msg == '!주사위') {
         var a = Math.floor((Math.random() * 100) + 1);
         if(a>0&&a<2)
  replier.reply("망이네요.....주사위가 "+a+" 나왔습니다.");
@@ -34,22 +34,3 @@ else
     }
 }
 }
-
-function onStartCompile(){
-    /*컴파일 또는 Api.reload호출시, 컴파일 되기 이전에 호출되는 함수입니다.
-     *제안하는 용도: 리로드시 자동 백업*/
-    
-}
-
-//아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
-function onCreate(savedInstanceState,activity) {
-    var layout=new android.widget.LinearLayout(activity);
-    layout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-    var txt=new android.widget.TextView(activity);
-    txt.setText("액티비티 사용 예시입니다.");
-    layout.addView(txt);
-    activity.setContentView(layout);
-}
-function onResume(activity) {}
-function onPause(activity) {}
-function onStop(activity) {}

@@ -43,9 +43,9 @@ function recommendnick(sender,replier){
  
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 if(room=="바다 월드") return
-if(msg.split(" ")[0]=="@무릉")
+if(msg.split(" ")[0]=="@무릉"||msg.split(" ")[0]=="!무릉")
 {
-var nick=msg.split("@무릉 ")[1];
+var nick=msg.substr(4);
 if(nick==undefined)
 	 nick=recommendnick(sender,replier);
 if(nick=="") replier.reply("닉네임을 입력해 주세요.");
@@ -99,7 +99,7 @@ else
 }
 }
 }
-if(msg.split(" ")[0]=="@유니온")
+if(msg.split(" ")[0]=="@유니온"||msg.split(" ")[0]=="!유니온")
 {
 var nick=msg.split(" ")[1];
 if(nick==undefined)

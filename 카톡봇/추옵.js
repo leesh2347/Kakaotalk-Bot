@@ -235,12 +235,12 @@ const jak=["100%","70%","30%","15%"];
  }
  
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-	if(msg=="!추옵")
+	if(msg=="!추옵"||msg=="@추옵")
 		replier.reply("추옵 검색 사용법"+"\u200b".repeat(500)+"\n\n사용법: !추옵 (장비종류) (무기종류)\n\n장비 종류: 자쿰, 네크로, 반레온, 여제, 파프, 앱솔, 아케인, 제네, 류드, 제로, 해카세\n\n무기 종류: "+weapon.join(", ")+"\n\n제로 무기 종류: 1형~10형\n\n*류드, 해카세의 경우 무기 종류는 입력하지 않습니다.\n*잘못된 값 입력 시 해당 장비 종류 모두를 출력합니다.");
-	else if(msg.split(" ")[0]=="!추옵")
+	else if(msg.split(" ")[0]=="!추옵"||msg.split(" ")[0]=="@추옵")
 		printchuop(msg,replier);
-	if(msg.split(" ")[0]=="!작분석")
+	if(msg.split(" ")[0]=="!작분석"||msg.split(" ")[0]=="@작분석")
 		statanalysis(msg,replier);
-	if(msg.split(" ")[0]=="!방무")
+	if(msg.split(" ")[0]=="!방무"||msg.split(" ")[0]=="@방무")
 		armor(msg,replier);
 }
