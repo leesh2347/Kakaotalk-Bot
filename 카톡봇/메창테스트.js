@@ -1,6 +1,8 @@
+const kalink=require('kaling_config');
+const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("aaa","http://asdf");
-Kakao.login('asdf','asdf');
+const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
+Kakao.login(kaling.email,kaling.password);
 const result=["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메이플 평균","메창","메이플 인생 메생이","컨텐츠가 부족한 토끼공듀","넥슨 VVIP 흑우 ㅋㅋ"];
 Jsoup=org.jsoup.Jsoup
 var lev;
@@ -45,7 +47,7 @@ replier.reply(["사용법: !메창 (닉네임)",
 	"801+ : ?"
 	].join("\n"));
 }
-else if(msg.split(" ")[0]=="!메창"){
+else if(msg.split(" ")[0]=="!메창"||msg.split(" ")[0]=="@메창"){
 lev=0;
 murung=0;
 union=0;

@@ -1,9 +1,10 @@
 const scriptName = "maplegg";
 FS = FileStream;
-//const kalingModule = require('kaling').Kakao();
+const kalink=require('kaling_config');
+const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("aaa","http://asdf");
-Kakao.login('asdf','asdf');
+const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
+Kakao.login(kaling.email,kaling.password);
  
 var loc="sdcard/katalkbot/Bots/maplelog.json";
 if (FS.read(loc)==null) FS.write(loc, "{}");

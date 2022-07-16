@@ -1,8 +1,8 @@
-const scriptName = "도움말";
-//const kalingModule = require('kaling').Kakao();
+const kalink=require('kaling_config');
+const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("aaa","http://asdf");
-Kakao.login('asdf','asdf');
+const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
+Kakao.login(kaling.email,kaling.password);
 
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
 
@@ -33,6 +33,7 @@ if(msg=="@도움말")
 		"※@메이플, @무릉, @유니온, @히스토리, @레벨히스토리, @코디 의 경우 공통으로 닉네임 생략 시 가장 많이 검색한 캐릭터의 정보를 출력합니다.",
 		"",
 		"@메창: 메창력 테스트. 사용법 및 측정 기준은 해당 명령어 참조.",
+		"@무토 (음식이름): 배고픈 무토 재료 위치 표시. 음식 이름 생략 시 모든 재료 위치 출력.",
 		"@보스 (이름): 보스 정보 출력. 난이도 띄어쓰기 없이 해주세요.  ex) !보스 카오스벨룸",
 		"@물통 (서버) (갯수): 현재 물통시세. !물통 만 입력 시 모든 서버 현재 시세표 출력",
 		"※일시적으로 통계 사이트 접속이 불가한 경우 가장 마지막에 검색된 결과를 출력합니다.",
@@ -95,7 +96,7 @@ if(msg=="@도움말")
 	"link_ver":"4.0",
 	"template_id":(22381),
 	"template_args":{
-		'UPDATE':'2022.07.08'
+		'UPDATE':'2022.07.16'
 	//이곳에 템플릿 정보를 입력하세요.
 	}
 	}, "custom")

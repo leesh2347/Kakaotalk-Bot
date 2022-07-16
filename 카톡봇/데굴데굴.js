@@ -1,6 +1,8 @@
+const kalink=require('kaling_config');
+const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("aaa","http://asdf");
-Kakao.login('asdf','asdf');
+const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
+Kakao.login(kaling.email,kaling.password);
 var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
