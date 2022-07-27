@@ -27,6 +27,7 @@ const pathseason="sdcard/Devel/Pokemon/Data/season.json";  //계절파일경로
 var typetexts=[" ","[⚪노말]","[🔥불]","[🌊물]","[🌿풀]","[🕊비행]","[🪨바위]","[⛰땅]","[✊격투]","[⛓강철]","[🐞벌레]","[❄얼음]","[⚡전기]","[🧪독]","[👽에스퍼]","[☠고스트]","[😈악]","[🌠드래곤]","[🎀페어리]"];
 var weathertexts=["[맑음]","[🌞햇살이 강함]","[☔비]","[🌪모래바람]","[☃️싸라기눈]"];
 var weatherdesc=["","🌞햇살이 강해요.","☔비가 내리고 있어요.","🌪모래바람이 세차게 불고 있어요.","☃️싸라기눈이 내리고 있어요."];
+var runpoks=["캐이시","라이코","스이쿤","앤테이","엠라이트","크레세리아","토네로스","볼트로스","라티아스","라티오스","릴링","델빌","가디","파이어","썬더","프리져"];
 var ispokselect=0;
 const more = "​";
 var succrate=0;
@@ -137,6 +138,8 @@ function newChampion(username,replier){
 		if(chamRank["Champlogs"].length>1)
 		{
 			var oldchamp=chamRank["Champlogs"][chamRank["Champlogs"].length-1];
+			pokUser[oldchamp]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+oldchamp+'.json'));
+			pokInv[oldchamp]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+oldchamp+'_inv.json'));
 			pokUser[oldchamp].rank=setting.rank.name[setting.rank.name.length-3];
 			
 			pokUser[oldchamp]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+oldchamp+'.json'));
@@ -179,6 +182,13 @@ function newChampion(username,replier){
 			java.lang.Thread.sleep(2000);
 			replier.reply("@"+oldchamp+"\n새로운 챔피언의 등장으로 챔피언의 자리에서 내려왔어요.");
 		}
+		pokUser[username]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+username+'.json'));
+		pokInv[username]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json'));
+		var temparr=[];
+		for(var i=0;i<pokInv[username].deck.length;i++)
+		{
+			temparr.push(pokInv[username].deck[i]);
+		}
 		var isfirstchamp=0;
 		var curlev=[];
 		if(chamRank["Champlogs"].indexOf(username)==(-1))
@@ -188,16 +198,20 @@ function newChampion(username,replier){
 		FileStream.write(pathchampRank, JSON.stringify(chamRank));
 		let chamdata=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/trainer/champion.json"));
 		chamdata.champname=username;
-		let chamdeck=chamdata.deck;
-		chamdeck=pokInv[username].deck;
+		let chamdeck=[];
+		for(var i=0;i<temparr.length;i++)
+		{
+			chamdeck.push(temparr[i]);
+		}
 		var champdeckprint="";
 		for(var i=0;i<chamdeck.length;i++)
 		{
-			curlev.push(chamdeck[i].level);
+			curlev.push(pokInv[username].deck[i].level);
 			champdeckprint=champdeckprint+"Lv."+chamdeck[i].level+" "+chamdeck[i].name+"\n";
-			chamdeck[i].level=championlev;
+			chamdeck[i].level=setting.championlev;
 			
 		}
+		replier.reply(curlev.join(","));
 		chamdata.deck=chamdeck;
 		FileStream.write("sdcard/Devel/Pokemon/Data/trainer/champion.json", JSON.stringify(chamdata));
 		nowr=setting.rank.name.indexOf(pokUser[username].rank);
@@ -211,11 +225,12 @@ function newChampion(username,replier){
 		pokUser[username].successcatch.g1=pokUser[username].successcatch.g1+setting.rank.successcatch[setting.rank.name.length-2]-setting.rank.successcatch[nowr];
 		pokUser[username].rank=setting.rank.name[setting.rank.name.length-2];
 		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		
 		let p1;
-		for(var j=0;j<pokInv[username].deck.length;j++)
+		for(var i=0;i<pokInv[username].deck.length;i++)
 		{
 			p1=pokInv[username].deck[i];
-				p1.level=Number(curlev[i]);
+				pokInv[username].deck[i].level=curlev[i];
 				p1.hp=Math.ceil((read("포켓몬/"+p1.name,"hp"))*p1.level/50);
 				p1.atk=Math.ceil(read("포켓몬/"+p1.name,"atk")*p1.level/50);
 				p1.def=Math.ceil(read("포켓몬/"+p1.name,"def")*p1.level/50);
@@ -223,6 +238,7 @@ function newChampion(username,replier){
 				pokInv[username].deck[i]=p1;
 
 		}
+		
 		pokInv[username].item.push("전설알");
 		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
 		java.lang.Thread.sleep(2000);
@@ -320,7 +336,7 @@ function printskills(skills,locked){
 			if(read("기술/"+skills[i],"damage")==9999)
 				power="일격필살";
 			else if(read("기술/"+skills[i],"damage")<3)
-				power="자신이 받은 데미지X"+power+"배";
+				power="자신이 받은 데미지X"+read("기술/"+skills[i],"damage")+"배";
 			else power=read("기술/"+skills[i],"damage");
 			if(read("기술/"+skills[i],"accr")==9999)
 				accr="반드시 명중";
@@ -337,7 +353,7 @@ function printskills(skills,locked){
 			if(read("기술/"+locked[i],"damage")==9999)
 				power="일격필살";
 			else if(read("기술/"+locked[i],"damage")<3)
-				power="자신이 받은 데미지X"+power+"배";
+				power="자신이 받은 데미지X"+read("기술/"+locked[i],"damage")+"배";
 			else power=read("기술/"+locked[i],"damage");
 			if(read("기술/"+locked[i],"accr")==9999)
 				accr="반드시 명중";
@@ -1400,7 +1416,7 @@ if(cmds.play.includes(msg)){
 		if(prob==1) //돈발견
 		{
 			
-			var money=(Math.floor(Math.random()*100)+1)*100;//100~10000
+			var money=(Math.floor(Math.random()*100)+1)*500;//100~10000
 			money=money*(ballArr.indexOf(pokUser[sender].Ball)+1)*100; //볼 강화당 돈발견 금액 증가
 			if(Number(pokUser[sender].activecollection.includes(14)))
 				money=money*(pokUser[sender].collectionlev*10+100)/100;
@@ -1439,7 +1455,16 @@ if(cmds.play.includes(msg)){
 					if(Number(pokUser[sender].activecollection.includes(14)))
 						money=money*(pokUser[sender].collectionlev*10+100)/100;
 					pokUser[sender].gold=pokUser[sender].gold+money;
-					replier.reply("@"+sender+"\n축하합니다!\n👑마제스티의 키를 발견했어요!\n상점에 팔아 "+money+"원을 획득했어요.");
+					var moneyprint="";
+					if(money>100000000)
+					{
+						moneyprint=moneyprint+Math.floor(money/100000000)+"억 ";
+						if((money%100000000)!=0)
+							moneyprint=moneyprint+Math.floor((money%100000000)/10000)+"만 ";
+					}
+					else
+						moneyprint=moneyprint+Math.floor((money%100000000)/10000)+"만 ";
+					replier.reply("@"+sender+"\n축하합니다!\n👑마제스티의 키를 발견했어요!\n상점에 팔아 "+moneyprint+"원을 획득했어요.");
 				}	
 				else
 				{
@@ -1447,7 +1472,16 @@ if(cmds.play.includes(msg)){
 					if(Number(pokUser[sender].activecollection.includes(14)))
 						money=money*(pokUser[sender].collectionlev*10+100)/100;
 					pokUser[sender].gold=pokUser[sender].gold+money;
-					replier.reply("@"+sender+"\n축하합니다!\n🪨알 수 없는 돌을 발견했어요!\n상점에 팔아 "+money+"원을 획득했어요.");
+					var moneyprint="";
+					if(money>100000000)
+					{
+						moneyprint=moneyprint+Math.floor(money/100000000)+"억 ";
+						if((money%100000000)!=0)
+							moneyprint=moneyprint+Math.floor((money%100000000)/10000)+"만 ";
+					}
+					else
+						moneyprint=moneyprint+Math.floor((money%100000000)/10000)+"만 ";
+					replier.reply("@"+sender+"\n축하합니다!\n🪨알 수 없는 돌을 발견했어요!\n상점에 팔아 "+moneyprint+"원을 획득했어요.");
 				}	
 			}
 		}
@@ -1517,13 +1551,13 @@ if(cmds.play.includes(msg)){
 	lev=lev+setting.minlevel+(ballArr.indexOf(pokUser[sender].Ball)+1)*setting.balluplev; //볼 강화당 출현레벨 8씩 증가
 	lev=lev+Math.floor(Math.random()*10)+1;
 	if(pokArr.group4.includes(pokname))
-		replier.reply("@"+sender+"\n<⭐전설⭐> "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
+		replier.reply("@"+sender+"\n❗ <⭐전설⭐> "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
 	else if(pokArr.group3.includes(pokname))
-		replier.reply("@"+sender+"\n[레어] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
+		replier.reply("@"+sender+"\n❗ [레어] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
 	else if(pokArr.group2.includes(pokname))
-		replier.reply("@"+sender+"\n[고급] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
+		replier.reply("@"+sender+"\n❗ [고급] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 나타났어요!");
 	else
-		replier.reply("@"+sender+"\n[일반] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 튀어나왔어요!");
+		replier.reply("@"+sender+"\n❗ [일반] 야생의 "+pokname+(pokname[lt].normalize("NFD").length == 3 ? '이' : '가')+" 튀어나왔어요!");
 	++pokUser[sender].count.total;
 	
 	let pokinfo={
@@ -1647,7 +1681,10 @@ if(cmds.ballthrow.includes(msg)){ //볼던지기
 		{
 			//포획실패
 			replier.reply("@"+sender+"\n"+ballfail[Math.floor(Math.random()*ballfail.length)])
-			if(setting.run[4-group]>(Math.floor(Math.random()*100)+1)) //포켓몬 도주
+			var runprob=0;
+			if(runpoks.includes(pokname)) runprob=90;
+			else runprob=setting.run[4-group];
+			if(runprob>(Math.floor(Math.random()*100)+1)) //포켓몬 도주
 			{
 				++pokUser[sender].count.fail;
 				--pokUser[sender].hp;
@@ -1788,7 +1825,7 @@ if(msg.split(" ")[0]==cmds.sell)//놓아주기
 	{
 		if(pokInv[sender].box[i].islocked==0)
 		{
-			pokmoney=600*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
+			pokmoney=3000*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
 			if(pokArr.group4.includes(pokInv[sender].box[i].name)||pokInv[sender].box[i].name=="다부니")
 				pokmoney=pokmoney*5;
 			money=money+pokmoney;
@@ -2029,7 +2066,7 @@ if(msg.split(" ")[0]==cmds.levelup)//레벨업
 			skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc-pokUser[sender].collectionlev*5)/100);
 		else
 			skillcosts=Math.ceil(skillcosts*(100-pokUser[sender].upgradedc)/100);
-		if((p.level+j)>200) skillcosts=skillcosts*10;
+		if((p.level+j)>200) skillcosts=skillcosts*5;
 		totalcosts=totalcosts+skillcosts;
 	}
 	if(pokUser[sender].gold<totalcosts)
@@ -3210,7 +3247,7 @@ if(msg==cmds.gym)//체육관
 			var player1skillsarr=player1pok.skills;
 			for(var j=0;j<player1pok.skillslocked.length;j++)
 				player1skillsarr.push(player1pok.skillslocked[j]);
-			var player2skillsarr=player1pok.skills;
+			var player2skillsarr=player2pok.skills;
 			for(var j=0;j<player2pok.skillslocked.length;j++)
 				player2skillsarr.push(player2pok.skillslocked[j]);
 			if(player2pok.name=="메타몽"){
@@ -3545,7 +3582,7 @@ if(msg==cmds.champ)//챔피언도전
 			var player1skillsarr=player1pok.skills;
 			for(var j=0;j<player1pok.skillslocked.length;j++)
 				player1skillsarr.push(player1pok.skillslocked[j]);
-			var player2skillsarr=player1pok.skills;
+			var player2skillsarr=player2pok.skills;
 			for(var j=0;j<player2pok.skillslocked.length;j++)
 				player2skillsarr.push(player2pok.skillslocked[j]);
 			if(player2pok.name=="메타몽"){
