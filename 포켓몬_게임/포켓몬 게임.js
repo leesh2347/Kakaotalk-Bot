@@ -341,7 +341,16 @@ function printskills(skills,locked){
 			if(read("기술/"+skills[i],"accr")==9999)
 				accr="반드시 명중";
 			else accr=read("기술/"+skills[i],"accr")+"%";
-			res=res+skills[i]+" "+typetexts[read("기술/"+skills[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+skills[i],"pp")+"  명중률:"+accr+"\n\n";
+			res=res+skills[i]+" "+typetexts[read("기술/"+skills[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+skills[i],"pp")+"  명중률:"+accr;
+			if(read("기술/"+skills[i],"addi")==1)
+				res=res+"\n💬 공격시 반동으로 1턴 쉼";
+			else if(read("기술/"+skills[i],"addi")==3)
+				res=res+"\n💥 공격시 1/4의 반동 데미지를 입음";
+			else if(read("기술/"+skills[i],"addi")==2)
+				res=res+"\n💚 공격시 1/4 데미지만큼 체력 회복";
+			else if(read("기술/"+skills[i],"addi")==9)
+				res=res+"\n💣 공격시 자폭하여 본인의 체력이 1이 됨";
+			res=res+"\n\n";
 		}catch(e){
 			res=res+skills[i]+" (데이터 읽기 오류)\n\n";
 		}
@@ -358,7 +367,16 @@ function printskills(skills,locked){
 			if(read("기술/"+locked[i],"accr")==9999)
 				accr="반드시 명중";
 			else accr=read("기술/"+locked[i],"accr")+"%";
-			res=res+"🔒"+locked[i]+" "+typetexts[read("기술/"+locked[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+locked[i],"pp")+"  명중률:"+accr+"\n\n";
+			res=res+"🔒"+locked[i]+" "+typetexts[read("기술/"+locked[i],"type")]+"\n위력:"+power+"  PP:"+read("기술/"+locked[i],"pp")+"  명중률:"+accr;
+			if(read("기술/"+locked[i],"addi")==1)
+				res=res+"\n💬 공격시 반동으로 1턴 쉼";
+			else if(read("기술/"+locked[i],"addi")==3)
+				res=res+"\n💥 공격시 1/4의 반동 데미지를 입음";
+			else if(read("기술/"+locked[i],"addi")==2)
+				res=res+"\n💚 공격시 1/4 데미지만큼 체력 회복";
+			else if(read("기술/"+locked[i],"addi")==9)
+				res=res+"\n💣 공격시 자폭하여 본인의 체력이 1이 됨";
+			res=res+"\n\n";
 		}catch(e){
 			res=res+"🔒"+locked[i]+" (데이터 읽기 오류)\n\n";
 		}
@@ -494,7 +512,7 @@ function battleturn(room,replier) //배틀 구현 함수
 							isplayer1bind=1;
 							
 						}
-						else if(player1skill=="자폭"||player1skill=="대폭발")
+						else if(read("기술/"+player1skill,"addi")==9)
 						{
 							player1pok.hp=1;
 							
@@ -588,7 +606,7 @@ function battleturn(room,replier) //배틀 구현 함수
 							isplayer2bind=1;
 							
 						}
-						else if(player2skill=="자폭"||player2skill=="대폭발")
+						else if(read("기술/"+player2skill,"addi")==9)
 						{
 							player2pok.hp=1;
 							
@@ -682,7 +700,7 @@ function battleturn(room,replier) //배틀 구현 함수
 							isplayer2bind=1;
 							
 						}
-						else if(player2skill=="자폭"||player2skill=="대폭발")
+						else if(read("기술/"+player2skill,"addi")==9)
 						{
 							player2pok.hp=1;
 							
@@ -772,7 +790,7 @@ function battleturn(room,replier) //배틀 구현 함수
 							isplayer1bind=1;
 							
 						}
-						else if(player1skill=="자폭"||player1skill=="대폭발")
+						else if(read("기술/"+player1skill,"addi")==9)
 						{
 							player1pok.hp=1;
 							
