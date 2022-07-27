@@ -146,7 +146,7 @@ function newChampion(username,replier){
 			var b=0;
 			b=ballArr.indexOf(pokUser[oldchamp].Ball);
 			var nowr=0;
-			nowr=setting.rank.name.indexOf(pokUser[oldchamp].rank);
+			nowr=setting.rank.name.length-3;
 			if(b>1){
 				while(setting.ballupsucc[b-1]>pokUser[oldchamp].count.total)
 				{
