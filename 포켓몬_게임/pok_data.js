@@ -397,6 +397,71 @@ exports.megapicture=[
 	'https://static.wikia.nocookie.net/pokemon/images/0/0f/%EC%9B%90%EC%8B%9C%EA%B0%80%EC%9D%B4%EC%98%A4%EA%B0%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170416101436&path-prefix=ko'
 ];
 
+exports.formchangenames=[
+	'로토무',
+	'큐레무',
+	'토네로스',
+	'볼트로스',
+	'랜드로스',
+	'테오키스',
+	'쉐이미',
+	'후파',
+	'디아루가',
+	'펄기아',
+	'기라티나',
+	'아르세우스',
+	'메로엣타',
+	'캐스퐁',
+	'도롱마담',
+	'킬가르도'
+];
+
+exports.formchangestatus={
+	'로토무':['로토무','히트로토무','워시로토무','스핀로토무','프로스트로토무','커트로토무'],
+	'큐레무':['큐레무','블랙큐레무','화이트큐레무'],
+	'토네로스':['화신폼','영물폼'],
+	'볼트로스':['화신폼','영물폼'],
+	'랜드로스':['화신폼','영물폼'],
+	'테오키스':['노말폼','어택폼','디펜스폼','스피드폼'],
+	'쉐이미':['랜드폼','스카이폼'],
+	'후파':['굴레에 빠진 후파','굴레를 벗어난 후파'],
+	'디아루가':['어나더폼','오리진폼'],
+	'펄기아':['어나더폼','오리진폼'],
+	'기라티나':['어나더폼','오리진폼'],
+	'아르세우스':['노말폼','불구슬플레이트','물방울플레이트','초록플레이트','푸른하늘플레이트','암석플레이트','대지플레이트','주먹플레이트','강철플레이트','비단벌레플레이트','고드름플레이트','우뢰플레이트','맹독플레이트','이상한플레이트','원령플레이트','공포플레이트','용의플레이트','정령플레이트'],
+	'메로엣타':['보이스폼','스텝폼'],
+	'캐스퐁':['노말폼','태양의 모습','빗방울의 모습','설운의 모습'],
+	'도롱마담':['초목도롱','모래땅도롱','슈레도롱'],
+	'킬가르도':['실드폼','블레이드폼']
+};
+
+exports.formchangeimage={
+	"로토무":["",
+	"https://static.wikia.nocookie.net/pokemon/images/5/55/%EB%A1%9C%ED%86%A0%EB%AC%B4_%ED%9E%88%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073157&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/4/4a/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%9B%8C%EC%8B%9C_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073210&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/5/54/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%8A%A4%ED%95%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073201&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/c/c7/%EB%A1%9C%ED%86%A0%EB%AC%B4_%ED%94%84%EB%A1%9C%EC%8A%A4%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073206&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/5/51/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%BB%A4%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073218&path-prefix=ko"],
+	"큐레무":["","https://static.wikia.nocookie.net/pokemon/images/0/0f/646%EB%B8%94%EB%9E%99%ED%81%90%EB%A0%88%EB%AC%B4.png/revision/latest/scale-to-width-down/200?cb=20170802060103&path-prefix=ko","https://static.wikia.nocookie.net/pokemon/images/a/a1/646%ED%99%94%EC%9D%B4%ED%8A%B8%ED%81%90%EB%A0%88%EB%AC%B4.png/revision/latest/scale-to-width-down/200?cb=20170802060325&path-prefix=ko"],
+	"토네로스":["","https://static.wikia.nocookie.net/pokemon/images/c/c6/%ED%86%A0%EB%84%A4%EB%A1%9C%EC%8A%A4_%EC%98%81%EB%AC%BC%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802054841&path-prefix=ko"],
+	"볼트로스":["","https://static.wikia.nocookie.net/pokemon/images/4/41/%EB%B3%BC%ED%8A%B8%EB%A1%9C%EC%8A%A4_%EC%98%81%EB%AC%BC%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802055217&path-prefix=ko"],
+	"랜드로스":["","https://static.wikia.nocookie.net/pokemon/images/0/04/%EB%9E%9C%EB%93%9C%EB%A1%9C%EC%8A%A4_%EC%98%81%EB%AC%BC%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802055916&path-prefix=ko"],
+	"테오키스":["","https://static.wikia.nocookie.net/pokemon/images/7/7d/%ED%85%8C%EC%98%A4%ED%82%A4%EC%8A%A4_%EC%96%B4%ED%83%9D_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170416103218&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/9/9f/%ED%85%8C%EC%98%A4%ED%82%A4%EC%8A%A4_%EB%94%94%ED%8E%9C%EC%8A%A4_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170416103353&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/3/3f/%ED%85%8C%EC%98%A4%ED%82%A4%EC%8A%A4_%EC%8A%A4%ED%94%BC%EB%93%9C_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170416103457&path-prefix=ko"],
+	"쉐이미":["","https://static.wikia.nocookie.net/pokemon/images/2/22/%EC%89%90%EC%9D%B4%EB%AF%B8_%EC%8A%A4%EC%B9%B4%EC%9D%B4_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170730125415&path-prefix=ko"],
+	"후파":["","https://static.wikia.nocookie.net/pokemon/images/1/1b/%EA%B5%B4%EB%A0%88%EB%A5%BC_%EB%B2%97%EC%96%B4%EB%82%9C_%ED%9B%84%ED%8C%8C_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150415060652&path-prefix=ko"],
+	"디아루가":["","https://static.wikia.nocookie.net/pokemon/images/c/c8/%EB%94%94%EC%95%84%EB%A3%A8%EA%B0%80_%EC%98%A4%EB%A6%AC%EC%A7%84_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20220217120015&path-prefix=ko"],
+	"펄기아":["","https://static.wikia.nocookie.net/pokemon/images/f/f2/%ED%8E%84%EA%B8%B0%EC%95%84_%EC%98%A4%EB%A6%AC%EC%A7%84_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20220217120017&path-prefix=ko"],
+	"기라티나":["","https://static.wikia.nocookie.net/pokemon/images/9/91/%EA%B8%B0%EB%9D%BC%ED%8B%B0%EB%82%98_%EC%98%A4%EB%A6%AC%EC%A7%84_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810072347&path-prefix=ko"],
+	"메로엣타":["","https://static.wikia.nocookie.net/pokemon/images/3/34/%EB%A9%94%EB%A1%9C%EC%97%A3%ED%83%80_%EC%8A%A4%ED%85%9D%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802060824&path-prefix=ko"],
+	"캐스퐁":["","https://static.wikia.nocookie.net/pokemon/images/d/d3/351a.png/revision/latest?cb=20161228132030&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/6/62/351b.png/revision/latest?cb=20161228132053&path-prefix=ko",
+	"https://static.wikia.nocookie.net/pokemon/images/b/b6/351c.png/revision/latest?cb=20161228132206&path-prefix=ko"],
+	"도롱마담":["","https://static.wikia.nocookie.net/pokemon/images/4/46/%EB%8F%84%EB%A1%B1%EB%A7%88%EB%8B%B4_%EB%AA%A8%EB%9E%98%EB%95%85%EB%8F%84%EB%A1%B1_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150724223207&path-prefix=ko","https://static.wikia.nocookie.net/pokemon/images/f/fe/%EB%8F%84%EB%A1%B1%EB%A7%88%EB%8B%B4_%EC%8A%88%EB%A0%88%EB%8F%84%EB%A1%B1_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150724223213&path-prefix=ko"],
+	"킬가르도":["","https://static.wikia.nocookie.net/pokemon/images/1/18/%ED%82%AC%EA%B0%80%EB%A5%B4%EB%8F%84_%EB%B8%94%EB%A0%88%EC%9D%B4%EB%93%9C%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20140226084111&path-prefix=ko"]
+};
+
 exports.ballfail=[
     '안돼, 포켓몬이 볼에서 나와버렸어요!',
     '아아, 잡았다고 생각했는데!',

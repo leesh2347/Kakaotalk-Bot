@@ -20,6 +20,9 @@ const collectioncontents=config.collectioncontents;
 const meganames=config.meganames;
 const megaafternames=config.megaafternames;
 const megapicture=config.megapicture;
+const formchangenames=config.formchangenames;
+const formchangestatus=config.formchangestatus;
+const formchangeimage=config.formchangeimage;
 var month=0;
 const pathRank="sdcard/Devel/Pokemon/Data/ranking.json";  //랭킹파일경로
 const pathchampRank="sdcard/Devel/Pokemon/Data/trainer/champlog.json";  //챔피언기록파일경로
@@ -90,26 +93,19 @@ var write = FileStream.write("sdcard/Devel/Pokemon/Data/"+target+".json", result
 return write;
 }
 
-function pokimglink(pokename){//카링 이미지 주소. 이거로 메가진화나 폼체인지 이미지 링크 변경
+function pokimglink(pokename,formchange){//카링 이미지 주소. 이거로 메가진화나 폼체인지 이미지 링크 변경
 	var imgg="";
 	if(megaafternames.includes(pokename))
 	{
 		imgg=megapicture[megaafternames.indexOf(pokename)];
 	}
-	else if(pokename=="히트로토무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/5/55/%EB%A1%9C%ED%86%A0%EB%AC%B4_%ED%9E%88%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073157&path-prefix=ko";
-	else if(pokename=="스핀로토무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/5/54/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%8A%A4%ED%95%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073201&path-prefix=ko";
-	else if(pokename=="프로스트로토무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/c/c7/%EB%A1%9C%ED%86%A0%EB%AC%B4_%ED%94%84%EB%A1%9C%EC%8A%A4%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073206&path-prefix=ko";
-	else if(pokename=="워시로토무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/4/4a/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%9B%8C%EC%8B%9C_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073210&path-prefix=ko";
-	else if(pokename=="커트로토무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/5/51/%EB%A1%9C%ED%86%A0%EB%AC%B4_%EC%BB%A4%ED%8A%B8_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150810073218&path-prefix=ko";
-	else if(pokename=="블랙큐레무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/0/0f/646%EB%B8%94%EB%9E%99%ED%81%90%EB%A0%88%EB%AC%B4.png/revision/latest/scale-to-width-down/200?cb=20170802060103&path-prefix=ko";
-	else if(pokename=="화이트큐레무")
-		imgg="https://static.wikia.nocookie.net/pokemon/images/a/a1/646%ED%99%94%EC%9D%B4%ED%8A%B8%ED%81%90%EB%A0%88%EB%AC%B4.png/revision/latest/scale-to-width-down/200?cb=20170802060325&path-prefix=ko";
+	else if(formchange>0&&formchangenames.includes(pokename))
+	{
+		if(pokename!="아르세우스")
+			imgg=formchangeimage[pokename][formchange];
+		else
+			imgg=Jsoup.connect("https://librewiki.net/wiki/"+pokename+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
+	}
 	else
 		imgg=Jsoup.connect("https://librewiki.net/wiki/"+pokename+"_(포켓몬)").get().select("meta[property=og:image]").attr("content");
 	return imgg;
@@ -385,8 +381,8 @@ function printskills(skills,locked){
 
 function printbattlekakaolink(room,replier){
 	try{
-	var img1=pokimglink(player1pok.name);
-	var img2=pokimglink(player2pok.name);
+	var img1=pokimglink(player1pok.name,player1pok.formchange);
+	var img2=pokimglink(player2pok.name,player2pok.formchange);
 	
 	Kakao.sendLink(room, {
 			"link_ver":"4.0",
@@ -1588,7 +1584,7 @@ if(cmds.play.includes(msg)){
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
     FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	try{
-		img=pokimglink(pokname);
+		img=pokimglink(pokname,0);
 		poklink="ko/wiki/"+encodeURIComponent(pokname+"_(포켓몬)");
 		//
 		
@@ -2022,6 +2018,8 @@ if(msg.split(" ")[0]==cmds.skillchange)//스킬뽑기
 		replier.reply("@"+sender+"\n돈이 부족해요.\n\nLv."+p.level+" "+p.name+"의 스킬 뽑기 비용: "+cost.comma()+"\n("+p.skillslocked.length+"개 스킬 잠금)");
 	else{
 	var skillsarr=read("포켓몬/"+p.name,"skills");
+	if(p.formchange!=0)
+		skillsarr=read("포켓몬/"+p.name+"_"+p.formchange,"skills");
 	if(skillsarr.length<5||p.skillslocked.length>3) replier.reply("@"+sender+"\n해당 포켓몬은 바꿀 스킬이 없어요.");
 	else
 	{
@@ -2109,11 +2107,18 @@ if(msg.split(" ")[0]==cmds.levelup)//레벨업
 		else p.name=up;
 		replier.reply("@"+sender+"\n축하합니다!\n"+preup+"은(는) Lv."+p.level+"을 달성하여 "+p.name+"(으)로 진화하였습니다!");
 	}
-	var caughtpokhp=read("포켓몬/"+p.name,"hp");
-	p.hp=Math.ceil(caughtpokhp*p.level/50);
+	if(p.formchange==0){
+	p.hp=Math.ceil(read("포켓몬/"+p.name,"hp")*p.level/50);
 	p.atk=Math.ceil(read("포켓몬/"+p.name,"atk")*p.level/50);
 	p.def=Math.ceil(read("포켓몬/"+p.name,"def")*p.level/50);
 	p.spd=Math.ceil(read("포켓몬/"+p.name,"spd")*p.level/50);
+	}
+	else{
+		p.hp=Math.ceil(read("포켓몬/"+p.name+"_"+formchange,"hp")*p.level/50);
+		p.atk=Math.ceil(read("포켓몬/"+p.name+"_"+formchange,"atk")*p.level/50);
+		p.def=Math.ceil(read("포켓몬/"+p.name+"_"+formchange,"def")*p.level/50);
+		p.spd=Math.ceil(read("포켓몬/"+p.name+"_"+formchange,"spd")*p.level/50);
+	}
 	
 	pokInv[sender].deck[n-1]=p;
 	pokUser[sender].gold=pokUser[sender].gold-totalcosts;
@@ -2144,11 +2149,9 @@ if(msg.split(" ")[0]==cmds.formchange)//폼체인지
 	var n=msg.split(" ")[1];
 	let p;
 	p=pokInv[sender].deck[n-1];
-	var rotom=["로토무","히트로토무","워시로토무","프로스트로토무","스핀로토무","커트로토무"];
-	var curem=["큐레무","블랙큐레무","화이트큐레무"];
-	if(rotom.indexOf(p.name)==(-1)&&curem.indexOf(p.name)==(-1))
+	if(formchangenames.indexOf(p.name)==(-1))
 	{
-		replier.reply("@"+sender+"\n폼체인지를 할 수 없는 포켓몬이에요.");
+		replier.reply("@"+sender+"\n폼체인지를 할 수 없는 포켓몬이에요.\n\n폼체인지 가능한 포켓몬: "+formchangenames.join(","));
 		return;
 	}
 	var skillcosts=10000000;
@@ -2158,23 +2161,11 @@ if(msg.split(" ")[0]==cmds.formchange)//폼체인지
 		replier.reply("@"+sender+"\n돈이 부족해요.\n\nLV."+p.level+" "+p.name+"의 폼체인지 비용: "+skillcosts.comma()+"원");
 	}
 	else{
-	var oldname=p.name;
-	if(rotom.indexOf(p.name)!=(-1))
-	{
-		var newname="";
-		do{
-			newname=rotom[Math.floor(Math.random()*rotom.length)];
-		}while(newname==p.name);
-		p.name=newname;
-	}
-	else if(curem.indexOf(p.name)!=(-1))
+	var oldname=formchangestatus[p.name][p.formchange];
+	if(p.name=="큐레무")
 	{
 		if(pokUser[sender].activecollection.includes(19)){
-		var newname="";
-		do{
-			newname=curem[Math.floor(Math.random()*curem.length)];
-		}while(newname==p.name);
-		p.name=newname;
+			
 		}
 		else
 		{
@@ -2182,17 +2173,31 @@ if(msg.split(" ")[0]==cmds.formchange)//폼체인지
 			return;
 		}
 	}
+	var newform=0;
+	do{
+		newform=Math.floor(Math.random()*formchangestatus[p.name].length);
+	}while(newform==p.formchange);
+	p.formchange=newform;
+	if(p.formchange!=0){
+	p.hp=Math.ceil(read("포켓몬/"+p.name+"_"+p.formchange,"hp")*p.level/50);
+	p.atk=Math.ceil(read("포켓몬/"+p.name+"_"+p.formchange,"atk")*p.level/50);
+	p.def=Math.ceil(read("포켓몬/"+p.name+"_"+p.formchange,"def")*p.level/50);
+	p.spd=Math.ceil(read("포켓몬/"+p.name+"_"+p.formchange,"spd")*p.level/50);
+	}
+	else
+	{
 	p.hp=Math.ceil(read("포켓몬/"+p.name,"hp")*p.level/50);
 	p.atk=Math.ceil(read("포켓몬/"+p.name,"atk")*p.level/50);
 	p.def=Math.ceil(read("포켓몬/"+p.name,"def")*p.level/50);
 	p.spd=Math.ceil(read("포켓몬/"+p.name,"spd")*p.level/50);
+	}
 	
 	pokInv[sender].deck[n-1]=p;
 	pokUser[sender].gold=pokUser[sender].gold-skillcosts;
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
 	var showstats="\n최대 HP: "+pokInv[sender].deck[n-1].hp+"\n공격력: "+pokInv[sender].deck[n-1].atk+"\n방어력: "+pokInv[sender].deck[n-1].def+"\n스피드: "+pokInv[sender].deck[n-1].spd;
-	replier.reply("@"+sender+"\n"+skillcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+pokInv[sender].deck[n-1].level+" "+oldname+" > Lv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+"\n\n"+"\u200b".repeat(500)+showstats);
+	replier.reply("@"+sender+"\n"+skillcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+pokInv[sender].deck[n-1].level+pokInv[sender].deck[n-1].name+"("+oldname+") > Lv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+"("+formchangestatus[p.name][p.formchange]+")\n\n"+"\u200b".repeat(500)+showstats);
 	
 	}
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
@@ -2380,9 +2385,13 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 	{
 	var n=msg.split(" ")[1];
 	let p;
+	
 	p=pokInv[sender].box[n-1];
+	var pokdesc=typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")];
+	if(p.formchange>0)
+		pokdesc=typetexts[read("포켓몬/"+p.name+"_"+p.formchange,"type1")]+" "+typetexts[read("포켓몬/"+p.name+"_"+p.formchange,"type2")];
 	try{
-		img=pokimglink(p.name);
+		img=pokimglink(p.name,p.formchange);
 		poklink="ko/wiki/"+encodeURIComponent(p.name+"_(포켓몬)");
 //  	
 		
@@ -2393,7 +2402,7 @@ if(msg.split(" ")[0]==cmds.pokinfo)//포켓몬 정보 자세히
 			"template_args":{
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
-			'POKNAME':"Lv."+p.level+" "+p.name+"  "+typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")],
+			'POKNAME':"Lv."+p.level+" "+p.name+"  "+pokdesc,
 			'DESC':"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd,
 			'LINK':poklink
 			}
@@ -2451,8 +2460,11 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 	var n=msg.split(" ")[1];
 	let p;
 	p=pokInv[sender].deck[n-1];
+	var pokdesc=typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")];
+	if(p.formchange>0)
+		pokdesc=typetexts[read("포켓몬/"+p.name+"_"+p.formchange,"type1")]+" "+typetexts[read("포켓몬/"+p.name+"_"+p.formchange,"type2")];
 	try{
-		img=pokimglink(p.name);
+		img=pokimglink(p.name,p.formchange);
 		poklink="ko/wiki/"+encodeURIComponent(p.name+"_(포켓몬)");
 		//    
 		
@@ -2462,7 +2474,7 @@ if(msg.split(" ")[0]==cmds.dpokinfo)//포켓몬 정보 자세히(덱)
 			"template_args":{
 			//이곳에 템플릿 정보를 입력하세요.
 			'POKIMG':img,
-			'POKNAME':"Lv."+p.level+" "+p.name+"  "+typetexts[read("포켓몬/"+p.name,"type1")]+" "+typetexts[read("포켓몬/"+p.name,"type2")],
+			'POKNAME':"Lv."+p.level+" "+p.name+"  "+pokdesc,
 			'DESC':"최대 HP: "+p.hp+" 공격력: "+p.atk+" 방어력: "+p.def+" 스피드: "+p.spd,
 			'LINK':poklink
 			}
@@ -5005,7 +5017,7 @@ if(msg==cmds.rank)//배틀 랭킹
 if(msg==cmds.leaguechar)//리그캐
 {
 	var pname=setting.leaguecharacter;
-	img=pokimglink(pname);
+	img=pokimglink(pname,0);
 	poklink="ko/wiki/"+encodeURIComponent(pname+"_(포켓몬)");
 	try{
 	Kakao.sendLink(room, {
@@ -5172,14 +5184,27 @@ if(msg.split(" ")[0]=="@패치업뎃")//확률수정 이후 업뎃용
 		}
 		else{
 			for(var q=0;q<pokInv[username].collection.length;q++){
-			pokInv[username].collection[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"hp")*pokInv[username].collection[q].level/50);
-			pokInv[username].collection[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"atk")*pokInv[username].collection[q].level/50);
-			pokInv[username].collection[q].def=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"def")*pokInv[username].collection[q].level/50);
-			pokInv[username].collection[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"spd")*pokInv[username].collection[q].level/50);
-			if(pokInv[username].collection[q].formchange==undefined||pokInv[username].collection[q].formchange==null)
+			if(formchangestatus["로토무"].includes(pokInv[username].collection[q].name)&&pokInv[username].collection[q].formchange==0)
 			{
-				pokInv[username].collection[q].formchange=null;
-				pokInv[username].collection[q].formchange=0;
+				pokInv[username].collection[q].formchange=formchangestatus["로토무"].indexOf(pokInv[username].collection[q].name);
+				pokInv[username].collection[q].name="로토무";
+			}
+			if(formchangestatus["큐레무"].includes(pokInv[username].collection[q].name)&&pokInv[username].collection[q].formchange==0)
+			{
+				pokInv[username].collection[q].formchange=formchangestatus["큐레무"].indexOf(pokInv[username].collection[q].name);
+				pokInv[username].collection[q].name="큐레무";
+			}
+			if(pokInv[username].collection[q].formchange>0){
+				pokInv[username].collection[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name+"_"+pokInv[username].collection[q].formchange,"hp")*pokInv[username].collection[q].level/50);
+				pokInv[username].collection[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name+"_"+pokInv[username].collection[q].formchange,"atk")*pokInv[username].collection[q].level/50);
+				pokInv[username].collection[q].def=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name+"_"+pokInv[username].collection[q].formchange,"def")*pokInv[username].collection[q].level/50);
+				pokInv[username].collection[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name+"_"+pokInv[username].collection[q].formchange,"spd")*pokInv[username].collection[q].level/50);
+			}
+			else{
+				pokInv[username].collection[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"hp")*pokInv[username].collection[q].level/50);
+				pokInv[username].collection[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"atk")*pokInv[username].collection[q].level/50);
+				pokInv[username].collection[q].def=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"def")*pokInv[username].collection[q].level/50);
+				pokInv[username].collection[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].collection[q].name,"spd")*pokInv[username].collection[q].level/50);
 			}
 		}
 		}
@@ -5195,25 +5220,51 @@ if(msg.split(" ")[0]=="@패치업뎃")//확률수정 이후 업뎃용
 		}
 		
 		for(var q=0;q<pokInv[username].deck.length;q++){
-			pokInv[username].deck[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"hp")*pokInv[username].deck[q].level/50);
-			pokInv[username].deck[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"atk")*pokInv[username].deck[q].level/50);
-			pokInv[username].deck[q].def=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"def")*pokInv[username].deck[q].level/50);
-			pokInv[username].deck[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"spd")*pokInv[username].deck[q].level/50);
-			if(pokInv[username].deck[q].formchange==undefined||pokInv[username].deck[q].formchange==null)
+			if(formchangestatus["로토무"].includes(pokInv[username].deck[q].name)&&pokInv[username].deck[q].formchange==0)
 			{
-				pokInv[username].deck[q].formchange=null;
-				pokInv[username].deck[q].formchange=0;
+				pokInv[username].deck[q].formchange=formchangestatus["로토무"].indexOf(pokInv[username].deck[q].name);
+				pokInv[username].deck[q].name="로토무";
+			}
+			if(formchangestatus["큐레무"].includes(pokInv[username].deck[q].name)&&pokInv[username].deck[q].formchange==0)
+			{
+				pokInv[username].deck[q].formchange=formchangestatus["큐레무"].indexOf(pokInv[username].deck[q].name);
+				pokInv[username].deck[q].name="큐레무";
+			}
+			if(pokInv[username].deck[q].formchange>0){
+				pokInv[username].deck[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name+"_"+pokInv[username].deck[q].formchange,"hp")*pokInv[username].deck[q].level/50);
+				pokInv[username].deck[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name+"_"+pokInv[username].deck[q].formchange,"atk")*pokInv[username].deck[q].level/50);
+				pokInv[username].deck[q].def=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name+"_"+pokInv[username].deck[q].formchange,"def")*pokInv[username].deck[q].level/50);
+				pokInv[username].deck[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name+"_"+pokInv[username].deck[q].formchange,"spd")*pokInv[username].deck[q].level/50);
+			}
+			else{
+				pokInv[username].deck[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"hp")*pokInv[username].deck[q].level/50);
+				pokInv[username].deck[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"atk")*pokInv[username].deck[q].level/50);
+				pokInv[username].deck[q].def=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"def")*pokInv[username].deck[q].level/50);
+				pokInv[username].deck[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].deck[q].name,"spd")*pokInv[username].deck[q].level/50);
 			}
 		}
 		for(var q=0;q<pokInv[username].box.length;q++){
-			pokInv[username].box[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"hp")*pokInv[username].box[q].level/50);
-			pokInv[username].box[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"atk")*pokInv[username].box[q].level/50);
-			pokInv[username].box[q].def=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"def")*pokInv[username].box[q].level/50);
-			pokInv[username].box[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"spd")*pokInv[username].box[q].level/50);
-			if(pokInv[username].box[q].formchange==undefined||pokInv[username].box[q].formchange==null)
+			if(formchangestatus["로토무"].includes(pokInv[username].box[q].name)&&pokInv[username].box[q].formchange==0)
 			{
-				pokInv[username].box[q].formchange=null;
-				pokInv[username].box[q].formchange=0;
+				pokInv[username].box[q].formchange=formchangestatus["로토무"].indexOf(pokInv[username].box[q].name);
+				pokInv[username].box[q].name="로토무";
+			}
+			if(formchangestatus["큐레무"].includes(pokInv[username].box[q].name)&&pokInv[username].box[q].formchange==0)
+			{
+				pokInv[username].box[q].formchange=formchangestatus["큐레무"].indexOf(pokInv[username].box[q].name);
+				pokInv[username].box[q].name="큐레무";
+			}
+			if(pokInv[username].box[q].formchange>0){
+				pokInv[username].box[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name+"_"+pokInv[username].box[q].formchange,"hp")*pokInv[username].box[q].level/50);
+				pokInv[username].box[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name+"_"+pokInv[username].box[q].formchange,"atk")*pokInv[username].box[q].level/50);
+				pokInv[username].box[q].def=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name+"_"+pokInv[username].box[q].formchange,"def")*pokInv[username].box[q].level/50);
+				pokInv[username].box[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name+"_"+pokInv[username].box[q].formchange,"spd")*pokInv[username].box[q].level/50);
+			}
+			else{
+				pokInv[username].box[q].hp=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"hp")*pokInv[username].box[q].level/50);
+				pokInv[username].box[q].atk=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"atk")*pokInv[username].box[q].level/50);
+				pokInv[username].box[q].def=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"def")*pokInv[username].box[q].level/50);
+				pokInv[username].box[q].spd=Math.ceil(read("포켓몬/"+pokInv[username].box[q].name,"spd")*pokInv[username].box[q].level/50);
 			}
 		}
 		
