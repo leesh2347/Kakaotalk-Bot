@@ -451,13 +451,26 @@ function battleturn(room,replier) //배틀 구현 함수
 					if(accr<Number(read("기술/"+player1skill,"accr"))/2)
 						accr=Number(read("기술/"+player1skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
-						var atk=Math.ceil(player1pok.atk*read("기술/"+player1skill,"damage")/300*(1000-read("포켓몬/"+player2pok.name,"def"))/1000);
+						var atk=Math.ceil(player1pok.atk*read("기술/"+player1skill,"damage")/300*(2000-player2pok.def)/2000);
 						if(read("기술/"+player1skill,"addi")==4)
 							atk=atk*(player1maxhp-player1pok.hp)/2;
-						if(read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type1")||read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type2"))
+						if(player1pok.formchange==0){
+							if(read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type1")||read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type2"))
 							atk=atk*1.5;
+						}
+						else{
+							if(read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type1")||read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type2"))
+							atk=atk*1.5;
+						}
+						
 						atk=weatherjudge(atk,read("기술/"+player1skill,"type"));
-						var judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
+						var judge;
+						if(player2pok.formchange==0){
+							judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
+						}
+						else{
+							judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type1"),read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type2"));
+						}
 						atk=atk*judge;
 						if(isnpcbattle==0){
 						if(pokUser[player1].activecollection.includes(1)||pokUser[player1].activecollection.includes(2))
@@ -543,13 +556,26 @@ function battleturn(room,replier) //배틀 구현 함수
 					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
 						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
-						var atk=Math.ceil(player2pok.atk*read("기술/"+player2skill,"damage")/300*(1000-read("포켓몬/"+player1pok.name,"def"))/1000);
+						var atk=Math.ceil(player2pok.atk*read("기술/"+player2skill,"damage")/300*(2000-player1pok.def)/2000);
 						if(read("기술/"+player2skill,"addi")==4)
 							atk=atk*(player2maxhp-player2pok.hp)/2;
-						if(read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type1")||read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type2"))
+						if(player2pok.formchange==0){
+							if(read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type1")||read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type2"))
 							atk=atk*1.5;
+						}
+						else{
+							if(read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type1")||read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type2"))
+							atk=atk*1.5;
+						}
+						
 						atk=weatherjudge(atk,read("기술/"+player2skill,"type"));
-						var judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name,"type1"),read("포켓몬/"+player1pok.name,"type2"));
+						var judge;
+						if(player1pok.formchange==0){
+							judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name,"type1"),read("포켓몬/"+player1pok.name,"type2"));
+						}
+						else{
+							judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type1"),read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type2"));
+						}
 						atk=atk*judge;
 						if(pokUser[player2].activecollection.includes(1)||pokUser[player2].activecollection.includes(2))
 							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
@@ -637,13 +663,26 @@ function battleturn(room,replier) //배틀 구현 함수
 					if(accr<Number(read("기술/"+player2skill,"accr"))/2)
 						accr=Number(read("기술/"+player2skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
-						var atk=Math.ceil(player2pok.atk*read("기술/"+player2skill,"damage")/300*(1000-read("포켓몬/"+player1pok.name,"def"))/1000);
+						var atk=Math.ceil(player2pok.atk*read("기술/"+player2skill,"damage")/300*(2000-player1pok.def)/2000);
 						if(read("기술/"+player2skill,"addi")==4)
 							atk=atk*(player2maxhp-player2pok.hp)/2;
-						if(read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type1")||read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type2"))
+						if(player2pok.formchange==0){
+							if(read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type1")||read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name,"type2"))
 							atk=atk*1.5;
+						}
+						else{
+							if(read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type1")||read("기술/"+player2skill,"type")==read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type2"))
+							atk=atk*1.5;
+						}
+						
 						atk=weatherjudge(atk,read("기술/"+player2skill,"type"));
-						var judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name,"type1"),read("포켓몬/"+player1pok.name,"type2"));
+						var judge;
+						if(player1pok.formchange==0){
+							judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name,"type1"),read("포켓몬/"+player1pok.name,"type2"));
+						}
+						else{
+							judge=typejudge(read("기술/"+player2skill,"type"),read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type1"),read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type2"));
+						}
 						atk=atk*judge;
 						if(pokUser[player2].activecollection.includes(1)||pokUser[player2].activecollection.includes(2))
 							atk=atk*(pokUser[player2].collectionlev*2+100)/100;
@@ -729,13 +768,26 @@ function battleturn(room,replier) //배틀 구현 함수
 					if(accr<Number(read("기술/"+player1skill,"accr"))/2)
 						accr=Number(read("기술/"+player1skill,"accr"))/2;
 					if(Math.floor(Math.random()*100)<accr){
-						var atk=Math.ceil(player1pok.atk*read("기술/"+player1skill,"damage")/300*(1000-read("포켓몬/"+player2pok.name,"def"))/1000);
+						var atk=Math.ceil(player1pok.atk*read("기술/"+player1skill,"damage")/300*(2000-player2pok.def)/2000);
 						if(read("기술/"+player1skill,"addi")==4)
 							atk=atk*(player1maxhp-player1pok.hp)/2;
-						if(read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type1")||read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type2"))
+						if(player1pok.formchange==0){
+							if(read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type1")||read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name,"type2"))
 							atk=atk*1.5;
+						}
+						else{
+							if(read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type1")||read("기술/"+player1skill,"type")==read("포켓몬/"+player1pok.name+"_"+player1pok.formchange,"type2"))
+							atk=atk*1.5;
+						}
+						
 						atk=weatherjudge(atk,read("기술/"+player1skill,"type"));
-						var judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
+						var judge;
+						if(player2pok.formchange==0){
+							judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name,"type1"),read("포켓몬/"+player2pok.name,"type2"));
+						}
+						else{
+							judge=typejudge(read("기술/"+player1skill,"type"),read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type1"),read("포켓몬/"+player2pok.name+"_"+player2pok.formchange,"type2"));
+						}
 						atk=atk*judge;
 						if(isnpcbattle==0){
 						if(pokUser[player1].activecollection.includes(1)||pokUser[player1].activecollection.includes(2))
