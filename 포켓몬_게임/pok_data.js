@@ -37,6 +37,8 @@ exports.cmds={
 	'giveup':'@배틀기권',
 	'eventinfo':'@포켓몬이벤트',
 	'gym':'@체육관',
+	'create':'@포켓몬합성',
+	'gatcha':'@제비뽑기',
 	'champ':'@챔피언도전',
 	'champinfo':'@챔피언정보',
 	'collectioninfo':'@컬렉션목록',
@@ -73,8 +75,9 @@ exports.setting={
     'ranknum':Number(30),  //랭킹 출력갯수(개)
 	'balluplev':7,
 	'luckygold':300000000, //알수없는돌 금액
-	'championlev':210, //챔피언 레벨
-	'leaguecharacter':'큐레무',
+	'championlev':220, //챔피언 레벨
+	'leaguechararr':['큐레무','지가르데'],
+	'leaguecharacter':'지가르데',
 	//eventp변수: 추가 부여 스탯(이벤트 개최 등에 사용) (이벤트가 없을 땐 모두 0으로 해두셈)
 	'eventp':{
 		'g4':10, //전설 추가 출현률
@@ -413,7 +416,8 @@ exports.formchangenames=[
 	'메로엣타',
 	'캐스퐁',
 	'도롱마담',
-	'킬가르도'
+	'킬가르도',
+	'지가르데'
 ];
 
 exports.formchangestatus={
@@ -432,7 +436,8 @@ exports.formchangestatus={
 	'메로엣타':['보이스폼','스텝폼'],
 	'캐스퐁':['노말폼','태양의 모습','빗방울의 모습','설운의 모습'],
 	'도롱마담':['초목도롱','모래땅도롱','슈레도롱'],
-	'킬가르도':['실드폼','블레이드폼']
+	'킬가르도':['실드폼','블레이드폼'],
+	'지가르데':['50%폼','퍼펙트폼']
 };
 
 exports.formchangeimage={
@@ -459,7 +464,8 @@ exports.formchangeimage={
 	"https://static.wikia.nocookie.net/pokemon/images/6/62/351b.png/revision/latest?cb=20161228132053&path-prefix=ko",
 	"https://static.wikia.nocookie.net/pokemon/images/b/b6/351c.png/revision/latest?cb=20161228132206&path-prefix=ko"],
 	"도롱마담":["","https://static.wikia.nocookie.net/pokemon/images/4/46/%EB%8F%84%EB%A1%B1%EB%A7%88%EB%8B%B4_%EB%AA%A8%EB%9E%98%EB%95%85%EB%8F%84%EB%A1%B1_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150724223207&path-prefix=ko","https://static.wikia.nocookie.net/pokemon/images/f/fe/%EB%8F%84%EB%A1%B1%EB%A7%88%EB%8B%B4_%EC%8A%88%EB%A0%88%EB%8F%84%EB%A1%B1_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150724223213&path-prefix=ko"],
-	"킬가르도":["","https://static.wikia.nocookie.net/pokemon/images/1/18/%ED%82%AC%EA%B0%80%EB%A5%B4%EB%8F%84_%EB%B8%94%EB%A0%88%EC%9D%B4%EB%93%9C%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20140226084111&path-prefix=ko"]
+	"킬가르도":["","https://static.wikia.nocookie.net/pokemon/images/1/18/%ED%82%AC%EA%B0%80%EB%A5%B4%EB%8F%84_%EB%B8%94%EB%A0%88%EC%9D%B4%EB%93%9C%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20140226084111&path-prefix=ko"],
+	"지가르데":["","https://static.wikia.nocookie.net/pokemon/images/0/0d/%EC%A7%80%EA%B0%80%EB%A5%B4%EB%8D%B0_%ED%8D%BC%ED%8E%99%ED%8A%B8%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802123600&path-prefix=ko"]
 };
 
 exports.ballfail=[
