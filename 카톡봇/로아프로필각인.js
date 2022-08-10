@@ -47,7 +47,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
         else
         {
            recordnick(sender,nick);
-           var a=org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/"+encodeURIComponent(nick)).header("referrer","https://lostark.game.onstove.com").header("content-type", "application/x-www-form-urlencoded; charset=UTF-8").data("memberNo", "l4hDdfILC1alFbTIUSPkO42bMb+bnyPi3CeFuKxi4vw=").data("worldNo", "ua/3l9nKTmxZWGSrvdE1IgK21Zs3E2eAbJNncGnV4tI=").data("pcId", "1xeBlgCfGJQUV2nugoVOV1336mH0ZtY9VVq6vkj4DiU=").ignoreContentType(true).ignoreHttpErrors(true).post();
+           var a=org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/"+encodeURIComponent(nick)).get();
            var img=a.select(".profile-equipment>div>img").attr("src");
             var ilev=a.select(".level-info2__expedition>span").text().split("장착 아이템 레벨 ")[1];
             var server=a.select(".profile-character-info__server").text().split("@")[1];
@@ -85,7 +85,7 @@ if(msg.split(" ")[0]=="@각인"||msg.split(" ")[0]=="!각인") {
         else
         {
            recordnick(sender,nick);
-           var a=org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/"+encodeURIComponent(nick)).header("referrer","https://lostark.game.onstove.com").header("content-type", "application/x-www-form-urlencoded; charset=UTF-8").data("memberNo", "l4hDdfILC1alFbTIUSPkO42bMb+bnyPi3CeFuKxi4vw=").data("worldNo", "ua/3l9nKTmxZWGSrvdE1IgK21Zs3E2eAbJNncGnV4tI=").data("pcId", "1xeBlgCfGJQUV2nugoVOV1336mH0ZtY9VVq6vkj4DiU=").ignoreContentType(true).ignoreHttpErrors(true).post();
+           var a=org.jsoup.Jsoup.connect("https://lostark.game.onstove.com/Profile/Character/"+encodeURIComponent(nick)).get();
            var job=a.select(".profile-equipment>div>img").attr("alt");
 		   var b=a.select(".profile-ability-engrave>div>div").select("li>span").text();
 		   var arr=b.split("3 ").join("3#").split("2 ").join("2#").split("1 ").join("1#").split("#");
