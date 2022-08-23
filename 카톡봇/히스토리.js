@@ -44,8 +44,14 @@ recordnick(sender,name);
 try{
 var url="https://maple.gg/u/"+name;
 var data = org.jsoup.Jsoup.connect(url).get();
-var s=data.getElementsByTag("script").select("script").get(25).toString();
-
+var data2=data.getElementsByTag("script").select("script");
+var s="";
+for(var i=20;i<30;i++){
+	if(data2.get(i).toString().includes("var expHistoryLabels = ")){
+		s=data2.get(i).toString();
+		break;
+	}
+}
 var a=s.split("var expHistoryLabels = ")[1].split("c3.generate")[0]
 var b=s.split("columns: ")[1].split("\"exp\"")[0]
 b=b+"]]"
@@ -71,7 +77,14 @@ recordnick(sender,name);
 try{
 var url="https://maple.gg/u/"+name;
 var data = org.jsoup.Jsoup.connect(url).get();
-var s=data.getElementsByTag("script").select("script").get(26).toString();
+var data2=data.getElementsByTag("script").select("script");
+var s="";
+for(var i=20;i<30;i++){
+	if(data2.get(i).toString().includes("c3.generate({")&&!(data2.get(i).toString().includes("var expHistoryLabels"))){
+		s=data2.get(i).toString();
+		break;
+	}
+}
 var s2=s.split("columns: ")[1].split(",\n                labels:")[0].replace("[[","{[").replace("]]","]}").replace("[\"x\"","\"x\":[\"1\"").replace(" [\"level\"","\"level\":[\"1\"");
 var s3=JSON.parse(s2);
 
