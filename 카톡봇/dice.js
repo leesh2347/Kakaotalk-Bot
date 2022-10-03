@@ -3,7 +3,7 @@ var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시
 function response(room, msg, sender, isGroupChat, replier, ImageDB) {
 if(banrooms.includes(room)) return;
 else{
-if (msg == '@주사위'||msg == '!주사위') {
+if ((msg == '@주사위'||msg == '!주사위')||(msg.includes("일 확률")||msg.includes("할 확률")||msg.includes("일 확률"))) {
         var a = Math.floor((Math.random() * 100) + 1);
         if(a>0&&a<2)
  replier.reply("망이네요.....주사위가 "+a+" 나왔습니다.");
@@ -31,6 +31,6 @@ else if(a==100)
  replier.reply("AI 루시가 확실하게 보증합니다. 주사위가 "+a+" 나왔습니다!");
 else
  replier.reply("AI 루시가 보증합니다. 주사위가 "+a+" 나왔습니다!");
-    }
+}
 }
 }
