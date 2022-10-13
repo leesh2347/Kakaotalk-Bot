@@ -1,6 +1,7 @@
 const scriptName = "maplegg";
 FS = FileStream;
 const kalink=require('kaling_config');
+
 const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
 const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
@@ -14,6 +15,17 @@ function recordnick(sender,nick){
 	if(rd[sender]==undefined) rd[sender] = {};
 	if(rd[sender][nick]==undefined)rd[sender][nick] = 0;
 	rd[sender][nick] = rd[sender][nick]+1;
+	var n=""
+	var temparr = [];
+		for (i in rd[sender]){
+			temparr.push(i+"/"+rd[sender][i]);
+		}
+		temparr.sort((a, b)=>a.split("/")[1] - b.split("/")[1]).reverse();
+		n=temparr[0].split("/")[0];
+	if(rd[sender][nick]>30&&nick==n){
+		rd[sender] = {};
+		rd[sender][nick] = 2;
+	}
 	FS.write(loc, JSON.stringify(rd))
 	
 }

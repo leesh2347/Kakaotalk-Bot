@@ -1,15 +1,6 @@
 const scriptName = "무릉유니온";
 Jsoup=org.jsoup.Jsoup;
 FS = FileStream;
-/**
- * (string) room
- * (string) sender
- * (boolean) isGroupChat
- * (void) replier.reply(message)
- * (boolean) replier.reply(room, message, hideErrorToast = false) // 전송 성공시 true, 실패시 false 반환
- * (string) imageDB.getProfileBase64()
- * (string) packageName
- */
 var loc="sdcard/katalkbot/Bots/maplelog.json";
 if (FS.read(loc)==null) FS.write(loc, "{}");
 
@@ -18,6 +9,17 @@ function recordnick(sender,nick){
 	if(rd[sender]==undefined) rd[sender] = {};
 	if(rd[sender][nick]==undefined)rd[sender][nick] = 0;
 	rd[sender][nick] = rd[sender][nick]+1;
+	var n=""
+	var temparr = [];
+		for (i in rd[sender]){
+			temparr.push(i+"/"+rd[sender][i]);
+		}
+		temparr.sort((a, b)=>a.split("/")[1] - b.split("/")[1]).reverse();
+		n=temparr[0].split("/")[0];
+	if(rd[sender][nick]>30&&nick==n){
+		rd[sender] = {};
+		rd[sender][nick] = 2;
+	}
 	FS.write(loc, JSON.stringify(rd))
 	
 }
