@@ -234,6 +234,28 @@ const jak=["100%","70%","30%","15%"];
 	  
  }
  
+ function jaehoek(msg,replier){
+	 var lev=Number(msg.split(" ")[1]);
+	 var drop=Number(msg.split(" ")[2]);
+	 var me=Number(msg.split(" ")[3]);
+	 var mari=Number(msg.split(" ")[4]);
+	 if(isNaN(lev)||isNaN(drop)||isNaN(me)||isNaN(mari))
+	 {
+		 replier.reply("재획비 효율 계산기 사용법: @재획 (레벨) (드랍) (메획) (간당 마리수)\n\n재획비가 얼마일 때부터 마시면 이득인지 효율을 계산해 줍니다.\n※간당 마리수는 만마리 단위로 입력해 주세요.(15000마리일 경우 1.5)");
+	 }
+	 else
+	 {
+	 var ddrop=60*(100+drop)/100
+	var jddrop=60*(120+drop)/100
+	if(ddrop>100) ddrop=100;
+	if(jddrop>100) jddrop=100;
+	nojae=Math.ceil(lev*(100+me)*mari*7.5*ddrop/10000);
+	jae=Math.ceil(lev*(100+me)*1.2*mari*7.5*jddrop/10000);
+	replier.reply("🍾재획비 효율 계산기🍾\n\n재획비 사용X: 간당 "+nojae+"만\n재획비 사용: 간당 "+jae+"만\n\n재획비 사용 추천 시세: "+(jae-nojae)*2+"만▼\n(1시간 30분 사냥시): "+Math.ceil((jae-nojae)*1.5)+"만▼\n(1시간 사냥시): "+(jae-nojae)+"만▼");
+	 }
+	 
+ }
+ 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 	if(msg=="!추옵"||msg=="@추옵")
 		replier.reply("추옵 검색 사용법"+"\u200b".repeat(500)+"\n\n사용법: !추옵 (장비종류) (무기종류)\n\n장비 종류: 자쿰, 네크로, 반레온, 여제, 파프, 앱솔, 아케인, 제네, 류드, 제로, 해카세\n\n무기 종류: "+weapon.join(", ")+"\n\n제로 무기 종류: 1형~10형\n\n*류드, 해카세의 경우 무기 종류는 입력하지 않습니다.\n*잘못된 값 입력 시 해당 장비 종류 모두를 출력합니다.");
@@ -243,4 +265,6 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 		statanalysis(msg,replier);
 	if(msg.split(" ")[0]=="!방무"||msg.split(" ")[0]=="@방무")
 		armor(msg,replier);
+	if(msg.split(" ")[0]=="!재획"||msg.split(" ")[0]=="@재획")
+		jaehoek(msg,replier);
 }
