@@ -245,6 +245,7 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else
 	 {
+		if(mari>1000) mari=mari/10000;
 	 var ddrop=60*(100+drop)/100
 	var jddrop=60*(120+drop)/100
 	if(ddrop>100) ddrop=100;
