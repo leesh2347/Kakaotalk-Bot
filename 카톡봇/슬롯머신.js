@@ -4,8 +4,11 @@ var line3=["█░█","░░█","███","███","███","██�
 var line4=["█░█","░░█","█░░","░░█","░░█","░░█","█░█","░░█","█░█","░░█"];
 var line5=["███","░░█","███","███","░░█","███","███","░░█","███","███"];
 
+const br=require('banned_rooms');
+const banrooms=br.banrooms['play'];
+
 function response(room, msg, sender, isGroupChat, replier, ImageDB){
-if(room=="바다 월드") return;
+if(banrooms.includes(room)) return;
 if(msg=="@슬롯머신")
 {
    var ran=[0,0,0];

@@ -3,7 +3,8 @@ const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
 const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
 Kakao.login(kaling.email,kaling.password);
-var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
+const br=require('banned_rooms');
+const banrooms=br.banrooms['play'];
 
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
 if(banrooms.includes(room)) return;

@@ -1,6 +1,7 @@
 Jsoup = org.jsoup.Jsoup;
 FS = FileStream;
-var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
+const br=require('banned_rooms');
+const banrooms=br.banrooms['play'];
 var loc="sdcard/katalkbot/Bots/royal/contents.json";
 if (FS.read(loc)==null) FS.write(loc, "{}");
         
@@ -64,7 +65,7 @@ if(msg=="@로얄업뎃"){
         return;
     }
       
-    if(msg.split(" ")[0]=="@로얄"){
+    if(msg.split(" ")[0]=="@로얄"||msg.split(" ")[0]=="!로얄"){
      
 
 var item_name=JSON.parse(FS.read(loc))["itemname"];

@@ -1,4 +1,5 @@
-var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
+const br=require('banned_rooms');
+const banrooms=br.banrooms['play'];
 
 var num;
 var strike=0;

@@ -4,7 +4,8 @@ var ans_fake="";
 var start_time=null;
 var isplaying=0;
 var playingroom="";
-var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
+const br=require('banned_rooms');
+const banrooms=br.banrooms['play'];
 Jsoup = org.jsoup.Jsoup
 
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
