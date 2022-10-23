@@ -1,8 +1,11 @@
+const kalink=require('kaling_config');
+const kaling=kalink.kaling;
 const { KakaoLinkClient } = require('kakaolink');
-const Kakao =new KakaoLinkClient("aaa","http://asdf");
-Kakao.login('asdf','asdf');
+const Kakao =new KakaoLinkClient(kaling.key,kaling.url);
+Kakao.login(kaling.email,kaling.password);
 
-var banrooms=["바다 월드","키네연구소","낚시터","메이플 키네시스"];
+const br=require('banned_rooms');
+const banrooms=br.banrooms['play'];
 playerList = [];
 isAI = 99;
 order = [];
@@ -80,10 +83,10 @@ function colmove(num){
 function response(room, msg, sender, isGroupChat, replier, imageDB) {
 	if(banrooms.includes(room)) return;
 	
-	if(msg=="/주사위게임 도움말")
-		replier.reply("추억의 주사위 보드게임\n\n/주사위게임 입장\n/주사위게임 퇴장\n/주사위게임 AI\n/주사위게임 시작\n\n*2인 이상부터 게임 진행이 가능합니다.");
+	if(msg=="@주사위게임 도움말")
+		replier.reply("추억의 주사위 보드게임\n\n@주사위게임 입장\n@주사위게임 퇴장\n@주사위게임 AI\n@주사위게임 시작\n\n*2인 이상부터 게임 진행이 가능합니다.");
 	
-	if (msg == "/주사위게임 입장") {
+	if (msg == "@주사위게임 입장") {
 		if(nowroom!="없음"&&nowroom!=room)
 		replier.reply("다른 방에서 게임이 진행 중입니다.");
 		else{
@@ -111,7 +114,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 		}
 	}
 	
-	if (msg == "/주사위게임 AI") {
+	if (msg == "@주사위게임 AI") {
 		if(nowroom!="없음"&&nowroom!=room)
 			replier.reply("다른 방에서 게임이 진행 중입니다.");
 		else{
@@ -139,7 +142,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 		}
 	}
 	
-	if (msg == "/주사위게임 퇴장") {
+	if (msg == "@주사위게임 퇴장") {
 		if(nowroom!="없음"&&nowroom!=room)
 			replier.reply("다른 방에서 게임이 진행 중입니다.");
 		else{
@@ -166,7 +169,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 		}
 	}
 	
-	if (msg == "/주사위게임 시작") {
+	if (msg == "@주사위게임 시작") {
 		if(nowroom!="없음"&&nowroom!=room)
 			replier.reply("다른 방에서 게임이 진행 중입니다.");
 		else{
@@ -186,7 +189,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 							showorder=showorder+tokenshow[i]+": "+order[i]+"\n";
 						replier.reply("게임을 시작합니다! \n\n"+showorder);
 						nowTurn = order[turnnum];
-						replier.reply(order[turnnum]+" 님 부터 /굴리기 를 통해 주사위를 굴려 주세요.");
+						replier.reply(order[turnnum]+" 님 부터 @굴리기 를 통해 주사위를 굴려 주세요.");
 						if(isAI==turnnum&&order[turnnum]=="AI 루시")
 						{
 							java.lang.Thread.sleep(1000);
@@ -224,7 +227,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 								if(turnnum==playerList.length)
 								   turnnum=0;
 							   nowTurn = order[turnnum];
-							   replier.reply(order[turnnum]+" 님의 차례입니다.\n/굴리기 를 통해 주사위를 굴려 주세요.");
+							   replier.reply(order[turnnum]+" 님의 차례입니다.\n@굴리기 를 통해 주사위를 굴려 주세요.");
 							}
 							
 						}
@@ -241,7 +244,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 		}
 	}
 	if (order[turnnum]==sender&&start&&nowroom==room) {
-		if(msg=="/굴리기"){
+		if(msg=="@굴리기"){
 			var r=Math.floor(Math.random()*6);
 			replier.reply(diceshow[r]);
 			java.lang.Thread.sleep(1000);
@@ -275,7 +278,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 				if(turnnum==playerList.length)
 				   turnnum=0;
 			   nowTurn = order[turnnum];
-			   replier.reply(order[turnnum]+" 님의 차례입니다.\n/굴리기 를 통해 주사위를 굴려 주세요.");
+			   replier.reply(order[turnnum]+" 님의 차례입니다.\n@굴리기 를 통해 주사위를 굴려 주세요.");
 			   if(isAI==turnnum&&order[turnnum]=="AI 루시")
 						{
 							java.lang.Thread.sleep(1000);
@@ -313,7 +316,7 @@ function response(room, msg, sender, isGroupChat, replier, imageDB) {
 								if(turnnum==playerList.length)
 								   turnnum=0;
 							   nowTurn = order[turnnum];
-							   replier.reply(order[turnnum]+" 님의 차례입니다.\n/굴리기 를 통해 주사위를 굴려 주세요.");
+							   replier.reply(order[turnnum]+" 님의 차례입니다.\n@굴리기 를 통해 주사위를 굴려 주세요.");
 							}
 						}
 						
