@@ -53,7 +53,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="자쿰")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(poisonic[weapon.indexOf(name)]);
 		 else
@@ -66,7 +68,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="네크로")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(necro[weapon.indexOf(name)]);
 		 else
@@ -79,7 +83,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="반레온")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(leon[weapon.indexOf(name)]);
 		 else
@@ -92,7 +98,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="여제")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(cygnus[weapon.indexOf(name)]);
 		 else
@@ -105,7 +113,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="파프")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(rootabyss[weapon.indexOf(name)]);
 		 else
@@ -118,7 +128,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="앱솔")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(absolabs[weapon.indexOf(name)]);
 		 else
@@ -131,7 +143,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="아케인")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(arcane[weapon.indexOf(name)]);
 		 else
@@ -144,7 +158,9 @@ const jak=["100%","70%","30%","15%"];
 	 }
 	 else if(series=="제네")
 	 {
-		 var name=msg.split(" ")[2].toUpperCase();
+		 var name=msg.split(" ")[2];
+		 if(name!=undefined)
+			 name=name.toUpperCase();
 		 if(weapon.indexOf(name)!=(-1))
 			 replier.reply(genesis[weapon.indexOf(name)]);
 		 else
