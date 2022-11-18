@@ -1540,7 +1540,7 @@ function pokleave(sender,replier){
 }
 
 function response(room, msg, sender, isGroupChat, replier, ImageDB){
-if(room!="루시 포켓몬방"&&room!="낚시터") return;
+if(room!="루시 포켓몬방") return;
 if(msg==cmds.join) //가입
 	pokjoin(sender,replier);
 if(msg==cmds.leave) //탈퇴
@@ -2058,20 +2058,37 @@ if(msg.split(" ")[0]==cmds.sell)//놓아주기
 		var money=0;
 		var pokmoney=0;
 		let tempbox=[];
+		var startn=0;
+		var endn=0;
+		var isselective=1;
+		startn=Number(msg.split(" ")[1])-1;
+		endn=Number(msg.split(" ")[2])-1;
+		if(isNaN(startn)&&isNaN(endn)){
+			startn=0;
+			endn=pokInv[sender].box.length;
+			isselective=0;
+		}
+		else if(isNaN(startn)||isNaN(endn)||startn<0||startn>pokInv[sender].box.length||endn<0||endn>pokInv[sender].box.length){
+			replier.reply('@'+sender+'\n선택형 놓아주기는 '+cmds.sell+'(시작 박스 번호) (끝 박스 번호)형태로 숫자로 입력해 주세요.');
+			return;
+		}
 	for(var i=0;i<pokInv[sender].box.length;i++)
 	{
-		if(pokInv[sender].box[i].islocked==0)
+		
+		if(pokInv[sender].box[i].islocked==1||i<startn||i>endn){
+			tempbox.push(pokInv[sender].box[i]);
+		}
+		else
 		{
 			pokmoney=3000*pokInv[sender].box[i].level*pokInv[sender].box[i].level;
 			if(pokArr.group4.includes(pokInv[sender].box[i].name)||pokInv[sender].box[i].name=="다부니")
 				pokmoney=pokmoney*5;
+			else if(megaafternames.includes(pokInv[sender].box[i].name))
+				pokmoney=pokmoney*10;
 			else if(pokArr.group5.includes(pokInv[sender].box[i].name))
 				pokmoney=pokmoney*10;
 			money=money+pokmoney;
 			
-		}
-		else{
-			tempbox.push(pokInv[sender].box[i]);
 		}
 	}
 	pokInv[sender].box=[];
@@ -2085,7 +2102,10 @@ if(msg.split(" ")[0]==cmds.sell)//놓아주기
 	pokUser[sender].gold=pokUser[sender].gold+money;
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
+	if(isselective==0)
 	replier.reply("@"+sender+"\n잠금상태의 포켓몬을 제외한 박스의 모든 포켓몬을 놓아주었어요.\n"+money.comma()+"원 획득.\n\n보유금액: "+(pokUser[sender].gold).comma()+"원");
+	else
+		replier.reply("@"+sender+"\n박스의 "+(startn+1)+"번 ~ "+(endn+1)+"번 중 잠금상태의 포켓몬을 제외한 포켓몬을 놓아주었어요.\n"+money.comma()+"원 획득.\n\n보유금액: "+(pokUser[sender].gold).comma()+"원");
 	}else replier.reply("@"+sender+"\n박스에 포켓몬이 없어요.");
 }
 
@@ -3764,9 +3784,12 @@ if(msg==cmds.battletower)//배틀타워(일일 레이드)
     }
 	if(battletowerplayers[sender]==null||battletowerplayers[sender]==undefined)
 				battletowerplayers[sender]=0;
-	if(battletowerplayers[sender]>0)
+	if(battletowerplayers[sender]>(0+setting.eventp.battletower))
 	{
-		replier.reply('@'+sender+"\n배틀타워는 1회 리로드 당 1회만 클리어 가능합니다.");
+		if(setting.eventp.battletower>0)
+			replier.reply('@'+sender+"\n배틀타워는 1회 리로드 당 1(+"+setting.eventp.battletower+")회만 클리어 가능합니다.");
+		else
+			replier.reply('@'+sender+"\n배틀타워는 1회 리로드 당 1회만 클리어 가능합니다.");
 		return;
 	}
 	pokInv[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json'));
@@ -6463,6 +6486,10 @@ if(msg==cmds.eventinfo)//이벤트 보기
 		res=res+"전설의 포켓몬 추가 포획률: +"+setting.eventp.g4catch+"%\n";
 	if(setting.eventp.g3catch!=0)
 		res=res+"레어 포켓몬 추가 포획률: +"+setting.eventp.g3catch+"%\n";
+	if(setting.eventp.battletower!=0)
+		res=res+"배틀타워 클리어횟수 추가: +"+setting.eventp.battletower+"회\n";
+	if(setting.eventp.gatcha!=0)
+		res=res+"제비뽑기 횟수 추가: +"+setting.eventp.gatcha+"회\n";
 	if(setting.eventp.goldX!=1)
 		res=res+"모든 돈 획득량: X"+setting.eventp.goldX+"배\n";
 	if(res=="")
@@ -6648,5 +6675,5 @@ function onStartCompile() {
 	month=pokseason["month"];
 	gatchaplayers={};
 	champplayers={};
-    Api.replyRoom("낚시터","포켓몬 게임 리로드.\n현재 계절: "+seasontext[month]);
+    Api.replyRoom("루시 포켓몬방","포켓몬 게임 리로드.\n현재 계절: "+seasontext[month]);
 }
