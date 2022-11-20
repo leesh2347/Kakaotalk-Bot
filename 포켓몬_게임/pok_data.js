@@ -27,9 +27,11 @@ exports.cmds={
     'title':'@트레이너등급',
     'rank':'@포켓몬 랭킹',
 	'battlejoin':'@배틀참가',
+	'battletower':'@배틀타워',
 	'battleexit':'@배틀취소',
 	'battlenext':'@다음',
 	'skillchange':'@스킬뽑기',
+	'effort':'@노력치강화',
 	'leaguechar':'@리그캐릭터',
     'levelup':'@레벨업',
 	'boxlevelup':'@박스레벨업',
@@ -38,7 +40,6 @@ exports.cmds={
 	'giveup':'@배틀기권',
 	'eventinfo':'@포켓몬이벤트',
 	'gym':'@체육관',
-	'create':'@포켓몬합성',
 	'gatcha':'@제비뽑기',
 	'champ':'@챔피언도전',
 	'champinfo':'@챔피언정보',
@@ -67,7 +68,7 @@ exports.setting={
     'maxball':Number(50),  //볼 최대갯수(개)
 	'ballg5':[0,0,0,0,0,0,0,0,0,0,0,1,1,2,2,3,4,5,6,7,8], //울트라비스트 볼강화 출현률
 	'ballg4':[0,0,0.1,0.5,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17], //전설 볼강화 출현률
-	'ballg3':[0,0.1,1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55], //레어 볼강화 출현률
+	'ballg3':[0.1,0.5,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,20], //레어 볼강화 출현률
 	'ballupPrice':[5000,50000,250000,800000,3000000,7500000,15000000,30000000,50000000,100000000,250000000,500000000,1000000000,1500000000,2000000000,2500000000,3000000000,3500000000,4000000000,4500000000,0], //볼별 다음볼로 업그레이드비용
 	'ballupsucc':[10,30,50,100,200,300,500,700,1000,1250,1500,1750,2000,2250,2500,2750,3000,3250,3500,4000,0], //볼강화 요구 포켓몬 발견 횟수
     'ballcatch':[0.2,0.5,2,3,5],  //볼강화 포획률(g5~g1)
@@ -78,16 +79,19 @@ exports.setting={
 	'balluplev':7,
 	'luckygold':300000000, //알수없는돌 금액
 	'championlev':260, //챔피언 레벨
-	'leaguechararr':['큐레무','지가르데'],
-	'leaguecharacter':'지가르데',
+	'leaguechararr':['큐레무','지가르데','네크로즈마'],
+	'leaguecharacter':'네크로즈마',
 	//eventp변수: 추가 부여 스탯(이벤트 개최 등에 사용) (이벤트가 없을 땐 모두 0으로 해두셈)
 	'eventp':{
+		'unknown':0, //??? 추가 출현률
+		'gatcha':0,//제비뽑기 추가횟수
+		'battletower':1, //배틀타워 추가횟수
 		'g4':0, //전설 추가 출현률
 		'g3':0,  //레어 추가 출현률
 		'g4catch':0,  //전설 추가 포획률
 		'g3catch':0,  //레어 추가 포획률
 		'allcatch':0,  //나머지 추가 포획률
-		'goldX':1 //모든 골드 획득량 배수(평상시 1로 두면 됨)
+		'goldX':2 //모든 골드 획득량 배수(평상시 1로 두면 됨)
 	},
     'rank':{
         'upif':[0,1,10,25,50,100,200,300,500,750,1000,1250,1500,1750,2000,2500,3000,0,0],  //랭크업조건(포획성공횟수)
@@ -269,6 +273,8 @@ exports.collectioncontents=[
 	['미싱노','유령','지우의피카츄','큐레무','지가르데','네크로즈마']
 ];
 
+exports.trainerranpoks=['이상해꽃','리자몽','거북왕','나무킹','대짱이','번치코','메가니움','블레이범','장크로다일','토대부기','초염몽','엠페르트','찌르호크','샤로다','염무왕','대검귀','브리가론','마폭시','개굴닌자','모크나이퍼','어흥염','누리레느','잠만보','망나뇽','해피너스','마기라스','보만다','메타그로스','포푸니라','자포코일','내룸벨트','거대코뿌리','덩쿠림보','마그마번','에레키블','전룡','보스로라','루카리오','한카리아스','드래피온','너트령','토게키스','글라이온','맘모꾸리','폴리곤Z','엘레이드','대코파스','야느와르몽','눈여아','로토무','악비아르','불비달마','타격귀','몰드류','삼삼드래','불카모스','조로아크','샹델라','액스라이즈','킬가르도','미끄래곤','따라큐','타타륜','짜랑고우거','그란돈','가이오가','레쿠쟈','디아루가','펄기아','히드런','팬텀','레시라무','제크로무','뮤츠','제르네아스','이벨타르','카푸꼬꼬꼭','카푸나비나','카푸브루루','카푸느지느','제라오라','유령','지우의피카츄','종이신도','전수목','철화구야']
+
 exports.meganames=[
 	'이상해꽃',
 	'리자몽',
@@ -317,7 +323,8 @@ exports.meganames=[
 	'다부니',
 	'디안시',
 	'그란돈',
-	'가이오가'
+	'가이오가',
+	'네크로즈마'
 ];
 
 exports.megaafternames=[
@@ -370,7 +377,8 @@ exports.megaafternames=[
 	'메가다부니',
 	'메가디안시',
 	'원시그란돈',
-	'원시가이오가'
+	'원시가이오가',
+	'울트라네크로즈마'
 ];
 
 exports.megapicture=[
@@ -423,7 +431,8 @@ exports.megapicture=[
 	'https://static.wikia.nocookie.net/pokemon/images/f/fd/%EB%A9%94%EA%B0%80%EB%8B%A4%EB%B6%80%EB%8B%88_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20141022120651&path-prefix=ko',
 	'https://static.wikia.nocookie.net/pokemon/images/0/0b/%EB%A9%94%EA%B0%80%EB%94%94%EC%95%88%EC%8B%9C_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20141022115115&path-prefix=ko',
 	'https://static.wikia.nocookie.net/pokemon/images/b/bc/%EC%9B%90%EC%8B%9C%EA%B7%B8%EB%9E%80%EB%8F%88_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170416102207&path-prefix=ko',
-	'https://static.wikia.nocookie.net/pokemon/images/0/0f/%EC%9B%90%EC%8B%9C%EA%B0%80%EC%9D%B4%EC%98%A4%EA%B0%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170416101436&path-prefix=ko'
+	'https://static.wikia.nocookie.net/pokemon/images/0/0f/%EC%9B%90%EC%8B%9C%EA%B0%80%EC%9D%B4%EC%98%A4%EA%B0%80_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20170416101436&path-prefix=ko',
+	'https://static.wikia.nocookie.net/pokemon/images/e/ee/%EC%9A%B8%ED%8A%B8%EB%9D%BC_%EB%84%A4%ED%81%AC%EB%A1%9C%EC%A6%88%EB%A7%88_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20171119132046&path-prefix=ko'
 ];
 
 exports.formchangenames=[
@@ -443,7 +452,8 @@ exports.formchangenames=[
 	'캐스퐁',
 	'도롱마담',
 	'킬가르도',
-	'지가르데'
+	'지가르데',
+	'네크로즈마'
 ];
 
 exports.formchangestatus={
@@ -463,7 +473,8 @@ exports.formchangestatus={
 	'캐스퐁':['노말폼','태양의 모습','빗방울의 모습','설운의 모습'],
 	'도롱마담':['초목도롱','모래땅도롱','슈레도롱'],
 	'킬가르도':['실드폼','블레이드폼'],
-	'지가르데':['50%폼','퍼펙트폼']
+	'지가르데':['50%폼','퍼펙트폼'],
+	'네크로즈마':['황혼의 갈기','새벽의 날개']
 };
 
 exports.formchangeimage={
@@ -491,7 +502,8 @@ exports.formchangeimage={
 	"https://static.wikia.nocookie.net/pokemon/images/b/b6/351c.png/revision/latest?cb=20161228132206&path-prefix=ko"],
 	"도롱마담":["","https://static.wikia.nocookie.net/pokemon/images/4/46/%EB%8F%84%EB%A1%B1%EB%A7%88%EB%8B%B4_%EB%AA%A8%EB%9E%98%EB%95%85%EB%8F%84%EB%A1%B1_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150724223207&path-prefix=ko","https://static.wikia.nocookie.net/pokemon/images/f/fe/%EB%8F%84%EB%A1%B1%EB%A7%88%EB%8B%B4_%EC%8A%88%EB%A0%88%EB%8F%84%EB%A1%B1_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20150724223213&path-prefix=ko"],
 	"킬가르도":["","https://static.wikia.nocookie.net/pokemon/images/1/18/%ED%82%AC%EA%B0%80%EB%A5%B4%EB%8F%84_%EB%B8%94%EB%A0%88%EC%9D%B4%EB%93%9C%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20140226084111&path-prefix=ko"],
-	"지가르데":["","https://static.wikia.nocookie.net/pokemon/images/0/0d/%EC%A7%80%EA%B0%80%EB%A5%B4%EB%8D%B0_%ED%8D%BC%ED%8E%99%ED%8A%B8%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802123600&path-prefix=ko"]
+	"지가르데":["","https://static.wikia.nocookie.net/pokemon/images/0/0d/%EC%A7%80%EA%B0%80%EB%A5%B4%EB%8D%B0_%ED%8D%BC%ED%8E%99%ED%8A%B8%ED%8F%BC_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest/scale-to-width-down/200?cb=20170802123600&path-prefix=ko"],
+	"네크로즈마":["","https://static.wikia.nocookie.net/pokemon/images/9/95/%ED%99%A9%ED%98%BC%EC%9D%98_%EA%B0%88%EA%B8%B0_%EB%84%A4%ED%81%AC%EB%A1%9C%EC%A6%88%EB%A7%88_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20171013235809&path-prefix=ko","https://static.wikia.nocookie.net/pokemon/images/a/a6/%EC%83%88%EB%B2%BD%EC%9D%98_%EB%82%A0%EA%B0%9C_%EB%84%A4%ED%81%AC%EB%A1%9C%EC%A6%88%EB%A7%88_%EA%B3%B5%EC%8B%9D_%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8.png/revision/latest?cb=20171013235856&path-prefix=ko"]
 };
 
 exports.ballfail=[
@@ -512,7 +524,7 @@ exports.specialimgpoks=[
 ];
 
 exports.specialpoksimage=[
-'https://w.namu.la/s/4f4a98efe51cba3170b91b891787ac72502cae103ffcef58d4c8b9b35f1a33279f333b5b0a0c1ddaac19ec8187879fa28ab5d3073616345424191012eac7472da8d0bf67f33674148cdb271dbfe76246a563c5a91d2eb335a637cea2d01514bd',
-'https://w.namu.la/s/6a7254e3212ce68396be4106c02c0114edd671a5a98d9449ef6bb76a21ddccc23ac4d05b7143e201ee4b6fae9c6d8098d32cb79560db1034c3015109daeca67ab70da8b0e594b343917c9208e0dcd9a86c9e08d31d7a766b9b92d764e66ce4c1',
-'https://w.namu.la/s/6a4eb97046aa4ddcf785d45a9fd8aa40219e11777600741a5bbafb99c4831d6229c9da5ec335288d64accf0eda39cee475bc163fdfa13620031e6465c6d256d72685f2d053a1198e60eb0cf23e8aeaa5c896b3da455ff177cf4666117da24511'
+'https://static.wikia.nocookie.net/pokemon/images/e/ec/%EB%AF%B8%EC%8B%B1%EB%85%B8_%ED%8F%89%EC%83%81%EC%8B%9C_%ED%8F%BC.png/revision/latest?cb=20110717094443&path-prefix=ko',
+'https://static.wikia.nocookie.net/pokemon/images/4/45/1%EC%84%B8%EB%8C%80_%EC%9C%A0%EB%A0%B9.png/revision/latest?cb=20110717094446&path-prefix=ko',
+'https://static.wikia.nocookie.net/pokemon/images/5/58/%EB%8F%84%ED%8A%B8_7%EB%AA%A8%EB%8D%B8%EB%A7%81_025%EB%AC%B4%EC%9D%B8.gif/revision/latest?cb=20161207120655&path-prefix=ko'
 ];
