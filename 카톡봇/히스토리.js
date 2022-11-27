@@ -5,6 +5,15 @@ var loc = "sdcard/katalkbot/Bots/maplelog.json";
 var historynumloc = "sdcard/msgbot/Bots/히스토리/num.json";
 if (FS.read(loc) == null) FS.write(loc, "{}");
 
+function graph(a,a2,d,l) {
+//a(array)는 배열, l(length)은 그래프 길이
+return Array(a.length).fill(Math.max.apply(null,a)).map((_,i)=>d[i]+'\n|'+'█'.repeat(l*a[i]/_)+' ▏▎▍▌▋▊▉█'.split('')[(a[i]/_%1)*8+0.5|0]+' '+a2[i]+"("+a[i]+"%)").join('\n')
+}
+
+function graph2(a,d,l) {
+return Array(a.length).fill(Math.max.apply(null,a)).map((_,i)=>d[i]+'\n|'+'█'.repeat(l*a[i]/_)+' ▏▎▍▌▋▊▉█'.split('')[(a[i]/_%1)*8+0.5|0]+' Lv.'+a[i]).join('\n')
+}
+
 function recordnick(sender,nick){
 	var rd = JSON.parse(FS.read(loc));
 	if(rd[sender]==undefined) rd[sender] = {};
@@ -62,12 +71,18 @@ s = data2.get(num).toString();
 var a=s.split("var expHistoryLabels = ")[1].split(";\n        c3.generate")[0]
 var b=s.split("columns: ")[1].split("\"exp\"")[0]
 b=b+"]]"
-var res=""
+var arr=[]
+var arr2=[]
+var darr=[]
 for(var i=0;i<7;i++){
 	if(JSON.parse(b)[0][i+1]!=undefined)
-	res=res+"\n"+JSON.parse(b)[0][i+1]+" : Lv."+JSON.parse(a)[i]["level"]+"("+JSON.parse(a)[i]["exp"]+"%)";
+	{
+		darr.push(JSON.parse(b)[0][i+1])
+		arr.push(JSON.parse(a)[i]["exp"])
+		arr2.push(JSON.parse(a)[i]["level"])
+	}
 }
-replier.reply("["+name+"]님의 경험치 히스토리\n"+res);
+replier.reply("["+name+"]님의 경험치 히스토리\n\n"+graph(arr,arr2,darr,5));
 }catch(e){
 replier.reply("없는 캐릭터 입니다.");}
 }
@@ -88,12 +103,15 @@ var s = "";
 var num = JSON.parse(FS.read(historynumloc))["levhistory"];
 s = data2.get(num).toString();
 var s2=s.split("columns: ")[1].split(",\n                labels:")[0].replace("[[","{[").replace("]]","]}").replace("[\"x\"","\"x\":[\"1\"").replace(" [\"level\"","\"level\":[\"1\"");
-var res=""
+var arr=[]
+var darr=[]
 for(var i=0;i<7;i++){
-	if(JSON.parse(s2)["x"][i+1]!=undefined)
-		res=res+"\n"+JSON.parse(s2)["x"][i+1]+" : Lv."+JSON.parse(s2)["level"][i+1];
+	if(JSON.parse(s2)["x"][i+1]!=undefined){
+		darr.push(JSON.parse(s2)["x"][i+1])
+		arr.push(JSON.parse(s2)["level"][i+1])
+	}
 }
-replier.reply("["+name+"]님의 레벨 히스토리\n"+res);
+replier.reply("["+name+"]님의 레벨 히스토리\n\n"+graph2(arr,darr,5));
 }catch(e){
 replier.reply("없는 캐릭터 입니다.");}
 }
