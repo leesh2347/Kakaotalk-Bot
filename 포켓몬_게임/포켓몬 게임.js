@@ -34,6 +34,7 @@ var typetexts=[" ","[⚪노말]","[🔥불]","[🌊물]","[🌿풀]","[🕊비�
 var weathertexts=["[맑음]","[🌞햇살이 강함]","[☔비]","[🌪모래바람]","[☃️싸라기눈]"];
 var weatherdesc=["","🌞햇살이 강해요.","☔비가 내리고 있어요.","🌪모래바람이 세차게 불고 있어요.","☃️싸라기눈이 내리고 있어요."];
 var runpoks=["캐이시","라이코","스이쿤","앤테이","엠라이트","크레세리아","토네로스","볼트로스","라티아스","라티오스","릴링","델빌","가디","파이어","썬더","프리져"];
+var vtexts=[" ","❶","❷","❸","❹","❺","❻"]
 var ispokselect=0;
 const more = "​";
 var succrate=0;
@@ -1530,9 +1531,9 @@ function pokjoin(sender, replier){
 function pokleave(sender,replier){
     pokUser[sender]=JSON.parse(FileStream.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
     if(pokUser[sender]!=null){
-		pokUser[sender]==null;
-		pokInv[sender]==null;
-		pokCol[sender]==null;
+		pokUser[sender]=null;
+		pokInv[sender]=null;
+		pokCol[sender]=null;
 		let pokRank=JSON.parse(FileStream.read(pathRank));
         if(pokRank.some(e=>e.name==sender)){
             pokRank.splice(pokRank.findIndex(e=>e.name==sender),1);
@@ -1637,7 +1638,7 @@ if(cmds.play.includes(msg)){
 			if(Number(pokUser[sender].activecollection.includes(19)))
 				money=money*(pokUser[sender].collectionlev*10+100)/100;
 			if(Number(pokUser[sender].activecollection.includes(16)))
-				money=money*(pokUser[player].collectionlev+1);
+				money=money*(pokUser[sender].collectionlev+1);
 			money=money*setting.eventp.goldX;
 			pokUser[sender].gold=pokUser[sender].gold+money;
 			replier.reply("@"+sender+"\n"+pokArr.gold[Math.floor(Math.random()*pokArr.gold.length)]+"를(을) 발견했어요!\n상점에 팔아 "+money.comma()+"원을 획득했어요.");
@@ -1994,7 +1995,7 @@ if(cmds.esc.includes(msg)){ //도망
 	advOn[sender]=0;
 	replier.reply("@"+sender+"\n무사히 도망쳤어요!");
 }
-if(msg==cmds.box)//포켓몬 보관함
+if(msg==cmds.box)//포켓몬 보관함(내 포켓몬)
 {
 	pokUser[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
 	if(pokUser[sender]==null){
@@ -2008,7 +2009,7 @@ if(msg==cmds.box)//포켓몬 보관함
 	if(pokInv[sender].deck.length<1) str="\n현재 장착 중인 덱이 없습니다.\n";
 	else{
 		for(var i=0;i<pokInv[sender].deck.length;i++)
-			str=str+(i+1)+".  Lv."+pokInv[sender].deck[i].level+" "+pokInv[sender].deck[i].name+"\n";
+			str=str+(i+1)+".  Lv."+pokInv[sender].deck[i].level+" "+vtexts[pokInv[sender].deck[i].v]+" "+pokInv[sender].deck[i].name+"\n";
 		if(pokInv[sender].deck.length<6)
 		{
 			for(var i=0;i<(6-pokInv[sender].deck.length);i++)
@@ -2018,9 +2019,9 @@ if(msg==cmds.box)//포켓몬 보관함
 	if(pokInv[sender].box.length<1) str2="\n보유 중인 포켓몬이 없습니다.\n";
 	else{
 		for(var i=0;i<pokInv[sender].box.length;i++)
-			str2=str2+(i+1)+".  Lv."+pokInv[sender].box[i].level+" "+pokInv[sender].box[i].name+" "+showlocked[pokInv[sender].box[i].islocked]+"\n";
+			str2=str2+(i+1)+".  Lv."+pokInv[sender].box[i].level+" "+vtexts[pokInv[sender].box[i].v]+" "+pokInv[sender].box[i].name+" "+showlocked[pokInv[sender].box[i].islocked]+"\n";
 	}
-	replier.reply("["+sender+"] 님의 포켓몬 목록\n"+"\u200b".repeat(500)+"\n포켓몬 정보 자세히 보기: "+cmds.pokinfo+" (숫자)\n(덱에 장착 중인 포켓몬은 "+cmds.dpokinfo+" 를 이용)\n※포켓몬 스킬 뽑기, 레벨업은 덱에 장착된 상태여야 가능\n\n덱 장착: "+cmds.lock+" (번호)\n덱 장착해제: "+cmds.unlock+" (번호)\n덱 순서 변경: "+cmds.swap+" (번호1) (번호2)\n보관함 포켓몬 잠금: "+cmds.boxlock+" (번호)\n보관함 포켓몬 잠금해제: "+cmds.boxunlock+" (번호)\n\n-----[배틀 덱]-----\n"+str+"\n----------\n\n\n-----[보관함]-----\n"+str2+"\n----------");
+	replier.reply("["+sender+"] 님의 포켓몬 목록\n"+"\u200b".repeat(500)+"\n포켓몬 정보 자세히 보기: "+cmds.pokinfo+" (숫자)\n(덱에 장착 중인 포켓몬은 "+cmds.dpokinfo+" 를 이용)\n※포켓몬 스킬 뽑기, 레벨업은 덱에 장착된 상태여야 가능\n\n덱 장착: "+cmds.lock+" (번호)\n덱 장착해제: "+cmds.unlock+" (번호)\n덱 순서 변경: "+cmds.swap+" (번호1) (번호2)\n보관함 포켓몬 잠금: "+cmds.boxlock+" (번호)\n보관함 포켓몬 잠금해제: "+cmds.boxunlock+" (번호)\n\n-----[배틀 덱]-----\n"+str+"\n----------\n\n\n-----[보관함]-----\n"+str2+"\n----------\n\n[보유 중인 아이템]"+pokInv[sender].item.join(","));
 }
 
 if(msg.split(" ")[0]==cmds.boxlock)//잠금
@@ -2603,6 +2604,7 @@ if(msg.split(" ")[0]==cmds.effort)//노력치작
 	{
 	var n=msg.split(" ")[1];
 	var n2=msg.split(" ")[2];
+	var oldpok="";
 	var iscrown=0;
 	if(n2==undefined||n2==null||isNaN(n2)){
 		if(pokInv[sender].item.includes("금왕관"))
@@ -2615,9 +2617,11 @@ if(msg.split(" ")[0]==cmds.effort)//노력치작
 	}
 	let p;
 	p=pokInv[sender].deck[n-1];
-	if(p.name!=pokInv[sender].box[n2-1].name){
-		replier.reply("@"+sender+"\n노력치 업그레이드의 재료는 박스의 같은 종류의 포켓몬만 가능해요.");
-		return;
+	if(iscrown==0){
+		if(p.name!=pokInv[sender].box[n2-1].name){
+				replier.reply("@"+sender+"\n노력치 업그레이드의 재료는 박스의 같은 종류의 포켓몬만 가능해요.");
+				return;
+		}
 	}
 	if(p.v>=6){
 		replier.reply("@"+sender+"\n해당 포켓몬은 이미 6V로 업그레이드된 상태에요.");
@@ -2636,13 +2640,17 @@ if(msg.split(" ")[0]==cmds.effort)//노력치작
 		totalcosts=totalcosts*5;
 	if(Number(pokUser[sender].activecollection.includes(18)))
 			totalcosts=Math.ceil(totalcosts*(100-pokUser[sender].upgradedc-pokUser[sender].collectionlev*5)/100);
+	if(iscrown==0)
+	{
+		if(pokInv[sender].box[n2-1].islocked!=0)
+		{
+			replier.reply("@"+sender+"\n재료로 사용될 포켓몬이 잠금 상태에요. 먼저 재료 포켓몬의 잠금 상태를 해제해 주세요.");
+			return;
+		}
+	}
 	if(pokUser[sender].gold<totalcosts)
 	{
 			replier.reply("@"+sender+"\n돈이 부족해요.\n\nLV."+p.level+" "+p.name+" ("+p.v+"V)의 다음 업그레이드 비용: "+totalcosts.comma()+"원");
-	}
-	else if(pokInv[sender].box[n2-1].islocked!=0)
-	{
-			replier.reply("@"+sender+"\n재료로 사용될 포켓몬이 잠금 상태에요. 먼저 재료 포켓몬의 잠금 상태를 해제해 주세요.");
 	}
 	else{
 	p.v=p.v+1;
@@ -2669,14 +2677,20 @@ if(msg.split(" ")[0]==cmds.effort)//노력치작
 	
 	pokInv[sender].deck[n-1]=p;
 	if(iscrown==0)
+	{
+		oldpok=pokInv[sender].box[n2-1].name;
 		pokInv[sender].box.splice(n2-1,1);
+	}
 	else
 		pokInv[sender].item.splice(pokInv[sender].item.indexOf("금왕관"),1);
 	pokUser[sender].gold=pokUser[sender].gold-totalcosts;
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'_inv.json', JSON.stringify(pokInv[sender]));
 	FileStream.write("sdcard/Devel/Pokemon/Data/player_"+sender+'.json', JSON.stringify(pokUser[sender]));
 	var showstats="\n최대 HP: "+pokInv[sender].deck[n-1].hp+"\n공격력: "+pokInv[sender].deck[n-1].atk+"\n방어력: "+pokInv[sender].deck[n-1].def+"\n스피드: "+pokInv[sender].deck[n-1].spd;
-	replier.reply("@"+sender+"\n"+totalcosts.comma()+"원 지불.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+" ("+(pokInv[sender].deck[n-1].v-1)+"V > "+pokInv[sender].deck[n-1].v+"V)\n\n"+"\u200b".repeat(500)+showstats);
+	if(iscrown==0)
+		replier.reply("@"+sender+"\n"+totalcosts.comma()+"원 지불, 박스의 "+oldpok+" 소모.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+" ("+(pokInv[sender].deck[n-1].v-1)+"V > "+pokInv[sender].deck[n-1].v+"V)\n\n"+"\u200b".repeat(500)+showstats);
+	else
+		replier.reply("@"+sender+"\n"+totalcosts.comma()+"원 지불, 금왕관 1개 소모.\n보유금액: "+(pokUser[sender].gold).comma()+"원\n\nLv."+pokInv[sender].deck[n-1].level+" "+pokInv[sender].deck[n-1].name+" ("+(pokInv[sender].deck[n-1].v-1)+"V > "+pokInv[sender].deck[n-1].v+"V)\n\n"+"\u200b".repeat(500)+showstats);
 	
 	}
 	}else replier.reply("@"+sender+"\n잘못 입력하셨습니다.");
@@ -3104,7 +3118,7 @@ if(msg.startsWith(cmds.info))//트레이너정보
 	if(pokInv[name].deck.length<1) str="\n현재 장착 중인 덱이 없습니다.\n";
 	else{
 		for(var i=0;i<pokInv[name].deck.length;i++)
-			str=str+(i+1)+".  Lv."+pokInv[name].deck[i].level+" "+pokInv[name].deck[i].name+"\n";
+			str=str+(i+1)+".  Lv."+pokInv[name].deck[i].level+" "+vtexts[pokInv[name].deck[i].v]+" "+pokInv[name].deck[i].name+"\n";
 		if(pokInv[name].deck.length<6)
 		{
 			for(var i=0;i<(6-pokInv[name].deck.length);i++)
@@ -6772,6 +6786,35 @@ if(msg.split(" ")[0]=="@포켓몬복구") //포켓몬 복구용
 		else
 			replier.reply("개발자만 가능합니다.");
 }
+
+if(msg.split(" ")[0]=="@보상지급") //사료지급용
+{
+	pokUser[sender]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+sender+'.json'));
+	if(pokUser[sender].rank=='개발자'){
+		var username=msg.split(" ")[1];
+		pokUser[username]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+username+'.json'));
+		if(pokUser[username]==null){
+			replier.reply('@'+username+'\n가입 정보가 없습니다.\n"'+cmds.join+'"으로 회원가입부터 진행해 주세요.');
+			return;
+		}
+		pokInv[username]=JSON.parse(FS.read("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json'));
+		
+		pokUser[username].gold=pokUser[username].gold+1600000000;
+		pokInv[username].item.push("전설알");
+		pokInv[username].item.push("전설알");
+		pokInv[username].item.push("전설알");
+		pokInv[username].item.push("금왕관");
+		pokInv[username].item.push("금왕관");
+		
+		
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'.json', JSON.stringify(pokUser[username]));
+		FileStream.write("sdcard/Devel/Pokemon/Data/player_"+username+'_inv.json', JSON.stringify(pokInv[username]));
+		replier.reply('@'+username+"\n카타르 월드컵 한국 16강 축하 보상 지급 완료.\n\n보상 내용: 16억원, 금왕관 2개, 전설알 3개");
+		}
+		else
+			replier.reply("개발자만 가능합니다.");
+}
+
 
 if(msg=="@포켓몬리셋") //강제리셋
 {
