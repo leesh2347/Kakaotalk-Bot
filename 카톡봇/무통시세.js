@@ -9,6 +9,7 @@ function responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageNa
 if(msg.split(" ")[0]=="!물통"||msg.split(" ")[0]=="@물통")
 {
 var serv=msg.split(" ")[1];
+if(serv=="레드") serv="RED";
 if(serverk.indexOf(serv)==-1||serv=="평균")
 {
 var num=Number(parseInt(msg.split(" ")[2]));
@@ -42,7 +43,7 @@ catch(e){
 else
 {
 var num=Number(parseInt(msg.split(" ")[2]));
-if(serv=="레드") serv="RED";
+
 try{
 	
 var a=Jsoup.connect("http://trade.itemmania.com/_xml/gamemoney_servers.xml.php?gamecode=138").get();
