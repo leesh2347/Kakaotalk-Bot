@@ -17,15 +17,13 @@ const starabs=[9,9,10,11,12,13,14];
 const stararc=[13,13,14,14,15,16,17];
 const jaknum=[3,5,7,9];
 const jak=["100%","70%","30%","15%"];
-/**
- * (string) room
- * (string) sender
- * (boolean) isGroupChat
- * (void) replier.reply(message)
- * (boolean) replier.reply(room, message, hideErrorToast = false) // 전송 성공시 true, 실패시 false 반환
- * (string) imageDB.getProfileBase64()
- * (string) packageName
- */
+
+ 
+ Number.prototype.comma = function() {
+	var coma=this.toString().replace(/(?=(\d{3})+(?!\d))/g, ",");
+	if(coma[0]==",") coma=coma.substr(1);
+return coma;
+}
  
  function printchuop(msg,replier)
  {
@@ -273,7 +271,51 @@ const jak=["100%","70%","30%","15%"];
 	 
  }
  
-function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
+  function symbol(msg,replier){
+	 var start=Number(msg.split(" ")[1]);
+	 var end=Number(msg.split(" ")[2]);
+	 var total_req=0;
+	 var total_meso=[0,0,0,0];
+	 var total_day_se=0;
+	 var total_day=0;
+	 if(isNaN(start)||isNaN(end))
+	 {
+		 replier.reply("어센틱심볼 계산기 사용법: @어센틱 (시작레벨) (끝레벨)\n\n지역별 심볼세 합과 일퀘 일수를 계산해 줍니다.");
+	 }
+	 else
+	 {
+		 // 요구 메소 = floor(필요 성장치 * 1.8 * ((지역상수 + 6) - (레벨 - 1)/3)) * 100000
+        // 지역 상수 : 세르 1 호텔 2 오디움 3 도원경 4
+		for (var i = start; i < end; i++){
+            total_req += 9*i*i + 20*i;
+            total_meso[0] += Number(Math.floor((9*i*i + 20*i) * 1.8 * (7 - (i - 1)/3)) * 100000);
+            total_meso[1] += Number(Math.floor((9*i*i + 20*i) * 1.8 * (8 - (i - 1)/3)) * 100000);
+            total_meso[2] += Number(Math.floor((9*i*i + 20*i) * 1.8 * (9 - (i - 1)/3)) * 100000);
+            total_meso[3] += Number(Math.floor((9*i*i + 20*i) * 1.8 * (10 - (i - 1)/3)) * 100000);
+        }
+		total_day_se=Math.ceil(total_req/20);
+		total_day=Math.ceil(total_req/10);
+		
+		replier.reply([
+		start+"레벨에서 "+end+"레벨까지",
+		"요구량: "+total_req,
+		"세르니움: "+total_meso[0].comma()+"메소",
+		"아르크스: "+total_meso[1].comma()+"메소",
+		"오디움: "+total_meso[2].comma()+"메소",
+		"도원경: "+total_meso[3].comma()+"메소",
+		"\u200b".repeat(500),
+		"모든 추가 퀘스트 완료시 필요 기간",
+		"",
+		"세르니움: "+total_day_se+"일",
+		"아르크스: "+total_day+"일",
+		"오디움: "+total_day+"일",
+		"도원경: "+total_day+"일",
+		].join("\n"));
+	 }
+	 
+ }
+ 
+function responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 	if(msg=="!추옵"||msg=="@추옵")
 		replier.reply("추옵 검색 사용법"+"\u200b".repeat(500)+"\n\n사용법: !추옵 (장비종류) (무기종류)\n\n장비 종류: 자쿰, 네크로, 반레온, 여제, 파프, 앱솔, 아케인, 제네, 류드, 제로, 해카세\n\n무기 종류: "+weapon.join(", ")+"\n\n제로 무기 종류: 1형~10형\n\n*류드, 해카세의 경우 무기 종류는 입력하지 않습니다.\n*잘못된 값 입력 시 해당 장비 종류 모두를 출력합니다.");
 	else if(msg.split(" ")[0]=="!추옵"||msg.split(" ")[0]=="@추옵")
@@ -284,4 +326,35 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName)
 		armor(msg,replier);
 	if(msg.split(" ")[0]=="!재획"||msg.split(" ")[0]=="@재획")
 		jaehoek(msg,replier);
+	if(msg.split(" ")[0]=="!어센틱"||msg.split(" ")[0]=="@어센틱")
+		symbol(msg,replier);
+}
+
+function onNotificationPosted(sbn, sm) {
+    var packageName = sbn.getPackageName();
+    if (!packageName.startsWith("com.kakao.tal")) return;
+    var actions = sbn.getNotification().actions;
+    if (actions == null) return;
+    var userId = sbn.getUser().hashCode();
+    for (var n = 0; n < actions.length; n++) {
+        var action = actions[n];
+        if (action.getRemoteInputs() == null) continue;
+        var bundle = sbn.getNotification().extras;
+
+        var msg = bundle.get("android.text").toString();
+        var sender = bundle.getString("android.title");
+        var room = bundle.getString("android.subText");
+        if (room == null) room = bundle.getString("android.summaryText");
+        var isGroupChat = room != null;
+        if (room == null) room = sender;
+        var replier = new com.xfl.msgbot.script.api.legacy.SessionCacheReplier(packageName, action, room, false, "");
+        var icon = bundle.getParcelableArray("android.messages")[0].get("sender_person").getIcon().getBitmap();
+        var image = bundle.getBundle("android.wearable.EXTENSIONS");
+        if (image != null) image = image.getParcelable("background");
+        var imageDB = new com.xfl.msgbot.script.api.legacy.ImageDB(icon, image);
+        com.xfl.msgbot.application.service.NotificationListener.Companion.setSession(packageName, room, action);
+        if (this.hasOwnProperty("responseFix")) {
+            responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName, userId != 0);
+        }
+    }
 }
