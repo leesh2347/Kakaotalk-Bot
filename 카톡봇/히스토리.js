@@ -5,12 +5,14 @@ var loc = "sdcard/katalkbot/Bots/maplelog.json";
 var historynumloc = "sdcard/msgbot/Bots/히스토리/num.json";
 if (FS.read(loc) == null) FS.write(loc, "{}");
 
+//var a = [12, 34, 25, 63, 53, 34], l = 10
 function graph(a,a2,d,l) {
 //a(array)는 배열, l(length)은 그래프 길이
-return Array(a.length).fill(Math.max.apply(null,a)).map((_,i)=>d[i]+'\n|'+'█'.repeat(l*a[i]/_)+' ▏▎▍▌▋▊▉█'.split('')[(a[i]/_%1)*8+0.5|0]+' '+a2[i]+"("+a[i]+"%)").join('\n')
+return Array(a.length).fill(100).map((_,i)=>d[i]+'\n|'+'█'.repeat(l*a[i]/_)+' ▏▎▍▌▋▊▉█'.split('')[(a[i]/_%1)*8+0.5|0]+' '+a2[i]+"("+a[i]+"%)").join('\n')
 }
 
 function graph2(a,d,l) {
+//a(array)는 배열, l(length)은 그래프 길이
 return Array(a.length).fill(Math.max.apply(null,a)).map((_,i)=>d[i]+'\n|'+'█'.repeat(l*a[i]/_)+' ▏▎▍▌▋▊▉█'.split('')[(a[i]/_%1)*8+0.5|0]+' Lv.'+a[i]).join('\n')
 }
 
@@ -52,7 +54,7 @@ function recommendnick(sender,replier){
 	return n;
 }
 
-function response(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
+function responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 if(msg.split(" ")[0]=="!히스토리"||msg.split(" ")[0]=="@히스토리"){
 var name=msg.split(" ")[1];
 if(name==undefined)
@@ -82,9 +84,15 @@ for(var i=0;i<7;i++){
 		arr2.push(JSON.parse(a)[i]["level"])
 	}
 }
-replier.reply("["+name+"]님의 경험치 히스토리\n\n"+graph(arr,arr2,darr,5));
+var min=arr[0];
+var max=arr[arr.length-1];
+if(min>max) max=max+100;
+var lvup=Math.ceil((100-arr[arr.length-1])/((max-min)/arr.length));
+replier.reply("["+name+"]님의 경험치 히스토리\n\n"+graph(arr,arr2,darr,5)+"\n\n예상 다음 레벨업: "+lvup+"일 후");
+
 }catch(e){
-replier.reply("없는 캐릭터 입니다.");}
+replier.reply("없는 캐릭터 입니다.\n이 메시지가 계속 표시된다면 메이플지지 사이트의 구조에 문제가 생겼을 수 있습니다.");}
+
 }
 }
 if(msg.split(" ")[0]=="!레벨히스토리"||msg.split(" ")[0]=="@레벨히스토리"){
@@ -148,4 +156,33 @@ function onStartCompile() {
 	numrd["levhistory"] = n1;
 	if(numrd["levhistory"]!=0&&numrd["history"]!=0)
 		FS.write(historynumloc, JSON.stringify(numrd));
+}
+
+function onNotificationPosted(sbn, sm) {
+    var packageName = sbn.getPackageName();
+    if (!packageName.startsWith("com.kakao.tal")) return;
+    var actions = sbn.getNotification().actions;
+    if (actions == null) return;
+    var userId = sbn.getUser().hashCode();
+    for (var n = 0; n < actions.length; n++) {
+        var action = actions[n];
+        if (action.getRemoteInputs() == null) continue;
+        var bundle = sbn.getNotification().extras;
+
+        var msg = bundle.get("android.text").toString();
+        var sender = bundle.getString("android.title");
+        var room = bundle.getString("android.subText");
+        if (room == null) room = bundle.getString("android.summaryText");
+        var isGroupChat = room != null;
+        if (room == null) room = sender;
+        var replier = new com.xfl.msgbot.script.api.legacy.SessionCacheReplier(packageName, action, room, false, "");
+        var icon = bundle.getParcelableArray("android.messages")[0].get("sender_person").getIcon().getBitmap();
+        var image = bundle.getBundle("android.wearable.EXTENSIONS");
+        if (image != null) image = image.getParcelable("background");
+        var imageDB = new com.xfl.msgbot.script.api.legacy.ImageDB(icon, image);
+        com.xfl.msgbot.application.service.NotificationListener.Companion.setSession(packageName, room, action);
+        if (this.hasOwnProperty("responseFix")) {
+            responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName, userId != 0);
+        }
+    }
 }
