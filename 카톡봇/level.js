@@ -1,12 +1,18 @@
 Jsoup = org.jsoup.Jsoup;
 FS = FileStream;
 function getexp(index){
-var l=Jsoup.connect("http://wachan.me/exp_api.php?exp1="+index).ignoreContentType(true).ignoreHttpErrors(true).get().text();
-var e = JSON.parse(l).result;
-return Number(parseInt(e.replace(/,/g,"")));
+var l = JSON.parse(FS.read(exploc));
+if(index>209)
+	var e=l["data_after210"][index-210];
+else if(index>100)
+	var e=l["data_101to209"][index-101];
+else
+	var e=l["data_1to100"][index-1];
+return Number(e);
 }
 
-var loc="sdcard/katalkbot/Bots/maplelog.json";
+var loc="sdcard/msgbot/Bots/maplelog.json";
+var exploc="sdcard/msgbot/Bots/levdata.json";
 if (FS.read(loc)==null) FS.write(loc, "{}");
 
 function recordnick(sender,nick){
@@ -49,9 +55,17 @@ function recommendnick(sender,replier){
 }
 
 function sum_cnt(index1,index2) {
-var l=Jsoup.connect("http://wachan.me/exp_api.php?exp1="+index1+"&exp2="+index2).ignoreContentType(true).ignoreHttpErrors(true).get().text();
-var e = JSON.parse(l).result;
-return Number(parseInt(e.replace(/,/g,"")));
+var l = JSON.parse(FS.read(exploc));
+var n=0;
+for(var ii=Number(index1);ii<Number(index2);ii++){
+	if(ii>209)
+		n=n+l["data_after210"][ii-210];
+	else if(ii>100)
+		n=n+l["data_101to209"][ii-101];
+	else
+		n=n+l["data_1to100"][ii-1];
+}
+return Number(n);
 }
 
 function unitExp(remaintonext){
@@ -93,60 +107,86 @@ unit = man+"만"
 return unit 
 }
 
+function levelsearch(nick,sender, nextlev){
+	if(nick=="") return "닉네임을 입력해 주세요.";
+	else
+	{
+			  recordnick(sender,nick);
+			  
+			  var today=new Date();
+				var d = new Date(today.setDate(today.getDate() - 1));
+				var d2=(d.getYear()+1900)+"-"+String(d.getMonth()+1).padStart(2, "0")+"-"+String(d.getDate()).padStart(2, "0");
+			  
+			  
+			  var ocid1 = Jsoup.connect("https://open.api.nexon.com/maplestory/v1/id?character_name="+encodeURIComponent(nick)).header("Content-Type","application/json").header("x-nxopen-api-key","live_5fbf44d53f909c000739c6ded2630548b1340053ca172cbe0d59ef023ae9477f69320869e3c5ee348598e4c96c389f59").ignoreContentType(true).ignoreHttpErrors(true).get().text();
+				var ocid2=JSON.parse(ocid1)["ocid"];
 
-function response(room, msg, sender, isGroupChat, replier, ImageDB) {
+				var s1 = Jsoup.connect("https://open.api.nexon.com/maplestory/v1/character/basic?ocid="+ocid2).header("Content-Type","application/json").header("x-nxopen-api-key","live_5fbf44d53f909c000739c6ded2630548b1340053ca172cbe0d59ef023ae9477f69320869e3c5ee348598e4c96c389f59").ignoreContentType(true).ignoreHttpErrors(true).get().text();
+				var s2=JSON.parse(s1);
+				
+				var level=s2["character_level"];
+				var exp=s2["character_exp"];
+				
+				if(isNaN(level)||level==undefined||level==null){
+					return "x";
+				}
+				else if(level>299){
+					return "["+nick+"]\nLv."+level;
+				}else{
+					
+					
+					var per=(exp/getexp(level)*100).toFixed(3);
+					var remaintonext=0;
+					var remaintomax=0;
+					if(isNaN(nextlev)||nextlev==undefined||nextlev<(level+1)){
+						remaintonext=getexp(level)-exp;
+						remaintomax=sum_cnt(level,300)-exp;       
+						 if((Math.ceil(remaintomax/10000000000000000)-1)>0){
+							return "["+nick+"]\nLv."+level+"("+per+"%)\n다음 레벨까지 경험치\n"+unitExp(remaintonext)+
+							"\n만렙까지 : "+(Math.ceil(remaintomax/10000000000000000)-1)+"경 "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠,우락키네";
+						}else{
+							return "["+nick+"]\nLv."+level+"("+per+"%)\n다음 레벨까지 경험치\n"+unitExp(remaintonext)+"\n만렙까지 : "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠,우락키네";
+						}
+					}
+					else{
+						remaintomax=sum_cnt(level,nextlev)-exp;       
+						 if((Math.ceil(remaintomax/10000000000000000)-1)>0){
+							return "["+nick+"]\nLv."+level+"("+per+"%)\n"+nextlev+"레벨까지 : "+(Math.ceil(remaintomax/10000000000000000)-1)+"경 "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠,우락키네";
+						}else{
+							return "["+nick+"]\nLv."+level+"("+per+"%)\n"+nextlev+"레벨까지 : "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠,우락키네";
+						}
+					}
+				}
+			  
+			  
+		}
+}
+
+function response(room, msg, sender, isGroupChat, replier, imageDB, packageName, isMention, logId, channelId, userHash) {
 if(room=="바다 월드") return;
 try{
 if(msg.split(" ")[0]=="@레벨"||msg.split(" ")[0]=="!레벨"){
 var nick = msg.split(" ")[1];
+
+var nextlev = msg.split(" ")[2];
+
 if(nick==undefined)
 		  nick=recommendnick(sender,replier);
 if(nick=="") replier.reply("닉네임을 입력해 주세요.");
 else
 {
-	recordnick(sender,nick);	
-	var isreboot=org.jsoup.Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c=" +nick).get().select("#container > div > div > div:nth-child(4)").text();
-	if(isreboot!="랭킹정보가 없습니다.")
-	{
-		var data = Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nick).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(4)").text();      
-		var level=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nick).get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");   
-	}
-	else{
-		var data = Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nick+"&w=254").get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(4)").text();      
-		var level=Jsoup.connect("https://maplestory.nexon.com/Ranking/World/Total?c="+nick+"&w=254").get().select("#container > div > div > div:nth-child(4) > div.rank_table_wrap > table > tbody > tr.search_com_chk > td:nth-child(3)").text().replace("Lv.", "");  
-	}
-	if(level>299){
-	replier.reply("["+nick+"]\nLv."+level);
-	}else{
-		var nextlev = msg.split(" ")[2];
-		
-			
-		var exp=data.replace(/,/g, "");     
-		var per=(exp/getexp(level)*100).toFixed(3);
-		var remaintonext=0;
-		var remaintomax=0;
-		if(isNaN(nextlev)||nextlev==undefined||nextlev<(level+1)){
-			remaintonext=getexp(level)-exp;
-			remaintomax=sum_cnt(level,300)-exp;       
-			 if((Math.ceil(remaintomax/10000000000000000)-1)>0){
-				replier.reply("["+nick+"]\nLv."+level+"("+per+"%)\n다음 레벨까지 경험치\n"+unitExp(remaintonext)+
-				"\n만렙까지 : "+(Math.ceil(remaintomax/10000000000000000)-1)+"경 "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠");
-			}else{
-				replier.reply("["+nick+"]\nLv."+level+"("+per+"%)\n다음 레벨까지 경험치\n"+unitExp(remaintonext)+"\n만렙까지 : "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠");
-			}
-		}
-		else{
-			remaintomax=sum_cnt(level,nextlev)-exp;       
-			 if((Math.ceil(remaintomax/10000000000000000)-1)>0){
-				replier.reply("["+nick+"]\nLv."+level+"("+per+"%)\n"+nextlev+"레벨까지 : "+(Math.ceil(remaintomax/10000000000000000)-1)+"경 "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠");
-			}else{
-				replier.reply("["+nick+"]\nLv."+level+"("+per+"%)\n"+nextlev+"레벨까지 : "+Number((Math.ceil(remaintomax/1000000000000)-(Math.ceil(remaintomax/10000000000000000)-1)*10000)-1)+"조 "+(Math.ceil(remaintomax/100000000)-(Math.ceil((remaintomax/1000000000000)-1)*10000)-1)+"억"+"\u200b".repeat(500)+"\n\nSpecial Thanks 정쿠");
-			}
-		}
-	}
+	var res=levelsearch(nick, sender, nextlev);
+	
+	if(res=="x")
+		replier.reply("["+nick+"]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다.");
+	else
+		replier.reply(res);
+	
 }
 }
 }catch(e){
-replier.reply("없는 캐릭터 입니다.");
+		var nick = msg.split(" ")[1];
+		replier.reply("["+nick+"]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다.");
 }
 }
+
