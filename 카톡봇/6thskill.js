@@ -79,133 +79,121 @@ Number.prototype.comma = function() {
    if(coma[0]==",") coma=coma.substr(1);
 return coma;
 }
- 
-function responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName) {
-if(room=="바다 월드") return
 
-if(msg.split(" ")[0]=="@헥사"||msg.split(" ")[0]=="!헥사")
-{
-var nick=msg.split(" ")[1];
-if(nick==undefined)
-    nick=recommendnick(sender,replier);
-if(nick=="") replier.reply("닉네임을 입력해 주세요.");
-else{
-try{
-var today=new Date();
-var d = new Date(today.setDate(today.getDate() - 1));
-var d2=(d.getYear()+1900)+"-"+String(d.getMonth()+1).padStart(2, "0")+"-"+String(d.getDate()).padStart(2, "0");
+function hexasearch(nick,sender){
+	if(nick=="") return "닉네임을 입력해 주세요.";
+	else{
+	try{
+	var today=new Date();
+	var d = new Date(today.setDate(today.getDate() - 1));
+	var d2=(d.getYear()+1900)+"-"+String(d.getMonth()+1).padStart(2, "0")+"-"+String(d.getDate()).padStart(2, "0");
 
-var ocid1 = Jsoup.connect("https://open.api.nexon.com/maplestory/v1/id?character_name="+encodeURIComponent(nick)).header("Content-Type","application/json").header("x-nxopen-api-key","live_5fbf44d53f909c000739c6ded2630548b1340053ca172cbe0d59ef023ae9477f69320869e3c5ee348598e4c96c389f59").ignoreContentType(true).ignoreHttpErrors(true).get().text();
-var ocid2=JSON.parse(ocid1)["ocid"];
+	var ocid1 = Jsoup.connect("https://open.api.nexon.com/maplestory/v1/id?character_name="+encodeURIComponent(nick)).header("Content-Type","application/json").header("x-nxopen-api-key","live_5fbf44d53f909c000739c6ded2630548b1340053ca172cbe0d59ef023ae9477f69320869e3c5ee348598e4c96c389f59").ignoreContentType(true).ignoreHttpErrors(true).get().text();
+	var ocid2=JSON.parse(ocid1)["ocid"];
 
-var answer = Jsoup.connect("https://open.api.nexon.com/maplestory/v1/character/hexamatrix?ocid="+ocid2+"&date="+d2).header("Content-Type","application/json").header("x-nxopen-api-key","live_5fbf44d53f909c000739c6ded2630548b1340053ca172cbe0d59ef023ae9477f69320869e3c5ee348598e4c96c389f59").ignoreContentType(true).ignoreHttpErrors(true).get().text();
-var t=JSON.parse(answer)["character_hexa_core_equipment"];
-recordnick(sender,nick);
-      var erda_a=[0,0,0,0];
-          var piece_a=[0,0,0,0];
-        
-        var i=0;
-        var j=0;
-        
-        var sum_erda=2;
-        var sum_piece=0;
-		
-		var janus_erda=0;
-		var janus_piece=0;
-        
-        var origintext="";
-        var mastertext="";
-        var skilltext="";
-        var publictext="";
-        
-       for(i=0;i<t.length;i++){
-       
-           for (j = 0; j < t[i]["hexa_core_level"]; j++){
-              if(j>0&&t[i]["hexa_core_type"]=="스킬 코어"){
-                 erda_a[0]=erda_a[0]+origin["기운"][j];
-                 piece_a[0]=piece_a[0]+origin["조각"][j];
-              }
-              else if(t[i]["hexa_core_type"]=="마스터리 코어"){
-                 erda_a[1]=erda_a[1]+master["기운"][j];
-               piece_a[1]=piece_a[1]+master["조각"][j];
-              }
-              else if(t[i]["hexa_core_type"]=="강화 코어"){
-                 erda_a[1]=erda_a[1]+skill["기운"][j];
-               piece_a[1]=piece_a[1]+skill["조각"][j];
-              }
-               else if(t[i]["hexa_core_type"]=="공용 코어"){
-                 erda_a[1]=erda_a[1]+gongyong["기운"][j];
-               piece_a[1]=piece_a[1]+gongyong["조각"][j];
-			   
-			   if(t[i]["hexa_core_name"].includes("야누스")){
-				   janus_erda=janus_erda+gongyong["기운"][j];
-					janus_piece=janus_piece+gongyong["조각"][j];
+	var answer = Jsoup.connect("https://open.api.nexon.com/maplestory/v1/character/hexamatrix?ocid="+ocid2+"&date="+d2).header("Content-Type","application/json").header("x-nxopen-api-key","live_5fbf44d53f909c000739c6ded2630548b1340053ca172cbe0d59ef023ae9477f69320869e3c5ee348598e4c96c389f59").ignoreContentType(true).ignoreHttpErrors(true).get().text();
+	var t=JSON.parse(answer)["character_hexa_core_equipment"];
+	recordnick(sender,nick);
+		  var erda_a=[0,0,0,0];
+			  var piece_a=[0,0,0,0];
+			
+			var i=0;
+			var j=0;
+			
+			var sum_erda=2;
+			var sum_piece=0;
+			
+			var janus_erda=0;
+			var janus_piece=0;
+			
+			var origintext="";
+			var mastertext="";
+			var skilltext="";
+			var publictext="";
+			
+		   for(i=0;i<t.length;i++){
+		   
+			   for (j = 0; j < t[i]["hexa_core_level"]; j++){
+				  if(j>0&&t[i]["hexa_core_type"]=="스킬 코어"){
+					 erda_a[0]=erda_a[0]+origin["기운"][j];
+					 piece_a[0]=piece_a[0]+origin["조각"][j];
+				  }
+				  else if(t[i]["hexa_core_type"]=="마스터리 코어"){
+					 erda_a[1]=erda_a[1]+master["기운"][j];
+				   piece_a[1]=piece_a[1]+master["조각"][j];
+				  }
+				  else if(t[i]["hexa_core_type"]=="강화 코어"){
+					 erda_a[1]=erda_a[1]+skill["기운"][j];
+				   piece_a[1]=piece_a[1]+skill["조각"][j];
+				  }
+				   else if(t[i]["hexa_core_type"]=="공용 코어"){
+					 erda_a[1]=erda_a[1]+gongyong["기운"][j];
+				   piece_a[1]=piece_a[1]+gongyong["조각"][j];
+				   
+				   if(t[i]["hexa_core_name"].includes("야누스")){
+					   janus_erda=janus_erda+gongyong["기운"][j];
+						janus_piece=janus_piece+gongyong["조각"][j];
+				   }
+				   
+				  }
+				  
+				  
 			   }
 			   
-              }
-              
-              
-           }
-           
-          if(t[i]["hexa_core_type"]=="스킬 코어"){
-            origintext=origintext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
-         }
-          else if(t[i]["hexa_core_type"]=="마스터리 코어"){
-            mastertext=mastertext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
-          }
-          else if(t[i]["hexa_core_type"]=="강화 코어"){
-            skilltext=skilltext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
-          }
-          else if(t[i]["hexa_core_type"]=="공용 코어"){
-            publictext=publictext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
-         }
-       }
-       
-       for(i=0;i<4;i++){
-          sum_erda=sum_erda+erda_a[i];
-          sum_piece=sum_piece+piece_a[i];
-       }
-       
-       
-       replier.reply([
-       "["+nick+"]",
-	   "솔 야누스 포함",
-       "누적 소모 솔 에르다: "+sum_erda+"개",
-       "["+Math.floor((sum_erda*100)/maxerda)+"%] 강화 ("+sum_erda+"/"+maxerda+")",
-       "누적 소모 조각: "+sum_piece+"개",
-       "["+Math.floor((sum_piece*100)/maxpiece)+"%] 강화 ("+sum_piece+"/"+maxpiece+")​​​​​​​​​​​​​​​​​​​​",
-	   "",
-	   "솔 야누스 제외",
-	   "누적 소모 솔 에르다: "+(sum_erda-janus_erda)+"개",
-       "["+Math.floor(((sum_erda-janus_erda)*100)/(maxerda-janusmaxerda))+"%] 강화 ("+(sum_erda-janus_erda)+"/"+(maxerda-janusmaxerda)+")",
-       "누적 소모 조각: "+(sum_piece-janus_piece)+"개",
-       "["+Math.floor(((sum_piece-janus_piece)*100)/(maxpiece-janusmaxpiece))+"%] 강화 ("+(sum_piece-janus_piece)+"/"+(maxpiece-janusmaxpiece)+")​​​​​​​​​​​​​​​​​​​​",
-       "\u200b".repeat(500),
-       "[오리진 스킬] 강화 내역",
-       origintext,
-       "[마스터리 코어] 강화 내역",
-       mastertext,
-       "[강화 코어] 강화 내역",
-       skilltext,
-       "[공용 코어] 강화 내역",
-       publictext
-       ].join("\n"));
+			  if(t[i]["hexa_core_type"]=="스킬 코어"){
+				origintext=origintext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
+			 }
+			  else if(t[i]["hexa_core_type"]=="마스터리 코어"){
+				mastertext=mastertext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
+			  }
+			  else if(t[i]["hexa_core_type"]=="강화 코어"){
+				skilltext=skilltext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
+			  }
+			  else if(t[i]["hexa_core_type"]=="공용 코어"){
+				publictext=publictext+t[i]["hexa_core_name"]+": "+t[i]["hexa_core_level"]+"레벨\n";
+			 }
+		   }
+		   
+		   for(i=0;i<4;i++){
+			  sum_erda=sum_erda+erda_a[i];
+			  sum_piece=sum_piece+piece_a[i];
+		   }
+		   
+		   return [
+		   "["+nick+"]",
+		   "솔 야누스 포함",
+		   "누적 소모 솔 에르다: "+sum_erda+"개",
+		   "["+Math.floor((sum_erda*100)/maxerda)+"%] 강화 ("+sum_erda+"/"+maxerda+")",
+		   "누적 소모 조각: "+sum_piece+"개",
+		   "["+Math.floor((sum_piece*100)/maxpiece)+"%] 강화 ("+sum_piece+"/"+maxpiece+")​​​​​​​​​​​​​​​​​​​​",
+		   "",
+		   "솔 야누스 제외",
+		   "누적 소모 솔 에르다: "+(sum_erda-janus_erda)+"개",
+		   "["+Math.floor(((sum_erda-janus_erda)*100)/(maxerda-janusmaxerda))+"%] 강화 ("+(sum_erda-janus_erda)+"/"+(maxerda-janusmaxerda)+")",
+		   "누적 소모 조각: "+(sum_piece-janus_piece)+"개",
+		   "["+Math.floor(((sum_piece-janus_piece)*100)/(maxpiece-janusmaxpiece))+"%] 강화 ("+(sum_piece-janus_piece)+"/"+(maxpiece-janusmaxpiece)+")​​​​​​​​​​​​​​​​​​​​",
+		   "\u200b".repeat(500),
+		   "[오리진/어센트 스킬] 강화 내역",
+		   origintext,
+		   "[마스터리 코어] 강화 내역",
+		   mastertext,
+		   "[강화 코어] 강화 내역",
+		   skilltext,
+		   "[공용 코어] 강화 내역",
+		   publictext
+		   ].join("\n");
 
-}
-catch(e){
-   replier.reply("["+nick+"]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다.");
-}
-}
+	}
+	catch(e){
+	   return "["+nick+"]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다.";
+	}
+	}
 }
 
-
-if(msg.split(" ")[0]=="!6차"||msg.split(" ")[0]=="@6차")
-   {
-      var start=Number(msg.split(" ")[1]);
-      var end=Number(msg.split(" ")[2]);
-      if(isNaN(start)||isNaN(end))
+function sixth_calc(start, end){
+	if(isNaN(start)||isNaN(end))
        {
-          replier.reply("6차 스킬 강화 계산기 사용법: @6차 (시작레벨) (끝레벨)\n\n필요 솔 에르다와 조각 갯수를 계산해 줍니다.");
+          return "6차 스킬 강화 계산기 사용법: @6차 (시작레벨) (끝레벨)\n\n필요 솔 에르다와 조각 갯수를 계산해 줍니다.";
        }
        else if((-1)<start&&start<30&&start<end&&0<end&&end<31)
        {
@@ -224,20 +212,45 @@ if(msg.split(" ")[0]=="!6차"||msg.split(" ")[0]=="@6차")
          erda_a[3]=erda_a[3]+gongyong["기운"][i];
             piece_a[3]=piece_a[3]+gongyong["조각"][i];
          }
-         replier.reply("오리진 스킬 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[0]+"개\n솔 에르다 조각💠 : "+piece_a[0]+"개\n\n마스터리 코어 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[1]+"개\n솔 에르다 조각💠 : "+piece_a[1]+"개\n\n강화 코어 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[2]+"개\n솔 에르다 조각💠 : "+piece_a[2]+"개\n\n공용 코어 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[3]+"개\n솔 에르다 조각💠 : "+piece_a[3]+"개");
+         return "오리진/어센트 스킬 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[0]+"개\n솔 에르다 조각💠 : "+piece_a[0]+"개\n\n마스터리 코어 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[1]+"개\n솔 에르다 조각💠 : "+piece_a[1]+"개\n\n강화 코어 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[2]+"개\n솔 에르다 조각💠 : "+piece_a[2]+"개\n\n공용 코어/솔 야누스 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda_a[3]+"개\n솔 에르다 조각💠 : "+piece_a[3]+"개";
        }
        else{
-          replier.reply("시작 레벨과 끝 레벨을 제대로 입력했는지 확인해 주세요.\n레벨 범위: 0~30\n(코어가 없는 상태에서 제작하는 것을 0->1레벨 강화로 칩니다.)");
+          return "시작 레벨과 끝 레벨을 제대로 입력했는지 확인해 주세요.\n레벨 범위: 0~30\n(코어가 없는 상태에서 제작하는 것을 0->1레벨 강화로 칩니다.)";
        }
+}
+
+
+function response(room, msg, sender, isGroupChat, replier, imageDB, packageName, isMention, logId, channelId, userHash) {
+if(room=="바다 월드") return
+
+if(msg.split(" ")[0]=="@헥사"||msg.split(" ")[0]=="!헥사")
+{
+var nick=msg.split(" ")[1];
+if(nick==undefined)
+    nick=recommendnick(sender,replier);
+
+	var res=hexasearch(nick,sender);
+	replier.reply(res);
+
+}
+
+if(msg.split(" ")[0]=="!6차"||msg.split(" ")[0]=="@6차")
+   {
+      var start=Number(msg.split(" ")[1]);
+      var end=Number(msg.split(" ")[2]);
+	  
+	  var res=sixth_calc(start,end);
+		replier.reply(res);
+	  
    }
    
-   if(msg.split(" ")[0]=="!오리진"||msg.split(" ")[0]=="@오리진")
+   if(msg.split(" ")[0]=="!오리진"||msg.split(" ")[0]=="@오리진"||msg.split(" ")[0]=="!어센트"||msg.split(" ")[0]=="@어센트")
    {
       var start=Number(msg.split(" ")[1]);
       var end=Number(msg.split(" ")[2]);
       if(isNaN(start)||isNaN(end))
        {
-          replier.reply("오리진 스킬 계산기 사용법: @오리진 (시작레벨) (끝레벨)\n\n필요 솔 에르다와 조각 갯수를 계산해 줍니다.");
+          replier.reply("오리진/어센트 스킬 계산기 사용법: @오리진 (시작레벨) (끝레벨)\n\n필요 솔 에르다와 조각 갯수를 계산해 줍니다.");
        }
        else if((-1)<start&&start<30&&start<end&&0<end&&end<31)
        {
@@ -247,7 +260,7 @@ if(msg.split(" ")[0]=="!6차"||msg.split(" ")[0]=="@6차")
             erda=erda+origin["기운"][i];
             piece=piece+origin["조각"][i];
          }
-         replier.reply("오리진 스킬 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda+"개\n솔 에르다 조각💠 : "+piece+"개");
+         replier.reply("오리진/어센트 스킬 "+start+" ~ "+end+"레벨 까지\n필요한 솔 에르다💎 : "+erda+"개\n솔 에르다 조각💠 : "+piece+"개");
        }
        else{
           replier.reply("시작 레벨과 끝 레벨을 제대로 입력했는지 확인해 주세요.\n레벨 범위: 0~30\n(코어가 없는 상태에서 제작하는 것을 0->1레벨 강화로 칩니다.)");
@@ -324,33 +337,4 @@ if(msg.split(" ")[0]=="!6차"||msg.split(" ")[0]=="@6차")
    }
 
 
-}
-
-function onNotificationPosted(sbn, sm) {
-    var packageName = sbn.getPackageName();
-    if (!packageName.startsWith("com.kakao.tal")) return;
-    var actions = sbn.getNotification().actions;
-    if (actions == null) return;
-    var userId = sbn.getUser().hashCode();
-    for (var n = 0; n < actions.length; n++) {
-        var action = actions[n];
-        if (action.getRemoteInputs() == null) continue;
-        var bundle = sbn.getNotification().extras;
-
-        var msg = bundle.get("android.text").toString();
-        var sender = bundle.getString("android.title");
-        var room = bundle.getString("android.subText");
-        if (room == null) room = bundle.getString("android.summaryText");
-        var isGroupChat = room != null;
-        if (room == null) room = sender;
-        var replier = new com.xfl.msgbot.script.api.legacy.SessionCacheReplier(packageName, action, room, false, "");
-        var icon = bundle.getParcelableArray("android.messages")[0].get("sender_person").getIcon().getBitmap();
-        var image = bundle.getBundle("android.wearable.EXTENSIONS");
-        if (image != null) image = image.getParcelable("background");
-        var imageDB = new com.xfl.msgbot.script.api.legacy.ImageDB(icon, image);
-        com.xfl.msgbot.application.service.NotificationListener.Companion.setSession(packageName, room, action);
-        if (this.hasOwnProperty("responseFix")) {
-            responseFix(room, msg, sender, isGroupChat, replier, imageDB, packageName, userId != 0);
-        }
-    }
 }
