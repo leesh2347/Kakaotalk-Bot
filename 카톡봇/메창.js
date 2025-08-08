@@ -314,10 +314,8 @@ function mechang(nick){
 		}
 }
  
-function response(room, msg, sender, isGroupChat, replier, imageDB, packageName, isMention, logId, channelId, userHash) {
-	if(msg=="!메창"||msg=="@메창")
-	{
-	replier.reply(["사용법: !메창 (닉네임)",
+function mechangdesc(){
+	return ["사용법: !메창 (닉네임)",
 		"",
 		"0~100 : 메린이",
 		"101~150 : 무자본 평균",
@@ -358,18 +356,30 @@ function response(room, msg, sender, isGroupChat, replier, imageDB, packageName,
 		"",
 		"[펫]",
 		"자석펫 1마리 보유당 10점씩 최대 30점까지 추가"
-		].join("\n"));
-	}
-	else if(msg=="!메창랭킹"||msg=="@메창랭킹")
-	{
-		var rd = JSON.parse(FS.read(dbloc));
+		].join("\n");
+}
+
+function mechangrank(){
+	var rd = JSON.parse(FS.read(dbloc));
 		var temparr=rd["score"].sort().reverse();
 		
 		var ress="";
 		for(var i=0;i<temparr.length;i++){
 			ress=ress+(i+1)+". "+rd["name"][rd["score"].indexOf(temparr[i])]+": "+temparr[i]+"점\n";
 		}
-		replier.reply(ress);
+		
+		return ress;
+}
+ 
+function response(room, msg, sender, isGroupChat, replier, imageDB, packageName, isMention, logId, channelId, userHash) {
+	if(msg=="!메창"||msg=="@메창")
+	{
+		replier.reply(mechangdesc());
+	}
+	else if(msg=="!메창랭킹"||msg=="@메창랭킹")
+	{
+		
+		replier.reply(mechangrank());
 		
 	}
 	else if(msg.split(" ")[0]=="!메창"||msg.split(" ")[0]=="@메창"){
