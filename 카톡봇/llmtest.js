@@ -1,12 +1,14 @@
 const scriptName = "llmtest";
 FS = FileStream;
 Jsoup = org.jsoup.Jsoup;
+const br=require('banned_rooms');
+const allowrooms=br.banrooms['talk'];
 
 
 function call_llm(question){
 	let jsondata = { "question": question, "use_tools":"true" };
 
-		const Url = "http://111.111.111.111:8002/ask"; //여기 ip와 포트번호를 자기가 포트포워딩한 주소로 바꾸셈
+		const Url = "http://111.111.111.111:8000/ask"; //여기 ip와 포트번호를 자기가 포트포워딩한 주소로 바꾸셈
 
 		send = _ => {
 		try{
@@ -50,45 +52,114 @@ function call_llm(question){
 	
 }
 
+function process_result(info,args,sender){
+	
+			if(info=="캐릭터")
+				return Bridge.getScopeOf("maplegg.js").maplegg(args,sender);
+			else if(info=="무릉")
+				return Bridge.getScopeOf("무릉유니온.js").murung(args,sender);
+			else if(info=="유니온")
+				return Bridge.getScopeOf("무릉유니온.js").union(args,sender);
+			else if(info=="업적")
+				return Bridge.getScopeOf("무릉유니온.js").achive(args,sender);
+			else if(info=="아티팩트")
+				return Bridge.getScopeOf("무릉유니온.js").artifact(args,sender);
+			else if(info=="메창")
+				return Bridge.getScopeOf("메창.js").mechang(args,sender);
+			else if(info=="헥사")
+				return Bridge.getScopeOf("6thskill.js").hexasearch(args,sender);
+			else if(info=="스탯")
+				return Bridge.getScopeOf("스탯.js").stat(args,sender);
+			else if(info=="경험치")
+			{
+				var arr=args.split(", ");
+				
+				return Bridge.getScopeOf("level.js").levelsearch(arr[0],sender,"",arr[1]);
+				
+			}
+			else if(info=="히스토리")
+			{
+				var arr=args.split(", ");
+				var nick=arr[0];
+				if(arr[1]=="최근"){
+					var today=new Date();
+	
+					if(today.getHours()<1)
+						today.setDate(today.getDate() - 9);
+					else
+						today.setDate(today.getDate() - 8);
+					
+					var yyyyMmDd = today.toISOString().slice(0, 10);
+					
+					var daarr=null;
+					daarr=Bridge.getScopeOf("히스토리.js").histdatearr(yyyyMmDd);
+					return Bridge.getScopeOf("히스토리.js").hist(nick,daarr, sender);
+				}
+				else{
+					var darr=[];
+					for(var i=1;i<arr.length;i++)
+						darr.push(arr[i]);
+					return Bridge.getScopeOf("히스토리.js").hist(nick,darr, sender);
+				}
+			}
+			else if(info=="6차코강")
+			{
+				var arr=args.split(", ");
+				if(arr[0]==0)
+				{
+					return Bridge.getScopeOf("6thskill.js").sixth_calc("x", "x");
+				}
+				else{
+					return Bridge.getScopeOf("6thskill.js").sixth_calc(arr[0], arr[1]);
+				}
+				
+			}
+			else if(info=="어센틱")
+			{
+				var arr=args.split(", ");
+				if(arr[0]==0)
+				{
+					return Bridge.getScopeOf("추옵.js").symbol("x", "x");
+				}
+				else{
+					return Bridge.getScopeOf("추옵.js").symbol(arr[0], arr[1]);
+				}
+				
+			}
+			else if(info=="없음")
+				return "[루시] 죄송해요. 잘 알아듣지 못했어요.";
+			else
+			{
+				//미구현인 명령어들
+				return "[루시] 미구현된 기능입니다. "+info+" "+args;
+			}
+}
+
 function response(room, msg, sender, isGroupChat, replier, imageDB, packageName, isMention, logId, channelId, userHash) {
-	if (msg.startsWith("!@루시 ")) {
-		msg = msg.replace("!@루시 ", "");
-			let results=call_llm(msg);
-		  
-		  //result 형식: {"정보":"명령어", "옵션":"닉네임, 날짜 등등 옵션. ',' 로 구분"}
-		  
-		  if(results["정보"]=="캐릭터"){
-			  let r=Bridge.getScopeOf("maplegg.js").maplegg(results["옵션"],sender);
+	if(allowrooms.includes(room)){
+		if (msg.startsWith("루시 ")) {
+			msg = msg.replace("루시 ", "");
+			
+			try{
+				let results=call_llm(msg);
+				
+			  
+			  //result 형식: {"정보":"명령어", "옵션":"닉네임, 날짜 등등 옵션. ',' 로 구분"}
+			  
+			  let r=process_result(results["정보"],results["옵션"],sender);
 			  replier.reply(r);
-		  }
-		  else if(results["정보"]=="무릉"){
-			  let r=Bridge.getScopeOf("무릉유니온.js").murung(results["옵션"],sender);
-			  replier.reply(r);
-		  }
-		  else if(results["정보"]=="유니온"){
-			  let r=Bridge.getScopeOf("무릉유니온.js").union(results["옵션"],sender);
-			  replier.reply(r);
-		  }
-		  else if(results["정보"]=="업적"){
-			  let r=Bridge.getScopeOf("무릉유니온.js").achive(results["옵션"],sender);
-			  replier.reply(r);
-		  }
-		  else if(results["정보"]=="아티팩트"){
-			  let r=Bridge.getScopeOf("무릉유니온.js").artifact(results["옵션"],sender);
-			  replier.reply(r);
-		  }
-		  else if(results["정보"]=="없음"){
-			  //LLM이 명령어를 찾아내지 못했을 때
-			  replier.reply("[루시] 죄송해요. 잘 알아듣지 못했어요.");
-		  }
-		  else{
-			  //미구현인 명령어들
-			  replier.reply("[루시] "+results["정보"]+" "+results["옵션"]);
-		  }  
+			  
+			}
+			catch(e){
+				replier.reply("AI 분석 서버 쪽에 문제가 발생했습니다."+e);
+			}
+			  
+		}
 	}
 	
+	
 	if (msg=="!@테스트"){
-		var res=Bridge.getScopeOf("maplegg.js").maplegg("디벨로이드",sender);
+		var res=Bridge.getScopeOf("level.js").levelsearch("폰타인간호사",sender,"","2025-08-01");
 		
 		replier.reply("test:"+res);
 	}
