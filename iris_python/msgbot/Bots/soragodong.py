@@ -24,9 +24,9 @@ def handle_message(chat):
         return
     #재미요소 금지 방 필터
 
-    if chat.message.command == '소라고동님':
+    if chat.message.msg == '소라고동님':
         chat.reply("왜.")
-    elif '소라고동님' in chat.message.command:
+    elif '소라고동님' in chat.message.msg:
         r = random.randint(1, 100)  # 1~100 사이 정수
         if r == 1:
             chat.reply("고동이는 기여어>< 고동 고동")
