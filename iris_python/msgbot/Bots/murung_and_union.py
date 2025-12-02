@@ -1,9 +1,8 @@
 import requests
 import json
-from datetime import date, timedelta
 from urllib import parse
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
 
 #api ocid 검색
 def search_api_ocid(nick):
@@ -73,11 +72,7 @@ def union(nick, sender):
         try:
             recordnick(sender, nick)
 
-            today = date.today()
-            # 어제
-            d = today - timedelta(days=1)
-            # "YYYY-MM-DD" 형태로 포맷
-            d2 = d.strftime("%Y-%m-%d")
+            d2 = get_yesterday_date()
 
             ocid = search_api_ocid(nick)
             t = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/user/union?ocid={ocid}")
