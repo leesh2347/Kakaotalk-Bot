@@ -111,19 +111,29 @@ def recordnick(sender: str, nick: str) -> None:
 
 
 def recommendnick(sender: str) -> str:
-    rd = _load_data(MAPLE_LOG_FILE)
+    db_gen = get_db()  # get_db()는 generator(yield)라 가정
+    db: Session = next(db_gen)
 
-    if sender not in rd or not isinstance(rd[sender], dict) or not rd[sender]:
-        return ""
+    try:
 
-    result = []
-    for i, cnt in rd[sender].items():
-        result.append(f"{i}/{cnt}")
+        dict_arr = []
 
-    result.sort(key=lambda s: int(s.split("/")[1]), reverse=True)
+        nick_search_arr = maple_nick_search_dao.get_by_sender_order_by_count_desc(db, sender)
 
-    n = result[0].split("/")[0]
-    return n
+        if nick_search_arr:
+            for nick_search_entity in nick_search_arr:
+                nick_search_dict = {
+                    "nick_search_key": getattr(nick_search_entity, "nick_search_key", None),
+                    "sender": getattr(nick_search_entity, "sender", None),
+                    "nick": getattr(nick_search_entity, "nick", None),
+                    "count": getattr(nick_search_entity, "count", None)
+                }
+                dict_arr.append(nick_search_dict)
+            return dict_arr[0]["nick"]
+        else:
+            return ""
+    except Exception as e:
+        print(e)
 
 def history_db_save(nick, lev, date):
     rd = _load_data(MAPLE_HISTORY_DB_FILE)
