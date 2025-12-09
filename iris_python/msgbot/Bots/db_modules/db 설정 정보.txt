@@ -1,0 +1,16 @@
+schema: lucy_bot
+
+table: MAPLE_NICK_SEARCH_TBL
+columns:
+nick_search_key varchar(100) PK 
+sender varchar(45) 
+nick varchar(45) 
+count int
+
+table: MAPLE_HISTORY_SEARCH_TBL
+columns:
+history_search_key varchar(100) PK 
+sender varchar(45) 
+nick varchar(45) 
+date varchar(45) 
+level int
