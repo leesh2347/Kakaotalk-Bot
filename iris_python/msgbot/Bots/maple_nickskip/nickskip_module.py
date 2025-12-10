@@ -7,9 +7,11 @@ from datetime import date, timedelta
 from msgbot.Bots.db_modules.db import get_db
 
 from msgbot.Bots.db_modules.schemas.maple_nick_search_schema import MapleNickSearchSchema, MapleNickSearchCreate
+from msgbot.Bots.db_modules.schemas.maple_history_search_schema import MapleHistorySearchSchema, MapleHistorySearchCreate
 from msgbot.Bots.db_modules.models.maple_nick_search_entity import MapleNickSearchEntity
+from msgbot.Bots.db_modules.models.maple_history_search_entity import MapleHistorySearchEntity
 
-from msgbot.Bots.db_modules.crud import maple_nick_search_dao
+from msgbot.Bots.db_modules.crud import maple_nick_search_dao, maple_history_search_dao
 from msgbot.Bots.db_modules.crud.common import save
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -107,6 +109,8 @@ def recordnick(sender: str, nick: str) -> None:
         save(db, h2)
     except Exception as e:
         print(e)
+    finally:
+        db_gen.close()
 
 
 
@@ -134,32 +138,78 @@ def recommendnick(sender: str) -> str:
             return ""
     except Exception as e:
         print(e)
+    finally:
+        db_gen.close()
 
 def history_db_save(nick, lev, date):
-    rd = _load_data(MAPLE_HISTORY_DB_FILE)
+    db_gen = get_db()  # get_db()는 generator(yield)라 가정
+    db: Session = next(db_gen)
 
-    if nick not in rd or not isinstance(rd[nick], dict):
-        rd[nick] = {}
-    
-    if "lev" not in rd[nick]:
-        rd[nick]["lev"] = []
-    if "date" not in rd[nick]:
-        rd[nick]["date"] = []
+    try:
+        dict_arr = []
 
-    recentlev = 0
-    if len(rd[nick]["lev"]) > 0:
-        recentlev = rd[nick]["lev"][len(rd[nick]["lev"])-1]
-    
-    if recentlev < lev:
-        if len(rd[nick]["lev"]) > 6:
-            del rd[nick]["lev"][0]
-            del rd[nick]["date"][0]
-        rd[nick]["lev"].append(lev)
-        rd[nick]["date"].append(date)
+        hist_search_key = f"{nick}_{date}"
 
-        _save_data(MAPLE_HISTORY_DB_FILE, rd)
+        h = MapleHistorySearchEntity(
+            history_search_key=hist_search_key,
+            nick=nick,
+            date=date,
+            level=lev
+        )
+
+        save(db, h)
+
+        hist_search_arr = maple_history_search_dao.get_by_nick_order_by_date_desc(db, nick)
+
+        if hist_search_arr:
+            for hist_search_entity in hist_search_arr:
+                hist_search_dict = {
+                    "history_search_key": getattr(hist_search_entity, "history_search_key", None),
+                    "nick": getattr(hist_search_entity, "nick", None),
+                    "date": getattr(hist_search_entity, "date", None),
+                    "level": getattr(hist_search_entity, "level", None)
+                }
+                dict_arr.append(hist_search_dict)
+            
+            if len(dict_arr) > 7:
+                nick_to_del = dict_arr[-1]["nick"]
+                date_to_del = dict_arr[-1]["date"]
+
+                isdel = maple_history_search_dao.delete_by_nick_and_date(db, nick_to_del, date_to_del)
+                print(f"isdel:{isdel}")
+        
+    except Exception as e:
+        print(e)
+    finally:
+        db_gen.close()
 
 
 def history_db_load(nick):
-    return _load_data(MAPLE_HISTORY_DB_FILE)
+    db_gen = get_db()  # get_db()는 generator(yield)라 가정
+    db: Session = next(db_gen)
+
+    try:
+        dict_arr = []
+
+        hist_search_arr = maple_history_search_dao.get_by_nick_order_by_date_desc(db, nick)
+
+        if hist_search_arr:
+            for hist_search_entity in hist_search_arr:
+                hist_search_dict = {
+                    "history_search_key": getattr(hist_search_entity, "history_search_key", None),
+                    "nick": getattr(hist_search_entity, "nick", None),
+                    "date": getattr(hist_search_entity, "date", None),
+                    "level": getattr(hist_search_entity, "level", None)
+                }
+                dict_arr.append(hist_search_dict)
+
+
+            print(f"histarr:{dict_arr}")
+
+        return dict_arr
+
+    except Exception as e:
+        print(e)
+    finally:
+        db_gen.close()
 
