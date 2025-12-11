@@ -191,7 +191,7 @@ def history_db_load(nick):
     try:
         dict_arr = []
 
-        hist_search_arr = maple_history_search_dao.get_by_nick_order_by_date_desc(db, nick)
+        hist_search_arr = maple_history_search_dao.get_by_nick_order_by_level_asc(db, nick)
 
         if hist_search_arr:
             for hist_search_entity in hist_search_arr:
