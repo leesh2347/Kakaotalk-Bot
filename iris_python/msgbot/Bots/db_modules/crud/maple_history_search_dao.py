@@ -29,6 +29,16 @@ def get_by_nick_order_by_date_desc(
         .all()
     )
 
+def get_by_nick_order_by_level_asc(
+    db: Session, nick: str
+) -> List[MapleHistorySearchEntity]:
+    return (
+        db.query(MapleHistorySearchEntity)
+        .filter(MapleHistorySearchEntity.nick == nick)
+        .order_by(MapleHistorySearchEntity.level.asc())
+        .all()
+    )
+
 def delete_by_nick_and_date(db: Session, nick: str, date: str) -> int:
     rows = (
         db.query(MapleHistorySearchEntity)
