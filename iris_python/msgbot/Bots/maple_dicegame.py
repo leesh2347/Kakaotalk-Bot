@@ -49,12 +49,12 @@ def handle_message(chat):
 
             # 폰트 로딩 (사용 폰트가 없으면 기본폰트)
             try:
-                font_nick = ImageFont.truetype("res/fonts/NanumFontSetup_OTF_GOTHIC/NanumGothicBold.otf", 30)
+                font_nick = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf", 30)
             except:
                 font_nick = ImageFont.load_default()
 
             try:
-                font_nums = ImageFont.truetype("res/fonts/NanumFontSetup_OTF_GOTHIC/NanumGothicBold.otf", 25)
+                font_nums = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Bold.otf", 25)
             except:
                 font_nums = ImageFont.load_default()
 
