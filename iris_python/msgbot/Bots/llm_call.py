@@ -112,8 +112,12 @@ def handle_message(chat):
                 results = call_llm(msg)
 
                 r = process_result(results.get("정보"), results.get("옵션"), chat.sender.name)
-
-                chat.reply(r)
+                
+                if results.get("정보") == "캐릭터":
+                    chat.reply_media(r["img_bytes"])
+                    chat.reply(r["text_print"])
+                else:
+                    chat.reply(r)
 
             except Exception as e:
                 chat.reply(f"AI 분석 서버 쪽에 문제가 발생했습니다. {str(e)}")
