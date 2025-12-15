@@ -145,21 +145,20 @@ def history_db_save(nick, lev, date):
     db_gen = get_db()  # get_db()는 generator(yield)라 가정
     db: Session = next(db_gen)
 
+    d2 = ""
+
+    if date is None or date == "":
+        yd = get_yesterday_date()
+        d2 = f"{yd.split('-')[1]}월 {yd.split('-')[2]}일"
+    else:
+        d2 = date
+
     try:
         dict_arr = []
 
-        hist_search_key = f"{nick}_{date}"
-
-        h = MapleHistorySearchEntity(
-            history_search_key=hist_search_key,
-            nick=nick,
-            date=date,
-            level=lev
-        )
-
-        save(db, h)
-
         hist_search_arr = maple_history_search_dao.get_by_nick_order_by_date_desc(db, nick)
+
+        is_new_lev = 1
 
         if hist_search_arr:
             for hist_search_entity in hist_search_arr:
@@ -170,6 +169,30 @@ def history_db_save(nick, lev, date):
                     "level": getattr(hist_search_entity, "level", None)
                 }
                 dict_arr.append(hist_search_dict)
+
+                if getattr(hist_search_entity, "level", None) == lev:
+                    is_new_lev = 0
+
+        hist_search_key = f"{nick}_{d2}"
+
+        h = MapleHistorySearchEntity(
+            history_search_key=hist_search_key,
+            nick=nick,
+            date=d2,
+            level=lev
+        )
+
+        if is_new_lev == 1:
+            save(db, h)
+
+            new_dict = {
+                "history_search_key":hist_search_key,
+                "nick":nick,
+                "date":d2,
+                "level":lev
+            }
+
+            dict_arr.append(new_dict)
             
             if len(dict_arr) > 7:
                 nick_to_del = dict_arr[-1]["nick"]
