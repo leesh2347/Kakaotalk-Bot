@@ -4,7 +4,7 @@ from urllib import parse
 import math
 import numpy as np
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save
 from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100
 
 def getexp(index):
@@ -114,6 +114,7 @@ def levelsearch(nick, sender, nextlev, date):
             if level is None:
                 return "x"
             elif level > 299:
+                history_db_save(nick, level, "")
                 return f"[{nick}]\nLv.{level}"
             else:
                 per = round((exp / getexp(level)*100), 3)
@@ -128,6 +129,8 @@ def levelsearch(nick, sender, nextlev, date):
                 else:
                     nl = int(nextlev) - level
                 
+                history_db_save(nick, level, "")
+
                 if nl > 1:
                     remaintomax = sum_cnt(level, int(level + nl)) - exp
                     if (math.ceil(remaintomax/10000000000000000)-1) > 0:

@@ -2,7 +2,7 @@ import requests
 import json
 from urllib import parse
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save
 
 #api ocid 검색
 def search_api_ocid(nick):
@@ -89,10 +89,12 @@ def maplegg(nick, sender):
 
         job1 = search2["ranking"][0]["class_name"]
         job2 = search2["ranking"][0]["sub_class_name"]
-        lv = float(search2["ranking"][0]["character_level"])
+        lv = int(search2["ranking"][0]["character_level"])
         pop = search2["ranking"][0]["character_popularity"]
         gu = search2["ranking"][0]["character_guildname"]
         ranking_all = int(search2["ranking"][0]["ranking"])
+
+        history_db_save(nick, lv, "")
         
         if job2 is not None and job2 != "":
             printjob = f"{job1}/{job2}"
