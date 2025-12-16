@@ -31,9 +31,6 @@ def get_image_bytes(image_url):
     # 2. 이미지 로드
     img = Image.open(image_url).convert("RGBA")
 
-    # 3. 캔버스(이미지) 위에 글자 넣기
-    draw = ImageDraw.Draw(img)
-
     # 4. 전송할 BytesIO 형태로 변환
     img_bytes = io.BytesIO()
     img.save(img_bytes, format="PNG")
