@@ -1,10 +1,6 @@
 import requests
 import json
 from urllib import parse
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import matplotlib.font_manager as fm
-from io import BytesIO
 from datetime import datetime, timedelta
 import math
 import numpy as np
@@ -37,82 +33,6 @@ def graph(a, a2, d, l):
         result.append(line)
 
     return "\n".join(result)
-
-def graph_image_bytes(a, a2, d, l, title, subtitle, nextlvup, islvup):
-    """
-    a  : 값 배열 (0~100 기준)
-    a2 : 값 옆에 붙는 문자열 배열 (레벨)
-    d  : 라벨 배열 (날짜)
-    l  : 사용 안 함 (호환 유지용)
-    """
-
-    # 🔤 폰트 설정
-    FONT_PATH = "res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf"
-    font_prop = fm.FontProperties(fname=FONT_PATH)
-
-    mpl.rcParams["font.family"] = font_prop.get_name()
-    mpl.rcParams["axes.unicode_minus"] = False
-    
-    # 📊 세로 막대 그래프
-    fig, ax = plt.subplots(figsize=(max(6, len(a) * 1.2), 5))
-
-    bars = ax.bar(d, a, width=0.55)
-
-    # 🏷 막대 위 텍스트
-    for bar, v, lv in zip(bars, a, a2):
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            bar.get_height() + 2.5,
-            f"Lv.{lv}\n({v:.2f}%)",
-            ha="center",
-            va="bottom",
-            fontsize=12,
-            fontproperties=font_prop,
-            clip_on=False
-        )
-
-    ax.set_ylim(-3, 120)             # 상·하 여유 공간 확보
-    ax.margins(y=0.05)               # 자동 여백 보정
-
-    ax.tick_params(
-        axis="y",
-        left=False,
-        labelleft=False
-    )
-    ax.set_xlabel(
-        f"{nextlvup}{islvup}",
-        fontproperties=font_prop,
-        fontsize=20,
-        labelpad=30
-    )
-
-    ax.set_title(
-        title,
-        fontproperties=font_prop,
-        fontsize=20,
-        pad=30
-    )
-    # 타이틀 하단 보조 라벨
-    ax.text(
-        0.5, 1.0,
-        subtitle,
-        transform=ax.transAxes,
-        ha="center",
-        va="bottom",
-        fontsize=16,
-        fontproperties=font_prop
-    )
-
-    plt.xticks(rotation=0, ha="center", fontsize=14, fontproperties=font_prop)
-    plt.tight_layout()
-
-    # 🖼 이미지 바이트 변환
-    buf = BytesIO()
-    plt.savefig(buf, format="png", dpi=150)
-    plt.close(fig)
-    buf.seek(0)
-
-    return buf.getvalue()
 
 
 def graph2(a, d, l):
@@ -167,10 +87,7 @@ def search_maple_api(url):
 
 def hist_search(nick, datearr, sender):
     if nick is None or nick == "":
-        return {
-                "img_bytes":"",
-                "text_print":"닉네임을 입력해 주세요"
-            }
+        return "닉네임을 입력해 주세요"
     else:
         try:
             recordnick(sender, nick)
@@ -223,35 +140,17 @@ def hist_search(nick, datearr, sender):
                 lvup = 999999
             else:
                 lvup = math.ceil((100 - arr[-1]) / div)
-
-            title = f"[{nick}]님의 경험치 히스토리"
             
-            subtitle = f"({datearr[-1]} 기준)"
-
-            nextlvup = ""
-
             if ismaxup == 1:
-                islevup = f"\n🏆 만렙 달성 축하합니다! 🏆"
+                return f"[{nick}]님의 경험치 히스토리\n({datearr[-1]} 기준)\n\n{graph(arr,arr2,darr,5)}\n\n🏆 만렙 달성 축하합니다! 🏆"
             elif div == 0:
-                nextlvup = f"예상 다음 레벨업: 메이플 섭종 후"
+                return f"[{nick}]님의 경험치 히스토리\n({datearr[-1]} 기준)\n\n{graph(arr,arr2,darr,5)}\n\n예상 다음 레벨업: 메이플 섭종 후{islevup}"
             else:
-                nextlvup = f"예상 다음 레벨업: {lvup}일 후"
-
-            img_bytes = graph_image_bytes(arr,arr2,darr,5, title, subtitle, nextlvup, islevup)
-
-            res_json = {
-                "img_bytes":img_bytes,
-                "text_print":""
-            }
-
-            return res_json
+                return f"[{nick}]님의 경험치 히스토리\n({datearr[-1]} 기준)\n\n{graph(arr,arr2,darr,5)}\n\n예상 다음 레벨업: {lvup}일 후{islevup}"
 
         except Exception as e:
             raise
-            return {
-                "img_bytes":"",
-                "text_print":f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
-            }
+            return f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
 
 def levhist(nick, sender):
     if nick is None or nick == "":
@@ -300,10 +199,7 @@ def handle_message(chat):
             daarr = histdatearr(yyyyMmDd)
             #print(daarr)
             res = hist_search(nick, daarr, chat.sender.name)
-            if res["img_bytes"] != "":
-                chat.reply_media(res["img_bytes"])
-            if res["text_print"] != "":
-                chat.reply(res["text_print"])
+            chat.reply(res)
 
 
 

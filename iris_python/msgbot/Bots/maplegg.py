@@ -112,7 +112,7 @@ def generate_character_image(image_url, nick, server, job, lv, per, guild, pop, 
     except:
         content_font = ImageFont.load_default()
 
-    draw.text((30, 130), f"[{nick}@{server}]", font=nick_font, fill=(0, 0, 0))
+    draw.text((150, 150), f"{nick}@{server}", font=nick_font, fill=(0, 0, 0), anchor="mm")
 
     draw.text((10, 185), job, font=content_font, fill=(0, 0, 0))
 
@@ -132,7 +132,10 @@ def generate_character_image(image_url, nick, server, job, lv, per, guild, pop, 
 
 def maplegg(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return {
+            "img_bytes":"",
+            "text_print":"닉네임을 입력해 주세요"
+        }
     else:
         recordnick(sender, nick)
         ocid = search_api_ocid(nick)
@@ -196,7 +199,8 @@ def handle_message(chat):
             nick = parts[1]
         try:
             res = maplegg(nick, chat.sender.name)
-            chat.reply_media(res["img_bytes"])
+            if res["img_bytes"] != "":
+                chat.reply_media(res["img_bytes"])
             chat.reply(res["text_print"])
         except Exception as e:
             nick = chat.message.msg[5:]
