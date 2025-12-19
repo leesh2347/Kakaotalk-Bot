@@ -18,6 +18,8 @@ from msgbot.Bots.chuop import symbol
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # msgbot/
 FILTER_FILE = os.path.join(BASE_DIR, "banned_rooms.json")
 
+CMDS_WITH_IMAGE = ["캐릭터", "히스토리"]
+
 # JSON 파일 로드
 with open(FILTER_FILE, "r", encoding="utf-8") as f:
     filter_data = json.load(f)
@@ -98,7 +100,7 @@ def process_result(info, args, sender):
         else:
             return symbol(arr[0], arr[1])
     elif info=="없음":
-        return "[루시] 죄송해요. 잘 알아듣지 못했어요."
+        return "[루시] 죄송해요. 잘 알아듣지 못했어요.\n\n현재 '사람같은 루시 BETA' 지원 명령어 목록: @메이플, @무릉, @유니온, @업적, @아티팩트, @레벨, @히스토리, @메창, @헥사, @스탯, @6차, @어센틱"
     else:
         return f"[루시] 미구현된 기능입니다. {info} {args}"
 
@@ -113,9 +115,11 @@ def handle_message(chat):
 
                 r = process_result(results.get("정보"), results.get("옵션"), chat.sender.name)
                 
-                if results.get("정보") == "캐릭터":
-                    chat.reply_media(r["img_bytes"])
-                    chat.reply(r["text_print"])
+                if results.get("정보") in CMDS_WITH_IMAGE:
+                    if r["img_bytes"] != "":
+                        chat.reply_media(r["img_bytes"])
+                    if r["text_print"] != "":
+                        chat.reply(r["text_print"])
                 else:
                     chat.reply(r)
 
