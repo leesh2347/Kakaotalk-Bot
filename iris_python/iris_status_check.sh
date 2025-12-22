@@ -5,7 +5,7 @@ TARGET_IP="172.17.0.2"
 TARGET_PORT=3000
 INTERVAL_SEC=600   # 10분 = 600초
 
-IRIS_CTL="/home/leesh2347/iris/iris_control"
+IRIS_CTL="/home/leesh2347/iris/iris_control_new"
 
 while true; do
     NOW="$(date '+%Y-%m-%d %H:%M:%S')"
@@ -18,8 +18,15 @@ while true; do
         echo "[$NOW] ❌ $TARGET_IP:$TARGET_PORT 연결 실패. iris_control 실행."
 
         # 실패 시 실행할 명령어들
-        "$IRIS_CTL" install
-        "$IRIS_CTL" start
+		docker restart redroid13
+		
+		sleep 30
+		
+        printf "1\n" | "$IRIS_CTL" install
+		
+		sleep 30
+		
+        printf "1\n" | "$IRIS_CTL" start
     fi
 
     echo "[$NOW] ⏱ 다음 체크까지 ${INTERVAL_SEC}초 대기..."
