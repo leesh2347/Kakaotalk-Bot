@@ -32,5 +32,8 @@ PREFIX_SUNGBI_220 = ["@성비3", "!성비3"]
 PREFIX_HIGHMOUNTAIN = ["@하이마운틴", "!하이마운틴", "@높은산", "!높은산", "@안녕산", "!안녕산"]
 PREFIX_ANGLER = ["@앵글러", "!앵글러"]
 PREFIX_NIGHTMARE = ["@악몽선경", "!악몽선경"]
+PREFIX_EXPCOUPON = ["@exp", "!exp", "@EXP", "!EXP"]
+PREFIX_HIGHEXPCOUPON = ["@상급exp", "!상급exp", "@상급EXP", "!상급EXP"]
+PREFIX_EXTREME_MONSTERPARK = ["@익몬", "!익몬"]
 
 PREFIX_MESPI = ["@메스피","!메스피"]
