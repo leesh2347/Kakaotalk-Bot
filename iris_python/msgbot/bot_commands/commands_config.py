@@ -1,3 +1,17 @@
+PREFIX_MURUNG = ["@무릉", "!무릉"]
+PREFIX_UNION = ["@유니온", "!유니온"]
+PREFIX_ACHIEVE = ["@업적", "!업적"]
+PREFIX_ARTIFACT = ["@아티팩트", "!아티팩트"]
+
+PREFIX_LEVEL = ["@레벨", "!레벨"]
+
+PREFIX_HEXA = ["@헥사", "!헥사"]
+PREFIX_SIXTH_ALL = ["@6차", "!6차"]
+PREFIX_ORIGIN = ["@오리진", "!오리진", "@어센트", "!어센트"]
+PREFIX_MASTERY = ["@마스터리", "!마스터리"]
+PREFIX_SKILL_CORE = ["@강화", "!강화"]
+PREFIX_GONGYONG_CORE = ["@공용", "!공용", "@야누스", "!야누스"]
+
 PREFIX_CHOSUNGBI = ["@초성비", "!초성비"]
 PREFIX_GUKSUNGBI = ["@극성비", "!극성비"]
 PREFIX_TAESUNGBI = ["@태성비", "!태성비"]
