@@ -1,6 +1,8 @@
 import requests
 import numpy as np
 from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER, DATA_NIGHTMARE
+from msgbot.bot_commands.commands_config import PREFIX_CHOSUNGBI, PREFIX_GUKSUNGBI, PREFIX_TAESUNGBI, PREFIX_IKSUNGBI, PREFIX_SUNGBI_200, PREFIX_SUNGBI_210, PREFIX_SUNGBI_220, PREFIX_HIGHMOUNTAIN, PREFIX_ANGLER, PREFIX_NIGHTMARE
+
 
 SUNGBI = [571115568,6120258214,22164317197,64359295696]
 
@@ -173,7 +175,7 @@ def nightmare(index):
 
 def handle_message(chat):
     #초성비
-    if '!초성비' in chat.message.msg or '@초성비' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_CHOSUNGBI):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -181,7 +183,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #극성비
-    if '!극성비' in chat.message.msg or '@극성비' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_GUKSUNGBI):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -189,7 +191,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #태성비
-    if '!태성비' in chat.message.msg or '@태성비' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_TAESUNGBI):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -197,7 +199,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #익성비
-    if '!익성비' in chat.message.msg or '@익성비' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_IKSUNGBI):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -205,7 +207,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #200성비
-    if '!성비1' in chat.message.msg or '@성비1' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_SUNGBI_200):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -213,7 +215,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #210성비
-    if '!성비2' in chat.message.msg or '@성비2' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_SUNGBI_210):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -221,7 +223,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #220성비
-    if '!성비3' in chat.message.msg or '@성비3' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_SUNGBI_220):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -229,7 +231,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #하이마운틴
-    if '!하이마운틴' in chat.message.msg or '@하이마운틴' in chat.message.msg or '@높은산' in chat.message.msg or '!높은산' in chat.message.msg or '@안녕산' in chat.message.msg or '!안녕산' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_HIGHMOUNTAIN):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -237,7 +239,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #앵글러
-    if '!앵글러' in chat.message.msg or '@앵글러' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_ANGLER):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
@@ -245,7 +247,7 @@ def handle_message(chat):
             chat.reply(res)
 
     #악몽선경
-    if '!악몽선경' in chat.message.msg or '@악몽선경' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_NIGHTMARE):
         parts = chat.message.msg.split(" ")
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
