@@ -1,7 +1,7 @@
 import requests
 import numpy as np
-from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER, DATA_NIGHTMARE
-from msgbot.bot_commands.commands_config import PREFIX_CHOSUNGBI, PREFIX_GUKSUNGBI, PREFIX_TAESUNGBI, PREFIX_IKSUNGBI, PREFIX_SUNGBI_200, PREFIX_SUNGBI_210, PREFIX_SUNGBI_220, PREFIX_HIGHMOUNTAIN, PREFIX_ANGLER, PREFIX_NIGHTMARE
+from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER, DATA_NIGHTMARE, DATA_EXP_COUPON, DATA_HIGH_EXP_COUPON, DATA_MONSTERPARK_EXTREME
+from msgbot.bot_commands.commands_config import PREFIX_CHOSUNGBI, PREFIX_GUKSUNGBI, PREFIX_TAESUNGBI, PREFIX_IKSUNGBI, PREFIX_SUNGBI_200, PREFIX_SUNGBI_210, PREFIX_SUNGBI_220, PREFIX_HIGHMOUNTAIN, PREFIX_ANGLER, PREFIX_NIGHTMARE, PREFIX_EXTREME_MONSTERPARK, PREFIX_EXPCOUPON, PREFIX_HIGHEXPCOUPON
 
 
 SUNGBI = [571115568,6120258214,22164317197,64359295696]
@@ -164,7 +164,7 @@ def nightmare(index):
         return "레벨은 1~299 사이 숫자만 입력해 주세요."
     else:
         if index < 260:
-            return "에픽 던전 악몽선경은 280 이상의 캐릭터만 입장 가능합니다."
+            return "에픽 던전 악몽선경은 280레벨 이상의 캐릭터만 입장 가능합니다."
         else:
             l = DATA_AFTER_210[index - 210]
             e = DATA_NIGHTMARE[index - 280]
@@ -172,6 +172,67 @@ def nightmare(index):
             s = e/l*100
 
             return f"{index}레벨에서 악몽선경 클리어 시 경험치 획득량 : {round(s, 3)}%\n\n12500메포 사용 시: {round(s*5, 3)}% (X5)\n50000메포 사용 시: {round(s*9, 3)}% (X9)"
+
+def extreme_monsterpark(index):
+    if np.nan == index or index < 1 or index > 299:
+        return "레벨은 1~299 사이 숫자만 입력해 주세요."
+    else:
+        if index < 260:
+            return "몬스터파크 익스트림은 260레벨 이상의 캐릭터만 입장 가능합니다."
+        else:
+            l = DATA_AFTER_210[index - 210]
+            e = DATA_MONSTERPARK_EXTREME[index - 260]
+
+            s = e/l*100
+
+            return f"{index}레벨에서 몬스터파크 익스트림 클리어 시 경험치 획득량 : {round(s, 3)}%"
+
+def exp_coupon(index, count):
+    if np.nan == index or index < 1 or index > 299:
+        return "레벨은 1~299 사이 숫자만 입력해 주세요."
+    else:
+        if index < 200 or index > 260:
+            return "EXP쿠폰은 200레벨 이상 260레벨 이하의 캐릭터만 사용 가능합니다."
+        else:
+            c = 0
+            if np.nan == count or count is None:
+                c = 1
+            elif count < 1:
+                c = 1
+            else:
+                c = int(count)
+
+            if index > 209:
+                l = DATA_AFTER_210[index - 210]
+            else:
+                l = DATA_101_TO_209[index - 101]
+            e = DATA_EXP_COUPON[index - 200]
+
+            s = e/l*100*c
+
+            return f"{index}레벨에서 EXP쿠폰 {c}개 사용 시 경험치 획득량 : {round(s, 3)}%"
+
+def high_exp_coupon(index, count):
+    if np.nan == index or index < 1 or index > 299:
+        return "레벨은 1~299 사이 숫자만 입력해 주세요."
+    else:
+        if index < 260:
+            return "상급 EXP쿠폰은 260레벨 이상의 캐릭터만 사용 가능합니다."
+        else:
+            c = 0
+            if np.nan == count or count is None:
+                c = 1
+            elif count < 1:
+                c = 1
+            else:
+                c = int(count)
+
+            l = DATA_AFTER_210[index - 210]
+            e = DATA_HIGH_EXP_COUPON[index - 260]
+
+            s = e/l*100*c
+
+            return f"{index}레벨에서 상급 EXP쿠폰 {c}개 사용 시 경험치 획득량 : {round(s, 3)}%"
 
 def handle_message(chat):
     #초성비
@@ -252,4 +313,40 @@ def handle_message(chat):
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
             res = nightmare(n)
+            chat.reply(res)
+
+    #익몬
+    if any(prefix in chat.message.msg for prefix in PREFIX_EXTREME_MONSTERPARK):
+        parts = chat.message.msg.split(" ")
+        if len(parts) > 1 and parts[1].isdigit():
+            n = int(parts[1])
+            res = extreme_monsterpark(n)
+            chat.reply(res)
+
+    #exp쿠폰
+    if any(prefix in chat.message.msg for prefix in PREFIX_EXPCOUPON):
+        parts = chat.message.msg.split(" ")
+        if len(parts) > 1 and parts[1].isdigit():
+            n = int(parts[1])
+
+            if len(parts) > 2 and parts[2].isdigit():
+                c = int(parts[2])
+            else:
+                c = 1
+
+            res = exp_coupon(n, c)
+            chat.reply(res)
+
+    #상급exp쿠폰
+    if any(prefix in chat.message.msg for prefix in PREFIX_HIGHEXPCOUPON):
+        parts = chat.message.msg.split(" ")
+        if len(parts) > 1 and parts[1].isdigit():
+            n = int(parts[1])
+
+            if len(parts) > 2 and parts[2].isdigit():
+                c = int(parts[2])
+            else:
+                c = 1
+
+            res = high_exp_coupon(n, c)
             chat.reply(res)
