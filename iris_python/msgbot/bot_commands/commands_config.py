@@ -36,4 +36,6 @@ PREFIX_EXPCOUPON = ["@exp", "!exp", "@EXP", "!EXP"]
 PREFIX_HIGHEXPCOUPON = ["@상급exp", "!상급exp", "@상급EXP", "!상급EXP"]
 PREFIX_EXTREME_MONSTERPARK = ["@익몬", "!익몬"]
 
+PREFIX_BOSS = ["@보스","!보스"]
+
 PREFIX_MESPI = ["@메스피","!메스피"]
