@@ -6,6 +6,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save
 from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100
+from msgbot.bot_commands.commands_config import PREFIX_LEVEL
 
 def getexp(index):
     if index > 209:
@@ -150,7 +151,7 @@ def levelsearch(nick, sender, nextlev, date):
 
 
 def handle_message(chat):
-    if "@레벨" in chat.message.msg or "!레벨" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_LEVEL):
         parts = chat.message.msg.split(" ")
         nick = ""
         nextlev = ""

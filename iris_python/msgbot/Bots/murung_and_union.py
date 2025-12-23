@@ -3,6 +3,7 @@ import json
 from urllib import parse
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
+from msgbot.bot_commands.commands_config import PREFIX_MURUNG, PREFIX_UNION, PREFIX_ACHIEVE, PREFIX_ARTIFACT
 
 #api ocid 검색
 def search_api_ocid(nick):
@@ -128,14 +129,14 @@ def artifact(nick, sender):
 
 
 def handle_message(chat):
-    if "@무릉" in chat.message.msg or "!무릉" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_MURUNG):
         nick = chat.message.msg[4:]
         if nick is None or nick == "":
             nick = recommendnick(chat.sender.name)
         res = murung(nick, chat.sender.name)
         chat.reply(res)
 
-    if "@유니온" in chat.message.msg or "!유니온" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_UNION):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             nick = recommendnick(chat.sender.name)
@@ -144,7 +145,7 @@ def handle_message(chat):
         res = union(nick, chat.sender.name)
         chat.reply(res)
 
-    if "@업적" in chat.message.msg or "!업적" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_ACHIEVE):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             nick = recommendnick(chat.sender.name)
@@ -153,7 +154,7 @@ def handle_message(chat):
         res = achieve(nick, chat.sender.name)
         chat.reply(res)
 
-    if "@아티팩트" in chat.message.msg or "!아티팩트" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_ARTIFACT):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             nick = recommendnick(chat.sender.name)
