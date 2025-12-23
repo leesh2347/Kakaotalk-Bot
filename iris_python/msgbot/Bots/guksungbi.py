@@ -1,6 +1,6 @@
 import requests
 import numpy as np
-from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER
+from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER, DATA_NIGHTMARE
 
 SUNGBI = [571115568,6120258214,22164317197,64359295696]
 
@@ -137,18 +137,39 @@ def highmountain(index):
         if index < 260:
             return "에픽 던전 하이마운틴은 260레벨 이상의 캐릭터만 입장 가능합니다."
         else:
+            l = DATA_AFTER_210[index - 210]
             e = DATA_HIGHMOUNTAIN[index - 260]
-            return f"{index}레벨에서 하이마운틴 클리어 시 경험치 획득량 : {e}%\n\n7500메포 사용 시: {round(e*5, 3)}% (X5)\n30000메포 사용 시: {round(e*9, 3)}% (X9)"
+
+            s = e/l*100
+            return f"{index}레벨에서 하이마운틴 클리어 시 경험치 획득량 : {round(s, 3)}%\n\n7500메포 사용 시: {round(s*5, 3)}% (X5)\n30000메포 사용 시: {round(s*9, 3)}% (X9)"
 
 def angler(index):
     if np.nan == index or index < 1 or index > 299:
         return "레벨은 1~299 사이 숫자만 입력해 주세요."
     else:
-        if index < 260:
+        if index < 270:
             return "에픽 던전 앵글러 컴퍼니는 270레벨 이상의 캐릭터만 입장 가능합니다."
         else:
-            e = DATA_ANGLER[index - 260]
-            return f"{index}레벨에서 앵글러 컴퍼니 클리어 시 경험치 획득량 : {e}%\n\n10000메포 사용 시: {round(e*5, 3)}% (X5)\n40000메포 사용 시: {round(e*9, 3)}% (X9)"
+            l = DATA_AFTER_210[index - 210]
+            e = DATA_ANGLER[index - 270]
+
+            s = e/l*100
+
+            return f"{index}레벨에서 앵글러 컴퍼니 클리어 시 경험치 획득량 : {round(s, 3)}%\n\n10000메포 사용 시: {round(s*5, 3)}% (X5)\n40000메포 사용 시: {round(s*9, 3)}% (X9)"
+
+def nightmare(index):
+    if np.nan == index or index < 1 or index > 299:
+        return "레벨은 1~299 사이 숫자만 입력해 주세요."
+    else:
+        if index < 260:
+            return "에픽 던전 악몽선경은 280 이상의 캐릭터만 입장 가능합니다."
+        else:
+            l = DATA_AFTER_210[index - 210]
+            e = DATA_NIGHTMARE[index - 280]
+
+            s = e/l*100
+
+            return f"{index}레벨에서 악몽선경 클리어 시 경험치 획득량 : {round(s, 3)}%\n\n12500메포 사용 시: {round(s*5, 3)}% (X5)\n50000메포 사용 시: {round(s*9, 3)}% (X9)"
 
 def handle_message(chat):
     #초성비
@@ -221,4 +242,12 @@ def handle_message(chat):
         if len(parts) > 1 and parts[1].isdigit():
             n = int(parts[1])
             res = angler(n)
+            chat.reply(res)
+
+    #악몽선경
+    if '!악몽선경' in chat.message.msg or '@악몽선경' in chat.message.msg:
+        parts = chat.message.msg.split(" ")
+        if len(parts) > 1 and parts[1].isdigit():
+            n = int(parts[1])
+            res = nightmare(n)
             chat.reply(res)
