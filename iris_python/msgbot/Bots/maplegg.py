@@ -6,6 +6,7 @@ import os
 from urllib import parse
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save
+from msgbot.bot_commands.commands_config import PREFIX_MAPLEGG
 
 #api ocid 검색
 def search_api_ocid(nick):
@@ -191,7 +192,7 @@ def maplegg(nick, sender):
         
 
 def handle_message(chat):
-    if "@메이플" in chat.message.msg or "!메아플" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_MAPLEGG):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             nick = recommendnick(chat.sender.name)

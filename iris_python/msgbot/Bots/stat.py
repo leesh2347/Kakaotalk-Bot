@@ -4,6 +4,7 @@ from datetime import date, timedelta
 from urllib import parse
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma
+from msgbot.bot_commands.commands_config import PREFIX_STAT
 
 #api ocid 검색
 def search_api_ocid(nick):
@@ -93,7 +94,7 @@ def stat(nick, sender):
 
 
 def handle_message(chat):
-    if "@스탯" in chat.message.msg or "!스탯" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_STAT):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             nick = recommendnick(chat.sender.name)

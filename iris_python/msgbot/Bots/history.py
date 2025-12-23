@@ -10,6 +10,7 @@ import math
 import numpy as np
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save, history_db_load
+from msgbot.bot_commands.commands_config import PREFIX_HISTORY, PREFIX_LEVEL_HISTORY
 
 def graph(a, a2, d, l):
     """
@@ -56,7 +57,7 @@ def graph_image_bytes(a, a2, d, l, title, subtitle, nextlvup, islvup):
     # 📊 세로 막대 그래프
     fig, ax = plt.subplots(figsize=(max(6, len(a) * 1.2), 5))
 
-    bars = ax.bar(d, a, width=0.55)
+    bars = ax.bar(d, a, width=0.55, color="#28CF59")
 
     # 🏷 막대 위 텍스트
     for bar, v, lv in zip(bars, a, a2):
@@ -71,8 +72,20 @@ def graph_image_bytes(a, a2, d, l, title, subtitle, nextlvup, islvup):
             clip_on=False
         )
 
+    ax.set_axisbelow(True)
+
     ax.set_ylim(-3, 120)             # 상·하 여유 공간 확보
+    ax.set_yticks(np.arange(0, 121, 10))
     ax.margins(y=0.05)               # 자동 여백 보정
+
+    # 가로 점선 그리드
+    ax.grid(
+        axis="y",
+        linestyle="--",
+        linewidth=0.8,
+        color="#c3c3c3",
+        alpha=0.8
+    )
 
     ax.tick_params(
         axis="y",
@@ -281,7 +294,7 @@ def levhist(nick, sender):
 
 def handle_message(chat):
 
-    if "@히스토리" in chat.message.msg or "!히스토리" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_HISTORY):
         parts = chat.message.msg.split(" ")
         nick = parts[1] if len(parts) > 1 else None
         if nick is None:
@@ -308,7 +321,7 @@ def handle_message(chat):
 
 
 
-    if "@레벨히스토리" in chat.message.msg or "!레벨히스토리" in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_LEVEL_HISTORY):
         parts = chat.message.msg.split(" ")
         nick = ""
         if len(parts) < 2:
