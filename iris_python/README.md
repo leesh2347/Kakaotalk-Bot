@@ -1,9 +1,13 @@
+초기세팅방법.txt를 참고하여 도커 및 iris 초기세팅부터 진행해 주세요
+
+/home/user 가 루트 디렉토리라고 가정,
+/home/user/iris 안에 start_all.sh 를,
+/home/user/iris/irispy-client 안에 run_iris_server.sh 를 넣어준 후
+crontab 설정을 해두면 재부팅마다 봇 자동 세팅이 완료됩니다.
+
 ./iris_control install
 ./iris control start
 
 irispy가 위치한 백엔드 서버 쪽에서 다음을 실행합니다
 백엔드 서버 메인 실행:
 python irispy.py
-
-iris_status_check.sh: 프론트엔드측(안드로이드) iris 프로세스 kill 방지 스크립트. 봇이 죽을 때마다 위 명령어를 자동으로 입력해서 재시작시키는 용도입니다.
-(2025.11.13 기준, 아직 테스트 미완료 상태. 작동 여부 확실하지는 않음)
