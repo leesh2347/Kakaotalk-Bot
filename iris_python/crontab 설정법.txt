@@ -1,0 +1,3 @@
+@reboot /home/leesh2347/iris/start_all.sh >> /var/log/start_all.log 2>&1
+
+0 4 * * * /sbin/reboot
