@@ -35,6 +35,8 @@ PREFIX_NIGHTMARE = ["@악몽선경", "!악몽선경"]
 PREFIX_EXPCOUPON = ["@exp", "!exp", "@EXP", "!EXP"]
 PREFIX_HIGHEXPCOUPON = ["@상급exp", "!상급exp", "@상급EXP", "!상급EXP"]
 PREFIX_EXTREME_MONSTERPARK = ["@익몬", "!익몬"]
+PREFIX_EXPRESS_BOOSTER = ["@익부", "@부스터", "!익부", "!부스터"]
+PREFIX_MECHA_STRAWBERRY = {"@메카딸기", "@메카딸농", "@메딸", "!메카딸기", "!메카딸농", "!메딸"}
 
 PREFIX_BOSS = ["@보스","!보스"]
 
