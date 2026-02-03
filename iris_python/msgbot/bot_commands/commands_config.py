@@ -40,4 +40,7 @@ PREFIX_MECHA_STRAWBERRY = {"@메카딸기", "@메카딸농", "@메딸", "!메카
 
 PREFIX_BOSS = ["@보스","!보스"]
 
+PREXIX_EVENTS = ["@이벤트", "!이벤트"]
+PREXIX_SUNDAY = ["@썬데이", "!썬데이"]
+
 PREFIX_MESPI = ["@메스피","!메스피"]
