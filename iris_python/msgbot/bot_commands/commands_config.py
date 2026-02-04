@@ -44,3 +44,6 @@ PREXIX_EVENTS = ["@이벤트", "!이벤트"]
 PREXIX_SUNDAY = ["@썬데이", "!썬데이"]
 
 PREFIX_MESPI = ["@메스피","!메스피"]
+
+PREFIX_FOOD_ADD = ["@뭐먹지등록", "!뭐먹지등록"]
+PREFIX_FOOD_DELETE = ["@뭐먹지삭제", "!뭐먹지삭제"]
