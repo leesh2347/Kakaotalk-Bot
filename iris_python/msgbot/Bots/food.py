@@ -23,6 +23,49 @@ with open(FILTER_FILE, "r", encoding="utf-8") as f:
 # 금지 방 목록 로드
 BANNED_PLAY_ROOMS = filter_data["banrooms"]["play"]
 
+def add_food(new_food):
+    foods_arr = _load_data(DATA_FILE_DIR)["food"]
+
+    space = "\u200b" * 500
+
+    if new_food not in foods_arr:
+        foods_arr.append(new_food)
+        record_to_data_file(DATA_FILE_DIR, "food", foods_arr)
+        return f'[루시] 뭐먹지 메뉴 등록 완료: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}'
+    else:
+        return f'[루시] 이미 등록된 메뉴입니다: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}'
+
+def delete_food(new_food):
+    foods_arr = _load_data(DATA_FILE_DIR)["food"]
+
+    space = "\u200b" * 500
+
+    if new_food in foods_arr:
+        idx = foods_arr.index(new_food)
+        del foods_arr[idx]
+        record_to_data_file(DATA_FILE_DIR, "food", foods_arr)
+        return f'[루시] 뭐먹지 메뉴 삭제 완료: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}'
+    else:
+        return f'[루시] 등록되어있지 않은 메뉴입니다: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}'
+
+def choose_food(msg):
+    parts = msg.split(" ")
+
+    foods_arr = _load_data(DATA_FILE_DIR)["food"]
+
+    if len(parts) > 1 and parts[1].isdigit():
+        n = int(parts[1])
+        if 1 < n < 11:
+            res = []
+            t = ""
+            for i in range(1,n+1):
+                t = foods_arr[random.randint(1, len(foods_arr))-1]
+                res.append(t)
+            return f"{chat.sender.name}님의 추천 메뉴는\n\n{','.join(res)}"
+    else:
+        t = random.randint(1, len(foods_arr))
+        return f"선택장애 {chat.sender.name}님!\n메뉴는 [{foods_arr[t-1]}]입니다 ^.^"
+
 def handle_message(chat):
     
     if chat.room.name in BANNED_PLAY_ROOMS:
@@ -34,17 +77,8 @@ def handle_message(chat):
 
         if len(parts) > 1:
             new_food = chat.message.msg[7:]
-
-            foods_arr = _load_data(DATA_FILE_DIR)["food"]
-
-            space = "\u200b" * 500
-
-            if new_food not in foods_arr:
-                    foods_arr.append(new_food)
-                    record_to_data_file(DATA_FILE_DIR, "food", foods_arr)
-                    chat.reply(f'[루시] 뭐먹지 메뉴 등록 완료: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}')
-            else:
-                chat.reply(f'[루시] 이미 등록된 메뉴입니다: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}')
+            res = add_food(new_food)
+            chat.reply(res)
         else:
             chat.reply("메뉴를 입력해 주세요.")
 
@@ -53,36 +87,13 @@ def handle_message(chat):
 
         if len(parts) > 1:
             new_food = chat.message.msg[7:]
+            res = delete_food(new_food)
+            chat.reply(res)
 
-            foods_arr = _load_data(DATA_FILE_DIR)["food"]
-
-            space = "\u200b" * 500
-
-            if new_food in foods_arr:
-                    idx = foods_arr.index(new_food)
-                    del foods_arr[idx]
-                    record_to_data_file(DATA_FILE_DIR, "food", foods_arr)
-                    chat.reply(f'[루시] 뭐먹지 메뉴 삭제 완료: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}')
-            else:
-                chat.reply(f'[루시] 등록되어있지 않은 메뉴입니다: {new_food}\n{space}\n현재 등록된 뭐먹지 목록\n{",".join(foods_arr)}')
         else:
             chat.reply("메뉴를 입력해 주세요.")
     elif '뭐먹지' in chat.message.msg or 'ㅁㅁㅈ' in chat.message.msg:
-        parts = chat.message.msg.split(" ")
-
-        foods_arr = _load_data(DATA_FILE_DIR)["food"]
-
-        if len(parts) > 1 and parts[1].isdigit():
-            n = int(parts[1])
-            if 1 < n < 11:
-                res = []
-                t = ""
-                for i in range(1,n+1):
-                    t = foods_arr[random.randint(1, len(foods_arr))-1]
-                    res.append(t)
-                chat.reply(f"{chat.sender.name}님의 추천 메뉴는\n\n{','.join(res)}")
-        else:
-            t = random.randint(1, len(foods_arr))
-            chat.reply(f"선택장애 {chat.sender.name}님!\n메뉴는 [{foods_arr[t-1]}]입니다 ^.^")
+        res = choose_food(chat.message.msg)
+        chat.reply(res)
 
 
