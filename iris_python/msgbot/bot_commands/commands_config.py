@@ -47,3 +47,7 @@ PREFIX_MESPI = ["@메스피","!메스피"]
 
 PREFIX_FOOD_ADD = ["@뭐먹지등록", "!뭐먹지등록"]
 PREFIX_FOOD_DELETE = ["@뭐먹지삭제", "!뭐먹지삭제"]
+PREFIX_FOOD = ["뭐먹지", "ㅁㅁㅈ"]
+PREFIX_JOB_ADD = ["@뭐하지등록", "!뭐하지등록"]
+PREFIX_JOB_DELETE = ["@뭐하지삭제", "!뭐하지삭제"]
+PREFIX_JOB = ["뭐하지", "ㅁㅎㅈ"]
