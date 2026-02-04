@@ -4,6 +4,7 @@ import os
 import random
 
 from msgbot.Bots.maple_nickskip.nickskip_module import _load_data, _save_data
+from msgbot.bot_commands.commands_config import PREFIX_FOOD_ADD, PREFIX_FOOD_DELETE
 
 # banned_rooms.json의 절대 경로 계산
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # msgbot/
@@ -27,7 +28,7 @@ def handle_message(chat):
     if chat.room.name in BANNED_PLAY_ROOMS:
         return
 
-    if '@뭐먹지등록' in chat.message.msg or '!뭐먹지등록' in chat.message.msg:
+    if any(prefix in chat.message.msg for prefix in PREFIX_FOOD_ADD):
 
         parts = chat.message.msg.split(" ")
 
@@ -47,7 +48,7 @@ def handle_message(chat):
         else:
             chat.reply("메뉴를 입력해 주세요.")
 
-    elif '@뭐먹지삭제' in chat.message.msg or '!뭐먹지삭제' in chat.message.msg:
+    elif any(prefix in chat.message.msg for prefix in PREFIX_FOOD_DELETE):
         parts = chat.message.msg.split(" ")
 
         if len(parts) > 1:
