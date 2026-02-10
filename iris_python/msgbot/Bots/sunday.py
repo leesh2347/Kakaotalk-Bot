@@ -4,8 +4,26 @@ import re
 from datetime import date, timedelta, datetime
 from urllib import parse
 from bs4 import BeautifulSoup
+from PIL import Image, ImageDraw, ImageFont
+import io
 from msgbot.Bots.maple_nickskip.nickskip_module import comma
 from msgbot.bot_commands.commands_config import PREXIX_EVENTS, PREXIX_SUNDAY
+
+def get_image_bytes(image_url):
+    # 2. 이미지 로드
+
+    response = requests.get(image_url)
+    response.raise_for_status()
+
+    # 1. 원본 이미지 로드
+    img = Image.open(io.BytesIO(response.content)).convert("RGBA")
+
+    # 4. 전송할 BytesIO 형태로 변환
+    img_bytes = io.BytesIO()
+    img.save(img_bytes, format="PNG")
+    img_bytes = io.BytesIO(img_bytes.getvalue())
+    
+    return img_bytes
 
 #api 검색
 def search_maple_api(url):
@@ -17,7 +35,6 @@ def search_maple_api(url):
     res.raise_for_status()     # 200이 아니면 에러
     s2 = json.loads(res.text)
     return s2
-
 
 def get_events():
     try:
@@ -78,12 +95,26 @@ def get_sunday():
                 break
 
         if is_sunday == 1:
-            return cleaned_url
+            img_bytes = get_image_bytes(cleaned_url)
+            result_json = {
+                "img_bytes":img_bytes,
+                "text_print":""
+            }
+
+            return result_json
         else:
-            return "썬데이 메이플 공개 시간이 아닙니다."
+            return {
+            "img_bytes":"",
+            "text_print":"썬데이 메이플 공개 시간이 아닙니다."
+        }
             
     except Exception as e:
-        return "API 오류"
+        raise
+        return {
+            "img_bytes":"",
+            "text_print":"API 오류"
+        }
+        
 
 
 def handle_message(chat):
@@ -93,4 +124,7 @@ def handle_message(chat):
 
     if any(prefix in chat.message.msg for prefix in PREXIX_SUNDAY):
         res = get_sunday()
-        chat.reply(res)
+        if res["img_bytes"] != "":
+            chat.reply_media(res["img_bytes"])
+        if res["text_print"] != "":
+            chat.reply(res["text_print"])
