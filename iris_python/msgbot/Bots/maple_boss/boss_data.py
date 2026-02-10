@@ -221,6 +221,26 @@ MAPLE_BOSS_COMMANDS = {
     "하드발드":"hard_baldrix",
     "발드릭스":"hard_baldrix",
 
+    "노말카이":"normal_kai",
+    "노말챌섭보스":"normal_kai",
+    "하드카이":"hard_kai",
+    "하드챌섭보스":"hard_kai",
+    "카이":"hard_kai",
+    "챌섭보스":"hard_kai",
+
+    "노말흉성":"normal_malefic",
+    "노말찬란한흉성":"normal_malefic",
+    "노흉성":"normal_malefic",
+    "노말흉통":"normal_malefic",
+    "노말찬란한흉통":"normal_malefic",
+    "하드흉성":"hard_malefic",
+    "하드찬란한흉성":"hard_malefic",
+    "하흉성":"hard_malefic",
+    "하드흉통":"hard_malefic",
+    "하드찬란한흉통":"hard_malefic",
+    "흉성":"hard_malefic",
+    "흉통":"hard_malefic",
+
     "디벨로이드":"developer",
     "디벨":"developer",
     "주인장":"developer",
@@ -2301,6 +2321,94 @@ MAPLE_BOSS_DATA = {
             "1페이즈" : 700,
             "2페이즈" : 700,
 			"3페이즈" : 700
+        }
+    },
+
+    "normal_kai" : {
+        "bg_color":"#000000",
+        "title_color":"#75d52e",
+        "content_color":"#ff31f3",
+        "image":"kai.png",
+        "name" : "노말 카이(챌린저스 시즌3)",
+        "level" : 270,
+        "HP" : {
+            "1페이즈" : "63,000,000,000,000\n            (63조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 270,
+		"reboot" : "44조",
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "bossCrystal" : "300,000,000메소",
+        "arcaneforce" : ""
+    },
+
+    "hard_kai" : {
+        "bg_color":"#000000",
+        "title_color":"#75d52e",
+        "content_color":"#ff31f3",
+        "image":"kai.png",
+        "name" : "하드 카이(챌린저스 시즌3)",
+        "level" : 280,
+        "HP" : {
+            "1페이즈" : "241,500,000,000,000\n            (241조 5000억)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+		"reboot" : "44조",
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "bossCrystal" : "600,000,000메소",
+        "arcaneforce" : ""
+    },
+
+    "normal_malefic" : {
+        "bg_color":"#330042",
+        "title_color":"#feffb7",
+        "content_color":"#ffea00",
+        "image":"malefic.png",
+        "name" : "노말 찬란한 흉성",
+        "level" : 290,
+        "HP" : {
+            "1페이즈" : "4,698,000,000,000,000\n            (4698조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+		"reboot" : "44조",
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "bossCrystal" : "658,000,000메소",
+        "arcaneforce" : {
+            "1페이즈" : 400
+        }
+    },
+
+    "hard_malefic" : {
+        "bg_color":"#330042",
+        "title_color":"#feffb7",
+        "content_color":"#ffea00",
+        "image":"malefic.png",
+        "name" : "하드 찬란한 흉성",
+        "level" : 290,
+        "HP" : {
+            "1페이즈" : "14,740,000,000,000,000\n            (1경 4740조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+		"reboot" : "44조",
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "bossCrystal" : "2,819,000,000메소",
+        "arcaneforce" : {
+            "1페이즈" : 550
         }
     },
 
