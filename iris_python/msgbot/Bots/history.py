@@ -7,6 +7,7 @@ import matplotlib.font_manager as fm
 from io import BytesIO
 from datetime import datetime, timedelta
 import math
+import threading  # 락(Lock) 사용을 위해 추가
 import numpy as np
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save, history_db_load
@@ -39,93 +40,78 @@ def graph(a, a2, d, l):
 
     return "\n".join(result)
 
+# 1. 전역 변수로 락 객체 생성
+graph_lock = threading.Lock()
+
 def graph_image_bytes(a, a2, d, l, title, subtitle, nextlvup, islvup):
     """
-    a  : 값 배열 (0~100 기준)
-    a2 : 값 옆에 붙는 문자열 배열 (레벨)
-    d  : 라벨 배열 (날짜)
-    l  : 사용 안 함 (호환 유지용)
+    matplotlib의 스레드 충돌을 방지하기 위해 Lock과 Non-interactive 백엔드를 사용합니다.
     """
-
-    # 🔤 폰트 설정
-    FONT_PATH = "res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf"
-    font_prop = fm.FontProperties(fname=FONT_PATH)
-
-    mpl.rcParams["font.family"] = font_prop.get_name()
-    mpl.rcParams["axes.unicode_minus"] = False
     
-    # 📊 세로 막대 그래프
-    fig, ax = plt.subplots(figsize=(max(6, len(a) * 1.2), 5))
+    # 2. 백엔드를 'Agg'로 강제 설정 (GUI 충돌 방지)
+    # 함수 내부에서 설정하거나, 임포트 직후에 설정하는 것이 안전합니다.
+    mpl.use('Agg') 
 
-    bars = ax.bar(d, a, width=0.55, color="#28CF59")
+    # 3. 락을 사용하여 동시 실행을 방지 (큐와 같은 효과)
+    with graph_lock:
+        # 폰트 설정
+        FONT_PATH = "res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf"
+        font_prop = fm.FontProperties(fname=FONT_PATH)
 
-    # 🏷 막대 위 텍스트
-    for bar, v, lv in zip(bars, a, a2):
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            bar.get_height() + 2.5,
-            f"Lv.{lv}\n({v:.2f}%)",
-            ha="center",
-            va="bottom",
-            fontsize=12,
-            fontproperties=font_prop,
-            clip_on=False
-        )
+        mpl.rcParams["font.family"] = font_prop.get_name()
+        mpl.rcParams["axes.unicode_minus"] = False
+        
+        # 세로 막대 그래프 생성
+        # plt.subplots() 대신 Figure를 직접 생성하는 것이 메모리 관리에 더 유리할 수 있습니다.
+        fig, ax = plt.subplots(figsize=(max(6, len(a) * 1.2), 5))
 
-    ax.set_axisbelow(True)
+        try:
+            bars = ax.bar(d, a, width=0.55, color="#28CF59")
 
-    ax.set_ylim(-3, 120)             # 상·하 여유 공간 확보
-    ax.set_yticks(np.arange(0, 121, 10))
-    ax.margins(y=0.05)               # 자동 여백 보정
+            # 🏷 막대 위 텍스트
+            for bar, v, lv in zip(bars, a, a2):
+                ax.text(
+                    bar.get_x() + bar.get_width() / 2,
+                    bar.get_height() + 2.5,
+                    f"Lv.{lv}\n({v:.2f}%)",
+                    ha="center",
+                    va="bottom",
+                    fontsize=12,
+                    fontproperties=font_prop,
+                    clip_on=False
+                )
 
-    # 가로 점선 그리드
-    ax.grid(
-        axis="y",
-        linestyle="--",
-        linewidth=0.8,
-        color="#c3c3c3",
-        alpha=0.8
-    )
+            ax.set_axisbelow(True)
+            ax.set_ylim(-3, 120)
+            ax.set_yticks(np.arange(0, 121, 10))
+            ax.margins(y=0.05)
 
-    ax.tick_params(
-        axis="y",
-        left=False,
-        labelleft=False
-    )
-    ax.set_xlabel(
-        f"{nextlvup}{islvup}",
-        fontproperties=font_prop,
-        fontsize=20,
-        labelpad=30
-    )
+            # 가로 점선 그리드
+            ax.grid(axis="y", linestyle="--", linewidth=0.8, color="#c3c3c3", alpha=0.8)
 
-    ax.set_title(
-        title,
-        fontproperties=font_prop,
-        fontsize=20,
-        pad=30
-    )
-    # 타이틀 하단 보조 라벨
-    ax.text(
-        0.5, 1.0,
-        subtitle,
-        transform=ax.transAxes,
-        ha="center",
-        va="bottom",
-        fontsize=16,
-        fontproperties=font_prop
-    )
+            ax.tick_params(axis="y", left=False, labelleft=False)
+            ax.set_xlabel(f"{nextlvup}{islvup}", fontproperties=font_prop, fontsize=20, labelpad=30)
+            ax.set_title(title, fontproperties=font_prop, fontsize=20, pad=30)
+            
+            ax.text(0.5, 1.0, subtitle, transform=ax.transAxes, ha="center", va="bottom", 
+                    fontsize=16, fontproperties=font_prop)
 
-    plt.xticks(rotation=0, ha="center", fontsize=14, fontproperties=font_prop)
-    plt.tight_layout()
+            plt.xticks(rotation=0, ha="center", fontsize=14, fontproperties=font_prop)
+            plt.tight_layout()
 
-    # 🖼 이미지 바이트 변환
-    buf = BytesIO()
-    plt.savefig(buf, format="png", dpi=150)
-    plt.close(fig)
-    buf.seek(0)
+            # 🖼 이미지 바이트 변환
+            buf = BytesIO()
+            plt.savefig(buf, format="png", dpi=150)
+            buf.seek(0)
+            image_data = buf.getvalue()
+            
+        finally:
+            # 4. 메모리 누수 방지를 위해 반드시 close 및 캔버스 초기화
+            plt.close(fig)
+            fig.clf()
+            buf.close()
 
-    return buf.getvalue()
+        return image_data
 
 
 def graph2(a, d, l):
