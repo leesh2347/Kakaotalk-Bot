@@ -1,9 +1,4 @@
 MAPLE_BOSS_COMMANDS = {
-    "불꽃늑대":"fire_wolf_normal",
-    "불늑":"fire_wolf_normal",
-
-    "도로시":"dorothy",
-
     "이지반레온":"easy_von_leon",
     "노말반레온":"normal_von_leon",
     "노멀반레온":"normal_von_leon",
@@ -250,46 +245,6 @@ MAPLE_BOSS_COMMANDS = {
 }
 
 MAPLE_BOSS_DATA = {
-   
-    "fire_wolf_normal" : {
-        "bg_color":"#FFFFFF",
-        "title_color":"#000000",
-        "content_color":"#000000",
-        "image":"",
-        "name" : "불꽃늑대",
-        "level" : 1,
-        "HP" : {
-            "1페이즈" : "600,000,000,000\n            (6000억)"
-        },
-        "defenseRate" : 90,
-		"reboot" : "-",
-        "minLevel" : "-",
-        "deathCount" : 1,
-        "dropItem" : [
-            
-        ],
-        "bossCrystal" : "0메소"
-    },
-    "dorothy" : {
-        "bg_color":"#FFFFFF",
-        "title_color":"#000000",
-        "content_color":"#000000",
-        "name" : "도로시",
-        "image":"",
-        "level" : 210,
-        "HP" : {
-            "1페이즈" : "840,000,000,000\n            (8400억)"
-        },
-        "defenseRate" : 250,
-		"reboot" : "-",
-        "minLevel" : 140,
-        "deathCount" : 30,
-        "dropItem" : [
-            "변질된 알리샤의 스태프"
-        ],
-        "bossCrystal" : "메소",
-        "arcaneforce" : ""
-    },
     "easy_von_leon" : {
         "bg_color":"#3d1f14",
         "title_color":"#ff0000",
@@ -308,6 +263,7 @@ MAPLE_BOSS_DATA = {
            "사자왕의 로얄 메달"
         ],
         "bossCrystal" : "633,927메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_von_leon" : {
@@ -328,6 +284,7 @@ MAPLE_BOSS_DATA = {
             "사자왕의 로얄 메달"
         ],
         "bossCrystal" : "873,601메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "hard_von_leon" : {
@@ -350,6 +307,7 @@ MAPLE_BOSS_DATA = {
             "로얄 반 레온 장비"
         ],
         "bossCrystal" : "1,467,984메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "hard_hilla" : {
@@ -371,6 +329,7 @@ MAPLE_BOSS_DATA = {
             "다크소울의 펫상자"
         ],
         "bossCrystal" : "6,936,489메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_zaquum" : {
@@ -395,6 +354,7 @@ MAPLE_BOSS_DATA = {
             "응축된 힘의 결정석"
         ],
         "bossCrystal" : "366,997메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_zaquum" : {
@@ -421,6 +381,7 @@ MAPLE_BOSS_DATA = {
             "분노한 자쿰의 투구/벨트/망토"
         ],
         "bossCrystal" : "9,741,285메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_horntail" : {
@@ -445,6 +406,7 @@ MAPLE_BOSS_DATA = {
             "실버블라썸 링"
         ],
         "bossCrystal" : "606,666메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_horntail" : {
@@ -469,6 +431,7 @@ MAPLE_BOSS_DATA = {
             "실버블라썸 링"
         ],
         "bossCrystal" : "810,086메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_pinkbean" : {
@@ -491,6 +454,7 @@ MAPLE_BOSS_DATA = {
             "블랙빈 마크"
         ],
         "bossCrystal" : "841,544메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_pinkbean" : {
@@ -513,6 +477,7 @@ MAPLE_BOSS_DATA = {
             "블랙빈 마크"
         ],
         "bossCrystal" : "12,800,000메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "easy_akairum" : {
@@ -534,6 +499,7 @@ MAPLE_BOSS_DATA = {
             "태초의 정수"
         ],
         "bossCrystal" : "690,249메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_akairum" : {
@@ -557,6 +523,7 @@ MAPLE_BOSS_DATA = {
             "혼돈의 파편"
         ],
         "bossCrystal" : "1,510,227메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_banban" : {
@@ -577,6 +544,7 @@ MAPLE_BOSS_DATA = {
             "이그드라실 코인"
         ],
         "bossCrystal" : "580,003메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_banban" : {
@@ -598,6 +566,7 @@ MAPLE_BOSS_DATA = {
             "카루타 방어구 조각"
         ],
         "bossCrystal" : "16,200,000메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_pierro" : {
@@ -618,6 +587,7 @@ MAPLE_BOSS_DATA = {
             "이그드라실 코인"
         ],
         "bossCrystal" : "580,003메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_pierro" : {
@@ -640,6 +610,7 @@ MAPLE_BOSS_DATA = {
             "카루타 방어구 조각"
         ],
         "bossCrystal" : "9,838,932메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_bloodyqueen" : {
@@ -660,6 +631,7 @@ MAPLE_BOSS_DATA = {
             "이그드라실 코인"
         ],
         "bossCrystal" : "580,003메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_bloodyqueen" : {
@@ -681,6 +653,7 @@ MAPLE_BOSS_DATA = {
             "카루타 방어구 조각"
         ],
         "bossCrystal" : "9,806,780메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_bellum" : {
@@ -701,6 +674,7 @@ MAPLE_BOSS_DATA = {
             "이그드라실 코인"
         ],
         "bossCrystal" : "580,003메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_bellum" : {
@@ -722,6 +696,7 @@ MAPLE_BOSS_DATA = {
             "카루타 방어구 조각"
         ],
         "bossCrystal" : "12,590,202메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "easy_magnus" : {
@@ -743,6 +718,7 @@ MAPLE_BOSS_DATA = {
             "크리스탈 웬투스 뱃지"
         ],
         "bossCrystal" : "432,605메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_magnus" : {
@@ -764,6 +740,7 @@ MAPLE_BOSS_DATA = {
             "크리스탈 웬투스 뱃지"
         ],
         "bossCrystal" : "1,553,066메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "hard_magnus" : {
@@ -787,6 +764,7 @@ MAPLE_BOSS_DATA = {
             "저주받은 카이세리움"
         ],
         "bossCrystal" : "19,012,500메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_papulatus" : {
@@ -808,6 +786,7 @@ MAPLE_BOSS_DATA = {
             "파풀라투스 시계 의자"
         ],
         "bossCrystal" : "1,596,506메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_papulatus" : {
@@ -830,6 +809,7 @@ MAPLE_BOSS_DATA = {
             "파풀라투스 마크 눈장식"
         ],
         "bossCrystal" : "26,725,937메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "easy_cygnus" : {
@@ -851,6 +831,7 @@ MAPLE_BOSS_DATA = {
             "여제 장비 조각"
         ],
         "bossCrystal" : "5,493,394메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_cygnus" : {
@@ -873,6 +854,7 @@ MAPLE_BOSS_DATA = {
             "여제 견장"
         ],
         "bossCrystal" : "9,039,130메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_gardianangelslime" : {
@@ -901,6 +883,7 @@ MAPLE_BOSS_DATA = {
             "가디언 엔젤 링"
         ],
         "bossCrystal" : "46,935,874메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "chaos_gardianangelslime" : {
@@ -938,6 +921,7 @@ MAPLE_BOSS_DATA = {
             "가디언 엔젤 링"
         ],
         "bossCrystal" : "155,492,141메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "normal_lotus" : {
@@ -968,6 +952,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 3개"
         ],
         "bossCrystal" : "31,397,803메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "hard_lotus" : {
@@ -1009,6 +994,7 @@ MAPLE_BOSS_DATA = {
             "앱솔랩스 장비"
         ],
         "bossCrystal" : "112,707,970메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
 	"extreme_lotus" : {
@@ -1052,6 +1038,7 @@ MAPLE_BOSS_DATA = {
             "앱솔랩스 장비"
         ],
         "bossCrystal" : "380,000,000메소",
+        "maxParty":2,
         "arcaneforce" : ""
     },
     "normal_demian" : {
@@ -1080,6 +1067,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 3개"
         ],
         "bossCrystal" : "35,517,853메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "hard_demian" : {
@@ -1119,6 +1107,7 @@ MAPLE_BOSS_DATA = {
             "앱솔랩스 장비"
         ],
         "bossCrystal" : "112,480,613메소",
+        "maxParty":6,
         "arcaneforce" : ""
     },
     "easy_lucid" : {
@@ -1147,6 +1136,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 3개"
         ],
         "bossCrystal" : "48,058,319메소",
+        "maxParty":6,
         "arcaneforce" : "360"
     },
     "normal_lucid" : {
@@ -1177,6 +1167,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 4개"
         ],
         "bossCrystal" : "57,502,626메소",
+        "maxParty":6,
         "arcaneforce" : "360"
     },
     "hard_lucid" : {
@@ -1217,6 +1208,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 9개"
         ],
         "bossCrystal" : "131,095,655메소",
+        "maxParty":6,
         "arcaneforce" : "360"
     },
     "easy_will" : {
@@ -1246,6 +1238,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 4개"
         ],
         "bossCrystal" : "52,139,127메소",
+        "maxParty":6,
         "arcaneforce" : "500"
     },
     "normal_will" : {
@@ -1277,6 +1270,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 5개"
         ],
         "bossCrystal" : "66,311,463메소",
+        "maxParty":6,
         "arcaneforce" : "760"
     },
     "hard_will" : {
@@ -1317,6 +1311,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 9개"
         ],
         "bossCrystal" : "145,038,483메소",
+        "maxParty":6,
         "arcaneforce" : "760"
     },
     "normal_dusk" : {
@@ -1347,6 +1342,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 6개"
         ],
         "bossCrystal" : "71,054,562메소",
+        "maxParty":6,
         "arcaneforce" : "730"
     },
     "chaos_dusk" : {
@@ -1387,6 +1383,7 @@ MAPLE_BOSS_DATA = {
             "아케인셰이드 장비"
         ],
         "bossCrystal" : "160,173,752메소",
+        "maxParty":6,
         "arcaneforce" : "730"
     },
     "normal_dunkel" : {
@@ -1417,6 +1414,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 6개"
         ],
         "bossCrystal" : "76,601,412메소",
+        "maxParty":6,
         "arcaneforce" : "850"
     },
     "hard_dunkel" : {
@@ -1457,6 +1455,7 @@ MAPLE_BOSS_DATA = {
             "아케인셰이드 장비"
         ],
         "bossCrystal" : "168,609,280메소",
+        "maxParty":6,
         "arcaneforce" : "850"
     },
     "normal_verushilla" : {
@@ -1495,6 +1494,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 9개"
         ],
         "bossCrystal" : "148,112,376메소",
+        "maxParty":6,
         "arcaneforce" : "900"
     },
     "hard_verushilla" : {
@@ -1535,6 +1535,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개"
         ],
         "bossCrystal" : "190,159,452메소",
+        "maxParty":6,
         "arcaneforce" : "900"
     },
     "hard_blackmage" : {
@@ -1580,6 +1581,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 30개"
         ],
         "bossCrystal" : "1,418,809,857메소",
+        "maxParty":6,
         "arcaneforce" : "1320"
     },
 	"extreme_blackmage" : {
@@ -1625,6 +1627,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 30개"
         ],
         "bossCrystal" : "5,675,239,428메소",
+        "maxParty":6,
         "arcaneforce" : "1320"
     },
     "normal_seren" : {
@@ -1663,6 +1666,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개"
         ],
         "bossCrystal" : "196,904,752메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 150,
             "2페이즈" : 200
@@ -1706,6 +1710,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 11개"
         ],
         "bossCrystal" : "267,825,621메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 150,
             "2페이즈" : 200
@@ -1749,6 +1754,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 11개"
         ],
         "bossCrystal" : "1,071,303,484메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 150,
             "2페이즈" : 200
@@ -1793,6 +1799,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 1n개"
         ],
         "bossCrystal" : "230,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 200,
             "2페이즈" : 200
@@ -1837,6 +1844,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 1n개"
         ],
         "bossCrystal" : "300,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 250,
             "2페이즈" : 300
@@ -1881,6 +1889,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 1n개"
         ],
         "bossCrystal" : "600,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 330,
             "2페이즈" : 330
@@ -1925,6 +1934,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 1n개"
         ],
         "bossCrystal" : "4,320,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 440,
             "2페이즈" : 440
@@ -1969,6 +1979,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개"
         ],
         "bossCrystal" : "250,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 230,
             "2페이즈" : 230,
@@ -2014,6 +2025,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개"
         ],
         "bossCrystal" : "350,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 330,
             "2페이즈" : 330,
@@ -2060,6 +2072,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개"
         ],
         "bossCrystal" : "1,830,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 350,
             "2페이즈" : 350,
@@ -2106,6 +2119,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개"
         ],
         "bossCrystal" : "5,670,000,000메소",
+        "maxParty":6,
         "arcaneforce" : {
             "1페이즈" : 480,
             "2페이즈" : 480,
@@ -2132,6 +2146,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "324,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 220,
             "2페이즈" : 220,
@@ -2158,6 +2173,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "589,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 320,
             "2페이즈" : 320,
@@ -2184,6 +2200,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "1,510,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 340,
             "2페이즈" : 340,
@@ -2210,6 +2227,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "1,510,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 340,
             "2페이즈" : 340,
@@ -2237,6 +2255,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "1,080,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 500,
             "2페이즈" : 500,
@@ -2263,6 +2282,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "2,510,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 500,
             "2페이즈" : 500,
@@ -2290,6 +2310,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "1,440,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 700,
             "2페이즈" : 700,
@@ -2317,6 +2338,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "3,240,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 700,
             "2페이즈" : 700,
@@ -2342,6 +2364,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "300,000,000메소",
+        "maxParty":1,
         "arcaneforce" : ""
     },
 
@@ -2363,6 +2386,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "600,000,000메소",
+        "maxParty":1,
         "arcaneforce" : ""
     },
 
@@ -2384,6 +2408,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "658,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 400
         }
@@ -2407,6 +2432,7 @@ MAPLE_BOSS_DATA = {
             ""
         ],
         "bossCrystal" : "2,819,000,000메소",
+        "maxParty":3,
         "arcaneforce" : {
             "1페이즈" : 550
         }
