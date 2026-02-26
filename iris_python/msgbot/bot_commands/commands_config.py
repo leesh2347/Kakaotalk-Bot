@@ -1,5 +1,7 @@
 PREFIX_MAPLEGG = ["@메이플", "!메이플"]
 
+PREFIX_LLM = ["루시", "Lucy," "ルシ"]
+
 PREFIX_MURUNG = ["@무릉", "!무릉"]
 PREFIX_UNION = ["@유니온", "!유니온"]
 PREFIX_ACHIEVE = ["@업적", "!업적"]
@@ -42,6 +44,9 @@ PREFIX_BOSS = ["@보스","!보스"]
 
 PREXIX_EVENTS = ["@이벤트", "!이벤트"]
 PREXIX_SUNDAY = ["@썬데이", "!썬데이"]
+
+PREFIX_CHANNEL = ["@채널", "!채널"]
+PREFIX_CHALLNNEL = ["@챌널", "!챌널"]
 
 PREFIX_MESPI = ["@메스피","!메스피"]
 
