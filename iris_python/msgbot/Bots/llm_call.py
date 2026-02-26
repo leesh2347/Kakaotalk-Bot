@@ -5,6 +5,8 @@ from datetime import date, timedelta
 from urllib import parse
 from bs4 import BeautifulSoup
 
+from msgbot.bot_commands.commands_config import PREFIX_LLM
+
 from msgbot.Bots.maplegg import maplegg
 from msgbot.Bots.murung_and_union import murung, union, achieve, artifact
 from msgbot.Bots.level import levelsearch
@@ -107,8 +109,9 @@ def process_result(info, args, sender):
 
 def handle_message(chat):
     if chat.room.name in ALLOW_ROOMS:
-        if chat.message.msg.startswith("루시 "):
-            msg = chat.message.msg.replace("루시 ", "", 1)
+        if any(chat.message.msg.startswith(f'{prefix} ') for prefix in PREFIX_LLM):
+            pf = chat.message.command
+            msg = chat.message.msg.replace(f"{pf} ", "", 1)
 
             try:
                 results = call_llm(msg)
@@ -124,4 +127,5 @@ def handle_message(chat):
                     chat.reply(r)
 
             except Exception as e:
+                raise
                 chat.reply(f"AI 분석 서버 쪽에 문제가 발생했습니다. {str(e)}")
