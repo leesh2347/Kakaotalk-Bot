@@ -76,6 +76,7 @@ def boss(bossname):
 			s,
 			f"방어율: {boss_data['defenseRate']}%",
 			f"최소 입장 레벨: Lv.{boss_data['minLevel']}",
+            f"최대 파티 인원: {boss_data['maxParty']}",
 			f"데스카운트: {boss_data['deathCount']}",
 			arc,
         ])
