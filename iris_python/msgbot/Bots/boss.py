@@ -59,13 +59,12 @@ def boss(bossname):
         
         arc = ""
 
-        if isinstance(boss_data["arcaneforce"],dict):
-            arc = "어센틱포스:\n"
-            for ii in boss_data["arcaneforce"]:
-                arc = arc + f"{ii}: {boss_data['arcaneforce'][ii]}\n"
-        else:
-            if boss_data["arcaneforce"] != "":
-                arc = f"아케인포스: {boss_data['arcaneforce']}"
+        if boss_data["arcaneforce"] != "":
+            arc = f"아케인포스: {boss_data['arcaneforce']}"
+
+        if boss_data["authenticforce"] != "":
+            arc = f"어센틱포스: {boss_data['authenticforce']}"
+
         
         space = "\u200b"*500
 
