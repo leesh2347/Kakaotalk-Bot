@@ -11,44 +11,53 @@ MAPLE_BOSS_COMMANDS = {
     "노말자쿰":"normal_zaquum",
     "노멀자쿰":"normal_zaquum",
     "노말쿰":"normal_zaquum",
+    "노멀쿰":"normal_zaquum",
     "카오스자쿰":"chaos_zaquum",
     "카쿰":"chaos_zaquum",
     "자쿰":"chaos_zaquum",
 
     "노말혼테일":"normal_horntail",
+    "노멀혼테일":"normal_horntail",
     "카오스혼테일":"chaos_horntail",
     "카혼":"chaos_horntail",
     "혼테일":"chaos_horntail",
 
     "노말핑크빈":"normal_pinkbean",
+    "노멀핑크빈":"normal_pinkbean",
     "카오스핑크빈":"chaos_pinkbean",
     "카핑":"chaos_pinkbean",
     "핑크빈":"chaos_pinkbean",
 
     "이지아카이럼":"easy_akairum",
     "노말아카이럼":"normal_akairum",
+    "노멀아카이럼":"normal_akairum",
     "아카이럼":"normal_akairum",
 
     "노말반반":"normal_banban",
+    "노멀반반":"normal_banban",
     "카오스반반":"chaos_banban",
     "카반":"chaos_banban",
     "카반반":"chaos_banban",
     "반반":"chaos_banban",
 
     "노말피에르":"normal_pierro",
+    "노멀피에르":"normal_pierro",
     "카오스피에르":"chaos_pierro",
     "카피":"chaos_pierro",
     "카삐":"chaos_pierro",
     "피에르":"chaos_pierro",
 
     "노말블러디퀸":"normal_bloodyqueen",
+    "노멀블러디퀸":"normal_bloodyqueen",
     "노말블퀸":"normal_bloodyqueen",
+    "노멀블퀸":"normal_bloodyqueen",
     "카오스블러디퀸":"chaos_bloodyqueen",
     "카블퀸":"chaos_bloodyqueen",
     "카퀸":"chaos_bloodyqueen",
     "블러디퀸":"chaos_bloodyqueen",
 
     "노말벨룸":"normal_bellum",
+    "노멀벨룸":"normal_bellum",
     "카오스벨룸":"chaos_bellum",
     "카벨":"chaos_bellum",
     "카벨룸":"chaos_bellum",
@@ -56,11 +65,13 @@ MAPLE_BOSS_COMMANDS = {
 
     "이지매그너스":"easy_magnus",
     "노말매그너스":"normal_magnus",
+    "노멀매그너스":"normal_magnus",
     "하드매그너스":"hard_magnus",
     "하매":"hard_magnus",
     "매그너스":"hard_magnus",
 
     "노말파풀라투스":"normal_papulatus",
+    "노멀파풀라투스":"normal_papulatus",
     "카오스파풀라투스":"chaos_papulatus",
     "카파풀":"chaos_papulatus",
     "파풀라투스":"chaos_papulatus",
@@ -70,11 +81,15 @@ MAPLE_BOSS_COMMANDS = {
     "이시그":"easy_cygnus",
     "노말시그너스":"normal_cygnus",
     "노말시그":"normal_cygnus",
+    "노멀시그너스":"normal_cygnus",
+    "노멀시그":"normal_cygnus",
     "노시그":"easy_cygnus",
     "시그너스":"normal_cygnus",
 
     "노말가디언엔젤슬라임":"normal_gardianangelslime",
     "노말가엔슬":"normal_gardianangelslime",
+    "노멀가디언엔젤슬라임":"normal_gardianangelslime",
+    "노멀가엔슬":"normal_gardianangelslime",
     "노가엔슬":"normal_gardianangelslime",
     "노엔슬":"normal_gardianangelslime",
     "카오스가디언엔젤슬라임":"chaos_gardianangelslime",
@@ -85,6 +100,7 @@ MAPLE_BOSS_COMMANDS = {
     "가엔슬":"chaos_gardianangelslime",
 
     "노말스우":"normal_lotus",
+    "노멀스우":"normal_lotus",
     "노스우":"normal_lotus",
     "하드스우":"hard_lotus",
     "하스우":"hard_lotus",
@@ -94,6 +110,7 @@ MAPLE_BOSS_COMMANDS = {
     "스우":"extreme_lotus",
 
     "노말데미안":"normal_demian",
+    "노멀데미안":"normal_demian",
     "노데미":"normal_demian",
     "하드데미안":"hard_demian",
     "하데미":"hard_demian",
@@ -104,6 +121,7 @@ MAPLE_BOSS_COMMANDS = {
     "이루시":"easy_lucid",
     "이시드":"easy_lucid",
     "노말루시드":"normal_lucid",
+    "노멀루시드":"normal_lucid",
     "노루시드":"normal_lucid",
     "노루시":"normal_lucid",
     "노시드":"normal_lucid",
@@ -115,12 +133,14 @@ MAPLE_BOSS_COMMANDS = {
 
     "이지윌":"easy_will",
     "노말윌":"normal_will",
+    "노멀윌":"normal_will",
     "노윌":"normal_will",
     "하드윌":"hard_will",
     "하윌":"hard_will",
     "윌":"hard_will",
 
     "노말더스크":"normal_dusk",
+    "노멀더스크":"normal_dusk",
     "노더스크":"normal_dusk",
     "노더":"normal_dusk",
     "카오스더스크":"chaos_dusk",
@@ -129,6 +149,7 @@ MAPLE_BOSS_COMMANDS = {
     "더스크":"chaos_dusk",
 
     "노말듄켈":"normal_dunkel",
+    "노멀듄켈":"normal_dunkel",
     "노듄켈":"normal_dunkel",
     "노듄":"normal_dunkel",
     "하드듄켈":"hard_dunkel",
@@ -137,6 +158,7 @@ MAPLE_BOSS_COMMANDS = {
     "듄켈":"hard_dunkel",
 
     "노말진힐라":"normal_verushilla",
+    "노멀진힐라":"normal_verushilla",
     "노진힐":"normal_verushilla",
     "하드진힐라":"hard_verushilla",
     "하진힐":"hard_verushilla",
@@ -152,6 +174,7 @@ MAPLE_BOSS_COMMANDS = {
     "익검":"extreme_blackmage",
 
     "노말세렌":"normal_seren",
+    "노멀세렌":"normal_seren",
     "노세렌":"normal_seren",
     "노세":"normal_seren",
     "하드세렌":"hard_seren",
@@ -165,6 +188,7 @@ MAPLE_BOSS_COMMANDS = {
     "이지칼로스":"easy_kalos",
     "이칼":"easy_kalos",
     "노말칼로스":"normal_kalos",
+    "노멀칼로스":"normal_kalos",
     "노칼":"normal_kalos",
     "카오스칼로스":"chaos_kalos",
     "카칼":"chaos_kalos",
@@ -176,6 +200,7 @@ MAPLE_BOSS_COMMANDS = {
     "이지카링":"easy_kaling",
     "이카":"easy_kaling",
     "노말카링":"normal_kaling",
+    "노멀카링":"normal_kaling",
     "노카":"normal_kaling",
     "하드카링":"hard_kaling",
     "하카":"hard_kaling",
@@ -190,6 +215,9 @@ MAPLE_BOSS_COMMANDS = {
     "노말최초의대적자":"normal_firstadversary",
     "노말대적자":"normal_firstadversary",
     "노말쌀숭이":"normal_firstadversary",
+    "노멀최초의대적자":"normal_firstadversary",
+    "노멀대적자":"normal_firstadversary",
+    "노멀쌀숭이":"normal_firstadversary",
     "노적자":"normal_firstadversary",
     "하드최초의대적자":"hard_firstadversary",
     "하드대적자":"hard_firstadversary",
@@ -203,6 +231,7 @@ MAPLE_BOSS_COMMANDS = {
     "쌀숭이":"extreme_firstadversary",
 
     "노말림보":"normal_limbo",
+    "노멀림보":"normal_limbo",
     "노림보":"normal_limbo",
     "하드림보":"hard_limbo",
     "하림보":"hard_limbo",
@@ -210,6 +239,8 @@ MAPLE_BOSS_COMMANDS = {
 
     "노말발드릭스":"normal_baldrix",
     "노말발드":"normal_baldrix",
+    "노멀발드릭스":"normal_baldrix",
+    "노멀발드":"normal_baldrix",
     "노발":"normal_baldrix",
     "하드발드릭스":"hard_baldrix",
     "하발":"hard_baldrix",
@@ -218,6 +249,8 @@ MAPLE_BOSS_COMMANDS = {
 
     "노말카이":"normal_kai",
     "노말챌섭보스":"normal_kai",
+    "노멀카이":"normal_kai",
+    "노멀챌섭보스":"normal_kai",
     "하드카이":"hard_kai",
     "하드챌섭보스":"hard_kai",
     "카이":"hard_kai",
@@ -225,6 +258,8 @@ MAPLE_BOSS_COMMANDS = {
 
     "노말흉성":"normal_malefic",
     "노말찬란한흉성":"normal_malefic",
+    "노멀흉성":"normal_malefic",
+    "노멀찬란한흉성":"normal_malefic",
     "노흉성":"normal_malefic",
     "노말흉통":"normal_malefic",
     "노말찬란한흉통":"normal_malefic",
@@ -264,7 +299,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "633,927메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_von_leon" : {
         "bg_color":"#3d1f14",
@@ -285,7 +321,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "873,601메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "hard_von_leon" : {
         "bg_color":"#3d1f14",
@@ -308,7 +345,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,467,984메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "hard_hilla" : {
         "bg_color":"#371100",
@@ -330,7 +368,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "6,936,489메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_zaquum" : {
         "bg_color":"#481300",
@@ -355,7 +394,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "366,997메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_zaquum" : {
         "bg_color":"#481300",
@@ -382,7 +422,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "9,741,285메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_horntail" : {
         "bg_color":"#2b2b2b",
@@ -407,7 +448,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "606,666메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_horntail" : {
         "bg_color":"#2b2b2b",
@@ -432,7 +474,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "810,086메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_pinkbean" : {
         "bg_color":"#ff8df8",
@@ -455,7 +498,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "841,544메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_pinkbean" : {
         "bg_color":"#ff8df8",
@@ -478,7 +522,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "12,800,000메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "easy_akairum" : {
         "bg_color":"#2c2c2c",
@@ -500,7 +545,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "690,249메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_akairum" : {
         "bg_color":"#2c2c2c",
@@ -524,7 +570,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,510,227메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_banban" : {
         "bg_color":"#2c2a2e",
@@ -545,7 +592,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "580,003메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_banban" : {
         "bg_color":"#2c2a2e",
@@ -567,7 +615,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "16,200,000메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_pierro" : {
         "bg_color":"#ffea00",
@@ -588,7 +637,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "580,003메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_pierro" : {
         "bg_color":"#ffea00",
@@ -611,7 +661,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "9,838,932메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_bloodyqueen" : {
         "bg_color":"#595061",
@@ -632,7 +683,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "580,003메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_bloodyqueen" : {
         "bg_color":"#595061",
@@ -654,7 +706,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "9,806,780메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_bellum" : {
         "bg_color":"#252525",
@@ -675,7 +728,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "580,003메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_bellum" : {
         "bg_color":"#252525",
@@ -697,7 +751,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "12,590,202메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "easy_magnus" : {
         "bg_color":"#002538",
@@ -719,7 +774,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "432,605메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_magnus" : {
         "bg_color":"#002538",
@@ -741,7 +797,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,553,066메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "hard_magnus" : {
         "bg_color":"#002538",
@@ -765,7 +822,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "19,012,500메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_papulatus" : {
         "bg_color":"#ab0000",
@@ -787,7 +845,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,596,506메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_papulatus" : {
         "bg_color":"#ab0000",
@@ -810,7 +869,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "26,725,937메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "easy_cygnus" : {
         "bg_color":"#190047",
@@ -832,7 +892,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "5,493,394메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_cygnus" : {
         "bg_color":"#190047",
@@ -855,7 +916,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "9,039,130메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_gardianangelslime" : {
         "bg_color":"#003e47",
@@ -884,7 +946,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "46,935,874메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "chaos_gardianangelslime" : {
         "bg_color":"#003e47",
@@ -922,7 +985,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "155,492,141메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_lotus" : {
         "bg_color":"#331400",
@@ -953,7 +1017,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "31,397,803메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "hard_lotus" : {
         "bg_color":"#331400",
@@ -995,7 +1060,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "112,707,970메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
 	"extreme_lotus" : {
         "bg_color":"#331400",
@@ -1039,7 +1105,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "380,000,000메소",
         "maxParty":2,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "normal_demian" : {
         "bg_color":"#2d0010",
@@ -1108,7 +1175,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "112,480,613메소",
         "maxParty":6,
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
     "easy_lucid" : {
         "bg_color":"#340069",
@@ -1137,7 +1205,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "48,058,319메소",
         "maxParty":6,
-        "arcaneforce" : "360"
+        "arcaneforce" : "360",
+        "authenticforce" : ""
     },
     "normal_lucid" : {
         "bg_color":"#340069",
@@ -1168,7 +1237,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "57,502,626메소",
         "maxParty":6,
-        "arcaneforce" : "360"
+        "arcaneforce" : "360",
+        "authenticforce" : ""
     },
     "hard_lucid" : {
         "bg_color":"#340069",
@@ -1209,7 +1279,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "131,095,655메소",
         "maxParty":6,
-        "arcaneforce" : "360"
+        "arcaneforce" : "360",
+        "authenticforce" : ""
     },
     "easy_will" : {
         "bg_color":"#480042",
@@ -1271,7 +1342,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "66,311,463메소",
         "maxParty":6,
-        "arcaneforce" : "760"
+        "arcaneforce" : "760",
+        "authenticforce" : ""
     },
     "hard_will" : {
         "bg_color":"#480042",
@@ -1312,7 +1384,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "145,038,483메소",
         "maxParty":6,
-        "arcaneforce" : "760"
+        "arcaneforce" : "760",
+        "authenticforce" : ""
     },
     "normal_dusk" : {
         "bg_color":"#1d0051",
@@ -1343,7 +1416,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "71,054,562메소",
         "maxParty":6,
-        "arcaneforce" : "730"
+        "arcaneforce" : "730",
+        "authenticforce" : ""
     },
     "chaos_dusk" : {
         "bg_color":"#1d0051",
@@ -1384,7 +1458,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "160,173,752메소",
         "maxParty":6,
-        "arcaneforce" : "730"
+        "arcaneforce" : "730",
+        "authenticforce" : ""
     },
     "normal_dunkel" : {
         "bg_color":"#000000",
@@ -1415,7 +1490,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "76,601,412메소",
         "maxParty":6,
-        "arcaneforce" : "850"
+        "arcaneforce" : "850",
+        "authenticforce" : ""
     },
     "hard_dunkel" : {
         "bg_color":"#000000",
@@ -1456,7 +1532,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "168,609,280메소",
         "maxParty":6,
-        "arcaneforce" : "850"
+        "arcaneforce" : "850",
+        "authenticforce" : ""
     },
     "normal_verushilla" : {
         "bg_color":"#1c3300",
@@ -1495,7 +1572,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "148,112,376메소",
         "maxParty":6,
-        "arcaneforce" : "900"
+        "arcaneforce" : "900",
+        "authenticforce" : ""
     },
     "hard_verushilla" : {
         "bg_color":"#1c3300",
@@ -1536,7 +1614,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "190,159,452메소",
         "maxParty":6,
-        "arcaneforce" : "900"
+        "arcaneforce" : "900",
+        "authenticforce" : ""
     },
     "hard_blackmage" : {
         "bg_color":"#000000",
@@ -1582,7 +1661,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,418,809,857메소",
         "maxParty":6,
-        "arcaneforce" : "1320"
+        "arcaneforce" : "1320",
+        "authenticforce" : ""
     },
 	"extreme_blackmage" : {
         "bg_color":"#000000",
@@ -1628,7 +1708,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "5,675,239,428메소",
         "maxParty":6,
-        "arcaneforce" : "1320"
+        "arcaneforce" : "1320",
+        "authenticforce" : ""
     },
     "normal_seren" : {
         "bg_color":"#391900",
@@ -1667,10 +1748,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "196,904,752메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 150,
-            "2페이즈" : 200
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "200"
     },
     "hard_seren" : {
         "bg_color":"#391900",
@@ -1711,10 +1790,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "267,825,621메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 150,
-            "2페이즈" : 200
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "200"
     },
 	"extreme_seren" : {
         "bg_color":"#391900",
@@ -1755,10 +1832,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,071,303,484메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 150,
-            "2페이즈" : 200
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "200"
     },
 	"easy_kalos" : {
         "bg_color":"#391900",
@@ -1800,10 +1875,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "230,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 200,
-            "2페이즈" : 200
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "200"
     },
     "normal_kalos" : {
         "bg_color":"#391900",
@@ -1845,10 +1918,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "300,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 250,
-            "2페이즈" : 300
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "300"
     },
 	"chaos_kalos" : {
         "bg_color":"#391900",
@@ -1890,10 +1961,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "600,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 330,
-            "2페이즈" : 330
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "330"
     },
 	"extreme_kalos" : {
         "bg_color":"#391900",
@@ -1935,10 +2004,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "4,320,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 440,
-            "2페이즈" : 440
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "440"
     },
 	"easy_kaling" : {
         "bg_color":"#27004f",
@@ -1980,11 +2047,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "250,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 230,
-            "2페이즈" : 230,
-			"3페이즈" : 230
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "230"
     },
     "normal_kaling" : {
         "bg_color":"#27004f",
@@ -2026,11 +2090,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "350,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 330,
-            "2페이즈" : 330,
-			"3페이즈" : 330
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "330"
     },
 	"hard_kaling" : {
         "bg_color":"#27004f",
@@ -2073,11 +2134,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,830,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 350,
-            "2페이즈" : 350,
-			"3페이즈" : 350
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "350"
     },
 	"extreme_kaling" : {
         "bg_color":"#27004f",
@@ -2120,11 +2178,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "5,670,000,000메소",
         "maxParty":6,
-        "arcaneforce" : {
-            "1페이즈" : 480,
-            "2페이즈" : 480,
-			"3페이즈" : 480
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "480"
     },
     "easy_firstadversary" : {
         "bg_color":"#003049",
@@ -2147,11 +2202,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "324,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 220,
-            "2페이즈" : 220,
-			"3페이즈" : 220
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "220"
     },
     "normal_firstadversary" : {
         "bg_color":"#003049",
@@ -2174,11 +2226,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "589,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 320,
-            "2페이즈" : 320,
-			"3페이즈" : 320
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "320"
     },
     "hard_firstadversary" : {
         "bg_color":"#003049",
@@ -2201,11 +2250,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,510,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 340,
-            "2페이즈" : 340,
-			"3페이즈" : 340
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "340"
     },
     "extreme_firstadversary" : {
         "bg_color":"#003049",
@@ -2228,11 +2274,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,510,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 340,
-            "2페이즈" : 340,
-			"3페이즈" : 340
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "340"
     },
 
     "normal_limbo" : {
@@ -2256,11 +2299,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,080,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 500,
-            "2페이즈" : 500,
-			"3페이즈" : 500
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "500"
     },
     "hard_limbo" : {
         "bg_color":"#210049",
@@ -2283,11 +2323,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "2,510,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 500,
-            "2페이즈" : 500,
-			"3페이즈" : 500
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "500"
     },
 
     "normal_baldrix" : {
@@ -2311,11 +2348,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "1,440,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 700,
-            "2페이즈" : 700,
-			"3페이즈" : 700
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "700"
     },
 
     "hard_baldrix" : {
@@ -2339,11 +2373,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "3,240,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 700,
-            "2페이즈" : 700,
-			"3페이즈" : 700
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "700"
     },
 
     "normal_kai" : {
@@ -2409,9 +2440,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "658,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 400
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "400"
     },
 
     "hard_malefic" : {
@@ -2433,9 +2463,8 @@ MAPLE_BOSS_DATA = {
         ],
         "bossCrystal" : "2,819,000,000메소",
         "maxParty":3,
-        "arcaneforce" : {
-            "1페이즈" : 550
-        }
+        "arcaneforce" : "",
+        "authenticforce" : "550"
     },
 
 	"developer" : {
@@ -2457,6 +2486,7 @@ MAPLE_BOSS_DATA = {
             "없음",
         ],
         "bossCrystal" : "없음",
-        "arcaneforce" : ""
+        "arcaneforce" : "",
+        "authenticforce" : ""
     }
 }
