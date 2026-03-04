@@ -15,6 +15,8 @@ PREFIX_LEVEL_HISTORY = ["@레벨히스토리", "!레벨히스토리"]
 
 PREFIX_STAT = ["@스탯", "!스탯"]
 
+PREFIX_CODY = ["@코디", "!코디"]
+
 PREFIX_MECHANG = ["@메창", "!메창"]
 
 PREFIX_HEXA = ["@헥사", "!헥사"]
