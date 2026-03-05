@@ -132,12 +132,14 @@ def cody(nick, sender):
 
         beauty_text = ""
 
-        beauty_text = beauty_text + f'헤어: {search["character_hair"]["hair_name"]}'
+        hair_color_text = search["character_hair"]["base_color"]
+
+        beauty_text = beauty_text + f'헤어: {search["character_hair"]["hair_name"].replace(hair_color_text,'')}'
 
         if search["character_hair"]["mix_color"] is None:
-            beauty_text = beauty_text + f'\n      ({search["character_hair"]["base_color"]})'
+            beauty_text = beauty_text + f'\n      ({hair_color_text})'
         else:
-            beauty_text = beauty_text + f'\n      ({search["character_hair"]["base_color"]}{100 - int(search["character_hair"]["mix_rate"])}/{search["character_hair"]["mix_color"]}{search["character_hair"]["mix_rate"]})'
+            beauty_text = beauty_text + f'\n      ({hair_color_text}{100 - int(search["character_hair"]["mix_rate"])}/{search["character_hair"]["mix_color"]}{search["character_hair"]["mix_rate"]})'
 
         beauty_text = beauty_text + f'\n성형: {search["character_face"]["face_name"]}'
 
