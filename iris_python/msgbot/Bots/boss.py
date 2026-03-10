@@ -18,6 +18,10 @@ def generate_boss_image(image_url, bgcolor, title_color, context_color, title_te
 
     canvas.paste(boss_img, (0, 0), boss_img)
 
+    #워터마크 추가
+    watermark_img = Image.open("res/img/watermark.png").convert("RGBA")
+    canvas.paste(watermark_img, (690, 450), watermark_img)
+
     # 5. 텍스트 그리기
     draw = ImageDraw.Draw(canvas)
 

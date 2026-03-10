@@ -94,11 +94,15 @@ def generate_character_image(image_url, nick, server, job, lv, per, guild, pop, 
     cropped_img = src_img.crop((left, top, right, bottom))
 
     # 3. 새 캔버스 생성 (500x500)
-    canvas = Image.new("RGBA", (300, 320), (255, 255, 255, 255))
+    canvas = Image.new("RGBA", (300, 360), (255, 255, 255, 255))
 
     # 4. crop 이미지를 캔버스 왼쪽에 붙이기 (세로 중앙)
     paste_x = (300 - crop_w) // 2
     canvas.paste(cropped_img, (paste_x, 10), cropped_img)
+
+    #워터마크 추가
+    watermark_img = Image.open("res/img/watermark_maplegg.png").convert("RGBA")
+    canvas.paste(watermark_img, (200, 325), watermark_img)
 
     # 5. 텍스트 그리기
     draw = ImageDraw.Draw(canvas)
@@ -124,6 +128,8 @@ def generate_character_image(image_url, nick, server, job, lv, per, guild, pop, 
     draw.text((10, 260), f"월드 랭킹: {comma(world_rank)}위", font=content_font, fill=(0, 0, 0))
 
     draw.text((10, 285), f"직업 랭킹(월드): {comma(class_rank)}위", font=content_font, fill=(0, 0, 0))
+
+    
 
     # 6. 전송
     img_bytes = io.BytesIO()
@@ -180,6 +186,7 @@ def maplegg(nick, sender):
             "",
             f"환산 링크: https://maplescouter.com/info?name={parse.quote(nick)}",
             "",
+            f'{search1["liberation_quest_clear"]}',
             "Special Thanks 정쿠, Lune"
         ])
 

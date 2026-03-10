@@ -82,6 +82,10 @@ def generate_cody_image(image_url, nick, beauty_text, item_text):
     paste_x = (300 - crop_w) // 2
     canvas.paste(cropped_img, (paste_x, 10), cropped_img)
 
+    #워터마크 추가
+    watermark_img = Image.open("res/img/watermark_maplegg.png").convert("RGBA")
+    canvas.paste(watermark_img, (200, 485), watermark_img)
+
     # 5. 텍스트 그리기
     draw = ImageDraw.Draw(canvas)
 
@@ -128,6 +132,8 @@ def cody(nick, sender):
 
         search2 = search_maple_api_items(ocid)
 
+        preset_no = search2["preset_no"]
+
         img = search_img["character_image"]
 
         beauty_text = ""
@@ -152,7 +158,13 @@ def cody(nick, sender):
 
         cody_item_text = ""
         
-        for item in search2["cash_item_equipment_base"]:
+        cash_item_preset_base = ""
+        if preset_no is None:
+            cash_item_preset_base = "cash_item_equipment_base"
+        else:
+            cash_item_preset_base = f"cash_item_equipment_preset_{preset_no}"
+
+        for item in search2[cash_item_preset_base]:
             part = ""
             itemname = ""
             itemicon = ""

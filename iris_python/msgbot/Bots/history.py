@@ -5,6 +5,9 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.font_manager as fm
 from io import BytesIO
+import io
+import os
+from PIL import Image
 from datetime import datetime, timedelta
 import math
 import threading  # 락(Lock) 사용을 위해 추가
@@ -103,7 +106,19 @@ def graph_image_bytes(a, a2, d, l, title, subtitle, nextlvup, islvup):
             buf = BytesIO()
             plt.savefig(buf, format="png", dpi=150)
             buf.seek(0)
-            image_data = buf.getvalue()
+
+            # matplotlib 이미지 → PIL 로드
+            canvas = Image.open(buf).convert("RGBA")
+
+            # 워터마크 추가
+            watermark_img = Image.open("res/img/watermark.png").convert("RGBA")
+            canvas.paste(watermark_img, (canvas.width - 110, canvas.height - 50), watermark_img)
+
+            # 다시 bytes로 변환
+            out_buf = BytesIO()
+            canvas.save(out_buf, format="PNG")
+            out_buf.seek(0)
+            image_data = out_buf.getvalue()
             
         finally:
             # 4. 메모리 누수 방지를 위해 반드시 close 및 캔버스 초기화

@@ -331,6 +331,10 @@ def generate_mechang_image(nick, judge_data, judge_score, judge_title, judge_des
     # 4. crop 이미지를 캔버스 왼쪽에 붙이기 (세로 중앙)
     canvas.paste(cropped_img, (60, 30), cropped_img)
 
+    #워터마크 추가
+    watermark_img = Image.open("res/img/watermark.png").convert("RGBA")
+    canvas.paste(watermark_img, (1250, 880), watermark_img)
+
     # 5. 텍스트 그리기
     draw = ImageDraw.Draw(canvas)
 
