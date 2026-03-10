@@ -1,6 +1,9 @@
 import requests
 import json
 import math
+from PIL import Image, ImageDraw, ImageFont
+import io
+import os
 from urllib import parse
 import numpy as np
 from bs4 import BeautifulSoup
@@ -50,15 +53,30 @@ def calc_score(nick):
             #항목별 점수 변수들
 
             lev = 0
+            lev_data = 0
+
             union = 0
+            union_data = 0
+
             artifact = 0
+
             atk = 0
+            atk_data = 0
+
             symbol = 0
+            symbol_data = 0
+
             hexa = 0
+
             champion = 0
+            champion_data = 0
+
             genesis = 0
             pet = 0
             android = 0
+
+            class_nm = ""
+            img_url = ""
 
             liberation_status = ""
 
@@ -68,14 +86,21 @@ def calc_score(nick):
             #레벨
             answer_lev = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/character/basic?ocid={ocid}")
             l = int(answer_lev["character_level"])
+            lev_data = l
+
             lev = l - 250
             if lev <= 0:
                 lev = 0
             lev = lev * 2
 
+            img_url = answer_lev["character_image"]
+            class_nm = answer_lev["character_class"]
+
             #유니온
             answer_union = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/user/union?ocid={ocid}")
             u = int(answer_union["union_level"])
+            union_data = u
+
             union = u - 6000
             if union <= 0:
                 union = 0
@@ -101,6 +126,8 @@ def calc_score(nick):
                     sym = int(answer_stat["final_stat"][iii]["stat_value"])
 
             #전투력
+            atk_data = at
+
             if at > 692000000:
                 atk = 100
             elif at > 350000000:
@@ -125,6 +152,8 @@ def calc_score(nick):
                 atk = 0
 
             #어센틱포스
+            symbol_data = sym
+
             symbol = math.floor((sym / 770) * 100)
             if symbol > 100:
                 symbol = 100
@@ -167,6 +196,8 @@ def calc_score(nick):
             #유챔
             answer_champion = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/user/union-champion?ocid={ocid}")
             ch = answer_champion["union_champion"]
+
+            champion_data = len(ch)
 
             # sss: 20 ss: 15 s: 10 a: 8 b: 5 c: 3
             for i in range(0, len(ch)):
@@ -225,6 +256,11 @@ def calc_score(nick):
 
             res_data = {
                 "total":total,
+                "lev_data":lev_data,
+                "union_data":union_data,
+                "atk_data":atk_data,
+                "symbol_data":symbol_data,
+                "champion_data":champion_data,
                 "lev":lev,
                 "union":union,
                 "artifact":artifact,
@@ -235,6 +271,8 @@ def calc_score(nick):
                 "genesis":genesis,
                 "pet":pet,
                 "android":android,
+                "img_url":img_url,
+                "class_nm":class_nm,
                 "liberation_status":liberation_status
             }
             return res_data
@@ -244,9 +282,130 @@ def calc_score(nick):
             print(e)
             return 0
 
+def generate_mechang_image(nick, judge_data, judge_score, judge_title, judge_desc):
+
+    #데이터 안에서 이미지, 직업이름 가져오기
+    class_nm = ""
+    if judge_data["class_nm"] is not None:
+        class_nm = judge_data["class_nm"]
+
+    image_url = ""
+    if judge_data["img_url"] is not None:
+        image_url = judge_data["img_url"]
+
+
+    response = requests.get(image_url)
+    response.raise_for_status()
+
+    # 1. 원본 이미지 로드
+    src_img = Image.open(io.BytesIO(response.content)).convert("RGBA")
+    w, h = src_img.size
+
+    # 2. 중앙 1/4 영역 crop
+    crop_w, crop_h = w // 4, h // 3
+    left = (w - crop_w) // 2
+    top = (h - crop_h) // 2
+    right = left + crop_w
+    bottom = top + crop_h
+
+    cropped_img = src_img.crop((left, top, right, bottom)).resize((int(crop_w*1.5), int(crop_h*1.5)),Image.Resampling.LANCZOS)
+
+    bg_img = Image.open(f"res/img/maple_ascent_bg/{class_nm}.png").convert("RGBA")
+
+    template_img_url = ""
+
+    if "1" in judge_data["liberation_status"]:
+        template_img_url = "res/img/mechang_template_destiny.png"
+    else:
+        template_img_url = "res/img/mechang_template_genesis.png"
+
+    template_img = Image.open(template_img_url).convert("RGBA")
+
+    # 3. 새 캔버스 생성 (1390x945)
+    canvas = Image.new("RGBA", (1350, 925), (255, 255, 255, 255))
+
+    canvas.paste(bg_img, (0, 0), bg_img)
+
+    canvas.paste(template_img, (0, 0), template_img)
+
+    # 4. crop 이미지를 캔버스 왼쪽에 붙이기 (세로 중앙)
+    canvas.paste(cropped_img, (60, 30), cropped_img)
+
+    # 5. 텍스트 그리기
+    draw = ImageDraw.Draw(canvas)
+
+    try:
+        nick_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Bold.otf", 40)
+    except:
+        nick_font = ImageFont.load_default()
+
+    try:
+        desc_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf", 30)
+    except:
+        desc_font = ImageFont.load_default()
+
+    try:
+        content_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf", 28)
+    except:
+        content_font = ImageFont.load_default()
+
+    try:
+        liberation_desc_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf", 16)
+    except:
+        liberation_desc_font = ImageFont.load_default()
+
+    liberation_desc = ""
+    if "2" in judge_data['liberation_status']:
+        liberation_desc = "+데스티니 2차 해방\n+데스티니 1차 해방\n+제네시스 해방"
+    elif "1" in judge_data['liberation_status']:
+        liberation_desc = "+데스티니 1차 해방\n+제네시스 해방"
+    elif "G" in judge_data['liberation_status']:
+        liberation_desc = "+제네시스 해방"
+    else:
+        liberation_desc = "-해방 미완료"
+    if "A" in judge_data['liberation_status']:
+        liberation_desc = liberation_desc + "\n+아스트라 보조무기 획득"
+
+    draw.text((786, 89), f'{nick}님은 "{judge_title}"({judge_score}점) 입니다.', font=nick_font, fill=(0, 0, 0), anchor="mm")
+
+    draw.text((786, 184), judge_desc, font=desc_font, fill=(0, 0, 0), anchor="mm")
+
+    draw.multiline_text((142, 505), f'레벨\nLv. {judge_data["lev_data"]}\n{judge_data["lev"]} / 100', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((400, 505), f'유니온\nLv. {judge_data["union_data"]}\n{judge_data["union"]} / 50', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((670, 505), f'유니온 아티팩트\nLv. {judge_data["artifact"]}\n{judge_data["artifact"]} / 50', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((933, 505), f'전투력\n{comma(judge_data["atk_data"])}\n{judge_data["atk"]} / 100', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((1197, 505), f'어센틱포스\n{judge_data["symbol_data"]}\n{judge_data["symbol"]} / 100', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((142, 820), f'HEXA 매트릭스\n{judge_data["hexa"]}%\n{judge_data["hexa"]} / 100', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((400, 820), f'유니온 챔피언\n등록 캐릭터: {judge_data["champion_data"]}명\n{judge_data["champion"]} / 100', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((670, 790), f'해방 여부\n{judge_data["genesis"]} / 100', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=5)
+
+    draw.multiline_text((670, 855), liberation_desc, font=liberation_desc_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=3)
+
+    draw.multiline_text((933, 820), f'보너스 점수\n안드로이드\n+ {judge_data["android"]}', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+    draw.multiline_text((1197, 820), f'보너스 점수\n펫\n+ {judge_data["pet"]}', font=content_font, fill=(0, 0, 0), anchor="mm", align="center", spacing=10)
+
+
+
+    # 6. 전송
+    img_bytes = io.BytesIO()
+    canvas.save(img_bytes, format="PNG")
+    img_bytes.seek(0)
+    return img_bytes
+
 def mechang(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return {
+                "img_bytes":"",
+                "text_print" : "닉네임을 입력해 주세요"
+            }
     else:
         try:
             recordnick(sender, nick)
@@ -278,6 +437,9 @@ def mechang(nick, sender):
             else:
                 res = 8
 
+            img_bytes = generate_mechang_image(nick, judge_data, judge, RES_TEXT[res], DESC_TEXT[res])
+
+            '''
             liberation_desc = ""
             if "2" in judge_data['liberation_status']:
                 liberation_desc = "데스티니 2차 해방"
@@ -332,9 +494,20 @@ def mechang(nick, sender):
                     f"-안드로이드: +{judge_data['android']}",
 					f"-펫: +{judge_data['pet']}"
                 ])
+            '''
+
+            result_json = {
+                "img_bytes":img_bytes,
+                "text_print":""
+            }
+
+            return result_json
 
         except Exception as e:
-            return f"[{nick}]\n측정 조건 자료 중 측정할 수 없는 항목이 있습니다.\n측정 항목을 확인해주세요.\n\n측정 항목: 레벨, 전투력, 유니온 레벨, 아티팩트 레벨, 6차 강화, 어센틱포스, 해방 유무, 자석펫 유무\n\n※2023.12.21이후 접속 기록이 없는 캐릭터는 측정이 불가합니다."
+            return {
+                "img_bytes":"",
+                "text_print" : f"[{nick}]\n측정 조건 자료 중 측정할 수 없는 항목이 있습니다.\n측정 항목을 확인해주세요.\n\n측정 항목: 레벨, 전투력, 유니온 레벨, 아티팩트 레벨, 6차 강화, 어센틱포스, 해방 유무, 자석펫 유무\n\n※2023.12.21이후 접속 기록이 없는 캐릭터는 측정이 불가합니다."
+            }
 
 def mechang_help():
     return "\n".join([
@@ -395,4 +568,7 @@ def handle_message(chat):
         else:
             nick = parts[1]
             res = mechang(nick, chat.sender.name)
-            chat.reply(res)
+            if res["img_bytes"] != "":
+                chat.reply_media(res["img_bytes"])
+            if res["text_print"] != "":    
+                chat.reply(res["text_print"])
