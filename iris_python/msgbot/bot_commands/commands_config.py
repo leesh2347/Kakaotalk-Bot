@@ -26,7 +26,9 @@ PREFIX_MASTERY = ["@마스터리", "!마스터리"]
 PREFIX_SKILL_CORE = ["@강화", "!강화"]
 PREFIX_GONGYONG_CORE = ["@공용", "!공용", "@야누스", "!야누스"]
 
+PREFIX_ZUNSUNGBI = ["@전성비", "!전성비"]
 PREFIX_CHOSUNGBI = ["@초성비", "!초성비"]
+PREFIX_DOSUNGBI = ["@도성비", "!도성비"]
 PREFIX_GUKSUNGBI = ["@극성비", "!극성비"]
 PREFIX_TAESUNGBI = ["@태성비", "!태성비"]
 PREFIX_IKSUNGBI = ["@익성비", "!익성비"]
@@ -49,6 +51,11 @@ PREXIX_SUNDAY = ["@썬데이", "!썬데이"]
 
 PREFIX_CHANNEL = ["@채널", "!채널"]
 PREFIX_CHALLNNEL = ["@챌널", "!챌널"]
+
+PREFIX_MYUNGDANG_ADD = ["@명당등록", "!명당등록"]
+PREFIX_MYUNGDANG_DELETE = ["@명당삭제", "!명당삭제"]
+PREFIX_MYUNGDANG_LIST = ["@명당목록", "!명당목록"]
+PREFIX_MYUNGDANG = ["@명당", "!명당"]
 
 PREFIX_MESPI = ["@메스피","!메스피"]
 
