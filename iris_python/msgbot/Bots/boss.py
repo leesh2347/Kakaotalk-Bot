@@ -8,7 +8,7 @@ from msgbot.Bots.maple_nickskip.nickskip_module import comma
 from msgbot.Bots.maple_boss.boss_data import MAPLE_BOSS_DATA, MAPLE_BOSS_COMMANDS
 from msgbot.bot_commands.commands_config import PREFIX_BOSS
 
-def generate_boss_image(image_url, bgcolor, title_color, context_color, title_text, context_text):
+def generate_boss_image(image_url, bgcolor, title_color, context_color, title_text, context_text, dropitem_img_url):
 
     # 2. 이미지 로드
     boss_img = Image.open(image_url).convert("RGBA")
@@ -18,9 +18,13 @@ def generate_boss_image(image_url, bgcolor, title_color, context_color, title_te
 
     canvas.paste(boss_img, (0, 0), boss_img)
 
+    #드롭템 추가
+    dropitem_img = Image.open(dropitem_img_url).convert("RGBA")
+    canvas.paste(dropitem_img, (0, 0), dropitem_img)
+
     #워터마크 추가
     watermark_img = Image.open("res/img/watermark.png").convert("RGBA")
-    canvas.paste(watermark_img, (690, 450), watermark_img)
+    canvas.paste(watermark_img, (0, 450), watermark_img)
 
     # 5. 텍스트 그리기
     draw = ImageDraw.Draw(canvas)
@@ -94,12 +98,13 @@ def boss(bossname):
         ])
 
         image_url = f"res/img/maple_boss_img/{boss_data['image']}"
+        dropitem_img_url = f"res/img/maple_boss_dropitems/{boss_data['dropItem_image']}"
 
-        img_bytes = generate_boss_image(image_url, boss_data['bg_color'], boss_data['title_color'], boss_data['content_color'], boss_data['name'], context_text)
+        img_bytes = generate_boss_image(image_url, boss_data['bg_color'], boss_data['title_color'], boss_data['content_color'], boss_data['name'], context_text, dropitem_img_url)
 
         result_json = {
             "img_bytes":img_bytes,
-            "text_print":context_after_space
+            "text_print":""
         }
 
 
@@ -124,6 +129,7 @@ def handle_message(chat):
             res = boss(bossname)
             if res["img_bytes"] != "":
                 chat.reply_media(res["img_bytes"])
-            chat.reply(res["text_print"])
+            if res["text_print"] != "":
+                chat.reply(res["text_print"])
         except Exception as e:
             raise
