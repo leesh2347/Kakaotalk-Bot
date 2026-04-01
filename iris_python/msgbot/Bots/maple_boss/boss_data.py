@@ -271,6 +271,11 @@ MAPLE_BOSS_COMMANDS = {
     "흉성":"hard_malefic",
     "흉통":"hard_malefic",
 
+    "노말유피테르":"normal_jupiter",
+    "노멀유피테르":"normal_jupiter",
+    "하드유피테르":"hard_jupiter",
+    "유피테르":"hard_jupiter",
+
     "디벨로이드":"developer",
     "디벨":"developer",
     "주인장":"developer",
@@ -291,12 +296,12 @@ MAPLE_BOSS_DATA = {
             "1페이즈" : "700,000,000"
         },
         "defenseRate" : 50,
-		"reboot" : "-",
         "minLevel" : 125,
         "deathCount" : 5,
         "dropItem" : [
            "사자왕의 로얄 메달"
         ],
+        "dropItem_image":"vonleon_normal.png",
         "bossCrystal" : "633,927메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -314,11 +319,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 80,
         "minLevel" : 125,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "사자왕의 로얄 메달"
         ],
+        "dropItem_image":"vonleon_normal.png",
         "bossCrystal" : "873,601메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -336,13 +341,13 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 125,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "이피아의 반지", 
             "이피아의 펜던트", 
             "로얄 반 레온 장비"
         ],
+        "dropItem_image":"vonleon_hard.png",
         "bossCrystal" : "1,467,984메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -360,12 +365,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 170,
-		"reboot" : "-",
         "deathCount" : 15,
         "dropItem" : [
             "네크로 세트 장비 아이템",
             "다크소울의 펫상자"
         ],
+        "dropItem_image":"hilla_hard.png",
         "bossCrystal" : "6,936,489메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -384,7 +389,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 90,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "자쿰의 투구/나뭇가지",
@@ -392,6 +396,7 @@ MAPLE_BOSS_DATA = {
             "아쿠아틱 레터 눈장식", 
             "응축된 힘의 결정석"
         ],
+        "dropItem_image":"zaquum_normal.png",
         "bossCrystal" : "366,997메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -410,7 +415,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 90,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "포이즈닉 무기", 
@@ -420,6 +424,7 @@ MAPLE_BOSS_DATA = {
             "카오스 자쿰의 나뭇가지",
             "분노한 자쿰의 투구/벨트/망토"
         ],
+        "dropItem_image":"zaquum_chaos.png",
         "bossCrystal" : "9,741,285메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -439,13 +444,13 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 40,
         "minLevel" : 130,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "혼테일의 목걸이",
             "데아 시두스 이어링",
             "실버블라썸 링"
         ],
+        "dropItem_image":"horntail_normal.png",
         "bossCrystal" : "606,666메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -465,13 +470,13 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 50,
         "minLevel" : 135,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "카오스 혼테일의 목걸이",
             "데아 시두스 이어링",
             "실버블라썸 링"
         ],
+        "dropItem_image":"horntail_chaos.png",
         "bossCrystal" : "810,086메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -489,13 +494,13 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 70,
         "minLevel" : 160,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "골든 클로버 벨트",
             "핑크빛 성배",
             "블랙빈 마크"
         ],
+        "dropItem_image":"pinkbean.png",
         "bossCrystal" : "841,544메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -513,13 +518,13 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 170,
-		"reboot" : "101억 8500만",
         "deathCount" : 5,
         "dropItem" : [
             "골든 클로버 벨트",
             "핑크빛 성배",
             "블랙빈 마크"
         ],
+        "dropItem_image":"pinkbean.png",
         "bossCrystal" : "12,800,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -537,12 +542,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 60,
         "minLevel" : 140,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "메커네이터 펜던트",
             "태초의 정수"
         ],
+        "dropItem_image":"akairum_easy.png",
         "bossCrystal" : "690,249메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -560,7 +565,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 90,
         "minLevel" : 140,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "메커네이터 펜던트",
@@ -568,6 +572,7 @@ MAPLE_BOSS_DATA = {
             "태초의 정수",
             "혼돈의 파편"
         ],
+        "dropItem_image":"akairum_normal.png",
         "bossCrystal" : "1,510,227메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -585,11 +590,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 50,
         "minLevel" : 125,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인"
         ],
+        "dropItem_image":"blank.png",
         "bossCrystal" : "580,003메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -607,12 +612,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 180,
-		"reboot" : "50억",
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인",
             "카루타 방어구 조각"
         ],
+        "dropItem_image":"banban.png",
         "bossCrystal" : "16,200,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -630,11 +635,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 50,
         "minLevel" : 125,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인"
         ],
+        "dropItem_image":"blank.png",
         "bossCrystal" : "580,003메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -652,13 +657,13 @@ MAPLE_BOSS_DATA = {
 			"(분열스킵 컷":"240억, 체력바 30% )"
         },
         "defenseRate" : 80,
-		"reboot" : "40억",
         "minLevel" : 180,
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인",
             "카루타 방어구 조각"
         ],
+        "dropItem_image":"pierro.png",
         "bossCrystal" : "9,838,932메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -676,11 +681,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 50,
         "minLevel" : 125,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인"
         ],
+        "dropItem_image":"blank.png",
         "bossCrystal" : "580,003메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -697,13 +702,13 @@ MAPLE_BOSS_DATA = {
             "1페이즈" : "140,000,000,000\n            (1400억)"
         },
         "defenseRate" : 120,
-		"reboot" : "70억",
         "minLevel" : 180,
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인",
             "카루타 방어구 조각"
         ],
+        "dropItem_image":"bloodyqueen.png",
         "bossCrystal" : "9,806,780메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -720,12 +725,12 @@ MAPLE_BOSS_DATA = {
             "1페이즈" : "550,000,000\n            (5억 5000만)"
         },
         "defenseRate" : 55,
-		"reboot" : "-",
         "minLevel" : 125,
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인"
         ],
+        "dropItem_image":"blank.png",
         "bossCrystal" : "580,003메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -743,12 +748,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 200,
         "minLevel" : 180,
-		"reboot" : "100억",
         "deathCount" : 5,
         "dropItem" : [
             "이그드라실 코인",
             "카루타 방어구 조각"
         ],
+        "dropItem_image":"bellum.png",
         "bossCrystal" : "12,590,202메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -766,12 +771,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 50,
         "minLevel" : 115,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "로얄 블랙메탈 숄더",
             "크리스탈 웬투스 뱃지"
         ],
+        "dropItem_image":"magnus_normal.png",
         "bossCrystal" : "432,605메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -789,12 +794,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 50,
         "minLevel" : 155,
-		"reboot" : "-",
         "deathCount" : 10,
         "dropItem" : [
             "로얄 블랙메탈 숄더",
             "크리스탈 웬투스 뱃지"
         ],
+        "dropItem_image":"magnus_normal.png",
         "bossCrystal" : "1,553,066메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -812,7 +817,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 120,
         "minLevel" : 175,
-		"reboot" : "60억",
         "deathCount" : 15,
         "dropItem" : [
             "로얄 블랙메탈 숄더",
@@ -820,6 +824,7 @@ MAPLE_BOSS_DATA = {
             "타일런트 망토",
             "저주받은 카이세리움"
         ],
+        "dropItem_image":"magnus_hard.png",
         "bossCrystal" : "19,012,500메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -838,11 +843,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 90,
         "minLevel" : 155,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "파풀라투스 시계 의자"
         ],
+        "dropItem_image":"blank.png",
         "bossCrystal" : "1,596,506메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -861,12 +866,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 250,
         "minLevel" : 190,
-		"reboot" : "252억",
         "deathCount" : 5,
         "dropItem" : [
             "파풀라투스 시계 의자",
             "파풀라투스 마크 눈장식"
         ],
+        "dropItem_image":"papulatus.png",
         "bossCrystal" : "26,725,937메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -884,12 +889,12 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 140,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "여제 무기 조각",
             "여제 장비 조각"
         ],
+        "dropItem_image":"cygnus_easy.png",
         "bossCrystal" : "5,493,394메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -907,13 +912,13 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 100,
         "minLevel" : 165,
-		"reboot" : "-",
         "deathCount" : 5,
         "dropItem" : [
             "여제 무기 조각",
             "여제 장비 조각",
             "여제 견장"
         ],
+        "dropItem_image":"cygnus_normal.png",
         "bossCrystal" : "9,039,130메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -931,7 +936,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 210,
-		"reboot" : "2500억 (+1분마다 25억 추가)",
         "deathCount" : 5,
         "dropItem" : [
             "강력한 환생의 불꽃",
@@ -944,6 +948,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 3개",
             "가디언 엔젤 링"
         ],
+        "dropItem_image":"guardianangelslime.png",
         "bossCrystal" : "46,935,874메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -961,7 +966,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 210,
-		"reboot" : "4.5조 (30초마다 450억 추가)",
         "deathCount" : 5,
         "dropItem" : [
             "강력한 환생의 불꽃",
@@ -983,6 +987,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 9개",
             "가디언 엔젤 링"
         ],
+        "dropItem_image":"guardianangelslime.png",
         "bossCrystal" : "155,492,141메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1003,7 +1008,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 190,
-		"reboot" : "750억",
         "deathCount" : 5,
         "dropItem" : [
             "특수형 에너지 코어(S급)",
@@ -1015,6 +1019,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 3개"
         ],
+        "dropItem_image":"lotus_normal.png",
         "bossCrystal" : "31,397,803메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1035,7 +1040,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 190,
-		"reboot" : "1조 5750억",
         "deathCount" : 5,
         "dropItem" : [
             "스우로이드",
@@ -1058,6 +1062,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 8개",
             "앱솔랩스 장비"
         ],
+        "dropItem_image":"lotus_hard.png",
         "bossCrystal" : "112,707,970메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1078,7 +1083,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 190,
-		"reboot" : "90조 5000억",
         "deathCount" : 5,
         "dropItem" : [
             "스우로이드",
@@ -1103,6 +1107,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 8개",
             "앱솔랩스 장비"
         ],
+        "dropItem_image":"lotus_extreme.png",
         "bossCrystal" : "380,000,000메소",
         "maxParty":2,
         "arcaneforce" : "",
@@ -1121,7 +1126,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 190,
-		"reboot" : "600억",
         "deathCount" : 10,
         "dropItem" : [
             "뒤틀린 낙인의 영혼석",
@@ -1133,6 +1137,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 3개"
         ],
+        "dropItem_image":"demian_normal.png",
         "bossCrystal" : "35,517,853메소",
         "maxParty":6,
         "arcaneforce" : ""
@@ -1150,7 +1155,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 190,
-		"reboot" : "1조 8000억",
         "deathCount" : 10,
         "dropItem" : [
             "데미안로이드",
@@ -1173,6 +1177,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 7개",
             "앱솔랩스 장비"
         ],
+        "dropItem_image":"demian_hard.png",
         "bossCrystal" : "112,480,613메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1191,7 +1196,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 220,
-		"reboot" : "6000억",
         "deathCount" : 10,
         "dropItem" : [
             "강력한 환생의 불꽃",
@@ -1203,6 +1207,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 3개"
         ],
+        "dropItem_image":"edicube.png",
         "bossCrystal" : "48,058,319메소",
         "maxParty":6,
         "arcaneforce" : "360",
@@ -1221,7 +1226,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 220,
-		"reboot" : "1조 2000억",
         "deathCount" : 10,
         "dropItem" : [
             "트와일라이트 마크",
@@ -1235,6 +1239,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 4개"
         ],
+        "dropItem_image":"lucid_normal.png",
         "bossCrystal" : "57,502,626메소",
         "maxParty":6,
         "arcaneforce" : "360",
@@ -1254,7 +1259,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 220,
-		"reboot" : "5조 8440억",
         "deathCount" : 10,
         "dropItem" : [
             "루시드로이드",
@@ -1277,6 +1281,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 9개"
         ],
+        "dropItem_image":"lucid_hard.png",
         "bossCrystal" : "131,095,655메소",
         "maxParty":6,
         "arcaneforce" : "360",
@@ -1296,7 +1301,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 235,
-		"reboot" : "8400억",
         "deathCount" : 10,
         "dropItem" : [
             "강력한 환생의 불꽃",
@@ -1308,6 +1312,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 4개"
         ],
+        "dropItem_image":"edicube.png",
         "bossCrystal" : "52,139,127메소",
         "maxParty":6,
         "arcaneforce" : "500"
@@ -1326,7 +1331,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 235,
-		"reboot" : "1조 2600억",
         "deathCount" : 10,
         "dropItem" : [
             "트와일라이트 마크",
@@ -1340,6 +1344,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 5개"
         ],
+        "dropItem_image":"will_normal.png",
         "bossCrystal" : "66,311,463메소",
         "maxParty":6,
         "arcaneforce" : "760",
@@ -1359,7 +1364,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 235,
-		"reboot" : "6조 3000억",
         "deathCount" : 10,
         "dropItem" : [
             "저주받은 마도서",
@@ -1382,6 +1386,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 9개"
         ],
+        "dropItem_image":"will_hard.png",
         "bossCrystal" : "145,038,483메소",
         "maxParty":6,
         "arcaneforce" : "760",
@@ -1399,7 +1404,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 245,
-		"reboot" : "1조 2750억",
         "deathCount" : 5,
         "dropItem" : [
             "염원의 불꽃",
@@ -1414,6 +1418,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 6개"
         ],
+        "dropItem_image":"dusk_dunkel_normal.png",
         "bossCrystal" : "71,054,562메소",
         "maxParty":6,
         "arcaneforce" : "730",
@@ -1431,7 +1436,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 245,
-		"reboot" : "6조 3750억",
         "deathCount" : 5,
         "dropItem" : [
             "거대한 공포",
@@ -1456,6 +1460,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개",
             "아케인셰이드 장비"
         ],
+        "dropItem_image":"dusk_chaos.png",
         "bossCrystal" : "160,173,752메소",
         "maxParty":6,
         "arcaneforce" : "730",
@@ -1473,7 +1478,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 255,
-		"reboot" : "1조 3000억",
         "deathCount" : 5,
         "dropItem" : [
             "에스텔라 이어링",
@@ -1488,6 +1492,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 6개"
         ],
+        "dropItem_image":"dusk_dunkel_normal.png",
         "bossCrystal" : "76,601,412메소",
         "maxParty":6,
         "arcaneforce" : "850",
@@ -1505,7 +1510,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 255,
-		"reboot" : "7조 8750억",
         "deathCount" : 5,
         "dropItem" : [
             "커맨더 포스 이어링",
@@ -1530,6 +1534,7 @@ MAPLE_BOSS_DATA = {
             "수상한 에디셔널 큐브 10개",
             "아케인셰이드 장비"
         ],
+        "dropItem_image":"dunkel_hard.png",
         "bossCrystal" : "168,609,280메소",
         "maxParty":6,
         "arcaneforce" : "850",
@@ -1547,7 +1552,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 250,
-		"reboot" : "4조 4000억",
         "deathCount" : 5,
         "dropItem" : [
             "데이브레이크 펜던트",
@@ -1570,6 +1574,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 9개"
         ],
+        "dropItem_image":"verushilla_normal.png",
         "bossCrystal" : "148,112,376메소",
         "maxParty":6,
         "arcaneforce" : "900",
@@ -1587,7 +1592,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 250,
-		"reboot" : "8조 8000억",
         "deathCount" : 5,
         "dropItem" : [
             "어두운 힘의 기운",
@@ -1612,6 +1616,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 10개"
         ],
+        "dropItem_image":"verushilla_hard.png",
         "bossCrystal" : "190,159,452메소",
         "maxParty":6,
         "arcaneforce" : "900",
@@ -1637,7 +1642,6 @@ MAPLE_BOSS_DATA = {
         "defenseRate" : 300,
         "minLevel" : 255,
         "deathCount" : 12,
-		"reboot" : "23조 8000억",
         "dropItem" : [
             "창세의 뱃지",
             "아케인셰이드 장비",
@@ -1659,6 +1663,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 30개"
         ],
+        "dropItem_image":"blackmage_hard.png",
         "bossCrystal" : "1,418,809,857메소",
         "maxParty":6,
         "arcaneforce" : "1320",
@@ -1683,7 +1688,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 300,
         "minLevel" : 255,
-		"reboot" : "299조 2500억",
         "deathCount" : 12,
         "dropItem" : [
             "창세의 뱃지",
@@ -1706,6 +1710,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 30개"
         ],
+        "dropItem_image":"blackmage_extreme.png",
         "bossCrystal" : "5,675,239,428메소",
         "maxParty":6,
         "arcaneforce" : "1320",
@@ -1724,7 +1729,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 260,
-		"reboot" : "10조 4000억",
         "deathCount" : 5,
         "dropItem" : [
             "데이브레이크 펜던트",
@@ -1746,6 +1750,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 10개"
         ],
+        "dropItem_image":"seren_normal.png",
         "bossCrystal" : "196,904,752메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1764,7 +1769,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 260,
-		"reboot" : "24조 3000억",
         "deathCount" : 5,
         "dropItem" : [
             "미트라의 분노",
@@ -1788,6 +1792,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 11개"
         ],
+        "dropItem_image":"seren_hard.png",
         "bossCrystal" : "267,825,621메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1806,7 +1811,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 260,
-		"reboot" : "362조 9500억",
         "deathCount" : 5,
         "dropItem" : [
             "미트라의 분노",
@@ -1830,6 +1834,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 11개"
         ],
+        "dropItem_image":"seren_extreme.png",
         "bossCrystal" : "1,071,303,484메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1851,7 +1856,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 265,
-		"reboot" : "17조 8500억",
         "deathCount" : 5,
         "dropItem" : [
             "남겨진 칼로스의 의지",
@@ -1873,6 +1877,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 1n개"
         ],
+        "dropItem_image":"solerda.png",
         "bossCrystal" : "230,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1894,7 +1899,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 265,
-		"reboot" : "52조 8000억",
         "deathCount" : 5,
         "dropItem" : [
             "남겨진 칼로스의 의지",
@@ -1916,6 +1920,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 1n개"
         ],
+        "dropItem_image":"kalos_normal_chaos.png",
         "bossCrystal" : "300,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1937,7 +1942,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 265,
-		"reboot" : "120조",
         "deathCount" : 8,
         "dropItem" : [
             "남겨진 칼로스의 의지",
@@ -1959,6 +1963,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 1n개"
         ],
+        "dropItem_image":"kalos_normal_chaos.png",
         "bossCrystal" : "600,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -1980,7 +1985,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 265,
-		"reboot" : "120조",
         "deathCount" : 8,
         "dropItem" : [
             "남겨진 칼로스의 의지",
@@ -2002,6 +2006,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 1n개"
         ],
+        "dropItem_image":"kalos_extreme.png",
         "bossCrystal" : "4,320,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -2022,7 +2027,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 275,
-		"reboot" : "44조",
         "deathCount" : "정신력 1000",
         "dropItem" : [
             "카링로이드",
@@ -2045,6 +2049,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 10개"
         ],
+        "dropItem_image":"kaling_easy.png",
         "bossCrystal" : "250,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -2065,7 +2070,6 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 275,
-		"reboot" : "182조",
         "deathCount" : "정신력 1000",
         "dropItem" : [
             "카링로이드",
@@ -2088,6 +2092,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 10개"
         ],
+        "dropItem_image":"kaling_normal.png",
         "bossCrystal" : "350,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -2107,7 +2112,6 @@ MAPLE_BOSS_DATA = {
             "3페이즈 카링" : " 2,240,000,000,000,000\n            (2240조)"
         },
         "defenseRate" : 380,
-		"reboot" : "???조",
         "minLevel" : 275,
         "deathCount" : "정신력 1000",
         "dropItem" : [
@@ -2132,6 +2136,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 10개"
         ],
+        "dropItem_image":"kaling_hard.png",
         "bossCrystal" : "1,830,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -2151,7 +2156,6 @@ MAPLE_BOSS_DATA = {
             "3페이즈 카링" : " 8,662,000,000,000,000\n            (8662조)"
         },
         "defenseRate" : 380,
-		"reboot" : "???조",
         "minLevel" : 275,
         "deathCount" : "정신력 1000",
         "dropItem" : [
@@ -2176,6 +2180,7 @@ MAPLE_BOSS_DATA = {
             "대형 보스 명예의 훈장",
             "수상한 에디셔널 큐브 10개"
         ],
+        "dropItem_image":"kaling_extreme.png",
         "bossCrystal" : "5,670,000,000메소",
         "maxParty":6,
         "arcaneforce" : "",
@@ -2195,11 +2200,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 270,
-		"reboot" : "44조",
         "deathCount" : "대적의 의지 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"solerda.png",
         "bossCrystal" : "324,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2219,11 +2224,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 270,
-		"reboot" : "44조",
         "deathCount" : "대적의 의지 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"firstadversary_normal.png",
         "bossCrystal" : "589,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2243,11 +2248,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 270,
-		"reboot" : "44조",
         "deathCount" : "대적의 의지 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"firstadversary_hard.png",
         "bossCrystal" : "1,510,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2267,11 +2272,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 270,
-		"reboot" : "44조",
         "deathCount" : "대적의 의지 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"firstadversary_extreme.png",
         "bossCrystal" : "1,510,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2292,11 +2297,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 285,
-		"reboot" : "44조",
         "deathCount" : "침식 수치 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"limbo_normal.png",
         "bossCrystal" : "1,080,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2316,11 +2321,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 285,
-		"reboot" : "44조",
         "deathCount" : "침식 수치 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"limbo_hard.png",
         "bossCrystal" : "2,510,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2341,11 +2346,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 290,
-		"reboot" : "44조",
         "deathCount" : "마력 잠식 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"baldrix_normal.png",
         "bossCrystal" : "1,440,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2366,11 +2371,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 290,
-		"reboot" : "44조",
         "deathCount" : "마력 잠식 1000",
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"baldrix_hard.png",
         "bossCrystal" : "3,240,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2389,11 +2394,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 270,
-		"reboot" : "44조",
         "deathCount" : 5,
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"kai_normal.png",
         "bossCrystal" : "300,000,000메소",
         "maxParty":1,
         "arcaneforce" : ""
@@ -2411,11 +2416,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 280,
-		"reboot" : "44조",
         "deathCount" : 5,
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"kai_hard.png",
         "bossCrystal" : "600,000,000메소",
         "maxParty":1,
         "arcaneforce" : ""
@@ -2433,11 +2438,11 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 280,
-		"reboot" : "44조",
         "deathCount" : 5,
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"malefic_normal.png",
         "bossCrystal" : "658,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
@@ -2456,15 +2461,65 @@ MAPLE_BOSS_DATA = {
         },
         "defenseRate" : 380,
         "minLevel" : 280,
-		"reboot" : "44조",
         "deathCount" : 5,
         "dropItem" : [
             ""
         ],
+        "dropItem_image":"malefic_hard.png",
         "bossCrystal" : "2,819,000,000메소",
         "maxParty":3,
         "arcaneforce" : "",
         "authenticforce" : "550"
+    },
+
+    "normal_jupiter" : {
+        "bg_color":"#00443d",
+        "title_color":"#ec24f9",
+        "content_color":"#31ffaa",
+        "image":"jupiter.png",
+        "name" : "노말 유피테르",
+        "level" : 295,
+        "HP" : {
+            "1페이즈" : "2,200,000,000,000,000\n            (2200조)",
+            "2페이즈" : "4,400,000,000,000,000\n            (4400조)",
+            "3페이즈" : "4,400,000,000,000,000\n            (4400조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 295,
+        "deathCount" : "파멸 수치 1000",
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"jupiter_normal.png",
+        "bossCrystal" : "1,700,000,000메소",
+        "maxParty":3,
+        "arcaneforce" : "",
+        "authenticforce" : "810"
+    },
+
+    "hard_jupiter" : {
+        "bg_color":"#00443d",
+        "title_color":"#ec24f9",
+        "content_color":"#31ffaa",
+        "image":"jupiter.png",
+        "name" : "하드 유피테르",
+        "level" : 295,
+        "HP" : {
+            "1페이즈" : "9,900,000,000,000,000\n            (9900조)",
+            "2페이즈" : "19,800,000,000,000,000\n            (1경 9800조)",
+            "3페이즈" : "19,800,000,000,000,000\n            (1경 9800조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 295,
+        "deathCount" : "파멸 수치 1000",
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"jupiter_hard.png",
+        "bossCrystal" : "5,100,000,000메소",
+        "maxParty":3,
+        "arcaneforce" : "",
+        "authenticforce" : "810"
     },
 
 	"developer" : {
@@ -2481,10 +2536,10 @@ MAPLE_BOSS_DATA = {
         "defenseRate" : 999,
         "minLevel" : 999,
         "deathCount" : 999,
-		"reboot" : "측정불가",
         "dropItem" : [
             "없음",
         ],
+        "dropItem_image":"blank.png",
         "bossCrystal" : "없음",
         "arcaneforce" : "",
         "authenticforce" : ""
