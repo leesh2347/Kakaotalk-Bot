@@ -11,7 +11,7 @@ from .pok_game_module.training import (
     handle_levelup, handle_skillchange, handle_effort, handle_mega,
     handle_formchange, handle_lock, handle_unlock, handle_sell,
     handle_swap, handle_rest, handle_egg, handle_legendegg,
-    handle_boxlock, handle_boxunlock
+    handle_boxlock, handle_boxunlock, handle_skilllock, handle_skillunlock
 )
 from .pok_game_module.rank_up import handle_ballup, handle_ballinfo, handle_title, handle_ball_purchase
 from .pok_game_module.battle import handle_battlejoin, handle_battleexit, handle_battlenext, handle_giveup
@@ -117,6 +117,14 @@ def handle_message(chat):
 
     if msg == CMDS['formchange']:
         handle_formchange(sender, chat)
+        return
+
+    if msg_first == CMDS['skilllock']:
+        handle_skilllock(sender, chat, msg[len(msg_first):].strip())
+        return
+
+    if msg_first == CMDS['skillunlock']:
+        handle_skillunlock(sender, chat, msg[len(msg_first):].strip())
         return
 
     if msg_first == CMDS['lock']:
