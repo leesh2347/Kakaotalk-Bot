@@ -82,8 +82,8 @@ def handle_levelup(sender, chat, args=None):
     # Check evolution
     preup = p["name"]
     up = read_json(f"포켓몬/{p['name']}", "nextup")
-    
-    if up:
+
+    if up and up != "x":
         # Handle multiple evolution paths (e.g., "이브이/피카츄")
         if "/" in up:
             up_options = up.split("/")
@@ -206,8 +206,8 @@ def handle_skillchange(sender, chat, args=None):
         skillsarr = read_json(f"포켓몬/{p['name']}", "skills") or []
     
     # Check if Pokemon has enough skills
-    if len(skillsarr) < 5 or len(p.get("skills", [])) + len(p.get("skillslocked", [])) >= 4:
-        chat.reply(f'@{sender}\n{p["name"]}은(는) 스킬 뽑기가 불가능해요!')
+    if len(skillsarr) < 5 or locked_count > 3:
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 바꿀 스킬이 없어요!')
         return
     
     # Clear current skills and pick new ones
@@ -218,7 +218,7 @@ def handle_skillchange(sender, chat, args=None):
     while len(caughtpokskills) < new_skills_count:
         t = random.choice(skillsarr)
         t = t.replace("DP", "").replace("Pt", "")
-        if t not in caughtpokskills:
+        if t not in caughtpokskills and t not in locked_skills:
             caughtpokskills.append(t)
     
     p["skills"] = caughtpokskills
@@ -229,10 +229,118 @@ def handle_skillchange(sender, chat, args=None):
     
     write_json(f"player_{sender}_inv", pokInv)
     write_json(f"player_{sender}", pokUser)
-    
+
     res = f"{cost:,}원 지불.\n보유금액: {pokUser['gold']:,}원\n\n"
     res += printskills(p["skills"], p["skillslocked"])
-    
+
+    chat.reply(f"@{sender}\n{res}")
+
+def handle_skilllock(sender, chat, args=None):
+    """Handle skill lock command (@스킬잠금)"""
+    pokUser = read_json(f"player_{sender}")
+    if pokUser is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    pokInv = read_json(f"player_{sender}_inv")
+    if pokInv is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    if not pokInv.get("deck"):
+        chat.reply(f'@{sender}\n스킬 잠금 및 해제는 덱에 장착된 포켓몬만 가능해요.\n먼저 포켓몬을 덱에 장착해 주세요.')
+        return
+
+    parts = args.split() if args else []
+    if len(parts) < 2:
+        chat.reply(f'@{sender}\n사용법: {CMDS["skilllock"]} [덱번호] [스킬번호]')
+        return
+
+    try:
+        n1 = int(parts[0])
+        n2 = int(parts[1])
+    except:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    if n1 < 1 or n1 > len(pokInv["deck"]):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    if n2 < 1 or n2 > 4:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    p = pokInv["deck"][n1 - 1]
+
+    if n2 > len(p.get("skills", [])):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    # Move skill from skills to skillslocked
+    skill_name = p["skills"][n2 - 1]
+    p["skillslocked"].append(skill_name)
+    p["skills"].pop(n2 - 1)
+
+    pokInv["deck"][n1 - 1] = p
+    write_json(f"player_{sender}_inv", pokInv)
+
+    res = f"Lv.{p['level']} {p['name']}의 기술\n{'\u200b' * 500}\n"
+    res += printskills(p["skills"], p["skillslocked"])
+    chat.reply(f"@{sender}\n{res}")
+
+def handle_skillunlock(sender, chat, args=None):
+    """Handle skill unlock command (@스킬잠금해제)"""
+    pokUser = read_json(f"player_{sender}")
+    if pokUser is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    pokInv = read_json(f"player_{sender}_inv")
+    if pokInv is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    if not pokInv.get("deck"):
+        chat.reply(f'@{sender}\n스킬 잠금 및 해제는 덱에 장착된 포켓몬만 가능해요.\n먼저 포켓몬을 덱에 장착해 주세요.')
+        return
+
+    parts = args.split() if args else []
+    if len(parts) < 2:
+        chat.reply(f'@{sender}\n사용법: {CMDS["skillunlock"]} [덱번호] [스킬번호]')
+        return
+
+    try:
+        n1 = int(parts[0])
+        n2 = int(parts[1])
+    except:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    if n1 < 1 or n1 > len(pokInv["deck"]):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    if n2 < 1 or n2 > 4:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    p = pokInv["deck"][n1 - 1]
+
+    if n2 > len(p.get("skillslocked", [])):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+
+    # Move skill from skillslocked to skills
+    skill_name = p["skillslocked"][n2 - 1]
+    p["skills"].append(skill_name)
+    p["skillslocked"].pop(n2 - 1)
+
+    pokInv["deck"][n1 - 1] = p
+    write_json(f"player_{sender}_inv", pokInv)
+
+    res = f"Lv.{p['level']} {p['name']}의 기술\n{'\u200b' * 500}\n"
+    res += printskills(p["skills"], p["skillslocked"])
     chat.reply(f"@{sender}\n{res}")
 
 def handle_effort(sender, chat, args=None):
