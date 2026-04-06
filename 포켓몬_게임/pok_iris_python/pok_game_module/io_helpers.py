@@ -46,9 +46,9 @@ def send_image(room, chat, template_id, template_args):
         # This requires integration with the Iris framework's KakaoTalk API
         # For now, fall back to text reply with image URL
         if 'POKIMG' in template_args:
-            chat.reply(f"이미지: {template_args['POKIMG']}\n{template_args.get('POKNAME', '')}\n{template_args.get('DESC', '')}")
+            chat.reply(f"카링 대체 부분\n이미지: {template_args['POKIMG']}\n{template_args.get('POKNAME', '')}\n{template_args.get('DESC', '')}")
         elif 'player1img' in template_args:
-            chat.reply(f"⚔️배틀\n{template_args['player1']}\n{template_args['player1desc']}\nvs\n{template_args['player2']}\n{template_args['player2desc']}")
+            chat.reply(f"카링 대체 부분\n⚔️배틀\n{template_args['player1']}\n{template_args['player1desc']}\nvs\n{template_args['player2']}\n{template_args['player2desc']}")
         else:
             chat.reply(f"카카오링크 전송 (template_id: {template_id})")
     except Exception as e:
@@ -400,7 +400,11 @@ def printskills(skills, locked):
                 
             type_val = skill_data.get("type", 0)
             type_text = TYPE_TEXTS[type_val] if type_val < len(TYPE_TEXTS) else ""
-            res += f"{skills[i]} {type_text}\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}"
+
+            atktype = skill_data.get("atktype", 1)
+            atktype_text = "물리" if atktype == 0 else "특수"
+
+            res += f"{skills[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}"
             
             addi = skill_data.get("addi", 0)
             if addi == 1:
@@ -437,7 +441,9 @@ def printskills(skills, locked):
                 
             type_val = skill_data.get("type", 0)
             type_text = TYPE_TEXTS[type_val] if type_val < len(TYPE_TEXTS) else ""
-            res += f"🔒{locked[i]} {type_text}\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}"
+            atktype = skill_data.get("atktype", 1)
+            atktype_text = "물리" if atktype == 0 else "특수"
+            res += f"🔒{locked[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}"
             
             addi = skill_data.get("addi", 0)
             if addi == 1:

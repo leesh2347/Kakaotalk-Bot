@@ -2,7 +2,7 @@
 import time
 import random
 import math
-from .config import SETTING, POK_ARR, SEASONS, ADV_FAIL, BALL_ARR
+from .config import SETTING, POK_ARR, SEASONS, ADV_FAIL, BALL_ARR, CMDS
 from .io_helpers import read_json, write_json, pokimglink, send_image
 
 # Global state for exploration
@@ -17,7 +17,7 @@ def handle_explore(sender, room, chat):
     
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
-        chat.reply(f'@{sender}\n가입 정보가 없습니다.\n"{SETTING["join"]}"으로 회원가입부터 진행해 주세요.')
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.\n"{CMDS["join"]}"으로 회원가입부터 진행해 주세요.')
         return
     
     if sender not in advOn:
@@ -32,15 +32,15 @@ def handle_explore(sender, room, chat):
         return
     
     if pokUser.get("restOn", {}).get("on", False):
-        chat.reply(f'@{sender} \n휴식 중입니다.\n"{SETTING["rest"]}" 을 입력해서 휴식을 종료하세요.')
+        chat.reply(f'@{sender} \n휴식 중입니다.\n"{CMDS["rest"]}" 을 입력해서 휴식을 종료하세요.')
         return
-    
+
     if pokUser.get("hp", 0) <= 0:
-        chat.reply(f'@{sender} \n체력이 부족해요.\n"{SETTING["rest"]}" 명령어를 사용해보세요.')
+        chat.reply(f'@{sender} \n체력이 부족해요.\n"{CMDS["rest"]}" 명령어를 사용해보세요.')
         return
     
     if pokUser.get("balls", 0) <= 0:
-        chat.reply(f'@{sender} \n볼이 없는 상태에선 탐험할 수 없어요.\n"{SETTING["ball"]}" 을 통해 볼을 구매해 주세요.')
+        chat.reply(f'@{sender} \n볼이 없는 상태에선 탐험할 수 없어요.\n"{CMDS["ball"]}" 을 통해 볼을 구매해 주세요.')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -108,12 +108,12 @@ def handle_explore(sender, room, chat):
                         if "item" not in pokInv:
                             pokInv["item"] = []
                         pokInv["item"].append("일반알")
-                        chat.reply(f"@{sender}\n축하합니다!\n포켓몬의 알을 발견했습니다.\n'{SETTING['egg']}' 명령어를 통해 알을 부화시키세요.")
+                        chat.reply(f"@{sender}\n축하합니다!\n포켓몬의 알을 발견했습니다.\n'{CMDS['egg']}' 명령어를 통해 알을 부화시키세요.")
                     elif ran == 99:
                         if "item" not in pokInv:
                             pokInv["item"] = []
                         pokInv["item"].append("전설알")
-                        chat.reply(f"@{sender}\n축하합니다!\n<⭐전설⭐> 포켓몬의 알을 발견했습니다.\n'{SETTING['legendegg']}' 명령어를 통해 알을 부화시키세요.")
+                        chat.reply(f"@{sender}\n축하합니다!\n<⭐전설⭐> 포켓몬의 알을 발견했습니다.\n'{CMDS['legendegg']}' 명령어를 통해 알을 부화시키세요.")
                     else:
                         money = SETTING["luckygold"]
                         pokUser["gold"] = pokUser.get("gold", 0) + money

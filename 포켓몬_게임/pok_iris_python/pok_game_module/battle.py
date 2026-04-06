@@ -184,7 +184,15 @@ def execute_attack(attacker_name, defender_name, attacker, defender, skill, chat
         return
     
     # Calculate damage
-    atk = math.ceil(attacker["atk"] * skill_data.get("damage", 40) / 300 * (2000 - defender["def"]) / 2000)
+    atktype = skill_data.get("atktype", 1)  # 0 = physical (atk/def), 1 = special (satk/sdef)
+    if atktype == 0:
+        atk_stat = attacker["atk"]
+        def_stat = defender["def"]
+    else:
+        atk_stat = attacker.get("satk", attacker["atk"])
+        def_stat = defender.get("sdef", defender["def"])
+
+    atk = math.ceil(atk_stat * skill_data.get("damage", 40) / 300 * (2000 - def_stat) / 2000)
     
     # Type effectiveness
     skill_type = skill_data.get("type", 1)

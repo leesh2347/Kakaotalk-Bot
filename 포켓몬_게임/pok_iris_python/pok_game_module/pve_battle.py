@@ -106,11 +106,15 @@ def handle_gym(sender, chat, args=None):
         player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "atk") or 50) * level / 50)
         player1pok["def"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "def") or 50) * level / 50)
         player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "spd") or 50) * level / 50)
+        player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "satk") or 1) * level / 50)
+        player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "sdef") or 1) * level / 50)
     else:
         player1pok["hp"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "hp") or 50) * level / 50)
         player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "atk") or 50) * level / 50)
         player1pok["def"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "def") or 50) * level / 50)
         player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "spd") or 50) * level / 50)
+        player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 1) * level / 50)
+        player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
     
     # Handle Metamong transform
     if player2pok["name"] == "메타몽":
@@ -119,6 +123,8 @@ def handle_gym(sender, chat, args=None):
         player2pok["atk"] = player1pok["atk"]
         player2pok["def"] = player1pok["def"]
         player2pok["spd"] = player1pok["spd"]
+        player2pok["satk"] = player1pok["satk"]
+        player2pok["sdef"] = player1pok["sdef"]
         player2pok["skills"] = player1pok["skills"][:]
     
     # Apply collection bonuses
@@ -256,6 +262,8 @@ def handle_battletower(sender, chat, args=None):
             'atk': math.ceil((read_json(f"포켓몬/{aipokname}", "atk") or 50) * aipoklevel / 50),
             'def': math.ceil((read_json(f"포켓몬/{aipokname}", "def") or 50) * aipoklevel / 50),
             'spd': math.ceil((read_json(f"포켓몬/{aipokname}", "spd") or 50) * aipoklevel / 50),
+            'satk': math.ceil((read_json(f"포켓몬/{aipokname}", "satk") or 1) * aipoklevel / 50),
+            'sdef': math.ceil((read_json(f"포켓몬/{aipokname}", "sdef") or 1) * aipoklevel / 50),
             'skills': caughtpokskills,
             'skillslocked': [],
             'formchange': 0,
@@ -368,11 +376,15 @@ def battle_loop(chat, sender):
                 player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "atk") or 50) * level / 50)
                 player1pok["def"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "def") or 50) * level / 50)
                 player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "spd") or 50) * level / 50)
+                player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "satk") or 1) * level / 50)
+                player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "sdef") or 1) * level / 50)
             else:
                 player1pok["hp"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "hp") or 50) * level / 50)
                 player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "atk") or 50) * level / 50)
                 player1pok["def"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "def") or 50) * level / 50)
                 player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "spd") or 50) * level / 50)
+                player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 1) * level / 50)
+                player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
 
             player1maxhp = player1pok["hp"]
             player1pp = {}
@@ -539,7 +551,15 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
         return
 
     # Calculate damage
-    atk = math.ceil(attacker["atk"] * (skill_data.get("damage") or 40) / 300 * (2000 - defender["def"]) / 2000)
+    atktype = skill_data.get("atktype") or 1  # 0 = physical (atk/def), 1 = special (satk/sdef)
+    if atktype == 0:
+        atk_stat = attacker["atk"]
+        def_stat = defender["def"]
+    else:
+        atk_stat = attacker.get("satk", attacker["atk"])
+        def_stat = defender.get("sdef", defender["def"])
+
+    atk = math.ceil(atk_stat * (skill_data.get("damage") or 40) / 300 * (2000 - def_stat) / 2000)
 
     # STAB
     skill_type = skill_data.get("type") or 1
