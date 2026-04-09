@@ -44,7 +44,7 @@ def handle_message(chat):
     """
     room = chat.room.name
     msg = chat.message.msg
-    sender = chat.sender.name.replace(" ", "_")
+    sender = chat.sender.name.replace(" ", "_").replace("/", "_").replace("\\", "_")
     msg_first = msg.split(" ")[0] if msg else ""
 
     # Room filter - only respond in Pokemon room
