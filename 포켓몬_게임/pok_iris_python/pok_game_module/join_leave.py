@@ -52,7 +52,7 @@ def pokjoin(sender, chat):
     new_col = {name: [] for name in COLLECTION_NAMES}
     write_json(f"player_{sender}_collection", new_col)
     
-    chat.reply(f"@{sender}\n포켓몬스터 게임에 오신 것을 환영합니다!\n{SETTING.get('help_cmd', '@포켓몬스터')} 명령어로 도움말을 확인하세요.")
+    chat.reply(f"@{sender}\n포켓몬스터 게임에 오신 것을 환영합니다!\n{SETTING.get('help_cmd', '@포켓몬 도움말')} 명령어로 도움말을 확인하세요.")
 
 def pokleave(sender, chat):
     """Leave the game"""

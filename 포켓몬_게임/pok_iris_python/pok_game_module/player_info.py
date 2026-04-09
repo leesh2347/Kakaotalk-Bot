@@ -1,6 +1,6 @@
 # Module 5: Player Info Display
 import math
-from .config import SETTING, BALL_ARR, COLLECTION_NAMES, V_TEXTS, TYPE_TEXTS, BALL_INFO_LIST, TRAINER_RANK_DATA, COLLECTION_EFFECTS_DATA
+from .config import SETTING, BALL_ARR, COLLECTION_NAMES, V_TEXTS, TYPE_TEXTS, BALL_INFO_LIST, TRAINER_RANK_DATA, COLLECTION_EFFECTS_DATA, CMDS
 from .io_helpers import read_json, printskills, pokimglink, send_image
 
 def handle_info(sender, chat, args=None):
@@ -227,6 +227,7 @@ def handle_box(sender, chat):
     
     deck = pokInv.get("deck", [])
     box = pokInv.get("box", [])
+    item = pokInv.get("item", [])
     
     res = f"@{sender}님의 포켓몬 상자\n"
     res += f"덱: {len(deck)}마리\n"
@@ -245,6 +246,13 @@ def handle_box(sender, chat):
             v_text = V_TEXTS[pok.get('v', 1)] if pok.get('v', 1) < len(V_TEXTS) else f"V{pok.get('v', 1)}"
             lock_mark = "🔒" if pok.get('islocked', 0) == 1 else ""
             res += f"{i+1}. {lock_mark}Lv.{pok.get('level', 0)} {pok.get('name', '???')} {v_text}\n"
+
+    res +="\n현재 보유중인 아이템 목록\n"
+
+    if item:
+        res+=", ".join(item)
+    else:
+        res+="\n아이템이 없습니다."
     
     chat.reply(res)
 
@@ -257,7 +265,7 @@ def handle_pokinfo(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["pokinfo"]} [상자번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["pokinfo"]} [상자번호]')
         return
     
     try:
@@ -273,7 +281,7 @@ def handle_pokinfo(sender, chat, args=None):
     p = pokInv["box"][n - 1]
     
     # Build description
-    v_text = V_TEXTS[p.get('v', 1)] if p.get('v', 1) < len(V_TEXTS) else f"V{p.get('v', 1)}"
+    v_text = V_TEXTS[p.get('v', 0)] if p.get('v', 0) < len(V_TEXTS) else f"V{p.get('v', 0)}"
     
     type1 = read_json(f"포켓몬/{p['name']}", "type1") or 0
     type2 = read_json(f"포켓몬/{p['name']}", "type2") or 0
@@ -283,6 +291,7 @@ def handle_pokinfo(sender, chat, args=None):
         pokdesc += " " + TYPE_TEXTS[type1]
     if type2 > 0 and type2 != type1:
         pokdesc += " " + TYPE_TEXTS[type2]
+    pokdesc +=f"\nHP:{p['hp']} ATK:{p['atk']} DEF:{p['def']}\nS.ATK:{p['satk']} S.DEF:{p['sdef']} SPD:{p['spd']}"
     
     # Get image via KakaoTalk link
     try:
@@ -294,7 +303,7 @@ def handle_pokinfo(sender, chat, args=None):
             'LINK': f"ko/wiki/{p['name']}_(포켓몬)"
         })
     except:
-        pass
+        chat.reply(f"이미지 전송 오류.\nLv.{p['level']} {p['name']}\n{pokdesc}")
     
     # Skills
     if p["name"] == "메타몽":
@@ -302,10 +311,7 @@ def handle_pokinfo(sender, chat, args=None):
     else:
         skills_text = printskills(p.get("skills", []), p.get("skillslocked", []))
     
-    res = f"Lv.{p['level']} {p['name']}\n"
-    res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']}\n"
-    res += f"{pokdesc}\n\n"
-    res += skills_text
+    res = f"@{sender}\n{skills_text}"
     
     chat.reply(res)
 
@@ -318,7 +324,7 @@ def handle_dpokinfo(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["dpokinfo"]} [덱번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["dpokinfo"]} [덱번호]')
         return
     
     try:
@@ -348,6 +354,7 @@ def handle_dpokinfo(sender, chat, args=None):
         pokdesc += " " + TYPE_TEXTS[type1]
     if type2 > 0 and type2 != type1:
         pokdesc += " " + TYPE_TEXTS[type2]
+    pokdesc +=f"\nHP:{p['hp']} ATK:{p['atk']} DEF:{p['def']}\nS.ATK:{p['satk']} S.DEF:{p['sdef']} SPD:{p['spd']}"
     
     # Get image via KakaoTalk link
     try:
@@ -359,7 +366,7 @@ def handle_dpokinfo(sender, chat, args=None):
             'LINK': f"ko/wiki/{p['name']}_(포켓몬)"
         })
     except:
-        pass
+        chat.reply(f"이미지 전송 오류.\nLv.{p['level']} {p['name']}\n{pokdesc}")
     
     # Skills
     if p["name"] == "메타몽":
@@ -367,9 +374,6 @@ def handle_dpokinfo(sender, chat, args=None):
     else:
         skills_text = printskills(p.get("skills", []), p.get("skillslocked", []))
     
-    res = f"Lv.{p['level']} {p['name']}\n"
-    res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']}\n"
-    res += f"{pokdesc}\n\n"
-    res += skills_text
+    res = f"@{sender}\n{skills_text}"
     
     chat.reply(res)

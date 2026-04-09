@@ -1048,9 +1048,18 @@ def handle_egg(sender, chat):
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
         return
-    
+
     pokInv = read_json(f"player_{sender}_inv")
-    if pokInv is None or "일반알" not in pokInv.get("item", []):
+    if pokInv is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    # Ensure item list exists
+    if "item" not in pokInv:
+        pokInv["item"] = []
+        write_json(f"player_{sender}_inv", pokInv)
+
+    if "일반알" not in pokInv.get("item", []):
         chat.reply(f'@{sender}\n포켓몬의 알이 없어요!')
         return
     
@@ -1098,6 +1107,8 @@ def handle_egg(sender, chat):
         'hp': math.ceil(caughtpokhp * poklev / 50),
         'atk': math.ceil((read_json(f"포켓몬/{pokname}", "atk") or 50) * poklev / 50),
         'def': math.ceil((read_json(f"포켓몬/{pokname}", "def") or 50) * poklev / 50),
+        'satk': math.ceil((read_json(f"포켓몬/{pokname}", "satk") or 50) * poklev / 50),
+        'sdef': math.ceil((read_json(f"포켓몬/{pokname}", "sdef") or 50) * poklev / 50),
         'spd': math.ceil((read_json(f"포켓몬/{pokname}", "spd") or 50) * poklev / 50),
         'skills': caughtpokskills,
         'skillslocked': [],
@@ -1148,9 +1159,18 @@ def handle_legendegg(sender, chat):
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
         return
-    
+
     pokInv = read_json(f"player_{sender}_inv")
-    if pokInv is None or "전설알" not in pokInv.get("item", []):
+    if pokInv is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    # Ensure item list exists
+    if "item" not in pokInv:
+        pokInv["item"] = []
+        write_json(f"player_{sender}_inv", pokInv)
+
+    if "전설알" not in pokInv.get("item", []):
         chat.reply(f'@{sender}\n전설의 포켓몬의 알이 없어요!')
         return
     
@@ -1195,6 +1215,8 @@ def handle_legendegg(sender, chat):
         'hp': math.ceil(caughtpokhp * poklev / 50),
         'atk': math.ceil((read_json(f"포켓몬/{pokname}", "atk") or 50) * poklev / 50),
         'def': math.ceil((read_json(f"포켓몬/{pokname}", "def") or 50) * poklev / 50),
+        'satk': math.ceil((read_json(f"포켓몬/{pokname}", "satk") or 50) * poklev / 50),
+        'sdef': math.ceil((read_json(f"포켓몬/{pokname}", "sdef") or 50) * poklev / 50),
         'spd': math.ceil((read_json(f"포켓몬/{pokname}", "spd") or 50) * poklev / 50),
         'skills': caughtpokskills,
         'skillslocked': [],

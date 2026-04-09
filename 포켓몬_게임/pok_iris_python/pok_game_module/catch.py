@@ -99,6 +99,8 @@ def handle_ballthrow(sender, chat):
         caught_pok = create_pokemon(pokname, lev)
         pokInv = read_json(f"player_{sender}_inv")
 
+        if pokInv is None:
+            pokInv = {"box": [], "deck": [], "item": []}
         if "box" not in pokInv:
             pokInv["box"] = []
         pokInv["box"].append(caught_pok)
@@ -188,7 +190,6 @@ def handle_ballthrow(sender, chat):
             pokUser["count"]["fail"] = pokUser.get("count", {}).get("fail", 0) + 1
             pokUser["hp"] = pokUser.get("hp", 1) - 1
             write_json(f"player_{sender}", pokUser)
-            write_json(f"player_{sender}_inv", read_json(f"player_{sender}_inv"))
 
             ispokfind.remove(sender)
             battlepokinfo.pop(idx)
@@ -205,7 +206,6 @@ def handle_ballthrow(sender, chat):
             pokUser["count"]["fail"] = pokUser.get("count", {}).get("fail", 0) + 1
             pokUser["hp"] = pokUser.get("hp", 1) - 1
             write_json(f"player_{sender}", pokUser)
-            write_json(f"player_{sender}_inv", read_json(f"player_{sender}_inv"))
 
             ispokfind.remove(sender)
             battlepokinfo.pop(idx)
