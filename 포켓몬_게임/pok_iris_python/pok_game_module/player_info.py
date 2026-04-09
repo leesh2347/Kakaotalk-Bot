@@ -275,8 +275,8 @@ def handle_pokinfo(sender, chat, args=None):
     # Build description
     v_text = V_TEXTS[p.get('v', 1)] if p.get('v', 1) < len(V_TEXTS) else f"V{p.get('v', 1)}"
     
-    type1 = read_json(f"포켓몬/{p['name']}", "type1") or 1
-    type2 = read_json(f"포켓몬/{p['name']}", "type2") or 1
+    type1 = read_json(f"포켓몬/{p['name']}", "type1") or 0
+    type2 = read_json(f"포켓몬/{p['name']}", "type2") or 0
     
     pokdesc = v_text
     if type1 > 0:

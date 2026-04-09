@@ -161,6 +161,8 @@ def handle_gym(sender, chat, args=None):
         img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
         img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
         send_image(None, chat, 67300, {
+            'player1name':player1,
+            'player2name':player2,
             'player1img': img1,
             'player2img': img2,
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -168,12 +170,14 @@ def handle_gym(sender, chat, args=None):
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
             'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
         })
-    except:
-        pass
+    except Exception as e:
+         print(e)   
     
     if weather > 0:
         chat.reply(WEATHER_TEXTS[weather])
     
+    time.sleep(5)
+
     # Battle loop
     battle_loop(chat, sender)
 
@@ -268,6 +272,7 @@ def handle_battletower(sender, chat, args=None):
             'skillslocked': [],
             'formchange': 0,
             'v': 0,
+            'shiny':0,
             'islocked': 0
         }
         
@@ -314,6 +319,8 @@ def handle_battletower(sender, chat, args=None):
         img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
         img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
         send_image(None, chat, 67300, {
+            'player1name':player1,
+            'player2name':player2,
             'player1img': img1,
             'player2img': img2,
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -321,11 +328,13 @@ def handle_battletower(sender, chat, args=None):
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
             'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
         })
-    except:
-        pass
+    except Exception as e:
+         print(e)
     
     if weather > 0:
         chat.reply(WEATHER_TEXTS[weather])
+
+    time.sleep(5)
     
     # Battle loop
     battle_loop(chat, sender)
@@ -399,6 +408,8 @@ def battle_loop(chat, sender):
                 img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
                 img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
                 send_image(None, chat, 67300, {
+                    'player1name':player1,
+                    'player2name':player2,
                     'player1img': img1,
                     'player2img': img2,
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -406,8 +417,10 @@ def battle_loop(chat, sender):
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
                     'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
                 })
-            except:
-                pass
+            except Exception as e:
+                print(e)
+
+            time.sleep(5)
 
         if player2pok["hp"] <= 0:
             # Send accumulated battle log before loading next Pokemon
@@ -446,6 +459,8 @@ def battle_loop(chat, sender):
                 img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
                 img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
                 send_image(None, chat, 67300, {
+                    'player1name':player1,
+                    'player2name':player2,
                     'player1img': img1,
                     'player2img': img2,
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -453,8 +468,10 @@ def battle_loop(chat, sender):
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
                     'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
                 })
-            except:
-                pass
+            except Exception as e:
+                print(e)
+
+            time.sleep(5)
 
         # Execute turn
         # Select skills

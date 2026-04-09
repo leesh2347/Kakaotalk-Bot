@@ -72,4 +72,4 @@ def pokleave(sender, chat):
         except Exception as e:
             print(f"Error deleting file: {e}")
     
-    chat.reply(f"@{sender}\n포켓몬스터 게임에서 탈퇴했습니다.")
+    chat.reply(f"@{sender}\n포켓몬 게임에서 탈퇴했어요. 바이바이.")

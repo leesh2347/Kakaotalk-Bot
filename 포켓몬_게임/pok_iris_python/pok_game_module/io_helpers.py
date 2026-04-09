@@ -1,5 +1,7 @@
 # IO Helpers Module - File I/O and utility functions
 import json
+from PIL import Image, ImageDraw, ImageFont
+import io
 import os
 import math
 import requests
@@ -40,23 +42,112 @@ def send_image(room, chat, template_id, template_args):
     Send KakaoTalk link image (equivalent to Kakao.sendLink)
     template_id: Kakao template ID (58796 = single pokemon, 67300 = battle)
     template_args: dict with template-specific parameters
+
+
+        ┌────────────────┬──────┬─────────────┬─────────────────────────────┐
+    │ File           │ Line │ template_id │ Purpose                     │
+    ├────────────────┼──────┼─────────────┼─────────────────────────────┤
+    │ explore.py     │ 172  │ 58796       │ Wild pokemon encounter      │
+    │ player_info.py │ 290  │ 58796       │ Pokemon info lookup         │
+    │ player_info.py │ 355  │ 58796       │ Detailed pokemon info       │
+    │ battle.py      │ 137  │ 67300       │ PvP battle start            │
+    │ pve_battle.py  │ 163  │ 67300       │ Gym battle start            │
+    │ pve_battle.py  │ 316  │ 67300       │ Battle tower start          │
+    │ pve_battle.py  │ 401  │ 67300       │ PVE battle pokemon switch   │
+    │ pve_battle.py  │ 448  │ 67300       │ Battle tower pokemon switch │
+    └────────────────┴──────┴─────────────┴─────────────────────────────┘
     """
     try:
-        # TODO: Implement actual KakaoTalk link sending
-        # This requires integration with the Iris framework's KakaoTalk API
-        # For now, fall back to text reply with image URL
-        if 'POKIMG' in template_args:
-            chat.reply(f"카링 대체 부분\n이미지: {template_args['POKIMG']}\n{template_args.get('POKNAME', '')}\n{template_args.get('DESC', '')}")
-        elif 'player1img' in template_args:
-            chat.reply(f"카링 대체 부분\n⚔️배틀\n{template_args['player1']}\n{template_args['player1desc']}\nvs\n{template_args['player2']}\n{template_args['player2desc']}")
-        else:
-            chat.reply(f"카카오링크 전송 (template_id: {template_id})")
+        if template_id == 58796:
+            # 1. 새 캔버스 생성 
+            canvas = Image.new("RGBA", (500, 650), (255, 255, 255, 255))
+
+            #포켓몬 이미지 추가
+            pok_img_url = template_args['POKIMG']
+            pok_img = Image.open(pok_img_url).convert("RGBA")
+            canvas.paste(pok_img, (0, 0), pok_img)
+
+            # 5. 텍스트 그리기
+            draw = ImageDraw.Draw(canvas)
+            try:
+                nick_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Bold.otf", 25)
+            except:
+                nick_font = ImageFont.load_default()
+
+            try:
+                content_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf", 20)
+            except:
+                content_font = ImageFont.load_default()
+
+            draw.text((10, 510), template_args.get('POKNAME', ''), font=nick_font, fill=(0, 0, 0))
+
+            draw.text((10, 550), template_args.get('DESC', ''), font=content_font, fill=(0, 0, 0))
+
+            # 6. 전송
+            img_bytes = io.BytesIO()
+            canvas.save(img_bytes, format="PNG")
+            img_bytes.seek(0)
+            chat.reply_media(img_bytes)
+
+        elif template_id == 67300:
+            # 1. 새 캔버스 생성
+            canvas = Image.new("RGBA", (1000, 600), (255, 255, 255, 255))
+
+            #포켓몬 이미지 추가
+            pok_img_url1 = template_args['player1img']
+            pok_img1 = Image.open(pok_img_url1).convert("RGBA")
+            pok1_w, pok1_h = pok_img1.size
+            pok_img_converted1 = pok_img1.resize((int(pok1_w*0.7), int(pok1_h*0.7)),Image.Resampling.LANCZOS)
+
+            pok_img_url2 = template_args['player2img']
+            pok_img2 = Image.open(pok_img_url2).convert("RGBA")
+            pok2_w, pok2_h = pok_img2.size
+            pok_img_converted2 = pok_img2.resize((int(pok2_w*0.7), int(pok2_h*0.7)),Image.Resampling.LANCZOS)
+
+            canvas.paste(pok_img_converted1, (0, 60), pok_img_converted1)
+            canvas.paste(pok_img_converted2, (580, 60), pok_img_converted2)
+
+
+            # 5. 텍스트 그리기
+            draw = ImageDraw.Draw(canvas)
+            try:
+                nick_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Bold.otf", 25)
+            except:
+                nick_font = ImageFont.load_default()
+
+            try:
+                content_font = ImageFont.truetype("res/fonts/MaplestoryFont_OTF/Maplestory OTF Light.otf", 20)
+            except:
+                content_font = ImageFont.load_default()
+
+            draw.text((250, 20), template_args.get('player1name', ''), font=nick_font, fill=(0, 0, 0), anchor="mm")
+
+            draw.text((750, 20), template_args.get('player2name', ''), font=nick_font, fill=(0, 0, 0), anchor="mm")
+
+            draw.text((250, 510), template_args.get('player1', ''), font=nick_font, fill=(0, 0, 0), anchor="mm")
+
+            draw.text((750, 510), template_args.get('player2', ''), font=nick_font, fill=(0, 0, 0), anchor="mm")
+
+            draw.text((500, 500), 'VS', font=nick_font, fill=(0, 0, 0), anchor="mm")
+
+            draw.text((250, 560), template_args.get('player1desc', ''), font=content_font, fill=(0, 0, 0), anchor="mm")
+
+            draw.text((750, 560), template_args.get('player2desc', ''), font=content_font, fill=(0, 0, 0), anchor="mm")
+
+            # 전송
+            img_bytes = io.BytesIO()
+            canvas.save(img_bytes, format="PNG")
+            img_bytes.seek(0)
+            chat.reply_media(img_bytes)
     except Exception as e:
+        print(e)
         # Fallback to text
-        if 'player1img' in template_args:
-            chat.reply(f"카카오링크 오류. 리셋 한번 해주세요.\n\n{template_args.get('player1', '')}\n{template_args.get('player1desc', '')}\n\n{template_args.get('player2', '')}\n{template_args.get('player2desc', '')}")
+        if template_id == 67300:
+            chat.reply(f"카링 대체 부분\n⚔️배틀\n{template_args['player1']}\n{template_args['player1desc']}\nvs\n{template_args['player2']}\n{template_args['player2desc']}")
+        elif template_id == 58796:
+            chat.reply(f"카링 대체 부분\n이미지: {template_args['POKIMG']}\n{template_args.get('POKNAME', '')}\n{template_args.get('DESC', '')}")
         else:
-            chat.reply(f"카카오링크 오류. 리셋 한번 해주세요.")
+            chat.reply(f"카링 대체 부분\n{template_args}")
 
 def fetch_url(url):
     """Fetch URL content"""
@@ -70,25 +161,14 @@ def fetch_url(url):
 
 def pokimglink(pokename, formchange):
     """Get Pokemon image URL"""
-    from .config import MEGA_AFTER_NAMES, MEGA_PICTURES, SPECIAL_IMG_POKS, SPECIAL_POKS_IMAGE, FORM_CHANGE_NAMES, FORM_CHANGE_IMAGE
-    
     imgg = ""
-    if pokename in MEGA_AFTER_NAMES:
-        idx = MEGA_AFTER_NAMES.index(pokename)
-        if idx < len(MEGA_PICTURES):
-            imgg = MEGA_PICTURES[idx]
-    elif pokename in SPECIAL_IMG_POKS:
-        idx = SPECIAL_IMG_POKS.index(pokename)
-        if idx < len(SPECIAL_POKS_IMAGE):
-            imgg = SPECIAL_POKS_IMAGE[idx]
-    elif formchange > 0 and pokename in FORM_CHANGE_NAMES:
-        if pokename != "아르세우스":
-            if pokename in FORM_CHANGE_IMAGE and formchange < len(FORM_CHANGE_IMAGE[pokename]):
-                imgg = FORM_CHANGE_IMAGE[pokename][formchange]
-        else:
-            imgg = ""
+    if formchange > 0 and pokename != "아르세우스":
+        imgg = f"res/img/pok_game/pokemon_images/{pokename}_{formchange}.png"
     else:
-        imgg = ""
+        imgg = f"res/img/pok_game/pokemon_images/{pokename}.png"
+
+    #TODO: 이로치 추가시 이로치 이미지 분기 추가
+
     return imgg
 
 def typejudge(skilltype, typea, typeb):

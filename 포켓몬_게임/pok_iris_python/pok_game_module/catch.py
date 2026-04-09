@@ -1,6 +1,7 @@
 # Module 4: Pokemon Catching
 import random
 import math
+import time
 import unicodedata
 from .config import SETTING, BALL_ARR, BALL_FAIL, RUN_POKS, V_TEXTS, POK_ARR
 from .io_helpers import read_json, write_json
@@ -40,7 +41,9 @@ def handle_ballthrow(sender, chat):
 
     pokUser["balls"] -= 1
 
-    chat.reply(f'@{sender}님이 {pokname}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요!')
+    chat.reply(f'{sender}님이 {pokname}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요!')
+
+    time.sleep(1)
 
     # Catch calculation - determine Pokemon group
     ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))
@@ -286,5 +289,6 @@ def create_pokemon(name, level):
         'skillslocked': [],
         'formchange': 0,
         'v': v,
+        'shiny':0,
         'islocked': 0
     }
