@@ -2,7 +2,7 @@
 import random
 import math
 import time
-from .config import SETTING, MEGA_NAMES, MEGA_AFTER_NAMES, FORM_CHANGE_NAMES, FORM_CHANGE_STATUS, POK_ARR, CMDS
+from .config import SETTING, MEGA_NAMES, MEGA_AFTER_NAMES, FORM_CHANGE_NAMES, FORM_CHANGE_STATUS, POK_ARR, CMDS, BALL_ARR
 from .io_helpers import read_json, write_json, printskills, pokimglink
 
 def handle_levelup(sender, chat, args=None):
@@ -20,7 +20,7 @@ def handle_levelup(sender, chat, args=None):
     # Parse arguments
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["levelup"]} [덱번호] [레벨량]\n예: {SETTING["levelup"]} 1 10')
+        chat.reply(f'@{sender}\n사용법: {CMDS["levelup"]} [덱번호] [레벨량]\n예: {CMDS["levelup"]} 1 10')
         return
     
     try:
@@ -177,7 +177,7 @@ def handle_skillchange(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["skillchange"]} [덱번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["skillchange"]} [덱번호]')
         return
     
     try:
@@ -365,7 +365,7 @@ def handle_effort(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["effort"]} [덱번호] [상자번호 or 금왕관]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["effort"]} [덱번호] [상자번호 or 금왕관]')
         return
     
     try:
@@ -517,7 +517,7 @@ def handle_mega(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["mega"]} [덱번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["mega"]} [덱번호]')
         return
     
     try:
@@ -626,7 +626,7 @@ def handle_formchange(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["formchange"]} [덱번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["formchange"]} [덱번호]')
         return
     
     try:
@@ -747,7 +747,7 @@ def handle_lock(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["lock"]} [상자번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["lock"]} [상자번호]')
         return
     
     try:
@@ -799,7 +799,7 @@ def handle_unlock(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {SETTING["unlock"]} [덱번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["unlock"]} [덱번호]')
         return
     
     try:
@@ -832,7 +832,10 @@ def handle_sell(sender, chat, args=None):
         chat.reply(f'@{sender}\n상자에 포켓몬이 없어요!')
         return
 
-    parts = args.split() if args else []
+    # Handle args properly - support no args, single arg, or range args
+    parts = []
+    if args and args.strip():
+        parts = args.strip().split()
 
     money = 0
     tempbox = []
@@ -854,12 +857,19 @@ def handle_sell(sender, chat, args=None):
             chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
             return
 
-    # If no args, sell all non-locked Pokemon
-
+    # Iterate through ALL Pokemon in box and sell unlocked ones
+    # Locked Pokemon (islocked==1) are kept in the box
+    # When no range is specified (default), all unlocked Pokemon are sold
+    # When a range is specified, only unlocked Pokemon in that range are sold
     for i, pok in enumerate(pokInv["box"]):
-        if pok.get("islocked", 0) == 1 or i < startn or i > endn:
+        is_locked = pok.get("islocked", 0) == 1
+        is_in_range = startn <= i <= endn
+        
+        # Keep Pokemon if it's locked OR if it's outside the specified range
+        if is_locked or not is_in_range:
             tempbox.append(pok)
         else:
+            # This is an unlocked Pokemon in the sell range - sell it!
             pokmoney = 3000 * pok["level"] ** 2
 
             if pok["name"] in POK_ARR["group4"] or pok["name"] == "다부니":
@@ -880,6 +890,7 @@ def handle_sell(sender, chat, args=None):
     # Apply event gold multiplier
     money = math.ceil(money * SETTING.get("eventp", {}).get("goldX", 1))
 
+    # Update box with only kept Pokemon
     pokInv["box"] = tempbox
     pokUser["gold"] += money
 
@@ -971,7 +982,7 @@ def handle_swap(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 2:
-        chat.reply(f'@{sender}\n사용법: {SETTING["swap"]} [덱번호1] [덱번호2]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["swap"]} [덱번호1] [덱번호2]')
         return
     
     try:
@@ -1091,6 +1102,7 @@ def handle_egg(sender, chat):
         'skills': caughtpokskills,
         'skillslocked': [],
         'formchange': 0,
+        'shiny':0,
         'v': 0,
         'islocked': 0
     }
@@ -1187,6 +1199,7 @@ def handle_legendegg(sender, chat):
         'skills': caughtpokskills,
         'skillslocked': [],
         'formchange': 0,
+        'shiny':0,
         'v': 0,
         'islocked': 0
     }

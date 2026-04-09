@@ -28,6 +28,9 @@ def handle_ballthrow(sender, chat):
         chat.reply(f'@{sender}\n이미 볼을 던진 상태예요.')
         return
 
+    # Add to waiting list BEFORE any processing to prevent spam
+    isballwaiting.append(sender)
+
     # Find Pokemon info
     idx = ispokfind.index(sender)
     pokinfo = battlepokinfo[idx]
@@ -36,6 +39,8 @@ def handle_ballthrow(sender, chat):
 
     # Check if player has balls
     if pokUser.get("balls", 0) <= 0:
+        # Remove from waiting list if no balls
+        isballwaiting.remove(sender)
         chat.reply(f'@{sender}\n볼이 없어요!\n"{SETTING["ball"]}" 명령어로 볼을 구매하세요.')
         return
 
