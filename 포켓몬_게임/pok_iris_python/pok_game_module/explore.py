@@ -161,7 +161,7 @@ def handle_explore(sender, room, chat):
     pokUser["count"] = pokUser.get("count", {"total": 0, "succ": 0})
     pokUser["count"]["total"] = pokUser["count"].get("total", 0) + 1
 
-    pokinfo = {'name': pokname, 'level': lev}
+    pokinfo = {'name': pokname, 'level': lev, 'shiny':0}
     ispokfind.append(sender)
     battlepokinfo.append(pokinfo)
     advOn[sender] = 2

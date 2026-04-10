@@ -36,6 +36,7 @@ def handle_ballthrow(sender, chat):
     pokinfo = battlepokinfo[idx]
     pokname = pokinfo['name']
     lev = pokinfo['level']
+    shiny = pokinfo['shiny']
 
     # Check if player has balls
     if pokUser.get("balls", 0) <= 0:
@@ -98,7 +99,7 @@ def handle_ballthrow(sender, chat):
     # Catch attempt
     if random.randint(1, 100) <= catch_rate:
         # Success - catch Pokemon
-        caught_pok = create_pokemon(pokname, lev)
+        caught_pok = create_pokemon(pokname, lev, shiny)
         pokInv = read_json(f"player_{sender}_inv")
 
         if pokInv is None:
@@ -271,7 +272,7 @@ def handle_escape(sender, chat):
     if sender in isballwaiting:
         isballwaiting.remove(sender)
 
-def create_pokemon(name, level):
+def create_pokemon(name, level, shiny):
     """Create a Pokemon with stats"""
     from .io_helpers import read_json
 
@@ -320,6 +321,6 @@ def create_pokemon(name, level):
         'skillslocked': [],
         'formchange': 0,
         'v': v,
-        'shiny':0,
+        'shiny':shiny,
         'islocked': 0
     }
