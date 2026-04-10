@@ -4,6 +4,7 @@ import math
 import time
 from .config import SETTING, BALL_ARR, TYPE_TEXTS
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink
+from .explore import advOn
 
 # Global battle state
 isbattle = 0
@@ -30,8 +31,13 @@ battletowerlev = {}
 
 def handle_battlejoin(sender, chat):
     """Handle battle join command (@배틀참가)"""
-    global isbattle, player1, player2, advOn
-    
+    global isbattle, player1, player2
+
+    # Check maintenance mode
+    from .maintenance import check_updating
+    if not check_updating(sender, chat):
+        return
+
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
@@ -60,8 +66,8 @@ def handle_battlejoin(sender, chat):
 
 def handle_battleexit(sender, chat):
     """Handle battle exit command (@배틀취소)"""
-    global isbattle, player1, player2, advOn
-    
+    global isbattle, player1, player2
+
     if sender == player1 and isbattle == 1:
         isbattle = 0
         player1 = ""

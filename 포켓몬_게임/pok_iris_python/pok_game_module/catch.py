@@ -44,7 +44,9 @@ def handle_ballthrow(sender, chat):
         chat.reply(f'@{sender}\n볼이 없어요!\n"{SETTING["ball"]}" 명령어로 볼을 구매하세요.')
         return
 
+    # Decrement ball count
     pokUser["balls"] -= 1
+    write_json(f"player_{sender}", pokUser)  # Immediately persist ball decrement
 
     chat.reply(f'{sender}님이 {pokname}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요!')
 
@@ -156,6 +158,12 @@ def handle_ballthrow(sender, chat):
         if pokUser["hp"] > pokUser.get("maxHp", 0):
             pokUser["hp"] = pokUser.get("maxHp", 0)
 
+        # Re-read to preserve ball count (balls were already decremented and persisted earlier)
+        current_pokUser = read_json(f"player_{sender}")
+        if current_pokUser:
+            pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+            pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+        
         write_json(f"player_{sender}", pokUser)
 
         chat.reply(f"@{sender}\n축하합니다!\n{pokname}{'을' if len(unicodedata.normalize('NFD', pokname[-1])) == 3 else '를'} 잡았습니다!")
@@ -187,6 +195,12 @@ def handle_ballthrow(sender, chat):
         # Check if Pokemon flees
         if runprob > (random.randint(1, 100)):
             # Pokemon fled - end exploration
+            # Re-read to preserve ball count
+            current_pokUser = read_json(f"player_{sender}")
+            if current_pokUser:
+                pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+                pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+            
             pokUser["count"]["fail"] = pokUser.get("count", {}).get("fail", 0) + 1
             pokUser["hp"] = pokUser.get("hp", 1) - 1
             write_json(f"player_{sender}", pokUser)
@@ -203,6 +217,12 @@ def handle_ballthrow(sender, chat):
                 isballwaiting.remove(sender)
         elif pokUser.get("balls", 0) < 1:
             # No balls left - end exploration
+            # Re-read to preserve ball count
+            current_pokUser = read_json(f"player_{sender}")
+            if current_pokUser:
+                pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+                pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+            
             pokUser["count"]["fail"] = pokUser.get("count", {}).get("fail", 0) + 1
             pokUser["hp"] = pokUser.get("hp", 1) - 1
             write_json(f"player_{sender}", pokUser)
@@ -217,6 +237,12 @@ def handle_ballthrow(sender, chat):
                 isballwaiting.remove(sender)
         else:
             # Pokemon didn't flee - give another chance
+            # Re-read to preserve ball count
+            current_pokUser = read_json(f"player_{sender}")
+            if current_pokUser:
+                pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+                pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+            
             write_json(f"player_{sender}", pokUser)
             chat.reply(f"@{sender}\n\n{pokinfo['name']}\nLv.{pokinfo['level']}\n\n볼 던지기:{'/'.join(SETTING.get('ballthrow_cmds', ['@볼']))} 도망가기:{'/'.join(SETTING.get('esc_cmds', ['@도망']))}")
 

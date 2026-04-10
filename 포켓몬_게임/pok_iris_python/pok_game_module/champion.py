@@ -10,7 +10,12 @@ champplayers = {}
 def handle_champ(sender, chat):
     """Handle champion challenge command (@챔피언도전)"""
     global champplayers
-    
+
+    # Check maintenance mode
+    from .maintenance import check_updating
+    if not check_updating(sender, chat):
+        return
+
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')

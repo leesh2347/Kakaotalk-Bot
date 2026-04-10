@@ -34,7 +34,12 @@ def handle_gym(sender, chat, args=None):
     global isbattle, player1, player2, player1pok, player2pok, player1maxhp, player2maxhp
     global player1pp, player2pp, player1retire, player2retire, isplayer1bind, isplayer2bind
     global battleres, weather, isnpcbattle, nextpokchoose, trainerInv, trainerpoknum, gymnum
-    
+
+    # Check maintenance mode
+    from .maintenance import check_updating
+    if not check_updating(sender, chat):
+        return
+
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
@@ -187,7 +192,12 @@ def handle_battletower(sender, chat, args=None):
     global player1pp, player2pp, player1retire, player2retire, isplayer1bind, isplayer2bind
     global battleres, weather, isnpcbattle, nextpokchoose, trainerInv, trainerpoknum
     global battletowerplayers, battletowerlev
-    
+
+    # Check maintenance mode
+    from .maintenance import check_updating
+    if not check_updating(sender, chat):
+        return
+
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')

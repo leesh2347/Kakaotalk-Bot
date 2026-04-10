@@ -14,7 +14,12 @@ pokdelay = {}
 def handle_explore(sender, room, chat):
     """Handle exploration command (@야생/ㅇㅅ)"""
     global ispokfind, battlepokinfo, advOn, pokdelay
-    
+
+    # Check maintenance mode
+    from .maintenance import check_updating
+    if not check_updating(sender, chat):
+        return
+
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.\n"{CMDS["join"]}"으로 회원가입부터 진행해 주세요.')
@@ -138,7 +143,7 @@ def handle_explore(sender, room, chat):
     
     # Display message based on rarity
     lt = len(pokname) - 1
-    particle = '이' if len(pokname.encode('utf-8')) != len(pokname) else '가'
+    particle = '(이)가'
     
     if pokname in POK_ARR['groupunknown']:
         chat.reply(f"@{sender}\n❗ <???> {pokname}{particle} 나타났어요!")
@@ -155,11 +160,17 @@ def handle_explore(sender, room, chat):
     
     pokUser["count"] = pokUser.get("count", {"total": 0, "succ": 0})
     pokUser["count"]["total"] = pokUser["count"].get("total", 0) + 1
-    
+
     pokinfo = {'name': pokname, 'level': lev}
     ispokfind.append(sender)
     battlepokinfo.append(pokinfo)
     advOn[sender] = 2
+
+    # Re-read to get current ball count before writing (balls may have been decremented by throws)
+    current_pokUser = read_json(f"player_{sender}")
+    if current_pokUser:
+        pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+        pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
     
     write_json(f"player_{sender}", pokUser)
     write_json(f"player_{sender}_inv", pokInv)
