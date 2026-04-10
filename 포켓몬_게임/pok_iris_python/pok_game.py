@@ -19,6 +19,7 @@ from .pok_game_module.pve_battle import handle_gym, handle_battletower
 from .pok_game_module.champion import handle_champ, handle_champinfo
 from .pok_game_module.collection import handle_mycollection, handle_collectioninfo, handle_collectioneffects
 from .pok_game_module.etc import handle_gatcha, handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar
+from .pok_game_module.maintenance import toggle_updating, load_updating_state, ADMIN_USER
 
 # Global state imports
 from .pok_game_module.explore import ispokfind, battlepokinfo
@@ -266,6 +267,17 @@ def handle_message(chat):
         return
 
     # ========================================================================
+    # Maintenance (Admin Only)
+    # ========================================================================
+    if msg_first == CMDS['updating']:
+        result = toggle_updating(sender, msg[len(msg_first):].strip())
+        if result:
+            chat.reply(result)
+        else:
+            chat.reply(f"@{sender}\n권한이 없습니다.\n(관리자: {ADMIN_USER})")
+        return
+
+    # ========================================================================
     # Help
     # ========================================================================
     if msg == CMDS['help'] or msg == CMDS['uphelp']:
@@ -322,17 +334,20 @@ def on_start():
     Initialization function called when module is loaded
     """
     global month, gatchaplayers, champplayers
-    
+
     season_text = ["", "봄", "여름", "가을", "겨울"]
     pokseason = read_json("season")
-    
+
     if pokseason is None:
         data = {"month": 1}
         write_json("season", data)
         pokseason = read_json("season")
-    
+
     month = pokseason.get("month", 1)
     gatchaplayers = {}
     champplayers = {}
-    
+
+    # Load maintenance state
+    load_updating_state()
+
     print(f"포켓몬 게임 리로드.\n현재 계절: {season_text[month]}")
