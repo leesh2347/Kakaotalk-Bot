@@ -14,8 +14,8 @@ player1pok = {}
 player2pok = {}
 player1maxhp = 0
 player2maxhp = 0
-player1pp = []
-player2pp = []
+player1pp = {}
+player2pp = {}
 player1retire = []
 player2retire = []
 isplayer1bind = 0
@@ -28,6 +28,10 @@ player1ball = ""
 player2ball = ""
 battletowerplayers = {}
 battletowerlev = {}
+
+# PvP battle specific state
+player1inv = {}
+player2inv = {}
 
 def handle_battlejoin(sender, chat):
     """Handle battle join command (@배틀참가)"""
@@ -51,16 +55,16 @@ def handle_battlejoin(sender, chat):
     if isbattle == 0:
         # Create new battle
         player1 = sender
-        isbattle = 1
+        isbattle = 3
         advOn[sender] = 3
         chat.reply(f"@{sender}\n배틀 참가 완료!\n상대를 기다리는 중...")
-    elif isbattle == 1 and player1 != sender:
+    elif isbattle == 3 and player1 != sender:
         # Join existing battle
         player2 = sender
         isbattle = 2
         advOn[sender] = 3
         chat.reply(f"@{player2}\n배틀 참가 완료!\n배틀을 시작합니다!")
-        start_battle(chat)
+        start_pvp_battle(chat)
     else:
         chat.reply(f"@{sender}\n이미 배틀이 진행 중이에요!")
 
@@ -68,13 +72,13 @@ def handle_battleexit(sender, chat):
     """Handle battle exit command (@배틀취소)"""
     global isbattle, player1, player2
 
-    if sender == player1 and isbattle == 1:
+    if sender == player1 and isbattle == 3:
         isbattle = 0
         player1 = ""
         advOn[sender] = 0
         chat.reply(f"@{sender}\n배틀 참가가 취소되었습니다.")
     elif sender == player2 and isbattle == 2:
-        isbattle = 1
+        isbattle = 3
         player2 = ""
         advOn[sender] = 0
         chat.reply(f"@{sender}\n배틀 참가가 취소되었습니다.")
@@ -106,7 +110,7 @@ def handle_battlenext(sender, chat, args=None):
 
 def handle_giveup(sender, chat):
     """Handle give up command (@배틀기권)"""
-    global isbattle, player1, player2
+    global isbattle, player1, player2, player1pok, player2pok, player1retire, player2retire
     
     if sender not in [player1, player2]:
         chat.reply(f"@{sender}\n배틀 중이 아니에요!")
@@ -114,33 +118,66 @@ def handle_giveup(sender, chat):
     
     chat.reply(f"@{sender}\n기권했습니다!")
     
-    # End battle
-    isbattle = 0
-    player1 = ""
-    player2 = ""
+    # Determine winner
+    winner = player2 if sender == player1 else player1
+    
+    # End battle with giveup
+    end_pvp_battle(chat, winner=winner)
 
-def start_battle(chat):
+def start_pvp_battle(chat):
     """Start PvP battle"""
     global player1, player2, player1pok, player2pok, player1maxhp, player2maxhp
+    global player1pp, player2pp, player1retire, player2retire, battleres, weather
+    global player1inv, player2inv
     
     # Load player data
-    pokInv1 = read_json(f"player_{player1}_inv")
-    pokInv2 = read_json(f"player_{player2}_inv")
+    player1inv = read_json(f"player_{player1}_inv")
+    player2inv = read_json(f"player_{player2}_inv")
+    
+    # Reset all deck HP to max HP at battle start
+    for pok in player1inv.get("deck", []):
+        pok["hp"] = pok.get("maxhp", pok["hp"])
+    for pok in player2inv.get("deck", []):
+        pok["hp"] = pok.get("maxhp", pok["hp"])
     
     # Select first pokemon from deck
-    player1pok = pokInv1["deck"][0].copy()
-    player2pok = pokInv2["deck"][0].copy()
+    player1pok = player1inv["deck"][0].copy()
+    player2pok = player2inv["deck"][0].copy()
     
-    player1maxhp = player1pok["hp"]
-    player2maxhp = player2pok["hp"]
+    player1maxhp = player1pok.get("maxhp", player1pok["hp"])
+    player2maxhp = player2pok.get("maxhp", player2pok["hp"])
+    
+    # Initialize PP
+    player1pp = {}
+    for skill in player1pok.get("skills", []):
+        skill_data = read_json(f"기술/{skill}")
+        player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
+    
+    player2pp = {}
+    for skill in player2pok.get("skills", []):
+        skill_data = read_json(f"기술/{skill}")
+        player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
+    
+    # Initialize retire lists
+    player1retire = []
+    player2retire = []
+    battleres = ""
+    
+    # Random weather (1/3 chance)
+    if random.randint(1, 3) == 1:
+        weather = random.randint(1, 4)
+    else:
+        weather = 0
     
     chat.reply(f"⚔️배틀 시작!⚔️\n\n[{player1}] Lv.{player1pok['level']} {player1pok['name']} [{player1pok['hp']}HP]\nvs\n[{player2}] Lv.{player2pok['level']} {player2pok['name']} [{player2pok['hp']}HP]")
     
-    # Send battle KakaoTalk link
+    # Send battle image
     try:
         img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
         img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
         send_image(None, chat, 67300, {
+            'player1name': player1,
+            'player2name': player2,
             'player1img': img1,
             'player2img': img2,
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -148,49 +185,238 @@ def start_battle(chat):
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
             'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
         })
-    except:
-        pass
+    except Exception as e:
+        print(e)
+    
+    # Weather message
+    weather_texts = {1: "☀️해가 내리찍는다!", 2: "🌧️비가 내리기 시작한다!", 3: "🌬️모래바람이 분다!", 4: "❄️싸라기눈이 내린다!"}
+    if weather > 0:
+        chat.reply(weather_texts.get(weather, ""))
+    
+    time.sleep(3)
     
     # Battle loop
-    battle_turn(chat)
+    pvp_battle_loop(chat)
 
-def battle_turn(chat):
-    """Execute one battle turn"""
-    global player1, player2, player1pok, player2pok, player1maxhp, player2maxhp, battleres
+def pvp_battle_loop(chat):
+    """Execute battle loop for PvP - continues until one player loses all Pokemon"""
+    global isbattle, player1, player2, player1pok, player2pok, player1maxhp, player2maxhp
+    global player1pp, player2pp, player1retire, player2retire, battleres, weather
+    global isplayer1bind, isplayer2bind, player1inv, player2inv
+
+    max_turns = 100
+    turn = 0
     
     battleres = ""
-    
-    # Select random skills
-    player1skill = random.choice(player1pok.get("skills", ["태클"]))
-    player2skill = random.choice(player2pok.get("skills", ["태클"]))
-    
-    # Determine turn order by speed
-    if player1pok["spd"] >= player2pok["spd"]:
-        execute_attack(player1, player2, player1pok, player2pok, player1skill, chat)
-        if player2pok["hp"] > 0:
-            execute_attack(player2, player1, player2pok, player1pok, player2skill, chat)
-    else:
-        execute_attack(player2, player1, player2pok, player1pok, player2skill, chat)
-        if player1pok["hp"] > 0:
-            execute_attack(player1, player2, player1pok, player2pok, player1skill, chat)
-    
-    # Check for faint
-    if player1pok["hp"] <= 0 or player2pok["hp"] <= 0:
-        end_battle(chat)
-    else:
-        chat.reply(f"{battleres}")
 
-def execute_attack(attacker_name, defender_name, attacker, defender, skill, chat):
-    """Execute a single attack"""
-    global battleres
+    while turn < max_turns:
+        turn += 1
+
+        # Check if player1's Pokemon fainted
+        if player1pok["hp"] <= 0:
+            # Send accumulated battle log
+            if battleres:
+                space = "\u200b" * 500
+                chat.reply(f"배틀 결과\n{space}\n{battleres}")
+                battleres = ""
+            
+            player1retire.append(len(player1retire))
+            
+            # Check if player1 has more Pokemon
+            if len(player1retire) >= len(player1inv.get("deck", [])):
+                # Player1 has no more Pokemon - Player2 wins
+                end_pvp_battle(chat, winner=player2)
+                return
+            
+            # Load next Pokemon
+            next_pok_idx = len(player1retire)
+            player1pok = player1inv["deck"][next_pok_idx].copy()
+            player1maxhp = player1pok.get("maxhp", player1pok["hp"])
+            player1pok["hp"] = player1maxhp
+            player1pp = {}
+            for skill in player1pok.get("skills", []):
+                skill_data = read_json(f"기술/{skill}")
+                player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
+            
+            chat.reply(f"[{player1}] {player1pok['name']} 등장!")
+            
+            # Send image
+            try:
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                send_image(None, chat, 67300, {
+                    'player1name': player1,
+                    'player2name': player2,
+                    'player1img': img1,
+                    'player2img': img2,
+                    'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
+                    'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
+                    'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
+                    'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
+                })
+            except Exception as e:
+                print(e)
+            
+            time.sleep(3)
+
+        # Check if player2's Pokemon fainted
+        if player2pok["hp"] <= 0:
+            # Send accumulated battle log
+            if battleres:
+                space = "\u200b" * 500
+                chat.reply(f"배틀 결과\n{space}\n{battleres}")
+                battleres = ""
+            
+            player2retire.append(len(player2retire))
+            
+            # Check if player2 has more Pokemon
+            if len(player2retire) >= len(player2inv.get("deck", [])):
+                # Player2 has no more Pokemon - Player1 wins
+                end_pvp_battle(chat, winner=player1)
+                return
+            
+            # Load next Pokemon
+            next_pok_idx = len(player2retire)
+            player2pok = player2inv["deck"][next_pok_idx].copy()
+            player2maxhp = player2pok.get("maxhp", player2pok["hp"])
+            player2pok["hp"] = player2maxhp
+            player2pp = {}
+            for skill in player2pok.get("skills", []):
+                skill_data = read_json(f"기술/{skill}")
+                player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
+            
+            chat.reply(f"[{player2}] {player2pok['name']} 등장!")
+            
+            # Send image
+            try:
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                send_image(None, chat, 67300, {
+                    'player1name': player1,
+                    'player2name': player2,
+                    'player1img': img1,
+                    'player2img': img2,
+                    'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
+                    'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
+                    'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
+                    'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
+                })
+            except Exception as e:
+                print(e)
+            
+            time.sleep(3)
+
+        # Execute turn
+        player1skill = random.choice(player1pok.get("skills", ["태클"]))
+        player2skill = random.choice(player2pok.get("skills", ["태클"]))
+
+        player1spd = player1pok["spd"]
+        player2spd = player2pok["spd"]
+
+        # Priority
+        skill1_data = read_json(f"기술/{player1skill}")
+        skill2_data = read_json(f"기술/{player2skill}")
+
+        if skill1_data:
+            player1spd += (skill1_data.get("priority") or 0) * 2
+        if skill2_data:
+            player2spd += (skill2_data.get("priority") or 0) * 2
+
+        if player1spd > player2spd:
+            execute_pvp_attack(player1, player2, player1pok, player2pok, player1skill, player1pp)
+            if player2pok["hp"] > 0:
+                execute_pvp_attack(player2, player1, player2pok, player1pok, player2skill, player2pp)
+        else:
+            execute_pvp_attack(player2, player1, player2pok, player1pok, player2skill, player2pp)
+            if player1pok["hp"] > 0:
+                execute_pvp_attack(player1, player2, player1pok, player2pok, player1skill, player1pp)
+
+        # Weather damage
+        if weather > 2:
+            if weather == 3:  # Sandstorm
+                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 1
+                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 1
+                if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7:
+                    player1pok["hp"] = max(1, math.ceil(player1pok["hp"] * 7 / 8))
+                    battleres += f"[{player1}] 모래바람이 {player1pok['name']}(를)을 덮쳤어요!\n"
+
+                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
+                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
+                if type1_2 != 6 and type2_2 != 6 and type1_2 != 7 and type2_2 != 7:
+                    player2pok["hp"] = max(1, math.ceil(player2pok["hp"] * 7 / 8))
+                    battleres += f"[{player2}] 모래바람이 {player2pok['name']}(를)을 덮쳤어요!\n"
+
+            elif weather == 4:  # Hail
+                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 1
+                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 1
+                if type1_1 != 11 and type2_1 != 11:
+                    player1pok["hp"] = max(1, math.ceil(player1pok["hp"] * 7 / 8))
+                    battleres += f"[{player1}] 싸라기눈이 {player1pok['name']}(를)을 덮쳤어요!\n"
+                
+                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
+                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
+                if type1_2 != 11 and type2_2 != 11:
+                    player2pok["hp"] = max(1, math.ceil(player2pok["hp"] * 7 / 8))
+                    battleres += f"[{player2}] 싸라기눈이 {player2pok['name']}(를)을 덮쳤어요!\n"
+
+        # Send periodic battle update
+        if turn % 5 == 0:
+            if battleres:
+                space = "\u200b" * 500
+                chat.reply(f"배틀 진행중...\n{space}\n{battleres}")
+                battleres = ""
+            
+            # Send image
+            try:
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                send_image(None, chat, 67300, {
+                    'player1name': player1,
+                    'player2name': player2,
+                    'player1img': img1,
+                    'player2img': img2,
+                    'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
+                    'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
+                    'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
+                    'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
+                })
+            except Exception as e:
+                print(e)
+            
+            time.sleep(3)
+
+    # Timeout
+    if battleres:
+        chat.reply(battleres)
+    chat.reply("배틀이 너무 길어져서 무승부로 처리됩니다.")
+    isbattle = 0
+    player1 = ""
+    player2 = ""
+
+def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, pp_dict):
+    """Execute a single PvP attack with full mechanics"""
+    global battleres, isplayer1bind, isplayer2bind, player1pok, player2pok, weather
     
     skill_data = read_json(f"기술/{skill}")
     if not skill_data:
         battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n기술 데이터 없음!\n\n"
         return
     
+    # Check PP
+    if skill not in pp_dict or pp_dict[skill] <= 0:
+        battleres += f"[{attacker_name}] {attacker['name']}는 PP가 부족해요!\n\n"
+        return
+    
+    pp_dict[skill] -= 1
+    
+    # Accuracy
+    accr = skill_data.get("accr") or 100
+    if random.randint(1, 100) > accr:
+        battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n아쉽게 빗나갔어요!\n\n"
+        return
+
     # Calculate damage
-    atktype = skill_data.get("atktype", 1)  # 0 = physical (atk/def), 1 = special (satk/sdef)
+    atktype = skill_data.get("atktype") or 1
     if atktype == 0:
         atk_stat = attacker["atk"]
         def_stat = defender["def"]
@@ -198,22 +424,38 @@ def execute_attack(attacker_name, defender_name, attacker, defender, skill, chat
         atk_stat = attacker.get("satk", attacker["atk"])
         def_stat = defender.get("sdef", defender["def"])
 
-    atk = math.ceil(atk_stat * skill_data.get("damage", 40) / 300 * (2000 - def_stat) / 2000)
+    atk = math.ceil(atk_stat * (skill_data.get("damage") or 40) / 300 * (2000 - def_stat) / 2000)
+
+    # STAB
+    skill_type = skill_data.get("type") or 1
+    attacker_type1 = read_json(f"포켓몬/{attacker['name']}", "type1") or 1
+    attacker_type2 = read_json(f"포켓몬/{attacker['name']}", "type2") or 1
+    
+    if skill_type == attacker_type1 or skill_type == attacker_type2:
+        atk = atk * 1.5
+    
+    # Weather
+    atk = weatherjudge(atk, skill_type, weather)
     
     # Type effectiveness
-    skill_type = skill_data.get("type", 1)
     defender_type1 = read_json(f"포켓몬/{defender['name']}", "type1") or 1
     defender_type2 = read_json(f"포켓몬/{defender['name']}", "type2") or 1
     
     judge = typejudge(skill_type, defender_type1, defender_type2)
     atk = atk * judge
     
-    # Apply weather
-    atk = weatherjudge(atk, skill_type, weather)
+    # Additional effects
+    addi = skill_data.get("addi") or 0
     
-    defender["hp"] = max(0, defender["hp"] - atk)
+    if addi == 4:  # Revenge
+        atk = atk * (attacker.get("maxhp", attacker["hp"]) - attacker["hp"]) / 2
+    
+    final_damage = math.ceil(atk)
+    new_hp = max(0, defender["hp"] - final_damage)
+    defender["hp"] = new_hp
     
     battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n"
+    
     if judge > 1:
         battleres += "효과가 굉장했어요!\n"
     elif judge == 0:
@@ -221,14 +463,63 @@ def execute_attack(attacker_name, defender_name, attacker, defender, skill, chat
     elif judge < 1:
         battleres += "효과가 별로인 듯해요\n"
     
+    # Recoil
+    if addi == 3 and judge != 0:
+        attacker["hp"] = max(1, attacker["hp"] - math.ceil(atk / 4))
+        battleres += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 데미지를 입었어요!\n"
+    elif addi == 2 and judge != 0:
+        attacker["hp"] = min(attacker.get("maxhp", attacker["hp"]), attacker["hp"] + math.ceil(atk / 4))
+        battleres += f"[{attacker_name}] {attacker['name']}는 공격을 통해 체력을 흡수했어요!\n"
+    elif addi == 1 and skill != "솔라빔" and weather != 1:
+        if attacker_name == player1:
+            isplayer1bind = 1
+        else:
+            isplayer2bind = 1
+    elif addi == 9:
+        attacker["hp"] = 1
+    
     battleres += f"\n[{attacker_name}] {attacker['name']} [{attacker['hp']}HP]\n[{defender_name}] {defender['name']} [{defender['hp']}HP]\n\n"
 
-def end_battle(chat):
-    """End the battle"""
+def end_pvp_battle(chat, winner=None):
+    """End the PvP battle"""
     global isbattle, player1, player2, player1pok, player2pok
+    global player1retire, player2retire, battleres
     
-    winner = player1 if player2pok["hp"] > 0 else player2
+    # Send final battle log
+    if battleres:
+        space = "\u200b" * 500
+        chat.reply(f"배틀 결과\n{space}\n{battleres}")
+        battleres = ""
+    
+    if winner is None:
+        # Determine winner based on remaining HP
+        winner = player1 if player2pok["hp"] > 0 else player2
+    
     loser = player2 if winner == player1 else player1
+    
+    # Send result image
+    try:
+        if winner == player1:
+            winnerpok = player1pok
+            loserpok = player2pok
+        else:
+            winnerpok = player2pok
+            loserpok = player1pok
+        
+        img1 = pokimglink(winnerpok["name"], winnerpok.get("formchange", 0))
+        img2 = pokimglink(loserpok["name"], loserpok.get("formchange", 0))
+        send_image(None, chat, 67300, {
+            'player1name': player1,
+            'player2name': player2,
+            'player1img': img1,
+            'player2img': img2,
+            'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
+            'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
+            'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
+            'player2desc': f"[{player2pok['hp']}/{player2maxhp}]"
+        })
+    except Exception as e:
+        print(e)
     
     chat.reply(f"🏆배틀 종료!🏆\n\n승자: [{winner}]\n패자: [{loser}]")
     
@@ -255,6 +546,15 @@ def end_battle(chat):
         write_json(f"player_{player2}", pokUser2)
     
     # Reset battle state
+    if player1 and player1 in advOn:
+        advOn[player1] = 0
+    if player2 and player2 in advOn:
+        advOn[player2] = 0
+    
     isbattle = 0
     player1 = ""
     player2 = ""
+    player1pok = {}
+    player2pok = {}
+    player1retire = []
+    player2retire = []

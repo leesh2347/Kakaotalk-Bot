@@ -363,6 +363,10 @@ def battle_loop(chat, sender):
     
     # Initialize battle result accumulator
     battleres = ""
+    
+    # Reset all deck HP to max HP at battle start
+    for pok in pokInv.get("deck", []):
+        pok["hp"] = pok.get("maxhp", pok["hp"])
 
     while turn < max_turns:
         turn += 1
@@ -404,7 +408,8 @@ def battle_loop(chat, sender):
                 player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "spd") or 50) * level / 50)
                 player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 1) * level / 50)
                 player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
-
+            
+            trainerInv[trainerpoknum]["hp"] = player1pok["hp"]
             player1maxhp = player1pok["hp"]
             player1pp = {}
             for skill in player1pok.get("skills", []):
@@ -456,7 +461,8 @@ def battle_loop(chat, sender):
 
             # Load next Pokemon
             player2pok = pokInv["deck"][next_pok_idx].copy()
-            player2maxhp = player2pok["hp"]
+            player2maxhp = player2pok.get("maxhp", player2pok["hp"])
+            player2pok["hp"] = player2maxhp
             player2pp = {}
             for skill in player2pok.get("skills", []):
                 skill_data = read_json(f"기술/{skill}")
@@ -612,7 +618,9 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
     if addi == 4:  # Revenge
         atk = atk * (attacker.get("maxhp", attacker["hp"]) - attacker["hp"]) / 2
     
-    defender["hp"] = max(0, defender["hp"] - math.ceil(atk))
+    final_damage = math.ceil(atk)
+    new_hp = max(0, defender["hp"] - final_damage)
+    defender["hp"] = new_hp
     
     battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n"
     
