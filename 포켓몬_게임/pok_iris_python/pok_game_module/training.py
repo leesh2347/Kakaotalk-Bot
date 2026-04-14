@@ -364,12 +364,13 @@ def handle_effort(sender, chat, args=None):
         return
     
     parts = args.split() if args else []
-    if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {CMDS["effort"]} [덱번호] [상자번호 or 금왕관]')
+    if len(parts) < 2:
+        chat.reply(f'@{sender}\n사용법: {CMDS["effort"]} [덱번호] [박스번호]')
         return
     
     try:
         n = int(parts[0])
+        n2 = int(parts[1])
     except:
         chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
         return
@@ -380,74 +381,22 @@ def handle_effort(sender, chat, args=None):
     
     p = pokInv["deck"][n - 1]
     
-    # Check V max
     if p.get("v", 0) >= 6:
         chat.reply(f'@{sender}\nV가 이미 최대(❻)에요!')
         return
     
-    iscrown = False
-    n2 = None
-    
-    if len(parts) > 1:
-        if parts[1] == "금왕관":
-            iscrown = True
-        else:
-            try:
-                n2 = int(parts[1])
-            except:
-                chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
-                return
-    
-    # Check for gold crown or box material
-    if not iscrown and n2 is None:
-        if "금왕관" not in pokInv.get("item", []):
-            chat.reply(f'@{sender}\n금왕관이 없어요!\n상자에서 포켓몬을 소재로 사용하거나 금왕관을 사용하세요.')
-            return
-        iscrown = True
-    
-    if n2 is not None:
-        if n2 < 1 or n2 > len(pokInv.get("box", [])):
-            chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
-            return
-        
-        material_pok = pokInv["box"][n2 - 1]
-        if material_pok.get("islocked", 0) == 1:
-            chat.reply(f'@{sender}\n잠긴 포켓몬은 소재로 사용할 수 없어요!')
-            return
-    
-    # Calculate cost
-    v = p.get("v", 0)
-    totalcosts = 500000000 * (v + 1)
-    
-    # Mega-evolved: /10
-    if p["name"] in MEGA_AFTER_NAMES:
-        totalcosts //= 10
-    
-    # Group unknown: /2
-    if p["name"] in POK_ARR["groupunknown"]:
-        totalcosts //= 2
-    
-    # Group4: x3
-    if p["name"] in POK_ARR["group4"]:
-        totalcosts *= 3
-    
-    # Group5: x5
-    if p["name"] in POK_ARR["group5"]:
-        totalcosts *= 5
-    
-    # Collection 18 discount
-    if 18 in pokUser.get("activecollection", []):
-        totalcosts = math.ceil(totalcosts * (100 - pokUser.get("collectionlev", 1) * 5) / 100)
-    
-    if pokUser.get("gold", 0) < totalcosts:
-        chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {totalcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
+    if n2 < 1 or n2 > len(pokInv.get("box", [])):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
         return
     
-    # Upgrade V
+    material_pok = pokInv["box"][n2 - 1]
+    if material_pok.get("islocked", 0) == 1:
+        chat.reply(f'@{sender}\n잠긴 포켓몬은 소재로 사용할 수 없어요!')
+        return
+    
     old_v = p.get("v", 0)
     p["v"] = old_v + 1
     
-    # Recalculate stats
     if p.get("formchange", 0) > 0:
         base_hp = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "hp") or 50
         base_atk = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "atk") or 50
@@ -470,7 +419,6 @@ def handle_effort(sender, chat, args=None):
     p["satk"] = math.ceil(base_satk * p["level"] / 50)
     p["sdef"] = math.ceil(base_sdef * p["level"] / 50)
 
-    # Apply V bonus
     v_bonus = (10 + p["v"]) / 10
     p["hp"] = math.ceil(p["hp"] * v_bonus)
     p["atk"] = math.ceil(p["atk"] * v_bonus)
@@ -481,24 +429,13 @@ def handle_effort(sender, chat, args=None):
 
     pokInv["deck"][n - 1] = p
 
-    # Consume material
-    material_name = ""
-    if iscrown:
-        pokInv["item"].remove("금왕관")
-        material_name = "금왕관"
-    else:
-        oldpok = pokInv["box"][n2 - 1]["name"]
-        pokInv["box"].pop(n2 - 1)
-        material_name = f"Lv.{oldpok}"
-
-    pokUser["gold"] -= totalcosts
+    material_name = pokInv["box"][n2 - 1]["name"]
+    pokInv["box"].pop(n2 - 1)
 
     write_json(f"player_{sender}_inv", pokInv)
-    write_json(f"player_{sender}", pokUser)
 
-    res = f"{totalcosts:,}원 지불, {material_name} 소모.\n"
-    res += f"보유금액: {pokUser['gold']:,}원\n\n"
-    res += f"Lv.{p['level']} {p['name']} ({old_v}V > {p['v']}V)\n\n"
+    res = f"Lv.{p['level']} {p['name']} ({old_v}V > {p['v']}V)\n"
+    res += f"{material_name} 포켓몬을 소재로 사용했습니다.\n\n"
     res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']} SATK:{p['satk']} SDEF:{p['sdef']}"
 
     chat.reply(f"@{sender}\n{res}")
@@ -1258,3 +1195,142 @@ def handle_legendegg(sender, chat):
         chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!")
     else:
         chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!")
+
+def handle_boxlevelup(sender, chat, args=None):
+    """Handle box level up command (@박스레벨업)"""
+    pokUser = read_json(f"player_{sender}")
+    if pokUser is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    pokInv = read_json(f"player_{sender}_inv")
+    if pokInv is None or not pokInv.get("box"):
+        chat.reply(f'@{sender}\n박스에 포켓몬이 없어요!')
+        return
+    
+    parts = args.split() if args else []
+    if len(parts) < 1:
+        chat.reply(f'@{sender}\n사용법: {CMDS["boxlevelup"]} [박스번호] [레벨량]\n예: {CMDS["boxlevelup"]} 1 10')
+        return
+    
+    try:
+        n = int(parts[0])
+    except:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+    
+    if n < 1 or n > len(pokInv["box"]):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+    
+    n2 = int(parts[1]) if len(parts) > 1 else 1
+    if n2 < 1 or n2 > SETTING["maxlevel"] - 1:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+    
+    p = pokInv["box"][n - 1]
+    old_level = p["level"]
+    
+    totalcosts = 0
+    for j in range(1, n2 + 1):
+        cost = 10 * (p["level"] + j) ** 3
+        
+        if p["name"] in POK_ARR["group5"] or p["name"] == "다부니":
+            cost *= 2
+        
+        if p["level"] + j > 150:
+            cost *= 2
+        elif p["level"] + j > 100:
+            cost *= 1.5
+        
+        if p["level"] + j > 200:
+            cost *= 5
+        
+        totalcosts += cost
+    
+    discount = pokUser.get("upgradedc", 0)
+    if 18 in pokUser.get("activecollection", []):
+        discount += pokUser.get("collectionlev", 1) * 5
+    
+    totalcosts = math.ceil(totalcosts * (100 - discount) / 100)
+    
+    if p["level"] + n2 > SETTING["maxlevel"]:
+        chat.reply(f'@{sender}\n레벨 상한({SETTING["maxlevel"]})에 도달했어요!')
+        return
+    
+    if pokUser.get("gold", 0) < totalcosts:
+        chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {totalcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
+        return
+    
+    up = read_json(f"포켓몬/{p['name']}", "nextup")
+
+    if up and up != "x":
+        if "/" in up:
+            up_options = up.split("/")
+            up = random.choice(up_options)
+        
+        new_pok = p.copy()
+        new_pok["name"] = up
+        new_pok["level"] = p["level"] + n2
+        new_pok["hp"] = math.ceil((read_json(f"포켓몬/{up}", "hp") or 50) * new_pok["level"] / 50)
+        new_pok["atk"] = math.ceil((read_json(f"포켓몬/{up}", "atk") or 50) * new_pok["level"] / 50)
+        new_pok["def"] = math.ceil((read_json(f"포켓몬/{up}", "def") or 50) * new_pok["level"] / 50)
+        new_pok["spd"] = math.ceil((read_json(f"포켓몬/{up}", "spd") or 50) * new_pok["level"] / 50)
+        new_pok["satk"] = math.ceil((read_json(f"포켓몬/{up}", "satk") or 1) * new_pok["level"] / 50)
+        new_pok["sdef"] = math.ceil((read_json(f"포켓몬/{up}", "sdef") or 1) * new_pok["level"] / 50)
+
+        if new_pok.get("v", 0) > 0:
+            v_bonus = (10 + new_pok["v"]) / 10
+            new_pok["hp"] = math.ceil(new_pok["hp"] * v_bonus)
+            new_pok["atk"] = math.ceil(new_pok["atk"] * v_bonus)
+            new_pok["def"] = math.ceil(new_pok["def"] * v_bonus)
+            new_pok["spd"] = math.ceil(new_pok["spd"] * v_bonus)
+            new_pok["satk"] = math.ceil(new_pok["satk"] * v_bonus)
+            new_pok["sdef"] = math.ceil(new_pok["sdef"] * v_bonus)
+        
+        pokInv["box"][n - 1] = new_pok
+        p = new_pok
+        
+        pokCol = read_json(f"player_{sender}_collection")
+        if pokCol:
+            from .config import COLLECTION_NAMES, COLLECTION_CONTENTS
+            for ii in COLLECTION_NAMES:
+                idx = COLLECTION_NAMES.index(ii)
+                if up in COLLECTION_CONTENTS[idx]:
+                    if ii not in pokCol:
+                        pokCol[ii] = []
+                    if up not in pokCol[ii]:
+                        pokCol[ii].append(up)
+                        chat.reply(f"@{sender}\n도감의 [{ii}] 에 새로운 포켓몬이 등록되었습니다.")
+                    break
+            write_json(f"player_{sender}_collection", pokCol)
+    else:
+        p["level"] += n2
+        p["hp"] = math.ceil((read_json(f"포켓몬/{p['name']}", "hp") or 50) * p["level"] / 50)
+        p["atk"] = math.ceil((read_json(f"포켓몬/{p['name']}", "atk") or 50) * p["level"] / 50)
+        p["def"] = math.ceil((read_json(f"포켓몬/{p['name']}", "def") or 50) * p["level"] / 50)
+        p["spd"] = math.ceil((read_json(f"포켓몬/{p['name']}", "spd") or 50) * p["level"] / 50)
+        p["satk"] = math.ceil((read_json(f"포켓몬/{p['name']}", "satk") or 1) * p["level"] / 50)
+        p["sdef"] = math.ceil((read_json(f"포켓몬/{p['name']}", "sdef") or 1) * p["level"] / 50)
+
+        if p.get("v", 0) > 0:
+            v_bonus = (10 + p["v"]) / 10
+            p["hp"] = math.ceil(p["hp"] * v_bonus)
+            p["atk"] = math.ceil(p["atk"] * v_bonus)
+            p["def"] = math.ceil(p["def"] * v_bonus)
+            p["spd"] = math.ceil(p["spd"] * v_bonus)
+            p["satk"] = math.ceil(p["satk"] * v_bonus)
+            p["sdef"] = math.ceil(p["sdef"] * v_bonus)
+        
+        pokInv["box"][n - 1] = p
+    
+    pokUser["gold"] -= totalcosts
+    
+    write_json(f"player_{sender}_inv", pokInv)
+    write_json(f"player_{sender}", pokUser)
+    
+    res = f"{totalcosts:,}원 지불.\n보유금액: {pokUser['gold']:,}원\n\n"
+    res += f"Lv.{old_level} > Lv.{p['level']} {p['name']}\n\n"
+    res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']} SATK:{p['satk']} SDEF:{p['sdef']}"
+    
+    chat.reply(f"@{sender}\n{res}")

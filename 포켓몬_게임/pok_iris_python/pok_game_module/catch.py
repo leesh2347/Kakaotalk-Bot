@@ -99,7 +99,7 @@ def handle_ballthrow(sender, chat):
     # Catch attempt
     if random.randint(1, 100) <= catch_rate:
         # Success - catch Pokemon
-        caught_pok = create_pokemon(pokname, lev, shiny)
+        caught_pok = create_pokemon(pokname, lev, shiny, group)
         pokInv = read_json(f"player_{sender}_inv")
 
         if pokInv is None:
@@ -272,7 +272,7 @@ def handle_escape(sender, chat):
     if sender in isballwaiting:
         isballwaiting.remove(sender)
 
-def create_pokemon(name, level, shiny):
+def create_pokemon(name, level, shiny, group=1):
     """Create a Pokemon with stats"""
     from .io_helpers import read_json
 
@@ -284,7 +284,6 @@ def create_pokemon(name, level, shiny):
     sdef_base = read_json(f"포켓몬/{name}", "sdef") or 1
     skills = read_json(f"포켓몬/{name}", "skills") or []
 
-    # Calculate stats
     hp = math.ceil(hp_base * level / 50)
     atk = math.ceil(atk_base * level / 50)
     def_stat = math.ceil(def_base * level / 50)
@@ -292,21 +291,19 @@ def create_pokemon(name, level, shiny):
     satk = math.ceil(satk_base * level / 50)
     sdef = math.ceil(sdef_base * level / 50)
 
-    # Select 4 random skills
     if len(skills) > 4:
         skills = random.sample(skills, 4)
 
-    v = 1
-    if random.randint(1, 100) <= 10:
-        v = random.randint(2, 6)
+    v = 0
 
-    # Apply V bonus
     hp = math.ceil(hp * (10 + v) / 10)
     atk = math.ceil(atk * (10 + v) / 10)
     def_stat = math.ceil(def_stat * (10 + v) / 10)
     spd = math.ceil(spd * (10 + v) / 10)
     satk = math.ceil(satk * (10 + v) / 10)
     sdef = math.ceil(sdef * (10 + v) / 10)
+
+    islocked = 1 if group >= 4 else 0
 
     return {
         'name': name,
@@ -321,6 +318,6 @@ def create_pokemon(name, level, shiny):
         'skillslocked': [],
         'formchange': 0,
         'v': v,
-        'shiny':shiny,
-        'islocked': 0
+        'shiny': shiny,
+        'islocked': islocked
     }
