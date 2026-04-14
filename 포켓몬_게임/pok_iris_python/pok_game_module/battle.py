@@ -173,8 +173,8 @@ def start_pvp_battle(chat):
     
     # Send battle image
     try:
-        img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-        img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+        img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+        img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
         send_image(None, chat, 67300, {
             'player1name': player1,
             'player2name': player2,
@@ -242,8 +242,8 @@ def pvp_battle_loop(chat):
             
             # Send image
             try:
-                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
                 send_image(None, chat, 67300, {
                     'player1name': player1,
                     'player2name': player2,
@@ -289,8 +289,8 @@ def pvp_battle_loop(chat):
             
             # Send image
             try:
-                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
                 send_image(None, chat, 67300, {
                     'player1name': player1,
                     'player2name': player2,
@@ -368,8 +368,8 @@ def pvp_battle_loop(chat):
             
             # Send image
             try:
-                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
                 send_image(None, chat, 67300, {
                     'player1name': player1,
                     'player2name': player2,
@@ -506,8 +506,8 @@ def end_pvp_battle(chat, winner=None):
             winnerpok = player2pok
             loserpok = player1pok
         
-        img1 = pokimglink(winnerpok["name"], winnerpok.get("formchange", 0))
-        img2 = pokimglink(loserpok["name"], loserpok.get("formchange", 0))
+        img1 = pokimglink(winnerpok["name"], winnerpok.get("formchange", 0), winnerpok.get("shiny", 0))
+        img2 = pokimglink(loserpok["name"], loserpok.get("formchange", 0), loserpok.get("shiny", 0))
         send_image(None, chat, 67300, {
             'player1name': player1,
             'player2name': player2,

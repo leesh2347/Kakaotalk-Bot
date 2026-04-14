@@ -163,13 +163,15 @@ def handle_gym(sender, chat, args=None):
     
     # Send battle KakaoTalk link
     try:
-        img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-        img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+        img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+        img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
         send_image(None, chat, 67300, {
             'player1name':player1,
             'player2name':player2,
             'player1img': img1,
             'player2img': img2,
+            'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
             'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -326,13 +328,15 @@ def handle_battletower(sender, chat, args=None):
     
     # Send battle KakaoTalk link
     try:
-        img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-        img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+        img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+        img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
         send_image(None, chat, 67300, {
             'player1name':player1,
             'player2name':player2,
             'player1img': img1,
             'player2img': img2,
+            'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
             'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -420,13 +424,15 @@ def battle_loop(chat, sender):
 
             #이부분에 이미지출력 구현
             try:
-                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
                 send_image(None, chat, 67300, {
                     'player1name':player1,
                     'player2name':player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
                     'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -472,13 +478,15 @@ def battle_loop(chat, sender):
 
             #이부분에 이미지출력 구현
             try:
-                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0))
-                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0))
+                img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
+                img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
                 send_image(None, chat, 67300, {
                     'player1name':player1,
                     'player2name':player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
                     'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -522,20 +530,20 @@ def battle_loop(chat, sender):
                 type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 1
                 type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 1
                 if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7:
-                    player1pok["hp"] = max(1, math.ceil(player1pok["hp"] * 7 / 8))
+                    player1pok["hp"] = max(0, math.ceil(player1pok["hp"] * 7 / 8))
                     battleres += f"[{player1}] 모래바람이 {player1pok['name']}(를)을 덮쳤어요!\n"
 
                 type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
                 type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
                 if type1_2 != 6 and type2_2 != 6 and type1_2 != 7 and type2_2 != 7:
-                    player2pok["hp"] = max(1, math.ceil(player2pok["hp"] * 7 / 8))
+                    player2pok["hp"] = max(0, math.ceil(player2pok["hp"] * 7 / 8))
                     battleres += f"[{player2}] 모래바람이 {player2pok['name']}(를)을 덮쳤어요!\n"
 
             elif weather == 4:  # Hail
                 type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
                 type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
                 if type1_2 != 11 and type2_2 != 11:
-                    player2pok["hp"] = max(1, math.ceil(player2pok["hp"] * 7 / 8))
+                    player2pok["hp"] = max(0, math.ceil(player2pok["hp"] * 7 / 8))
                     battleres += f"[{player2}] 싸라기눈이 {player2pok['name']}(를)을 덮쳤어요!\n"
 
         # Check for battle end (a Pokemon fainted and no more to send)

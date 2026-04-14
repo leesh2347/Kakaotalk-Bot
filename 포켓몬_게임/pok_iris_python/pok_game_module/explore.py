@@ -177,7 +177,7 @@ def handle_explore(sender, room, chat):
     
     # Send image via KakaoTalk link
     try:
-        img = pokimglink(pokname, 0)
+        img = pokimglink(pokname, 0, pokinfo.get("shiny", 0))
         poklink = f"ko/wiki/{pokname}_(포켓몬)"
         
         send_image(room, chat, 58796, {

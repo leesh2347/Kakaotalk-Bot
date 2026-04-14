@@ -184,7 +184,8 @@ def handle_info(sender, chat, args=None):
 
     res += "현재 장착 중인 덱\n"
     for i, pok in enumerate(deck[:6]):
-        res += f"{i+1}. Lv.{pok.get('level', 0)} {pok.get('name', '???')}\n"
+        shiny_text = "✨" if pok.get('shiny', 0) > 0 else ""
+        res += f"{i+1}. Lv.{pok.get('level', 0)} {pok.get('name', '???')}{shiny_text}\n"
 
     res += f"\n포켓몬 조우 횟수: {total_encounters:,}\n"
     res += f"포획 성공: {total_success:,}\n"
@@ -238,14 +239,16 @@ def handle_box(sender, chat):
         res += "[덱]\n"
         for i, pok in enumerate(deck[:6]):
             v_text = V_TEXTS[pok.get('v', 1)] if pok.get('v', 1) < len(V_TEXTS) else f"V{pok.get('v', 1)}"
-            res += f"{i+1}. Lv.{pok.get('level', 0)} {pok.get('name', '???')} [{pok.get('hp', 0)}HP] {v_text}\n"
+            shiny_text = "✨" if pok.get('shiny', 0) > 0 else ""
+            res += f"{i+1}. Lv.{pok.get('level', 0)} {pok.get('name', '???')}{shiny_text} {v_text}\n"
     
     if box:
         res += f"\n[상자 - {len(box)}마리]\n"
         for i, pok in enumerate(box):
             v_text = V_TEXTS[pok.get('v', 1)] if pok.get('v', 1) < len(V_TEXTS) else f"V{pok.get('v', 1)}"
+            shiny_text = "✨" if pok.get('shiny', 0) > 0 else ""
             lock_mark = "🔒" if pok.get('islocked', 0) == 1 else ""
-            res += f"{i+1}. {lock_mark}Lv.{pok.get('level', 0)} {pok.get('name', '???')} {v_text}\n"
+            res += f"{i+1}. {lock_mark}Lv.{pok.get('level', 0)} {pok.get('name', '???')}{shiny_text} {v_text}\n"
 
     res +="\n현재 보유중인 아이템 목록\n"
 
@@ -295,11 +298,12 @@ def handle_pokinfo(sender, chat, args=None):
     
     # Get image via KakaoTalk link
     try:
-        img = pokimglink(p["name"], p.get("formchange", 0))
+        img = pokimglink(p["name"], p.get("formchange", 0), p.get("shiny", 0))
         send_image(None, chat, 58796, {
             'POKIMG': img,
             'POKNAME': f"Lv.{p['level']} {p['name']}",
             'DESC': pokdesc,
+            'shiny':p.get("shiny", 0),
             'LINK': f"ko/wiki/{p['name']}_(포켓몬)"
         })
     except:
@@ -358,11 +362,12 @@ def handle_dpokinfo(sender, chat, args=None):
     
     # Get image via KakaoTalk link
     try:
-        img = pokimglink(p["name"], p.get("formchange", 0))
+        img = pokimglink(p["name"], p.get("formchange", 0), p.get("shiny", 0))
         send_image(None, chat, 58796, {
             'POKIMG': img,
             'POKNAME': f"Lv.{p['level']} {p['name']}",
             'DESC': pokdesc,
+            'shiny':p.get("shiny", 0),
             'LINK': f"ko/wiki/{p['name']}_(포켓몬)"
         })
     except:

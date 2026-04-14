@@ -67,6 +67,12 @@ def send_image(room, chat, template_id, template_args):
             pok_img = Image.open(pok_img_url).convert("RGBA")
             canvas.paste(pok_img, (0, 0), pok_img)
 
+            #이로치 연출 추가
+            if template_args['shiny'] > 0:
+                shiny_icon_url = f"res/img/pok_game/shiny_icon_{template_args['shiny']}.png"
+                shiny_icon = Image.open(shiny_icon_url).convert("RGBA")
+                canvas.paste(shiny_icon, (440, 0), shiny_icon)
+
             # 5. 텍스트 그리기
             draw = ImageDraw.Draw(canvas)
             try:
@@ -106,6 +112,17 @@ def send_image(room, chat, template_id, template_args):
 
             canvas.paste(pok_img_converted1, (0, 60), pok_img_converted1)
             canvas.paste(pok_img_converted2, (580, 60), pok_img_converted2)
+
+            #이로치 아이콘 추가
+            if template_args['player1shiny'] > 0:
+                shiny_icon_url = f"res/img/pok_game/shiny_icon_{template_args['player1shiny']}.png"
+                shiny_icon = Image.open(shiny_icon_url).convert("RGBA")
+                canvas.paste(shiny_icon, (440, 60), shiny_icon)
+            if template_args['player2shiny'] > 0:
+                shiny_icon_url = f"res/img/pok_game/shiny_icon_{template_args['player2shiny']}.png"
+                shiny_icon = Image.open(shiny_icon_url).convert("RGBA")
+                canvas.paste(shiny_icon, (940, 60), shiny_icon)
+
 
 
             # 5. 텍스트 그리기
@@ -159,15 +176,19 @@ def fetch_url(url):
         print(f"Error fetching {url}: {e}")
         return None
 
-def pokimglink(pokename, formchange):
+def pokimglink(pokename, formchange, shiny):
     """Get Pokemon image URL"""
     imgg = ""
-    if formchange > 0 and pokename != "아르세우스":
-        imgg = f"res/img/pok_game/pokemon_images/{pokename}_{formchange}.png"
+    baseurl = ""
+    if shiny > 0:
+        baseurl = f"pokemon_images_shiny/{shiny}"
     else:
-        imgg = f"res/img/pok_game/pokemon_images/{pokename}.png"
+        baseurl = "pokemon_images"
 
-    #TODO: 이로치 추가시 이로치 이미지 분기 추가
+    if formchange > 0 and pokename != "아르세우스":
+        imgg = f"res/img/pok_game/{baseurl}/{pokename}_{formchange}.png"
+    else:
+        imgg = f"res/img/pok_game/{baseurl}/{pokename}.png"
 
     return imgg
 
