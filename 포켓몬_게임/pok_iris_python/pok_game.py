@@ -8,7 +8,7 @@ from .pok_game_module.explore import handle_explore, advOn, pokdelay
 from .pok_game_module.catch import handle_ballthrow, handle_escape
 from .pok_game_module.player_info import handle_info, handle_box, handle_pokinfo, handle_dpokinfo
 from .pok_game_module.training import (
-    handle_levelup, handle_skillchange, handle_effort, handle_mega,
+    handle_levelup, handle_boxlevelup, handle_skillchange, handle_effort, handle_mega,
     handle_formchange, handle_lock, handle_unlock, handle_sell,
     handle_swap, handle_rest, handle_egg, handle_legendegg,
     handle_boxlock, handle_boxunlock, handle_skilllock, handle_skillunlock
@@ -102,6 +102,10 @@ def handle_message(chat):
     # ========================================================================
     if msg_first == CMDS['levelup']:
         handle_levelup(sender, chat, msg[len(msg_first):].strip())
+        return
+
+    if msg_first == CMDS['boxlevelup']:
+        handle_boxlevelup(sender, chat, msg[len(msg_first):].strip())
         return
 
     if msg_first == CMDS['skillchange']:
