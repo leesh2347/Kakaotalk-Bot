@@ -24,7 +24,8 @@ PREFIX_SIXTH_ALL = ["@6차", "!6차"]
 PREFIX_ORIGIN = ["@오리진", "!오리진", "@어센트", "!어센트"]
 PREFIX_MASTERY = ["@마스터리", "!마스터리"]
 PREFIX_SKILL_CORE = ["@강화", "!강화"]
-PREFIX_GONGYONG_CORE = ["@공용", "!공용", "@야누스", "!야누스"]
+PREFIX_GONGYONG_CORE = ["@공용", "!공용", "@야누스", "!야누스", "@헤카테", "!헤카테"]
+PREFIX_JOB_GONGYONG_CORE = ["@직업공용", "!직업공용"]
 
 PREFIX_ZUNSUNGBI = ["@전성비", "!전성비"]
 PREFIX_CHOSUNGBI = ["@초성비", "!초성비"]
@@ -48,6 +49,7 @@ PREFIX_BOSS = ["@보스","!보스"]
 
 PREXIX_EVENTS = ["@이벤트", "!이벤트"]
 PREXIX_SUNDAY = ["@썬데이", "!썬데이"]
+PREFIX_NOTICE = ['@공지구독', '!공지구독']
 
 PREFIX_CHANNEL = ["@채널", "!채널"]
 PREFIX_CHALLNNEL = ["@챌널", "!챌널"]
