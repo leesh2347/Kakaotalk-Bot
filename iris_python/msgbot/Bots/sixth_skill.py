@@ -4,9 +4,9 @@ import math
 from urllib import parse
 import numpy as np
 from bs4 import BeautifulSoup
-from msgbot.Bots.hexa_data.hexa_levdata import MAX_ERDA, MAX_PIECE, JANUS_MAX_ERDA, JANUS_MAX_PIECE, HEXA_DATA, ORIGIN_DATA, MASTER_DATA, SKILL_DATA, GONGYONG_DATA
+from msgbot.Bots.hexa_data.hexa_levdata import MAX_ERDA, MAX_PIECE, JANUS_MAX_ERDA, JANUS_MAX_PIECE, HEXA_DATA, ORIGIN_DATA, MASTER_DATA, SKILL_DATA, GONGYONG_DATA, JOB_GONGYONG_DATA
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
-from msgbot.bot_commands.commands_config import PREFIX_HEXA, PREFIX_SIXTH_ALL, PREFIX_ORIGIN, PREFIX_MASTERY, PREFIX_SKILL_CORE, PREFIX_GONGYONG_CORE
+from msgbot.bot_commands.commands_config import PREFIX_HEXA, PREFIX_SIXTH_ALL, PREFIX_ORIGIN, PREFIX_MASTERY, PREFIX_SKILL_CORE, PREFIX_GONGYONG_CORE, PREFIX_JOB_GONGYONG_CORE
 
 #api ocid 검색
 def search_api_ocid(nick):
@@ -200,6 +200,22 @@ def sixth_gongyong_calc(start, end):
     else:
         return "시작 레벨과 끝 레벨을 제대로 입력했는지 확인해 주세요.\n레벨 범위: 0~30\n(코어가 없는 상태에서 제작하는 것을 0->1레벨 강화로 칩니다.)"
 
+def sixth_job_gongyong_calc(start, end):
+    if not isinstance(start, int) or not isinstance(end, int):
+        return "직업 공용 코어 계산기 사용법: @공용 (시작레벨) (끝레벨)\n\n필요 솔 에르다와 조각 갯수를 계산해 줍니다."
+    elif (-1) < start < 30 and 0 < end < 31:
+        erda = 0
+        piece = 0
+
+        for i in range(start, end):
+            erda = erda + JOB_GONGYONG_DATA["기운"][i]
+            piece = piece + JOB_GONGYONG_DATA["조각"][i]
+        
+        return f"직업 공용 코어 {start} ~ {end}레벨 까지\n필요한 솔 에르다💎 : {erda}개\n솔 에르다 조각💠 : {piece}개"
+    else:
+        return "시작 레벨과 끝 레벨을 제대로 입력했는지 확인해 주세요.\n레벨 범위: 0~30\n(코어가 없는 상태에서 제작하는 것을 0->1레벨 강화로 칩니다.)"
+
+
 def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in PREFIX_HEXA):
         parts = chat.message.msg.split(" ")
@@ -281,4 +297,18 @@ def handle_message(chat):
                 end = int(parts[2])
 
         res = sixth_gongyong_calc(start, end)
+        chat.reply(res)
+
+    if any(prefix in chat.message.msg for prefix in PREFIX_JOB_GONGYONG_CORE):
+        parts = chat.message.msg.split(" ")
+
+        start = 0
+        end = 0
+
+        if len(parts) > 2:
+            if parts[1].isdigit() or parts[2].isdigit():
+                start = int(parts[1])
+                end = int(parts[2])
+
+        res = sixth_job_gongyong_calc(start, end)
         chat.reply(res)
