@@ -234,6 +234,12 @@ def handle_box(sender, chat):
     res += f"덱: {len(deck)}마리\n"
     res += f"상자: {len(box)}마리\n\n"
     res+="\u200b"*500
+    res+= f"\n박스 포켓몬 정보 보기: {CMDS["pokinfo"]} [박스번호]\n"
+    res+= f"덱 포켓몬 정보 보기: {CMDS["dpokinfo"]} [덱번호]\n"
+    res+= f"덱으로 이동: {CMDS["lock"]} [박스번호]\n"
+    res+= f"덱으로 이동: {CMDS["unlock"]} [덱번호]\n"
+    res+= f"박스 포켓몬 잠금: {CMDS["boxlock"]} [박스번호]\n"
+    res+= f"박스 포켓몬 잠금해제: {CMDS["boxunlock"]} [박스번호]\n\n"
     
     if deck:
         res += "[덱]\n"
@@ -378,6 +384,13 @@ def handle_dpokinfo(sender, chat, args=None):
         skills_text = "변신"
     else:
         skills_text = printskills(p.get("skills", []), p.get("skillslocked", []))
+
+    skills_text+="\u200b"*500
+    skills_text+= f"\n레벨업: {CMDS["levelup"]} [덱번호] [레벨업 횟수]\n"
+    skills_text+= f"스킬뽑기: {CMDS["skillchange"]} [덱번호]\n"
+    skills_text+= f"폼체인지: {CMDS["formchange"]} [덱번호]\n"
+    skills_text+= f"메가진화/원시회귀/거다이맥스: {CMDS["mega"]} [덱번호]\n"
+    skills_text+= f"노력치강화(돌파): {CMDS["effort"]} [덱번호] [재료 박스번호]\n"
     
     res = f"@{sender}\n{skills_text}"
     
