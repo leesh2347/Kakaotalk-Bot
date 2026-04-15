@@ -182,6 +182,7 @@ def handle_explore(sender, room, chat):
         
         send_image(room, chat, 58796, {
             'POKIMG': img,
+            'shiny':pokinfo.get("shiny", 0),
             'POKNAME': f"Lv.{lev}  {pokname}",
             'DESC': f"볼던지기: {','.join(SETTING.get('ballthrow_cmds', ['@볼']))}\n도망가기: {','.join(SETTING.get('esc_cmds', ['@도망']))}",
             'LINK': poklink

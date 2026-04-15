@@ -115,6 +115,9 @@ def handle_levelup(sender, chat, args=None):
         pokInv["deck"][n - 1] = new_pok
         p = new_pok
         
+        # Evolution notification
+        chat.reply(f"@{sender}\n{p['name']}이(가) 진화했다!")
+        
         # Register in collection
         pokCol = read_json(f"player_{sender}_collection")
         if pokCol:
@@ -1038,6 +1041,10 @@ def handle_egg(sender, chat):
     
     # Create Pokemon
     caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
+    
+    # Set islocked based on rarity (group 4+ is locked)
+    islocked_val = 1 if islegend >= 2 else 0
+    
     caughtpok = {
         'name': pokname,
         'level': poklev,
@@ -1052,7 +1059,7 @@ def handle_egg(sender, chat):
         'formchange': 0,
         'shiny':0,
         'v': 0,
-        'islocked': 0
+        'islocked': islocked_val
     }
     
     # Add to box
@@ -1146,6 +1153,10 @@ def handle_legendegg(sender, chat):
     
     # Create Pokemon
     caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
+    
+    # Set islocked based on rarity (group 4+ is locked)
+    islocked_val = 1 if islegend >= 2 else 0
+    
     caughtpok = {
         'name': pokname,
         'level': poklev,
@@ -1160,7 +1171,7 @@ def handle_legendegg(sender, chat):
         'formchange': 0,
         'shiny':0,
         'v': 0,
-        'islocked': 0
+        'islocked': islocked_val
     }
     
     # Add to box
@@ -1290,6 +1301,8 @@ def handle_boxlevelup(sender, chat, args=None):
         
         pokInv["box"][n - 1] = new_pok
         p = new_pok
+        
+        chat.reply(f"@{sender}\n{p['name']}이(가) 진화했다!")
         
         pokCol = read_json(f"player_{sender}_collection")
         if pokCol:

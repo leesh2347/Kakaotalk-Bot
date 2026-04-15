@@ -307,8 +307,16 @@ def pvp_battle_loop(chat):
             time.sleep(3)
 
         # Execute turn
-        player1skill = random.choice(player1pok.get("skills", ["태클"]))
-        player2skill = random.choice(player2pok.get("skills", ["태클"]))
+        player1skills = [s for s in player1pok.get("skills", []) if s not in player1pok.get("skillslocked", [])]
+        player2skills = [s for s in player2pok.get("skills", []) if s not in player2pok.get("skillslocked", [])]
+        
+        if not player1skills:
+            player1skills = ["태클"]
+        if not player2skills:
+            player2skills = ["태클"]
+        
+        player1skill = random.choice(player1skills)
+        player2skill = random.choice(player2skills)
 
         player1spd = player1pok["spd"]
         player2spd = player2pok["spd"]

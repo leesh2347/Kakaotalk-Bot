@@ -49,7 +49,7 @@ def handle_ballthrow(sender, chat):
     pokUser["balls"] -= 1
     write_json(f"player_{sender}", pokUser)  # Immediately persist ball decrement
 
-    chat.reply(f'{sender}님이 {pokname}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요!')
+    chat.reply(f'{sender}님이 {pokname}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요! (남은 볼: {pokUser.get("balls", 0)}개)')
 
     time.sleep(1)
 
