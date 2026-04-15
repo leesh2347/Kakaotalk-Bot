@@ -166,14 +166,23 @@ def handle_explore(sender, room, chat):
     battlepokinfo.append(pokinfo)
     advOn[sender] = 2
 
-    # Re-read to get current ball count before writing (balls may have been decremented by throws)
-    current_pokUser = read_json(f"player_{sender}")
-    if current_pokUser:
-        pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
-        pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
-    
-    write_json(f"player_{sender}", pokUser)
-    write_json(f"player_{sender}_inv", pokInv)
+    # Save state immediately in case of error
+    try:
+        # Re-read to get current ball count before writing (balls may have been decremented by throws)
+        current_pokUser = read_json(f"player_{sender}")
+        if current_pokUser:
+            pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+            pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+        
+        write_json(f"player_{sender}", pokUser)
+        write_json(f"player_{sender}_inv", pokInv)
+    except Exception as e:
+        # Force cleanup on error
+        ispokfind.remove(sender)
+        battlepokinfo.pop(len(battlepokinfo) - 1)
+        advOn[sender] = 0
+        print(f"Error in exploration: {e}")
+        return
     
     # Send image via KakaoTalk link
     try:

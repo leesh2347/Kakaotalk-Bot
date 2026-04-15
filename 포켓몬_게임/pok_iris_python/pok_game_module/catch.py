@@ -169,12 +169,18 @@ def handle_ballthrow(sender, chat):
 
         chat.reply(f"@{sender}\n축하합니다!\n{pokname}{'을' if len(unicodedata.normalize('NFD', pokname[-1])) == 3 else '를'} 잡았습니다!")
 
-        # Clean up
-        ispokfind.remove(sender)
-        battlepokinfo.pop(idx)
-        advOn[sender] = 0
-        if sender in isballwaiting:
-            isballwaiting.remove(sender)
+        # Clean up - ALWAYS execute to prevent stuck exploration
+        try:
+            if sender in ispokfind:
+                idx = ispokfind.index(sender)
+                ispokfind.remove(sender)
+                if idx < len(battlepokinfo):
+                    battlepokinfo.pop(idx)
+            advOn[sender] = 0
+            if sender in isballwaiting:
+                isballwaiting.remove(sender)
+        except Exception as e:
+            print(f"Cleanup error: {e}")
     else:
         # Fail - Pokemon not caught
         chat.reply(f"@{sender}\n{random.choice(BALL_FAIL)}")
@@ -206,9 +212,17 @@ def handle_ballthrow(sender, chat):
             pokUser["hp"] = pokUser.get("hp", 1) - 1
             write_json(f"player_{sender}", pokUser)
 
-            ispokfind.remove(sender)
-            battlepokinfo.pop(idx)
-            advOn[sender] = 0
+            # Clean up
+            try:
+                if sender in ispokfind:
+                    ispokfind.remove(sender)
+                    if idx < len(battlepokinfo):
+                        battlepokinfo.pop(idx)
+                advOn[sender] = 0
+                if sender in isballwaiting:
+                    isballwaiting.remove(sender)
+            except Exception as e:
+                print(f"Cleanup error: {e}")
 
             lt = len(pokname) - 1
             particle = '은' if len(unicodedata.normalize('NFD', pokname[-1])) == 3 else '는'
@@ -228,14 +242,20 @@ def handle_ballthrow(sender, chat):
             pokUser["hp"] = pokUser.get("hp", 1) - 1
             write_json(f"player_{sender}", pokUser)
 
-            ispokfind.remove(sender)
-            battlepokinfo.pop(idx)
-            advOn[sender] = 0
+            # Clean up
+            try:
+                if sender in ispokfind:
+                    ispokfind.remove(sender)
+                    if idx < len(battlepokinfo):
+                        battlepokinfo.pop(idx)
+                advOn[sender] = 0
+                if sender in isballwaiting:
+                    isballwaiting.remove(sender)
+            except Exception as e:
+                print(f"Cleanup error: {e}")
 
             chat.reply(f"@{sender}\n더 이상 던질 볼이 없어 도망쳐 나왔어요. {SETTING.get('ball', '@볼구매')} 를 통해 볼을 구매해 주세요!\n포획 실패!")
 
-            if sender in isballwaiting:
-                isballwaiting.remove(sender)
         else:
             # Pokemon didn't flee - give another chance
             # Re-read to preserve ball count
@@ -265,12 +285,17 @@ def handle_escape(sender, chat):
 
     chat.reply(f"@{sender}\n야생의 {pokinfo['name']}에게서 도망쳤어요!")
 
-    # Clean up
-    ispokfind.remove(sender)
-    battlepokinfo.pop(idx)
-    advOn[sender] = 0
-    if sender in isballwaiting:
-        isballwaiting.remove(sender)
+    # Clean up - ALWAYS execute
+    try:
+        if sender in ispokfind:
+            ispokfind.remove(sender)
+            if idx < len(battlepokinfo):
+                battlepokinfo.pop(idx)
+        advOn[sender] = 0
+        if sender in isballwaiting:
+            isballwaiting.remove(sender)
+    except Exception as e:
+        print(f"Cleanup error: {e}")
 
 def create_pokemon(name, level, shiny, group=1):
     """Create a Pokemon with stats"""
