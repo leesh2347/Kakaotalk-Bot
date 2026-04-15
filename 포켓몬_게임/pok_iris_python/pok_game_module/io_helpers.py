@@ -315,8 +315,6 @@ def typejudge(skilltype, typea, typeb):
             typeres = typeres / 2
         if typea == 13 or typeb == 13:
             typeres = typeres / 2
-        if typea == 15 or typeb == 15:
-            typeres = typeres / 2
         if typea == 1 or typeb == 1:
             typeres = typeres * 2
         if typea == 6 or typeb == 6:
@@ -374,22 +372,22 @@ def typejudge(skilltype, typea, typeb):
             typeres = typeres / 2
         if typea == 4 or typeb == 4:
             typeres = typeres * 2
-        if typea == 10 or typeb == 10:
+        if typea == 7 or typeb == 7:
             typeres = typeres * 2
-        if typea == 13 or typeb == 13:
+        if typea == 17 or typeb == 17:
             typeres = typeres * 2
     elif skilltype == 12:
-        if typea == 2 or typeb == 2:
-            typeres = typeres / 2
-        if typea == 9 or typeb == 9:
-            typeres = typeres / 2
-        if typea == 10 or typeb == 10:
+        if typea == 7 or typeb == 7:
+            typeres = 0
+        if typea == 4 or typeb == 4:
             typeres = typeres / 2
         if typea == 12 or typeb == 12:
             typeres = typeres / 2
-        if typea == 4 or typeb == 4:
+        if typea == 17 or typeb == 17:
+            typeres = typeres / 2
+        if typea == 3 or typeb == 3:
             typeres = typeres * 2
-        if typea == 7 or typeb == 7:
+        if typea == 5 or typeb == 5:
             typeres = typeres * 2
     elif skilltype == 13:
         if typea == 9 or typeb == 9:
@@ -405,57 +403,51 @@ def typejudge(skilltype, typea, typeb):
         if typea == 18 or typeb == 18:
             typeres = typeres * 2
     elif skilltype == 14:
-        if typea == 8 or typeb == 8:
-            typeres = typeres * 2
-        if typea == 9 or typeb == 9:
-            typeres = typeres / 2
         if typea == 16 or typeb == 16:
             typeres = 0
-        if typea == 10 or typeb == 10:
+        if typea == 9 or typeb == 9:
             typeres = typeres / 2
+        if typea == 14 or typeb == 14:
+            typeres = typeres / 2
+        if typea == 8 or typeb == 8:
+            typeres = typeres * 2
+        if typea == 13 or typeb == 13:
+            typeres = typeres * 2
     elif skilltype == 15:
         if typea == 1 or typeb == 1:
             typeres = 0
-        if typea == 9 or typeb == 9:
-            typeres = typeres / 2
         if typea == 16 or typeb == 16:
             typeres = typeres / 2
-        if typea == 13 or typeb == 13:
-            typeres = typeres * 2
-        if typea == 14 or typeb == 14:
+        if typea == 15 or typeb == 15:
             typeres = typeres * 2
     elif skilltype == 16:
-        if typea == 1 or typeb == 1:
-            typeres = 0
-        if typea == 8 or typeb == 8:
-            typeres = typeres / 2
-        if typea == 9 or typeb == 9:
-            typeres = typeres / 2
-        if typea == 15 or typeb == 15:
-            typeres = typeres * 2
-        if typea == 14 or typeb == 14:
-            typeres = typeres * 2
-    elif skilltype == 17:
-        if typea == 2 or typeb == 2:
-            typeres = typeres / 2
-        if typea == 9 or typeb == 9:
-            typeres = typeres / 2
-        if typea == 10 or typeb == 10:
-            typeres = typeres / 2
         if typea == 16 or typeb == 16:
             typeres = typeres / 2
-        if typea == 13 or typeb == 13:
-            typeres = typeres * 2
+        if typea == 8 or typeb == 8:
+            typeres = typeres / 2
+        if typea == 18 or typeb == 18:
+            typeres = typeres / 2
         if typea == 14 or typeb == 14:
             typeres = typeres * 2
         if typea == 15 or typeb == 15:
+            typeres = typeres * 2
+    elif skilltype == 17:
+        if typea == 18 or typeb == 18:
+            typeres = 0
+        if typea == 9 or typeb == 9:
+            typeres = typeres / 2
+        if typea == 17 or typeb == 17:
             typeres = typeres * 2
     elif skilltype == 18:
         if typea == 9 or typeb == 9:
             typeres = typeres / 2
-        if typea == 10 or typeb == 10:
+        if typea == 13 or typeb == 13:
             typeres = typeres / 2
         if typea == 2 or typeb == 2:
+            typeres = typeres / 2
+        if typea == 8 or typeb == 8:
+            typeres = typeres * 2
+        if typea == 16 or typeb == 16:
             typeres = typeres * 2
         if typea == 17 or typeb == 17:
             typeres = typeres * 2
