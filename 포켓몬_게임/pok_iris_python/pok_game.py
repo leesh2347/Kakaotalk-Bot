@@ -116,12 +116,12 @@ def handle_message(chat):
         handle_effort(sender, chat, msg[len(msg_first):].strip())
         return
 
-    if msg == CMDS['mega']:
-        handle_mega(sender, chat)
+    if msg_first == CMDS['mega']:
+        handle_mega(sender, chat, msg[len(msg_first):].strip())
         return
-
-    if msg == CMDS['formchange']:
-        handle_formchange(sender, chat)
+    
+    if msg_first == CMDS['formchange']:
+        handle_formchange(sender, chat, msg[len(msg_first):].strip())
         return
 
     if msg_first == CMDS['skilllock']:
