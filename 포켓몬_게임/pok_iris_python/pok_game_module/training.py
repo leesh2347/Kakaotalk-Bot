@@ -7,9 +7,18 @@ from .io_helpers import read_json, write_json, printskills, pokimglink
 
 def handle_levelup(sender, chat, args=None):
     """Handle level up command (@레벨업)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -168,9 +177,18 @@ def handle_levelup(sender, chat, args=None):
 
 def handle_skillchange(sender, chat, args=None):
     """Handle skill change command (@스킬뽑기)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -356,9 +374,18 @@ def handle_skillunlock(sender, chat, args=None):
 
 def handle_effort(sender, chat, args=None):
     """Handle effort value upgrade command (@노력치강화)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -445,9 +472,18 @@ def handle_effort(sender, chat, args=None):
 
 def handle_mega(sender, chat, args=None):
     """Handle mega evolution command (@메가진화)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -474,7 +510,7 @@ def handle_mega(sender, chat, args=None):
     
     # Check if Pokemon can mega evolve
     if p["name"] not in MEGA_NAMES:
-        chat.reply(f'@{sender}\n{p["name"]}은(는) 메가진화할 수 없어요!')
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 메가진화할 수 없어요!\n\n메가진화 가능 포켓몬: {MEGA_NAMES}')
         return
     
     # Special case: Necrozma needs formchange
@@ -554,9 +590,18 @@ def handle_mega(sender, chat, args=None):
 
 def handle_formchange(sender, chat, args=None):
     """Handle form change command (@폼체인지)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -583,7 +628,7 @@ def handle_formchange(sender, chat, args=None):
     
     # Check if Pokemon can form change
     if p["name"] not in FORM_CHANGE_NAMES:
-        chat.reply(f'@{sender}\n{p["name"]}은(는) 폼체인지할 수 없어요!')
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 폼체인지할 수 없어요!\n\n메가진화 가능 포켓몬: {FORM_CHANGE_NAMES}')
         return
     
     # Cost: 10 million with discount
@@ -675,9 +720,18 @@ def handle_formchange(sender, chat, args=None):
 
 def handle_lock(sender, chat, args=None):
     """Handle lock to deck command (@덱)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -727,9 +781,18 @@ def handle_lock(sender, chat, args=None):
 
 def handle_unlock(sender, chat, args=None):
     """Handle unlock from deck command (@박스)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
@@ -1209,9 +1272,18 @@ def handle_legendegg(sender, chat):
 
 def handle_boxlevelup(sender, chat, args=None):
     """Handle box level up command (@박스레벨업)"""
+    from .explore import advOn
+    
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
         return
     
     pokInv = read_json(f"player_{sender}_inv")
