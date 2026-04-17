@@ -326,7 +326,7 @@ def handle_pokinfo(sender, chat, args=None):
     chat.reply(res)
 
 def handle_dpokinfo(sender, chat, args=None):
-    """Handle deck info command (@덱정보)"""
+    """Handle deck pokemon info command (@덱정보)"""
     pokInv = read_json(f"player_{sender}_inv")
     if pokInv is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
@@ -334,7 +334,7 @@ def handle_dpokinfo(sender, chat, args=None):
     
     parts = args.split() if args else []
     if len(parts) < 1:
-        chat.reply(f'@{sender}\n사용법: {CMDS["dpokinfo"]} [덱번호]')
+        chat.reply(f'@{sender}\n사용법: {CMDS["dpokinfo"]} [덱순번]')
         return
     
     try:
@@ -343,21 +343,17 @@ def handle_dpokinfo(sender, chat, args=None):
         chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
         return
     
-    if n < 1 or n > len(pokInv.get("deck", [])):
+    deck = pokInv.get("deck", [])
+    if n < 1 or n > len(deck):
         chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
         return
     
-    p = pokInv["deck"][n - 1]
+    p = deck[n - 1]
     
-    # Build description
-    v_text = V_TEXTS[p.get('v', 1)] if p.get('v', 1) < len(V_TEXTS) else f"V{p.get('v', 1)}"
+    v_text = V_TEXTS[p.get('v', 0)] if p.get('v', 0) < len(V_TEXTS) else f"V{p.get('v', 0)}"
     
-    if p.get("formchange", 0) > 0:
-        type1 = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "type1") or 1
-        type2 = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "type2") or 1
-    else:
-        type1 = read_json(f"포켓몬/{p['name']}", "type1") or 1
-        type2 = read_json(f"포켓몬/{p['name']}", "type2") or 1
+    type1 = read_json(f"포켓몬/{p['name']}", "type1") or 0
+    type2 = read_json(f"포켓몬/{p['name']}", "type2") or 0
     
     pokdesc = v_text
     if type1 > 0:
@@ -366,7 +362,6 @@ def handle_dpokinfo(sender, chat, args=None):
         pokdesc += " " + TYPE_TEXTS[type2]
     pokdesc +=f"\nHP:{p['hp']} ATK:{p['atk']} DEF:{p['def']}\nS.ATK:{p['satk']} S.DEF:{p['sdef']} SPD:{p['spd']}"
     
-    # Get image via KakaoTalk link
     try:
         img = pokimglink(p["name"], p.get("formchange", 0), p.get("shiny", 0))
         send_image(None, chat, 58796, {
@@ -379,19 +374,87 @@ def handle_dpokinfo(sender, chat, args=None):
     except:
         chat.reply(f"이미지 전송 오류.\nLv.{p['level']} {p['name']}\n{pokdesc}")
     
-    # Skills
     if p["name"] == "메타몽":
         skills_text = "변신"
     else:
         skills_text = printskills(p.get("skills", []), p.get("skillslocked", []))
-
-    skills_text+="\u200b"*500
-    skills_text+= f"\n레벨업: {CMDS["levelup"]} [덱번호] [레벨업 횟수]\n"
-    skills_text+= f"스킬뽑기: {CMDS["skillchange"]} [덱번호]\n"
-    skills_text+= f"폼체인지: {CMDS["formchange"]} [덱번호]\n"
-    skills_text+= f"메가진화/원시회귀/거다이맥스: {CMDS["mega"]} [덱번호]\n"
-    skills_text+= f"노력치강화(돌파): {CMDS["effort"]} [덱번호] [재료 박스번호]\n"
     
     res = f"@{sender}\n{skills_text}"
+    
+    chat.reply(res)
+
+def handle_pokdictionary(sender, chat, args=None):
+    """Handle pokemon info command (@도감)"""
+    
+    if args is None:
+        chat.reply(f'@{sender}\n사용법: {CMDS["dic"]} [포켓몬이름]')
+        return
+    
+    pokinfo = {
+        'type1':read_json(f"포켓몬/{args}", "type1") or 0,
+        'type2':read_json(f"포켓몬/{args}", "type1") or 0,
+        'hp':read_json(f"포켓몬/{args}", "hp") or 0,
+        'atk':read_json(f"포켓몬/{args}", "atk") or 0,
+        'def':read_json(f"포켓몬/{args}", "def") or 0,
+        'satk':read_json(f"포켓몬/{args}", "satk") or 0,
+        'sdef':read_json(f"포켓몬/{args}", "sdef") or 0,
+        'spd':read_json(f"포켓몬/{args}", "spd") or 0,
+        'nextup':read_json(f"포켓몬/{args}", "nextup") or 'x',
+        'nextlv':read_json(f"포켓몬/{args}", "nextlv") or 0,
+        'skills':read_json(f"포켓몬/{args}", "skills") or [],
+    }
+
+    
+    
+    # Build description
+    
+    '''
+    이부분은 폼체인지 보는 명령어 추가 시 사용
+    if p.get("formchange", 0) > 0:
+        type1 = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "type1") or 1
+        type2 = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "type2") or 1
+    '''
+
+    poktype = ""
+
+    if pokinfo['type1'] > 0:
+        poktype += " " + TYPE_TEXTS[pokinfo['type1']]
+    if pokinfo['type1'] > 0 and pokinfo['type2'] != pokinfo['type1']:
+        poktype += " " + TYPE_TEXTS[pokinfo['type2']]
+    
+    
+    # Get image via KakaoTalk link
+    try:
+        img = pokimglink(args, 0, 0)
+        send_image(None, chat, 58796, {
+            'POKIMG': img,
+            'POKNAME': f"도감 보기: {args}",
+            'DESC': poktype,
+            'shiny':0,
+            'LINK': f"ko/wiki/{args}_(포켓몬)"
+        })
+    except Exception as e:
+        print(e)
+        chat.reply(f"이미지 전송 오류.\n도감: {args}\n{poktype}")
+    
+    skills_text = ""
+
+    skills_text +=f"[{args}]\n\n[종족값]\nHP:{pokinfo['hp']}\nATK:{pokinfo['atk']}\nDEF:{pokinfo['def']}\nS.ATK:{pokinfo['satk']}\nS.DEF:{pokinfo['sdef']}\nSPD:{pokinfo['spd']}\n\n"
+
+    #진화
+    if pokinfo['nextup'] != 'x':
+        skills_text += f"[진화 정보]\n진화 레벨: {pokinfo['nextlv']}\n진화 후: {pokinfo['nextup']}\n\n"
+
+    # Skills
+
+    space = "\u200b"*500
+    skills_text += f"{space}\n\n[배우는 기술]\n"
+
+    if args == "메타몽":
+        skills_text += "변신"
+    else:
+        skills_text += printskills(pokinfo['skills'],[])
+    
+    res = f"{skills_text}"
     
     chat.reply(res)

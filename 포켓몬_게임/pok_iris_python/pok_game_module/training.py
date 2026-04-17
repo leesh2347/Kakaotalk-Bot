@@ -2,7 +2,7 @@
 import random
 import math
 import time
-from .config import SETTING, MEGA_NAMES, MEGA_AFTER_NAMES, FORM_CHANGE_NAMES, FORM_CHANGE_STATUS, POK_ARR, CMDS, BALL_ARR
+from .config import SETTING, MEGA_NAMES, MEGA_AFTER_NAMES, FORM_CHANGE_NAMES, FORM_CHANGE_STATUS, POK_ARR, CMDS, BALL_ARR, GMAX_NAMES, GMAX_AFTER_NAMES
 from .io_helpers import read_json, write_json, printskills, pokimglink
 
 def handle_levelup(sender, chat, args=None):
@@ -518,16 +518,6 @@ def handle_mega(sender, chat, args=None):
         chat.reply(f'@{sender}\n네크로즈마는 폼체인지 후 메가진화할 수 있어요!')
         return
     
-    # Check if deck already has mega
-    ismegaexists = 0
-    for deck_pok in pokInv["deck"]:
-        if deck_pok["name"] in MEGA_AFTER_NAMES:
-            ismegaexists = 1
-            break
-    
-    if ismegaexists == 1:
-        chat.reply(f'@{sender}\n이미 덱에 메가진화한 포켓몬이 있어요. 메가진화는 덱에 1마리만 장착 가능해요.')
-        return
     
     # Check level
     if p["level"] < 200:
@@ -587,6 +577,106 @@ def handle_mega(sender, chat, args=None):
     res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']} SATK:{p['satk']} SDEF:{p['sdef']}"
 
     chat.reply(f"@{sender}\n{res}")
+
+
+
+def handle_gmax(sender, chat, args=None):
+    """Handle gmax command (@거다이맥스)"""
+    from .explore import advOn
+    
+    pokUser = read_json(f"player_{sender}")
+    if pokUser is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n탐험 또는 배틀 중에는 사용할 수 없어요!')
+        return
+    
+    pokInv = read_json(f"player_{sender}_inv")
+    if pokInv is None or not pokInv.get("deck"):
+        chat.reply(f'@{sender}\n덱에 포켓몬이 없어요!')
+        return
+    
+    parts = args.split() if args else []
+    if len(parts) < 1:
+        chat.reply(f'@{sender}\n사용법: {CMDS["gmax"]} [덱번호]')
+        return
+    
+    try:
+        n = int(parts[0])
+    except:
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+    
+    if n < 1 or n > len(pokInv["deck"]):
+        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+        return
+    
+    p = pokInv["deck"][n - 1]
+    
+    # Check if Pokemon can gmax evolve
+    if p["name"] not in GMAX_NAMES:
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 거다이맥스할 수 없어요!\n\n거다이맥스 가능 포켓몬: {GMAX_NAMES}')
+        return
+    
+    
+    # Check level
+    if p["level"] < 200:
+        chat.reply(f'@{sender}\n거다이맥스는 레벨 200 이상이어야 해요!')
+        return
+    
+    # Cost: 2 billion
+    skillcosts = 2000000000
+    
+    if pokUser.get("gold", 0) < skillcosts:
+        chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {skillcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
+        return
+    
+    # Determine new name
+    oldname = p["name"]
+    
+    newname = GMAX_AFTER_NAMES[GMAX_NAMES.index(oldname)]
+    
+    # Recalculate stats with new name
+    new_hp = read_json(f"포켓몬/{newname}", "hp") or 50
+    new_atk = read_json(f"포켓몬/{newname}", "atk") or 50
+    new_def = read_json(f"포켓몬/{newname}", "def") or 50
+    new_spd = read_json(f"포켓몬/{newname}", "spd") or 50
+    
+    p["name"] = newname
+    p["hp"] = math.ceil(new_hp * p["level"] / 50)
+    p["atk"] = math.ceil(new_atk * p["level"] / 50)
+    p["def"] = math.ceil(new_def * p["level"] / 50)
+    p["spd"] = math.ceil(new_spd * p["level"] / 50)
+    
+    # Apply V bonus
+    if p.get("v", 0) > 0:
+        v_bonus = (10 + p["v"]) / 10
+        p["hp"] = math.ceil(p["hp"] * v_bonus)
+        p["atk"] = math.ceil(p["atk"] * v_bonus)
+        p["def"] = math.ceil(p["def"] * v_bonus)
+        p["spd"] = math.ceil(p["spd"] * v_bonus)
+    
+    p["formchange"] = 0
+    
+    pokInv["deck"][n - 1] = p
+    pokUser["gold"] -= skillcosts
+    
+    write_json(f"player_{sender}_inv", pokInv)
+    write_json(f"player_{sender}", pokUser)
+    
+    chat.reply(f"@{sender}\n{oldname}이(가) {newname}(으)로 거다이맥스했어요!")
+    
+    res = f"{skillcosts:,}원 지불.\n보유금액: {pokUser['gold']:,}원\n\n"
+    res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']} SATK:{p['satk']} SDEF:{p['sdef']}"
+
+    chat.reply(f"@{sender}\n{res}")
+
+
 
 def handle_formchange(sender, chat, args=None):
     """Handle form change command (@폼체인지)"""
