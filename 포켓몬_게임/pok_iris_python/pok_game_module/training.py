@@ -510,7 +510,7 @@ def handle_mega(sender, chat, args=None):
     
     # Check if Pokemon can mega evolve
     if p["name"] not in MEGA_NAMES:
-        chat.reply(f'@{sender}\n{p["name"]}은(는) 메가진화할 수 없어요!\n\n메가진화 가능 포켓몬: {MEGA_NAMES}')
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 메가진화할 수 없어요!\n\n메가진화 가능 포켓몬: {", ".join(MEGA_NAMES)}')
         return
     
     # Special case: Necrozma needs formchange
@@ -620,7 +620,7 @@ def handle_gmax(sender, chat, args=None):
     
     # Check if Pokemon can gmax evolve
     if p["name"] not in GMAX_NAMES:
-        chat.reply(f'@{sender}\n{p["name"]}은(는) 거다이맥스할 수 없어요!\n\n거다이맥스 가능 포켓몬: {GMAX_NAMES}')
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 거다이맥스할 수 없어요!\n\n거다이맥스 가능 포켓몬: {", ".join(GMAX_NAMES)}')
         return
     
     
@@ -718,7 +718,7 @@ def handle_formchange(sender, chat, args=None):
     
     # Check if Pokemon can form change
     if p["name"] not in FORM_CHANGE_NAMES:
-        chat.reply(f'@{sender}\n{p["name"]}은(는) 폼체인지할 수 없어요!\n\n메가진화 가능 포켓몬: {FORM_CHANGE_NAMES}')
+        chat.reply(f'@{sender}\n{p["name"]}은(는) 폼체인지할 수 없어요!\n\n폼체인지 가능 포켓몬: {", ".join(FORM_CHANGE_NAMES)}')
         return
     
     # Cost: 10 million with discount
