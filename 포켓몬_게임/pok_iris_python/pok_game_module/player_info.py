@@ -415,17 +415,8 @@ def handle_pokdictionary(sender, chat, args=None):
         'nextlv':read_json(f"포켓몬/{args}", "nextlv") or 0,
         'skills':read_json(f"포켓몬/{args}", "skills") or [],
     }
-
-    
     
     # Build description
-    
-    '''
-    이부분은 폼체인지 보는 명령어 추가 시 사용
-    if p.get("formchange", 0) > 0:
-        type1 = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "type1") or 1
-        type2 = read_json(f"포켓몬/{p['name']}_{p['formchange']}", "type2") or 1
-    '''
 
     poktype = ""
 
@@ -450,8 +441,13 @@ def handle_pokdictionary(sender, chat, args=None):
         chat.reply(f"이미지 전송 오류.\n도감: {args}\n{poktype}")
     
     skills_text = ""
-
-    skills_text +=f"[{args}]\n\n[종족값]\nHP:{pokinfo['hp']}\nATK:{pokinfo['atk']}\nDEF:{pokinfo['def']}\nS.ATK:{pokinfo['satk']}\nS.DEF:{pokinfo['sdef']}\nSPD:{pokinfo['spd']}\n\n"
+    skills_text +=f"[{args}]\n\n[종족값]\n"
+    skills_text +=f"HP:{pokinfo['hp']} (❻ {math.ceil(pokinfo['hp']*1.6)})\n"
+    skills_text +=f"ATK:{pokinfo['atk']} (❻ {math.ceil(pokinfo['atk']*1.6)})\n"
+    skills_text +=f"DEF:{pokinfo['def']} (❻ {math.ceil(pokinfo['def']*1.6)})\n"
+    skills_text +=f"S.ATK:{pokinfo['satk']} (❻ {math.ceil(pokinfo['satk']*1.6)})\n"
+    skills_text +=f"S.DEF:{pokinfo['sdef']} (❻ {math.ceil(pokinfo['sdef']*1.6)})\n"
+    skills_text +=f"SPD:{pokinfo['spd']} (❻ {math.ceil(pokinfo['spd']*1.6)})\n\n"
 
     #진화
     if pokinfo['nextup'] != 'x':
