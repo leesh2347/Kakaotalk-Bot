@@ -404,7 +404,7 @@ def handle_pokdictionary(sender, chat, args=None):
     
     pokinfo = {
         'type1':read_json(f"포켓몬/{args}", "type1") or 0,
-        'type2':read_json(f"포켓몬/{args}", "type1") or 0,
+        'type2':read_json(f"포켓몬/{args}", "type2") or 0,
         'hp':read_json(f"포켓몬/{args}", "hp") or 0,
         'atk':read_json(f"포켓몬/{args}", "atk") or 0,
         'def':read_json(f"포켓몬/{args}", "def") or 0,

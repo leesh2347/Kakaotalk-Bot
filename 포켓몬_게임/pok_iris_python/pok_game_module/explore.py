@@ -209,11 +209,13 @@ def get_prob(sender, pokUser):
     g4_rate = SETTING["p"]["g4"] + SETTING["ballg4"][ball_idx] + pokUser.get("stat", {}).get("g4", 0)
     g3_rate = SETTING["p"]["g3"] + SETTING["ballg3"][ball_idx] + pokUser.get("stat", {}).get("g3", 0)
     
-    if r <= g5_rate:
+    if r <= 1:
+        return 99  # ???
+    elif r <= g5_rate + 1:
         return 3  # Ultra Beast
-    elif r <= g5_rate + g4_rate:
+    elif r <= g5_rate + g4_rate + 1:
         return 4  # Legendary
-    elif r <= g5_rate + g4_rate + g3_rate:
+    elif r <= g5_rate + g4_rate + g3_rate + 1:
         return 5  # Rare
     elif r <= 50:
         return 6  # Common
@@ -226,11 +228,7 @@ def get_pokemon_name(prob, pokUser):
     """Get Pokemon name based on probability"""
     from .config import SEASONS
     
-    if prob == 7:  # Seasonal
-        month = read_json("season", "month") or 1
-        season_key = {1: 'spring', 2: 'summer', 3: 'autumn', 4: 'winter'}[month]
-        return random.choice(SEASONS[season_key])
-    elif prob == 99:
+    if prob == 99:
         return random.choice(POK_ARR['groupunknown'])
     elif prob == 3:
         return random.choice(POK_ARR['group5'])

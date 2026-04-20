@@ -65,12 +65,14 @@ def handle_ballinfo(sender, chat):
         res += f"볼 1개당 가격: {ball['price_per_ball']:,}\n"
         res += f"야생 포켓몬 레벨: {ball['level_range'][0]}~{ball['level_range'][1]}\n"
         res += "추가 포획률\n"
+        res += f"울트라비스트: +{ball['catch_bonus']['울트라비스트']}%\n"
         res += f"전설: +{ball['catch_bonus']['전설']}%\n"
         res += f"레어: +{ball['catch_bonus']['레어']}%\n"
         res += f"고급: +{ball['catch_bonus']['고급']}%\n"
         res += f"일반: +{ball['catch_bonus']['일반']}%\n"
+        res += f"울트라비스트 출현률: +{ball['spawn_bonus']['울트라비스트']}%\n"
         res += f"전설 포켓몬 출현률: +{ball['spawn_bonus']['전설']}%\n"
-        res += f"??? 출현률: +{ball['spawn_bonus']['레어']}%\n"
+        res += f"레어 포켓몬 출현률: +{ball['spawn_bonus']['레어']}%\n"
         res += "\n"
 
     chat.reply(res)
