@@ -403,19 +403,20 @@ def battle_loop(chat, sender):
                 player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "atk") or 50) * level / 50)
                 player1pok["def"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "def") or 50) * level / 50)
                 player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "spd") or 50) * level / 50)
-                player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "satk") or 1) * level / 50)
-                player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "sdef") or 1) * level / 50)
+                player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "satk") or 50) * level / 50)
+                player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "sdef") or 50) * level / 50)
             else:
                 player1pok["hp"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "hp") or 50) * level / 50)
                 player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "atk") or 50) * level / 50)
                 player1pok["def"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "def") or 50) * level / 50)
                 player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "spd") or 50) * level / 50)
-                player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 1) * level / 50)
-                player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
+                player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 50) * level / 50)
+                player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 50) * level / 50)
             
             trainerInv[trainerpoknum]["hp"] = player1pok["hp"]
             player1maxhp = player1pok["hp"]
             player1pp = {}
+            
             for skill in player1pok.get("skills", []):
                 skill_data = read_json(f"기술/{skill}")
                 player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
@@ -535,21 +536,21 @@ def battle_loop(chat, sender):
         # Weather damage
         if weather > 2:
             if weather == 3:  # Sandstorm
-                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 1
-                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 1
+                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 0
+                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 0
                 if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7:
                     player1pok["hp"] = max(0, math.ceil(player1pok["hp"] * 7 / 8))
                     battleres += f"[{player1}] 모래바람이 {player1pok['name']}(를)을 덮쳤어요!\n"
 
-                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
-                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
+                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 0
+                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 0
                 if type1_2 != 6 and type2_2 != 6 and type1_2 != 7 and type2_2 != 7:
                     player2pok["hp"] = max(0, math.ceil(player2pok["hp"] * 7 / 8))
                     battleres += f"[{player2}] 모래바람이 {player2pok['name']}(를)을 덮쳤어요!\n"
 
             elif weather == 4:  # Hail
-                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
-                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
+                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 0
+                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 0
                 if type1_2 != 11 and type2_2 != 11:
                     player2pok["hp"] = max(0, math.ceil(player2pok["hp"] * 7 / 8))
                     battleres += f"[{player2}] 싸라기눈이 {player2pok['name']}(를)을 덮쳤어요!\n"
@@ -558,7 +559,8 @@ def battle_loop(chat, sender):
         if player2pok["hp"] <= 0 and len(player2retire) >= len(pokInv.get("deck", [])):
             # Send final accumulated battle log
             if battleres:
-                chat.reply(battleres)
+                space = "\u200b"*500
+                chat.reply(f"배틀 결과\n{space}\n{battleres}")
                 battleres = ""
             end_pve_battle(chat, sender, winner=player1)
             return
@@ -566,7 +568,8 @@ def battle_loop(chat, sender):
         if player1pok["hp"] <= 0 and trainerpoknum >= len(trainerInv) - 1:
             # Send final accumulated battle log
             if battleres:
-                chat.reply(battleres)
+                space = "\u200b"*500
+                chat.reply(f"배틀 결과\n{space}\n{battleres}")
                 battleres = ""
             end_pve_battle(chat, sender, winner=sender)
             return
@@ -612,8 +615,8 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
 
     # STAB
     skill_type = skill_data.get("type") or 1
-    attacker_type1 = read_json(f"포켓몬/{attacker['name']}", "type1") or 1
-    attacker_type2 = read_json(f"포켓몬/{attacker['name']}", "type2") or 1
+    attacker_type1 = read_json(f"포켓몬/{attacker['name']}", "type1") or 0
+    attacker_type2 = read_json(f"포켓몬/{attacker['name']}", "type2") or 0
     
     if skill_type == attacker_type1 or skill_type == attacker_type2:
         atk = atk * 1.5
@@ -622,8 +625,8 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
     atk = weatherjudge(atk, skill_type, weather)
     
     # Type effectiveness
-    defender_type1 = read_json(f"포켓몬/{defender['name']}", "type1") or 1
-    defender_type2 = read_json(f"포켓몬/{defender['name']}", "type2") or 1
+    defender_type1 = read_json(f"포켓몬/{defender['name']}", "type1") or 0
+    defender_type2 = read_json(f"포켓몬/{defender['name']}", "type2") or 0
     
     judge = typejudge(skill_type, defender_type1, defender_type2)
     atk = atk * judge

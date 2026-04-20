@@ -148,13 +148,15 @@ def start_pvp_battle(chat):
     player2maxhp = player2pok.get("maxhp", player2pok["hp"])
     
     # Initialize PP
+    player1skillarr = player1pok.get("skills", []) + player1pok.get("skillslocked", [])
     player1pp = {}
-    for skill in player1pok.get("skills", []):
+    for skill in player1skillarr:
         skill_data = read_json(f"기술/{skill}")
         player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
     
+    player2skillarr = player2pok.get("skills", []) + player2pok.get("skillslocked", [])
     player2pp = {}
-    for skill in player2pok.get("skills", []):
+    for skill in player2skillarr:
         skill_data = read_json(f"기술/{skill}")
         player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
     
@@ -180,6 +182,8 @@ def start_pvp_battle(chat):
             'player2name': player2,
             'player1img': img1,
             'player2img': img2,
+            'player1shiny': player1pok.get("shiny", 0),
+            'player2shiny': player2pok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
             'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -233,8 +237,9 @@ def pvp_battle_loop(chat):
             player1pok = player1inv["deck"][next_pok_idx].copy()
             player1maxhp = player1pok.get("maxhp", player1pok["hp"])
             player1pok["hp"] = player1maxhp
+            player1skillarr = player1pok.get("skills", []) + player1pok.get("skillslocked", [])
             player1pp = {}
-            for skill in player1pok.get("skills", []):
+            for skill in player1skillarr:
                 skill_data = read_json(f"기술/{skill}")
                 player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
             
@@ -249,6 +254,8 @@ def pvp_battle_loop(chat):
                     'player2name': player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
                     'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -280,8 +287,9 @@ def pvp_battle_loop(chat):
             player2pok = player2inv["deck"][next_pok_idx].copy()
             player2maxhp = player2pok.get("maxhp", player2pok["hp"])
             player2pok["hp"] = player2maxhp
+            player2skillarr = player2pok.get("skills", []) + player2pok.get("skillslocked", [])
             player2pp = {}
-            for skill in player2pok.get("skills", []):
+            for skill in player2skillarr:
                 skill_data = read_json(f"기술/{skill}")
                 player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
             
@@ -296,6 +304,8 @@ def pvp_battle_loop(chat):
                     'player2name': player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
                     'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -342,27 +352,27 @@ def pvp_battle_loop(chat):
         # Weather damage
         if weather > 2:
             if weather == 3:  # Sandstorm
-                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 1
-                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 1
+                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 0
+                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 0
                 if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7:
                     player1pok["hp"] = max(1, math.ceil(player1pok["hp"] * 7 / 8))
                     battleres += f"[{player1}] 모래바람이 {player1pok['name']}(를)을 덮쳤어요!\n"
 
-                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
-                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
+                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 0
+                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 0
                 if type1_2 != 6 and type2_2 != 6 and type1_2 != 7 and type2_2 != 7:
                     player2pok["hp"] = max(1, math.ceil(player2pok["hp"] * 7 / 8))
                     battleres += f"[{player2}] 모래바람이 {player2pok['name']}(를)을 덮쳤어요!\n"
 
             elif weather == 4:  # Hail
-                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 1
-                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 1
+                type1_1 = read_json(f"포켓몬/{player1pok['name']}", "type1") or 0
+                type2_1 = read_json(f"포켓몬/{player1pok['name']}", "type2") or 0
                 if type1_1 != 11 and type2_1 != 11:
                     player1pok["hp"] = max(1, math.ceil(player1pok["hp"] * 7 / 8))
                     battleres += f"[{player1}] 싸라기눈이 {player1pok['name']}(를)을 덮쳤어요!\n"
                 
-                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 1
-                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 1
+                type1_2 = read_json(f"포켓몬/{player2pok['name']}", "type1") or 0
+                type2_2 = read_json(f"포켓몬/{player2pok['name']}", "type2") or 0
                 if type1_2 != 11 and type2_2 != 11:
                     player2pok["hp"] = max(1, math.ceil(player2pok["hp"] * 7 / 8))
                     battleres += f"[{player2}] 싸라기눈이 {player2pok['name']}(를)을 덮쳤어요!\n"
@@ -383,6 +393,8 @@ def pvp_battle_loop(chat):
                     'player2name': player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'player1shiny': player1pok.get("shiny", 0),
+                    'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
                     'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
                     'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
@@ -436,8 +448,8 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
 
     # STAB
     skill_type = skill_data.get("type") or 1
-    attacker_type1 = read_json(f"포켓몬/{attacker['name']}", "type1") or 1
-    attacker_type2 = read_json(f"포켓몬/{attacker['name']}", "type2") or 1
+    attacker_type1 = read_json(f"포켓몬/{attacker['name']}", "type1") or 0
+    attacker_type2 = read_json(f"포켓몬/{attacker['name']}", "type2") or 0
     
     if skill_type == attacker_type1 or skill_type == attacker_type2:
         atk = atk * 1.5
@@ -446,8 +458,8 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
     atk = weatherjudge(atk, skill_type, weather)
     
     # Type effectiveness
-    defender_type1 = read_json(f"포켓몬/{defender['name']}", "type1") or 1
-    defender_type2 = read_json(f"포켓몬/{defender['name']}", "type2") or 1
+    defender_type1 = read_json(f"포켓몬/{defender['name']}", "type1") or 0
+    defender_type2 = read_json(f"포켓몬/{defender['name']}", "type2") or 0
     
     judge = typejudge(skill_type, defender_type1, defender_type2)
     atk = atk * judge
@@ -521,6 +533,8 @@ def end_pvp_battle(chat, winner=None):
             'player2name': player2,
             'player1img': img1,
             'player2img': img2,
+            'player1shiny': winnerpok.get("shiny", 0),
+            'player2shiny': loserpok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
             'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
             'player1desc': f"[{player1pok['hp']}/{player1maxhp}]",
