@@ -243,7 +243,8 @@ def pvp_battle_loop(chat):
                 skill_data = read_json(f"기술/{skill}")
                 player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
             
-            chat.reply(f"[{player1}] {player1pok['name']} 등장!")
+            leftpoks = (next_pok_idx+1)*"●"+(len(player1inv["deck"]-next_pok_idx))*"○"
+            chat.reply(f"[{player1}] {player1pok['name']} 등장!\n{leftpoks}")
             
             # Send image
             try:
@@ -293,7 +294,8 @@ def pvp_battle_loop(chat):
                 skill_data = read_json(f"기술/{skill}")
                 player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
             
-            chat.reply(f"[{player2}] {player2pok['name']} 등장!")
+            leftpoks = (next_pok_idx+1)*"●"+(len(player2inv["deck"])-next_pok_idx)*"○"
+            chat.reply(f"[{player2}] {player2pok['name']} 등장!\n{leftpoks}")
             
             # Send image
             try:

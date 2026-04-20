@@ -6,47 +6,6 @@ from .io_helpers import read_json, write_json
 
 gatchaplayers = {}
 
-def handle_gatcha(sender, chat, args=None):
-    """Handle gacha command (@제비뽑기)"""
-    global gatchaplayers
-    
-    pokUser = read_json(f"player_{sender}")
-    if pokUser is None:
-        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
-        return
-    
-    # Check attempt limit
-    if sender not in gatchaplayers:
-        gatchaplayers[sender] = 0
-    
-    max_attempts = 5 + SETTING.get("eventp", {}).get("gatcha", 0)
-    
-    if gatchaplayers[sender] >= max_attempts:
-        chat.reply(f"@{sender}\n제비뽑기 횟수를 모두 사용했어요!\n(최대 {max_attempts}회)")
-        return
-    
-    # Gacha logic - random rewards
-    rann = random.randint(0, 99)
-    
-    if rann < 30:  # 30% - Gold
-        gold_amount = random.randint(1000000, 50000000)
-        gold_amount = math.ceil(gold_amount * SETTING.get("eventp", {}).get("goldX", 1))
-        pokUser["gold"] = pokUser.get("gold", 0) + gold_amount
-        chat.reply(f"@{sender}\n🎰 제비뽑기 결과: {gold_amount:,}G 획득!")
-    elif rann < 60:  # 30% - Balls
-        ball_count = random.randint(5, 20)
-        pokUser["balls"] = pokUser.get("balls", 0) + ball_count
-        chat.reply(f"@{sender}\n🎰 제비뽑기 결과: 볼 {ball_count}개 획득!")
-    elif rann < 80:  # 20% - Small gold
-        gold_amount = random.randint(100000, 1000000)
-        pokUser["gold"] = pokUser.get("gold", 0) + gold_amount
-        chat.reply(f"@{sender}\n🎰 제비뽑기 결과: {gold_amount:,}G 획득!")
-    else:  # 20% - Nothing
-        chat.reply(f"@{sender}\n🎰 제비뽑기 결과: 꽝! 다음 기회에...")
-    
-    gatchaplayers[sender] += 1
-    write_json(f"player_{sender}", pokUser)
-
 def handle_eventinfo(sender, chat):
     """Handle event info command (@포켓몬이벤트)"""
     eventp = SETTING.get("eventp", {})
