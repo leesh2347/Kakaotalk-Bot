@@ -63,25 +63,21 @@ def handle_mycollection(sender, chat):
 
 def handle_collectioninfo(sender, chat):
     """Handle collection info command (@컬렉션목록)"""
-    pokCol = read_json(f"player_{sender}_collection")
-    
-    if pokCol is None:
-        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
-        return
-    
-    res = f"@{sender} 컬렉션 목록\n\n"
+    res = "포켓몬스터 컬렉션 목록\n"
+
+    space = "\u200b"*500
+
+    res += f"{space}\n"
     
     for name in COLLECTION_NAMES:
         idx = COLLECTION_NAMES.index(name)
-        collected = pokCol.get(name, [])
-        total = len(COLLECTION_CONTENTS[idx])
+        contents = COLLECTION_CONTENTS[idx]
+        total = len(contents)
         
-        res += f"[{name}] {len(collected)}/{total}\n"
-        if collected:
-            res += f"  {', '.join(collected[:5])}"
-            if len(collected) > 5:
-                res += f" 외 {len(collected) - 5}마리"
-            res += "\n"
+        res += f"[{name}] {total}마리\n"
+        for i in range(0, len(contents), 10):
+            chunk = contents[i:i+10]
+            res += ", ".join(chunk) + ",\n"
         res += "\n"
     
     chat.reply(res)

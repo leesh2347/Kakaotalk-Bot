@@ -193,11 +193,11 @@ def handle_explore(sender, room, chat):
             'POKIMG': img,
             'shiny':pokinfo.get("shiny", 0),
             'POKNAME': f"Lv.{lev}  {pokname}",
-            'DESC': f"볼던지기: {','.join(SETTING.get('ballthrow_cmds', ['@볼']))}\n도망가기: {','.join(SETTING.get('esc_cmds', ['@도망']))}",
+            'DESC': f"도감 검색: {CMDS.get('dic', ['@도감'])} [포켓몬이름]\n볼던지기: {','.join(CMDS.get('ballthrow', ['@볼']))}        도망가기: {','.join(CMDS.get('esc', ['@도망']))}",
             'LINK': poklink
         })
     except Exception as e:
-        chat.reply(f"카카오링크 오류. 리셋 한번 해주세요.\n(볼은 던질수 있음)\n\nLv.{lev}  {pokname}\n볼던지기: {','.join(SETTING.get('ballthrow_cmds', ['@볼']))}\n도망가기: {','.join(SETTING.get('esc_cmds', ['@도망']))}")
+        chat.reply(f"카카오링크 오류. 리셋 한번 해주세요.\n(볼은 던질수 있음)\n\nLv.{lev}  {pokname}\n볼던지기: {','.join(CMDS.get('ballthrow', ['@볼']))}\n도망가기: {','.join(CMDS.get('esc', ['@도망']))}")
 
 def get_prob(sender, pokUser):
     """Determine what appears during exploration"""
