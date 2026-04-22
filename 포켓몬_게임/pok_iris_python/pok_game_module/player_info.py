@@ -292,8 +292,9 @@ def handle_pokinfo(sender, chat, args=None):
     # Build description
     v_text = V_TEXTS[p.get('v', 0)] if p.get('v', 0) < len(V_TEXTS) else f"V{p.get('v', 0)}"
     
-    type1 = read_json(f"포켓몬/{p['name']}", "type1") or 0
-    type2 = read_json(f"포켓몬/{p['name']}", "type2") or 0
+    pok_file_name = f"{p['name']}_{p['formchange']}" if p.get('formchange', 0) != 0 else p['name']
+    type1 = read_json(f"포켓몬/{pok_file_name}", "type1") or 0
+    type2 = read_json(f"포켓몬/{pok_file_name}", "type2") or 0
     
     pokdesc = v_text
     if type1 > 0:
@@ -355,8 +356,9 @@ def handle_dpokinfo(sender, chat, args=None):
     
     v_text = V_TEXTS[p.get('v', 0)] if p.get('v', 0) < len(V_TEXTS) else f"V{p.get('v', 0)}"
     
-    type1 = read_json(f"포켓몬/{p['name']}", "type1") or 0
-    type2 = read_json(f"포켓몬/{p['name']}", "type2") or 0
+    pok_file_name = f"{p['name']}_{p['formchange']}" if p.get('formchange', 0) != 0 else p['name']
+    type1 = read_json(f"포켓몬/{pok_file_name}", "type1") or 0
+    type2 = read_json(f"포켓몬/{pok_file_name}", "type2") or 0
     
     pokdesc = v_text
     if type1 > 0:
