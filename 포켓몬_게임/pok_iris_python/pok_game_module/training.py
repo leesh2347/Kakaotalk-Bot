@@ -1196,7 +1196,7 @@ def handle_egg(sender, chat):
     caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
     
     # Set islocked based on rarity (group 4+ is locked)
-    islocked_val = 1 if islegend >= 2 else 0
+    islocked_val = 1 if islegend >= 1 else 0
     
     caughtpok = {
         'name': pokname,
@@ -1308,7 +1308,7 @@ def handle_legendegg(sender, chat):
     caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
     
     # Set islocked based on rarity (group 4+ is locked)
-    islocked_val = 1 if islegend >= 2 else 0
+    islocked_val = 1 if islegend >= 1 else 0
     
     caughtpok = {
         'name': pokname,

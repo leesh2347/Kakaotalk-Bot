@@ -500,7 +500,7 @@ def printskills(skills, locked):
             atktype = skill_data.get("atktype", 1)
             atktype_text = "물리" if atktype == 0 else "특수"
 
-            res += f"{skills[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}"
+            res += f"{skills[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}  우선도:{skill_data.get('priority', 0)}"
             
             addi = skill_data.get("addi", 0)
             if addi == 1:
