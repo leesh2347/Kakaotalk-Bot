@@ -84,21 +84,28 @@ def handle_info(sender, chat, args=None):
     ball_spawn_rare_ui = BALL_INFO_LIST[ball_idx]['spawn_bonus']['레어']  # Displayed as "레어 포켓몬 출현률"
 
     # Get stat bonuses (from ribbons and other sources)
+    # stat['g6'] = paradox spawn bonus
     # stat['g5'] = ultra beast spawn bonus
     # stat['g4'] = legendary spawn bonus (added to ball's legendary bonus)
     # stat['g3'] = rare spawn bonus (added to ball's rare bonus)
+    stat_g6 = pokUser.get("stat", {}).get("g6", 0)
     stat_g5 = pokUser.get("stat", {}).get("g5", 0)
     stat_g4 = pokUser.get("stat", {}).get("g4", 0)
     stat_g3 = pokUser.get("stat", {}).get("g3", 0)
 
     # Base spawn rates from SETTING
+    base_paradox = SETTING["p"]["g6"]    # 0.1
     base_ultra = SETTING["p"]["g5"]      # 0
     base_legend = SETTING["p"]["g4"]      # 0
     base_rare = SETTING["p"]["g3"]        # 1
     base_advanced = SETTING["p"]["g2"]    # 19
     base_normal = SETTING["p"]["g1"]      # 60
 
+    # Ball spawn bonuses for paradox (패러독스)
+    ball_spawn_paradox_ui = BALL_INFO_LIST[ball_idx]['spawn_bonus']['패러독스']
+
     # Total spawn rates
+    total_paradox_spawn = base_paradox + stat_g6 + ball_spawn_paradox_ui
     total_ultra_spawn = base_ultra + stat_g5
     total_legend_spawn = base_legend + stat_g4 + ball_spawn_legend_ui
     total_rare_spawn = base_rare + stat_g3 + ball_spawn_rare_ui
@@ -106,6 +113,7 @@ def handle_info(sender, chat, args=None):
     total_normal_spawn = base_normal
 
     # Bonus amounts (excluding base rate)
+    paradox_spawn_bonus = stat_g6 + ball_spawn_paradox_ui
     ultra_spawn_bonus = stat_g5
     legend_spawn_bonus = stat_g4 + ball_spawn_legend_ui
     rare_spawn_bonus = stat_g3 + ball_spawn_rare_ui
@@ -153,20 +161,24 @@ def handle_info(sender, chat, args=None):
     event_legend_catch_bonus = eventp.get("g4catch", 0)
     event_rare_catch_bonus = eventp.get("g3catch", 0)
 
-    # Ball catch bonuses
-    ball_catch_legend = BALL_INFO_LIST[ball_idx]['catch_bonus']['전설']
-    ball_catch_rare = BALL_INFO_LIST[ball_idx]['catch_bonus']['레어']
-    ball_catch_advanced = BALL_INFO_LIST[ball_idx]['catch_bonus']['고급']
-    ball_catch_normal = BALL_INFO_LIST[ball_idx]['catch_bonus']['일반']
+    # Ball catch bonuses (from ball upgrade)
+    successcatch = pokUser.get("successcatch", {})
+    default_ball_catch = SETTING["catchsuccess"]
+    ball_catch_paradox = successcatch.get("g6", default_ball_catch[0] * (ball_idx + 1))
+    ball_catch_ultra = successcatch.get("g5", default_ball_catch[1] * (ball_idx + 1))
+    ball_catch_legend = successcatch.get("g4", default_ball_catch[2])
+    ball_catch_rare = successcatch.get("g3", default_ball_catch[3])
+    ball_catch_advanced = successcatch.get("g2", default_ball_catch[4])
+    ball_catch_normal = successcatch.get("g1", SETTING["catchsuccess"][5] if len(SETTING["catchsuccess"]) > 5 else 40)
 
     # Calculate total catch rates for each group
-    # Ultra Beast: base(0) + ball(0 or higher) + ribbon + event
-    # For ultra beast, we need to check if there's a specific ultra beast catch bonus
-    # From SETTING['ballcatch']: [0.2, 0.5, 2, 3, 5] - this seems to be for different ball tiers
-    # Let's use the ball's catch bonus for ultra beast (index 0 for legendary)
+    # Paradox: base(1) + ball + rank + ribbon + event
+    # Ultra Beast: base(0) + ball + ribbon + event + ultra_beast_catch_bonus
+    # Legend/Rare: base + ball + rank + ribbon + event
 
     # Base catch rates per group
-    catch_ultra_beast = base_ultra + ball_catch_legend + ribbon_catch_bonus + event_catch_bonus + ultra_beast_catch_bonus
+    catch_paradox = base_paradox + ball_catch_paradox + rank_catch_bonus + ribbon_catch_bonus + event_catch_bonus
+    catch_ultra_beast = base_ultra + ball_catch_ultra + ribbon_catch_bonus + event_catch_bonus + ultra_beast_catch_bonus
     catch_legend = base_legend + ball_catch_legend + rank_catch_bonus + ribbon_catch_bonus + event_catch_bonus + event_legend_catch_bonus + legend_catch_bonus + collection_catch_bonus
     catch_rare = base_rare + ball_catch_rare + rank_catch_bonus + ribbon_catch_bonus + event_catch_bonus + event_rare_catch_bonus
     catch_advanced = base_advanced + ball_catch_advanced + rank_catch_bonus + ribbon_catch_bonus + event_catch_bonus
@@ -204,6 +216,7 @@ def handle_info(sender, chat, args=None):
     res += f"탐험 소요시간: {cast_min}~{cast_max}초 ({cast_time_reduction}% 단축)\n\n"
 
     res += f"포켓몬 레벨업/스킬뽑기 할인: {total_discount}%\n"
+    res += f"패러독스 출현률: {total_paradox_spawn}%({paradox_spawn_bonus:+.1f}%)\n"
     res += f"울트라비스트 출현률: {total_ultra_spawn}%({ultra_spawn_bonus:+.1f}%)\n"
     res += f"전설의 포켓몬 출현률: {total_legend_spawn}%({legend_spawn_bonus:+.1f}%)\n"
     res += f"레어 포켓몬 출현률: {total_rare_spawn}%({rare_spawn_bonus:+.1f}%)\n"
@@ -211,6 +224,7 @@ def handle_info(sender, chat, args=None):
     res += f"일반 포켓몬 출현률: {total_normal_spawn}%({normal_spawn_bonus:+.1f}%)\n\n"
 
     res += "포켓몬 그룹별 포획률\n"
+    res += f"패러독스: {catch_paradox}%({catch_paradox - base_paradox:+.1f}%)\n"
     res += f"울트라비스트: {catch_ultra_beast}%({catch_ultra_beast - base_ultra:+.1f}%)\n"
     res += f"전설: {catch_legend}%({catch_legend - base_legend:+.1f}%)\n"
     res += f"레어: {catch_rare}%({catch_rare - base_rare:+.1f}%)\n"

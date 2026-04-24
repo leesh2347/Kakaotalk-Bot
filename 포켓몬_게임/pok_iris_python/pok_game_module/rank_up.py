@@ -38,10 +38,28 @@ def handle_ballup(sender, chat):
     pokUser["gold"] -= cost
     pokUser["Ball"] = BALL_ARR[current_idx + 1]
     
-    # Update stats
-    pokUser["stat"]["g5"] = SETTING["p"]["g5"] + SETTING["ballg5"][current_idx + 1]
-    pokUser["stat"]["g4"] = SETTING["p"]["g4"] + SETTING["ballg4"][current_idx + 1]
-    pokUser["stat"]["g3"] = SETTING["p"]["g3"] + SETTING["ballg3"][current_idx + 1]
+    # Update spawn stat bonuses
+    pokUser["stat"]["g6"] = pokUser["stat"]["g6"] - SETTING["ballg6"][current_idx] + SETTING["ballg6"][current_idx + 1]
+    pokUser["stat"]["g5"] = pokUser["stat"]["g5"] - SETTING["ballg5"][current_idx] + SETTING["ballg5"][current_idx + 1]
+    pokUser["stat"]["g4"] = pokUser["stat"]["g4"] - SETTING["ballg4"][current_idx] + SETTING["ballg4"][current_idx + 1]
+    pokUser["stat"]["g3"] = pokUser["stat"]["g3"] - SETTING["ballg3"][current_idx] + SETTING["ballg3"][current_idx + 1]
+    
+    # Update catch stat bonuses
+    if "successcatch" not in pokUser:
+        pokUser["successcatch"] = {
+            'g6':SETTING["catchsuccess"][0],
+            'g5':SETTING["catchsuccess"][1],
+            'g4':SETTING["catchsuccess"][2],
+            'g3':SETTING["catchsuccess"][3],
+            'g2':SETTING["catchsuccess"][4],
+            'g1':SETTING["catchsuccess"][5]
+        }
+    pokUser["successcatch"]["g6"] = pokUser["successcatch"]["g6"] + SETTING["catchsuccess"][0]
+    pokUser["successcatch"]["g5"] = pokUser["successcatch"]["g5"] + SETTING["catchsuccess"][1]
+    pokUser["successcatch"]["g4"] = pokUser["successcatch"]["g4"] + SETTING["catchsuccess"][2]
+    pokUser["successcatch"]["g3"] = pokUser["successcatch"]["g3"] + SETTING["catchsuccess"][3]
+    pokUser["successcatch"]["g2"] = pokUser["successcatch"]["g2"] + SETTING["catchsuccess"][4]
+    pokUser["successcatch"]["g1"] = pokUser["successcatch"]["g1"] + SETTING["catchsuccess"][5]
     
     write_json(f"player_{sender}", pokUser)
     
@@ -65,11 +83,13 @@ def handle_ballinfo(sender, chat):
         res += f"볼 1개당 가격: {ball['price_per_ball']:,}\n"
         res += f"야생 포켓몬 레벨: {ball['level_range'][0]}~{ball['level_range'][1]}\n"
         res += "추가 포획률\n"
+        res += f"패러독스: +{ball['catch_bonus']['패러독스']}%\n"
         res += f"울트라비스트: +{ball['catch_bonus']['울트라비스트']}%\n"
         res += f"전설: +{ball['catch_bonus']['전설']}%\n"
         res += f"레어: +{ball['catch_bonus']['레어']}%\n"
         res += f"고급: +{ball['catch_bonus']['고급']}%\n"
         res += f"일반: +{ball['catch_bonus']['일반']}%\n"
+        res += f"패러독스 포켓몬 출현률: +{ball['spawn_bonus']['패러독스']}%\n"
         res += f"울트라비스트 출현률: +{ball['spawn_bonus']['울트라비스트']}%\n"
         res += f"전설 포켓몬 출현률: +{ball['spawn_bonus']['전설']}%\n"
         res += f"레어 포켓몬 출현률: +{ball['spawn_bonus']['레어']}%\n"
@@ -149,6 +169,8 @@ def handle_ball_purchase(sender, chat, args=None):
     # Purchase
     pokUser["gold"] -= total_price
     pokUser["balls"] = pokUser.get("balls", 0) + quantity
+    if pokUser["balls"] > SETTING["maxball"]:
+        pokUser["balls"] = SETTING["maxball"]
 
     write_json(f"player_{sender}", pokUser)
 

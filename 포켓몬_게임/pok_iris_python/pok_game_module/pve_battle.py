@@ -477,7 +477,7 @@ def battle_loop(chat, sender):
                 skill_data = read_json(f"기술/{skill}")
                 player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-            leftpoks = (next_pok_idx+1)*"●"+(len(pokInv.get("deck", []))-next_pok_idx)*"○"
+            leftpoks = (next_pok_idx+1)*"●"+(len(pokInv.get("deck", []))-next_pok_idx-1)*"○"
 
             chat.reply(f"[{player2}] {player2pok['name']} 등장!\n{leftpoks}")
 
@@ -609,8 +609,18 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
         battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n아쉽게 빗나갔어요!\n\n"
         return
 
+    # Additional effects
+    addi = skill_data.get("addi") or 0
+
     # Calculate damage
     atktype = skill_data.get("atktype") or 1  # 0 = physical (atk/def), 1 = special (satk/sdef)
+
+    if addi == 6: #atk, satk highest stat
+        if attacker["atk"] > attacker["satk"]:
+            atktype = 0
+        else:
+            atktype = 1
+
     if atktype == 0:
         atk_stat = attacker["atk"]
         def_stat = defender["def"]
@@ -625,7 +635,10 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
     attacker_pok_file_name = f"{attacker['name']}_{attacker['formchange']}" if attacker.get('formchange', 0) != 0 else attacker['name']
     attacker_type1 = read_json(f"포켓몬/{attacker_pok_file_name}", "type1") or 0
     attacker_type2 = read_json(f"포켓몬/{attacker_pok_file_name}", "type2") or 0
-    
+
+    if addi == 5: #multi type
+        skill_type = attacker_type1
+
     if skill_type == attacker_type1 or (attacker_type2 != 0 and skill_type == attacker_type2):
         atk = atk * 1.5
     
@@ -639,10 +652,7 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
     
     judge = typejudge(skill_type, defender_type1, defender_type2)
     atk = atk * judge
-    
-    # Additional effects
-    addi = skill_data.get("addi") or 0
-    
+
     if addi == 4:  # Revenge
         atk = atk * (attacker.get("maxhp", attacker["hp"]) - attacker["hp"]) / 2
     

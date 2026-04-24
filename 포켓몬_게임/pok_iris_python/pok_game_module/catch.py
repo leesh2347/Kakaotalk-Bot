@@ -60,24 +60,31 @@ def handle_ballthrow(sender, chat):
     if pokname in POK_ARR['groupunknown']:
         group = 99
         catch_rate = 20  # Unknown group fixed rate
+    elif pokname in POK_ARR['group6']:
+        group = 6
+        catch_rate = pokUser.get("successcatch", {}).get("g6", 1)
     elif pokname in POK_ARR['group5']:
         group = 5
-        catch_rate = pokUser.get("successcatch", {}).get("g5", 0)
+        catch_rate = pokUser.get("successcatch", {}).get("g5", 1)
     elif pokname in POK_ARR['group4']:
         group = 4
-        catch_rate = pokUser.get("successcatch", {}).get("g4", 0)
+        catch_rate = pokUser.get("successcatch", {}).get("g4", 1)
     elif pokname in POK_ARR['group3']:
         group = 3
-        catch_rate = pokUser.get("successcatch", {}).get("g3", 0)
+        catch_rate = pokUser.get("successcatch", {}).get("g3", 1)
     elif pokname in POK_ARR['group2']:
         group = 2
-        catch_rate = pokUser.get("successcatch", {}).get("g2", 0)
+        catch_rate = pokUser.get("successcatch", {}).get("g2", 1)
     else:
         group = 1
-        catch_rate = pokUser.get("successcatch", {}).get("g1", 0)
+        catch_rate = pokUser.get("successcatch", {}).get("g1", 1)
 
     # Apply event bonuses
-    if group == 4:
+    if group == 6:
+        catch_rate = catch_rate + SETTING['eventp'].get('g6catch', 0)
+    if group == 5:
+        catch_rate = catch_rate + SETTING['eventp'].get('g5catch', 0)
+    elif group == 4:
         catch_rate = catch_rate + SETTING['eventp'].get('g4catch', 0)
     elif group == 3:
         catch_rate = catch_rate + SETTING['eventp'].get('g3catch', 0)
@@ -91,10 +98,6 @@ def handle_ballthrow(sender, chat):
     # Ensure minimum catch rate
     if catch_rate < 0:
         catch_rate = 1
-
-    # Level difference penalty
-    lev_penalty = max(0, (lev - 100) * 2)
-    catch_rate = max(10, catch_rate - lev_penalty)
 
     # Catch attempt
     if random.randint(1, 100) <= catch_rate:
@@ -197,7 +200,7 @@ def handle_ballthrow(sender, chat):
             runprob = 90
         else:
             # mapping: group 5→0, 4→1, 3→2, 2→3, 1→4
-            runprob = SETTING['run'][5 - group]
+            runprob = SETTING['run'][6 - group]
 
         # Check if Pokemon flees
         if runprob > (random.randint(1, 100)):

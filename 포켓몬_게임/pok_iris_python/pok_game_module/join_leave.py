@@ -18,11 +18,12 @@ def pokjoin(sender, chat):
         'castT': SETTING["rank"]["castT"][0],
         'success': SETTING["success"],
         'successcatch': {
-            'g5': SETTING["catchsuccess"][0],
-            'g4': SETTING["catchsuccess"][1],
-            'g3': SETTING["catchsuccess"][2],
-            'g2': SETTING["catchsuccess"][3],
-            'g1': SETTING["catchsuccess"][4]
+            'g6': SETTING["catchsuccess"][0],
+            'g5': SETTING["catchsuccess"][1],
+            'g4': SETTING["catchsuccess"][2],
+            'g3': SETTING["catchsuccess"][3],
+            'g2': SETTING["catchsuccess"][4],
+            'g1': SETTING["catchsuccess"][5]
         },
         'count': {'total': 0, 'succ': 0},
         'battlecount': {'total': 0, 'win': 0, 'lose': 0},
@@ -30,6 +31,7 @@ def pokjoin(sender, chat):
         'Ball': BALL_ARR[0],
         'gold': 0,
         'stat': {
+            'g6': SETTING["p"]["g6"],
             'g5': SETTING["p"]["g5"],
             'g4': SETTING["p"]["g4"],
             'g3': SETTING["p"]["g3"],

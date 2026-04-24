@@ -185,7 +185,7 @@ def pokimglink(pokename, formchange, shiny):
     else:
         baseurl = "pokemon_images"
 
-    if formchange > 0 and pokename != "아르세우스":
+    if formchange > 0:
         imgg = f"res/img/pok_game/{baseurl}/{pokename}_{formchange}.png"
     else:
         imgg = f"res/img/pok_game/{baseurl}/{pokename}.png"
@@ -509,6 +509,10 @@ def printskills(skills, locked):
                 res += "\n💥 공격시 1/4의 반동 데미지를 입음"
             elif addi == 2:
                 res += "\n💚 공격시 1/4 데미지만큼 체력 회복"
+            elif addi == 5:
+                res += "\n🎨 기술 사용자의 제1타입으로 기술 타입이 변함"
+            elif addi == 6:
+                res += "\n📊 기술 사용자의 atk, satk 중 높은 스탯으로 기술 분류가 변함"
             elif addi == 9:
                 res += "\n💣 공격시 자폭하여 본인의 체력이 1이 됨"
             res += "\n\n"
@@ -539,7 +543,7 @@ def printskills(skills, locked):
             type_text = TYPE_TEXTS[type_val] if type_val < len(TYPE_TEXTS) else ""
             atktype = skill_data.get("atktype", 1)
             atktype_text = "물리" if atktype == 0 else "특수"
-            res += f"🔒{locked[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}"
+            res += f"🔒{locked[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}  우선도:{skill_data.get('priority', 0)}"
             
             addi = skill_data.get("addi", 0)
             if addi == 1:
@@ -548,6 +552,10 @@ def printskills(skills, locked):
                 res += "\n💥 공격시 1/4의 반동 데미지를 입음"
             elif addi == 2:
                 res += "\n💚 공격시 1/4 데미지만큼 체력 회복"
+            elif addi == 5:
+                res += "\n🎨 기술 사용자의 제1타입으로 기술 타입이 변함"
+            elif addi == 6:
+                res += "\n📊 기술 사용자의 atk, satk 중 높은 스탯으로 기술 분류가 변함"
             elif addi == 9:
                 res += "\n💣 공격시 자폭하여 본인의 체력이 1이 됨"
             res += "\n\n"

@@ -100,7 +100,7 @@ def handle_explore(sender, room, chat):
                 if ran < 84:
                     balln = random.randint(1, 10)
                     pokUser["balls"] = pokUser.get("balls", 0) + balln
-                    if pokUser["balls"] > SETTING["maxball"]:
+                    if pokUser["balls"] >= SETTING["maxball"]:
                         pokUser["balls"] = SETTING["maxball"]
                     chat.reply(f"@{sender}\n바닥에 떨어진 볼을 발견했어요!\n볼 {balln}개 획득.")
                 else:
@@ -147,6 +147,8 @@ def handle_explore(sender, room, chat):
     
     if pokname in POK_ARR['groupunknown']:
         chat.reply(f"@{sender}\n❗ <???> {pokname}{particle} 나타났어요!")
+    elif pokname in POK_ARR['group6']:
+        chat.reply(f"@{sender}\n❗ <⏳️패러독스⏳️> {pokname}{particle} 나타났어요!")
     elif pokname in POK_ARR['group5']:
         chat.reply(f"@{sender}\n❗ <🦄울트라비스트🦄> {pokname}{particle} 나타났어요!")
     elif pokname in POK_ARR['group4']:
@@ -205,17 +207,20 @@ def get_prob(sender, pokUser):
     ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))
     
     # Probability calculation
-    g5_rate = SETTING["p"]["g5"] + SETTING["ballg5"][ball_idx] + pokUser.get("stat", {}).get("g5", 0)
-    g4_rate = SETTING["p"]["g4"] + SETTING["ballg4"][ball_idx] + pokUser.get("stat", {}).get("g4", 0)
-    g3_rate = SETTING["p"]["g3"] + SETTING["ballg3"][ball_idx] + pokUser.get("stat", {}).get("g3", 0)
+    g6_rate = SETTING["p"]["g6"] + SETTING["ballg6"][ball_idx] + pokUser.get("stat", {}).get("g6", 0.1)
+    g5_rate = SETTING["p"]["g5"] + SETTING["ballg5"][ball_idx] + pokUser.get("stat", {}).get("g5", 0.1)
+    g4_rate = SETTING["p"]["g4"] + SETTING["ballg4"][ball_idx] + pokUser.get("stat", {}).get("g4", 0.1)
+    g3_rate = SETTING["p"]["g3"] + SETTING["ballg3"][ball_idx] + pokUser.get("stat", {}).get("g3", 0.1)
     
     if r <= 1:
         return 99  # ???
-    elif r <= g5_rate + 1:
+    elif r <= g6_rate + 1:
         return 3  # Ultra Beast
-    elif r <= g5_rate + g4_rate + 1:
+    elif r <= g6_rate + g5_rate + 1:
+        return 3  # Ultra Beast
+    elif r <= g6_rate + g5_rate + g4_rate + 1:
         return 4  # Legendary
-    elif r <= g5_rate + g4_rate + g3_rate + 1:
+    elif r <= g6_rate + g5_rate + g4_rate + g3_rate + 1:
         return 5  # Rare
     elif r <= 50:
         return 6  # Common
