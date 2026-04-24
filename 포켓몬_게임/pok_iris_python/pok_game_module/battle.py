@@ -483,9 +483,12 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
     defender_type2 = read_json(f"포켓몬/{defender_pok_file_name}", "type2") or 0
     
     judge = typejudge(skill_type, defender_type1, defender_type2)
+
+    if judge == 0 and addi == 7: #무효도 공격
+        judge = 1
+
     atk = atk * judge
     
-
     
     if addi == 4:  # Revenge
         atk = atk * (attacker.get("maxhp", attacker["hp"]) - attacker["hp"]) / 2

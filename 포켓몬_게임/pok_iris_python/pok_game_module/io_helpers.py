@@ -513,6 +513,8 @@ def printskills(skills, locked):
                 res += "\n🎨 기술 사용자의 제1타입으로 기술 타입이 변함"
             elif addi == 6:
                 res += "\n📊 기술 사용자의 atk, satk 중 높은 스탯으로 기술 분류가 변함"
+            elif addi == 7:
+                res += "\n🎯 효과가 없는 상대에게도 데미지를 줄 수 있음"
             elif addi == 9:
                 res += "\n💣 공격시 자폭하여 본인의 체력이 1이 됨"
             res += "\n\n"
@@ -556,6 +558,8 @@ def printskills(skills, locked):
                 res += "\n🎨 기술 사용자의 제1타입으로 기술 타입이 변함"
             elif addi == 6:
                 res += "\n📊 기술 사용자의 atk, satk 중 높은 스탯으로 기술 분류가 변함"
+            elif addi == 7:
+                res += "\n🎯 효과가 없는 상대에게도 데미지를 줄 수 있음"
             elif addi == 9:
                 res += "\n💣 공격시 자폭하여 본인의 체력이 1이 됨"
             res += "\n\n"

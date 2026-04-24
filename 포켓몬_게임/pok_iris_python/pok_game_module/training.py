@@ -1165,7 +1165,10 @@ def handle_egg(sender, chat):
     if rann == 1:
         islegend = 3  # Unknown
         pokname = random.choice(POK_ARR["groupunknown"])
-    elif rann < 4:
+    elif rann < 2:
+        islegend = 4  # paradox
+        pokname = random.choice(POK_ARR["group6"])
+    elif rann < 5:
         islegend = 2  # Ultrabeast
         pokname = random.choice(POK_ARR["group5"])
     elif rann < 22:
@@ -1243,6 +1246,8 @@ def handle_egg(sender, chat):
     # Reply based on rarity
     if islegend == 3:
         chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!")
+    elif islegend == 4:
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!")
     elif islegend == 2:
         chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!")
     elif islegend == 1:
@@ -1280,7 +1285,10 @@ def handle_legendegg(sender, chat):
     if rann == 1:
         islegend = 3  # Unknown
         pokname = random.choice(POK_ARR["groupunknown"])
-    elif rann < 4:
+    elif rann < 2:
+        islegend = 4  # paradox
+        pokname = random.choice(POK_ARR["group6"])
+    elif rann < 5:
         islegend = 2  # Ultrabeast
         pokname = random.choice(POK_ARR["group5"])
     else:
@@ -1355,6 +1363,8 @@ def handle_legendegg(sender, chat):
     # Reply based on rarity
     if islegend == 3:
         chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!")
+    elif islegend == 4:
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!")
     elif islegend == 2:
         chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!")
     else:
