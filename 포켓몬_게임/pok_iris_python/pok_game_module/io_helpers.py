@@ -467,13 +467,16 @@ def weatherjudge(atk, type_val, weather):
         at = at * 2
     return at
 
-def printskills(skills, locked):
+def printskills(skills, locked, shiny_skills=None):
     """Format and display Pokemon skills"""
     from .config import TYPE_TEXTS
     MORE = "\u200b"
     res = ""
     power = ""
     accr = ""
+    
+    if shiny_skills is None:
+        shiny_skills = []
     
     for i in range(len(skills)):
         try:
@@ -500,7 +503,8 @@ def printskills(skills, locked):
             atktype = skill_data.get("atktype", 1)
             atktype_text = "물리" if atktype == 0 else "특수"
 
-            res += f"{skills[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}  우선도:{skill_data.get('priority', 0)}"
+            shiny_prefix = "✨ " if skills[i] in shiny_skills else ""
+            res += f"{shiny_prefix}{skills[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}  우선도:{skill_data.get('priority', 0)}"
             
             addi = skill_data.get("addi", 0)
             if addi == 1:
@@ -545,7 +549,9 @@ def printskills(skills, locked):
             type_text = TYPE_TEXTS[type_val] if type_val < len(TYPE_TEXTS) else ""
             atktype = skill_data.get("atktype", 1)
             atktype_text = "물리" if atktype == 0 else "특수"
-            res += f"🔒{locked[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}  우선도:{skill_data.get('priority', 0)}"
+            
+            shiny_prefix = "✨ " if locked[i] in shiny_skills else ""
+            res += f"🔒{shiny_prefix}{locked[i]} {type_text} [{atktype_text}]\n위력:{power}  PP:{skill_data.get('pp', 0)}  명중률:{accr}  우선도:{skill_data.get('priority', 0)}"
             
             addi = skill_data.get("addi", 0)
             if addi == 1:

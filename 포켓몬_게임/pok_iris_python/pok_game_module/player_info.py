@@ -2,6 +2,7 @@
 import math
 from .config import SETTING, BALL_ARR, COLLECTION_NAMES, V_TEXTS, TYPE_TEXTS, BALL_INFO_LIST, TRAINER_RANK_DATA, COLLECTION_EFFECTS_DATA, CMDS
 from .io_helpers import read_json, printskills, pokimglink, send_image
+from .shiny_moves import SHINY_POK_SKILLS
 
 def handle_info(sender, chat, args=None):
     """Handle trainer info command (@트레이너정보)"""
@@ -334,7 +335,13 @@ def handle_pokinfo(sender, chat, args=None):
     if p["name"] == "메타몽":
         skills_text = "변신"
     else:
-        skills_text = printskills(p.get("skills", []), p.get("skillslocked", []))
+        pok_shiny_skills = SHINY_POK_SKILLS.get(p["name"], []) if p.get("shiny", 0) == 1 else []
+        skills_text = printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
+        
+        # Add shiny skills info if shiny value is 1
+        if p.get("shiny", 0) == 1 and p["name"] in SHINY_POK_SKILLS:
+            shiny_skills = SHINY_POK_SKILLS[p["name"]]
+            skills_text += f"\n✨ 획득 가능 이로치 전용 기술: {', '.join(shiny_skills)}\n"
 
         skills_text+= f"\n레벨업: {CMDS["boxlevelup"]} [박스번호] [레벨업 횟수]\n"
         skills_text+= "스킬뽑기, 메가진화, 거다이맥스, 폼체인지의 경우 덱 장착 후 가능\n"
@@ -396,7 +403,13 @@ def handle_dpokinfo(sender, chat, args=None):
     if p["name"] == "메타몽":
         skills_text = "변신"
     else:
-        skills_text = printskills(p.get("skills", []), p.get("skillslocked", []))
+        pok_shiny_skills = SHINY_POK_SKILLS.get(p["name"], []) if p.get("shiny", 0) == 1 else []
+        skills_text = printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
+        
+        # Add shiny skills info if shiny value is 1
+        if p.get("shiny", 0) == 1 and p["name"] in SHINY_POK_SKILLS:
+            shiny_skills = SHINY_POK_SKILLS[p["name"]]
+            skills_text += f"\n✨ 획득 가능 이로치 전용 기술: {', '.join(shiny_skills)}\n"
 
         skills_text+="\u200b"*500
         skills_text+= f"\n도감보기: {CMDS["dic"]} [포켓몬 이름]\n"
@@ -478,6 +491,12 @@ def handle_pokdictionary(sender, chat, args=None):
         skills_text += "변신"
     else:
         skills_text += printskills(pokinfo['skills'],[])
+    
+    # Add shiny skills info if exists
+    if args in SHINY_POK_SKILLS:
+        shiny_skills = SHINY_POK_SKILLS[args]
+        skills_text += f"\n{space}\n\n[배우는 기술(이로치 전용)]\n"
+        skills_text += printskills(shiny_skills, [], shiny_skills)
     
     res = f"{skills_text}"
     

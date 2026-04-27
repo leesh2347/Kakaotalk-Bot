@@ -111,6 +111,18 @@ def handle_ballthrow(sender, chat):
             pokInv["box"] = []
         pokInv["box"].append(caught_pok)
 
+        # Check for mega/gmax notification
+        from .config import MEGA_NAMES, GMAX_NAMES, FORM_CHANGE_NAMES
+        noti_msg = ""
+        if caught_pok.get("name") in MEGA_NAMES:
+            noti_msg += f"\n💎 {caught_pok.get('name')}은(는) 메가진화 가능합니다 (@메가진화 [덱번호])"
+        if caught_pok.get("name") in GMAX_NAMES:
+            noti_msg += f"\n🌟 {caught_pok.get('name')}은(는) 거다이맥스 가능합니다 (@거다이맥스 [덱번호])"
+        if caught_pok.get("name") in FORM_CHANGE_NAMES:
+            noti_msg += f"\n🔄 {caught_pok.get('name')}은(는) 폼체인지 가능합니다 (@폼체인지 [덱번호])"
+        if noti_msg:
+            chat.reply(f"@{sender}\n{noti_msg}")
+
         # Update collection
         pokCol = read_json(f"player_{sender}_collection")
         if pokCol:

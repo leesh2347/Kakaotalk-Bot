@@ -125,7 +125,14 @@ def handle_levelup(sender, chat, args=None):
         p = new_pok
         
         # Evolution notification
-        chat.reply(f"@{sender}\n{p['name']}이(가) 진화했다!")
+        noti_msg = ""
+        if up in MEGA_NAMES:
+            noti_msg += f"\n💎 {up}은(는) 메가진화 가능합니다 (@메가진화)"
+        if up in GMAX_NAMES:
+            noti_msg += f"\n🌟 {up}은(는) 거다이맥스 가능합니다 (@거다이맥스)"
+        if up in FORM_CHANGE_NAMES:
+            noti_msg += f"\n🔄 {up}은(는) 폼체인지 가능합니다 (@폼체인지)"
+        chat.reply(f"@{sender}\n{p['name']}이(가) 진화했다!{noti_msg}")
         
         # Register in collection
         pokCol = read_json(f"player_{sender}_collection")
@@ -178,6 +185,7 @@ def handle_levelup(sender, chat, args=None):
 def handle_skillchange(sender, chat, args=None):
     """Handle skill change command (@스킬뽑기)"""
     from .explore import advOn
+    from .shiny_moves import SHINY_POK_SKILLS
     
     pokUser = read_json(f"player_{sender}")
     if pokUser is None:
@@ -234,6 +242,13 @@ def handle_skillchange(sender, chat, args=None):
     else:
         skillsarr = read_json(f"포켓몬/{p['name']}", "skills") or []
     
+    # Add shiny skills if shiny value is 1
+    pokename = p['name']
+    shiny_skills = []
+    if p.get("shiny", 0) == 1 and pokename in SHINY_POK_SKILLS:
+        shiny_skills = SHINY_POK_SKILLS[pokename]
+        skillsarr = skillsarr + shiny_skills
+    
     # Check if Pokemon has enough skills
     if len(skillsarr) < 5 or locked_count > 3:
         chat.reply(f'@{sender}\n{p["name"]}은(는) 바꿀 스킬이 없어요!')
@@ -260,7 +275,7 @@ def handle_skillchange(sender, chat, args=None):
     write_json(f"player_{sender}", pokUser)
 
     res = f"{cost:,}원 지불.\n보유금액: {pokUser['gold']:,}원\n\n"
-    res += printskills(p["skills"], p["skillslocked"])
+    res += printskills(p["skills"], p["skillslocked"], shiny_skills)
 
     chat.reply(f"@{sender}\n{res}")
 
@@ -1243,15 +1258,24 @@ def handle_egg(sender, chat):
     write_json(f"player_{sender}_inv", pokInv)
     write_json(f"player_{sender}_collection", pokCol)
     
+    # Check for mega/gmax notification
+    noti_msg = ""
+    if pokname in MEGA_NAMES:
+        noti_msg += f"\n💎 {pokname}은(는) 메가진화 가능합니다 (@메가진화)"
+    if pokname in GMAX_NAMES:
+        noti_msg += f"\n🌟 {pokname}은(는) 거다이맥스 가능합니다 (@거다이맥스)"
+    if pokname in FORM_CHANGE_NAMES:
+        noti_msg += f"\n🔄 {pokname}은(는) 폼체인지 가능합니다 (@폼체인지)"
+    
     # Reply based on rarity
     if islegend == 3:
-        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 4:
-        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 2:
-        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 1:
-        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     else:
         chat.reply(f"@{sender}\n축하합니다! [레어] {pokname}이(가) 알에서 나왔어요!")
 
@@ -1360,15 +1384,24 @@ def handle_legendegg(sender, chat):
     write_json(f"player_{sender}_inv", pokInv)
     write_json(f"player_{sender}_collection", pokCol)
     
+    # Check for mega/gmax notification
+    noti_msg = ""
+    if pokname in MEGA_NAMES:
+        noti_msg += f"\n💎 {pokname}은(는) 메가진화 가능합니다 (@메가진화)"
+    if pokname in GMAX_NAMES:
+        noti_msg += f"\n🌟 {pokname}은(는) 거다이맥스 가능합니다 (@거다이맥스)"
+    if pokname in FORM_CHANGE_NAMES:
+        noti_msg += f"\n🔄 {pokname}은(는) 폼체인지 가능합니다 (@폼체인지)"
+    
     # Reply based on rarity
     if islegend == 3:
-        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 4:
-        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 2:
-        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
     else:
-        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
 
 def handle_boxlevelup(sender, chat, args=None):
     """Handle box level up command (@박스레벨업)"""
@@ -1474,7 +1507,14 @@ def handle_boxlevelup(sender, chat, args=None):
         pokInv["box"][n - 1] = new_pok
         p = new_pok
         
-        chat.reply(f"@{sender}\n{p['name']}이(가) 진화했다!")
+        noti_msg = ""
+        if up in MEGA_NAMES:
+            noti_msg += f"\n💎 {up}은(는) 메가진화 가능합니다 (@메가진화)"
+        if up in GMAX_NAMES:
+            noti_msg += f"\n🌟 {up}은(는) 거다이맥스 가능합니다 (@거다이맥스)"
+        if up in FORM_CHANGE_NAMES:
+            noti_msg += f"\n🔄 {up}은(는) 폼체인지 가능합니다 (@폼체인지)"
+        chat.reply(f"@{sender}\n{p['name']}이(가) 진화했다!{noti_msg}")
         
         pokCol = read_json(f"player_{sender}_collection")
         if pokCol:
