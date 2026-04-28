@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "메가메타그로스",
+      "level": 260,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "코멧펀치",
+        "사념의박치기",
+        "지진",
+        "암해머"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 리자몽",
+      "level": 260,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "불대문자",
+        "에어슬래시",
+        "솔라빔",
+        "화염방사"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "테라파고스",
+      "level": 260,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "테라클러스터",
+        "대지의힘",
+        "파워젬",
+        "파동탄"
+      ],
+      "skillslocked": [],
+      "formchange": 1,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가플라엣테",
+      "level": 260,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "파멸의빛",
+        "문포스",
+        "파괴광선",
+        "기가드레인"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "울트라네크로즈마",
+      "level": 260,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "포톤가이저",
+        "니힐레이저",
+        "스마트호른",
+        "용의파동"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+	{
+      "name": "무한다이맥스 무한다이노",
+      "level": 260,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "무한다이빔",
+        "화염방사",
+        "크로스포이즌",
+        "대지의힘"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    }
+  ]
+}
