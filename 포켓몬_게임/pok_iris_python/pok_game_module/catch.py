@@ -49,7 +49,11 @@ def handle_ballthrow(sender, chat):
     pokUser["balls"] -= 1
     write_json(f"player_{sender}", pokUser)  # Immediately persist ball decrement
 
-    chat.reply(f'{sender}님이 {pokname}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요! (남은 볼: {pokUser.get("balls", 0)}개)')
+    shinytext = ''
+    if shiny > 0:
+        shinytext = '✨'
+
+    chat.reply(f'{sender}님이 {pokname}{shinytext}에게 {pokUser.get("Ball", BALL_ARR[0])}을 던졌어요! (남은 볼: {pokUser.get("balls", 0)}개)')
 
     time.sleep(1)
 
@@ -182,7 +186,7 @@ def handle_ballthrow(sender, chat):
         
         write_json(f"player_{sender}", pokUser)
 
-        chat.reply(f"@{sender}\n축하합니다!\n{pokname}{'을' if len(unicodedata.normalize('NFD', pokname[-1])) == 3 else '를'} 잡았습니다!")
+        chat.reply(f"@{sender}\n축하합니다!\n{pokname}{shinytext}{'을' if len(unicodedata.normalize('NFD', pokname[-1])) == 3 else '를'} 잡았습니다!")
 
         # Clean up - ALWAYS execute to prevent stuck exploration
         try:
@@ -241,7 +245,7 @@ def handle_ballthrow(sender, chat):
 
             lt = len(pokname) - 1
             particle = '은' if len(unicodedata.normalize('NFD', pokname[-1])) == 3 else '는'
-            chat.reply(f"@{sender}\n야생의 {pokname}{particle} 도망쳐 버렸어요!\n포획 실패!")
+            chat.reply(f"@{sender}\n야생의 {pokname}{shinytext}{particle} 도망쳐 버렸어요!\n포획 실패!")
 
             if sender in isballwaiting:
                 isballwaiting.remove(sender)
@@ -298,7 +302,12 @@ def handle_escape(sender, chat):
     idx = ispokfind.index(sender)
     pokinfo = battlepokinfo[idx]
 
-    chat.reply(f"@{sender}\n야생의 {pokinfo['name']}에게서 도망쳤어요!")
+    shiny = pokinfo['shiny']
+    shinytext = ''
+    if shiny > 0:
+        shinytext = '✨'
+
+    chat.reply(f"@{sender}\n야생의 {pokinfo['name']}{shinytext}에게서 도망쳤어요!")
 
     # Clean up - ALWAYS execute
     try:

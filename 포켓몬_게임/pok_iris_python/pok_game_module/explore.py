@@ -85,6 +85,7 @@ def handle_explore(sender, room, chat):
     # Determine what appears
     prob = get_prob(sender, pokUser)
     
+
     while prob < 3:
         r = random.randint(1, 100)
         if r > pokUser.get("success", 70):
@@ -118,7 +119,7 @@ def handle_explore(sender, room, chat):
                         if "item" not in pokInv:
                             pokInv["item"] = []
                         pokInv["item"].append("전설알")
-                        chat.reply(f"@{sender}\n축하합니다!\n<⭐전설⭐> 포켓몬의 알을 발견했습니다.\n'{CMDS['legendegg']}' 명령어를 통해 알을 부화시키세요.")
+                        chat.reply(f"@{sender}\n축하합니다!\n<⭐전설/환상⭐> 포켓몬의 알을 발견했습니다.\n'{CMDS['legendegg']}' 명령어를 통해 알을 부화시키세요.")
                     else:
                         money = SETTING["luckygold"]
                         pokUser["gold"] = pokUser.get("gold", 0) + money
@@ -141,9 +142,21 @@ def handle_explore(sender, room, chat):
     lev = SETTING["minlevel"] + (BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0])) + 1) * SETTING["balluplev"]
     lev = lev + random.randint(1, 10)
     
+    #shiny determine
+    shiny = 0
+    shr = random.randint(1, 1000)
+    if shr == 1:
+        shiny = 1
+
     # Display message based on rarity
     lt = len(pokname) - 1
-    particle = '(이)가'
+
+    particle = ''
+
+    if shiny > 0:
+        particle += '✨'
+
+    particle += '(이)가'
     
     if pokname in POK_ARR['groupunknown']:
         chat.reply(f"@{sender}\n❗ <???> {pokname}{particle} 나타났어요!")
@@ -152,7 +165,7 @@ def handle_explore(sender, room, chat):
     elif pokname in POK_ARR['group5']:
         chat.reply(f"@{sender}\n❗ <🦄울트라비스트🦄> {pokname}{particle} 나타났어요!")
     elif pokname in POK_ARR['group4']:
-        chat.reply(f"@{sender}\n❗ <⭐전설⭐> {pokname}{particle} 나타났어요!")
+        chat.reply(f"@{sender}\n❗ <⭐전설/환상⭐> {pokname}{particle} 나타났어요!")
     elif pokname in POK_ARR['group3']:
         chat.reply(f"@{sender}\n❗ [레어] 야생의 {pokname}{particle} 나타났어요!")
     elif pokname in POK_ARR['group2']:
@@ -163,7 +176,7 @@ def handle_explore(sender, room, chat):
     pokUser["count"] = pokUser.get("count", {"total": 0, "succ": 0})
     pokUser["count"]["total"] = pokUser["count"].get("total", 0) + 1
 
-    pokinfo = {'name': pokname, 'level': lev, 'shiny':0}
+    pokinfo = {'name': pokname, 'level': lev, 'shiny':shiny}
     ispokfind.append(sender)
     battlepokinfo.append(pokinfo)
     advOn[sender] = 2
@@ -193,7 +206,7 @@ def handle_explore(sender, room, chat):
         
         send_image(room, chat, 58796, {
             'POKIMG': img,
-            'shiny':pokinfo.get("shiny", 0),
+            'shiny':pokinfo.get("shiny", shiny),
             'POKNAME': f"Lv.{lev}  {pokname}",
             'DESC': f"도감 검색: {CMDS.get('dic', ['@도감'])} [포켓몬이름]\n볼던지기: {','.join(CMDS.get('ballthrow', ['@볼']))}        도망가기: {','.join(CMDS.get('esc', ['@도망']))}",
             'LINK': poklink
