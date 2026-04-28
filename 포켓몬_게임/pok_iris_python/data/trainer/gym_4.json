@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "토대부기",
+      "level": 55,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "우드해머",
+        "지진",
+        "기가드레인",
+        "엄청난힘"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "로파파",
+      "level": 57,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "기가드레인",
+        "파도타기",
+        "에너지볼",
+        "불꽃펀치"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "마스카나",
+      "level": 59,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "트릭플라워",
+        "지옥찌르기",
+        "치근거리기",
+        "트리플악셀"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가이상해꽃",
+      "level": 61,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "오물폭탄",
+        "꽃잎댄스",
+        "파괴광선",
+        "기가드레인"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "오거폰",
+      "level": 63,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "덩굴방망이",
+        "우드호른",
+        "우드해머",
+        "엄청난힘"
+      ],
+      "skillslocked": [],
+      "formchange": 1,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "종이신도",
+      "level": 65,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "거수참",
+        "리프블레이드",
+        "성스러운칼",
+        "깜짝베기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "쥬피썬더",
+      "level": 175,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "방전",
+        "섀도볼",
+        "전격파",
+        "아이언테일"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "자포코일",
+      "level": 177,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "러스터캐논",
+        "10만볼트",
+        "마그넷봄",
+        "파괴광선"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "로토무",
+      "level": 179,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "하이드로펌프",
+        "10만볼트",
+        "섀도볼",
+        "번개"
+      ],
+      "skillslocked": [],
+      "formchange": 2,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 피카츄",
+      "level": 181,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "볼트태클",
+        "파찌파찌액셀",
+        "참방참방서핑",
+        "둥실둥실폴"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 스트린더",
+      "level": 183,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "오버드라이브",
+        "오물웨이브",
+        "번개",
+        "폭음파"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "제크로무",
+      "level": 185,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "뇌격",
+        "역린",
+        "크로스썬더",
+        "엄청난힘"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

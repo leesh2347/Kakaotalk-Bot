@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "마폭시",
+      "level": 200,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "사이코키네시스",
+        "섀도볼",
+        "오버히트",
+        "솔라빔"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "키키링",
+      "level": 202,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "사이코키네시스",
+        "깨물어부수기",
+        "지진",
+        "기습"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "솔가레오",
+      "level": 204,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "메테오드라이브",
+        "플레어드라이브",
+        "깨물어부수기",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 브리무음",
+      "level": 206,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "드레인키스",
+        "매지컬샤인",
+        "사이코키네시스",
+        "파괴광선"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가가디안",
+      "level": 208,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "문포스",
+        "사이코키네시스",
+        "섀도볼",
+        "화염방사"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가뮤츠Y",
+      "level": 210,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "사이코브레이크",
+        "파동탄",
+        "섀도볼",
+        "매지컬샤인"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

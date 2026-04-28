@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "딱구리",
+      "level": 85,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "깨트리다",
+        "기습",
+        "스톤샤워",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "콜로솔트",
+      "level": 87,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "스톤샤워",
+        "지진",
+        "바디프레스",
+        "헤비봄버"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "아케오스",
+      "level": 89,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "스톤에지",
+        "애크러뱃",
+        "용의파동",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "마기라스",
+      "level": 91,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "스톤에지",
+        "깨물어부수기",
+        "지진",
+        "깨트리다"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가디안시",
+      "level": 93,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "다이아스톰",
+        "매지컬샤인",
+        "문포스",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 석탄산",
+      "level": 95,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "분화",
+        "열탕",
+        "스톤에지",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

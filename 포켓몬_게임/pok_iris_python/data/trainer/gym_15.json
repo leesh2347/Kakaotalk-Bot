@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "둥실라이드",
+      "level": 210,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "공중날기",
+        "기습",
+        "섀도볼",
+        "10만볼트"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "대쓰여너",
+      "level": 212,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "성묘",
+        "웨이브태클",
+        "아쿠아제트",
+        "깨물어부수기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "타부자고",
+      "level": 214,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "골드러시",
+        "섀도볼",
+        "파워젬",
+        "10만볼트"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가팬텀",
+      "level": 216,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "오물폭탄",
+        "섀도볼",
+        "악의파동",
+        "기합구슬"
+      ],
+      "skillslocked": [],
+      "formchange": 1,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "버드렉스",
+      "level": 218,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "아스트랄비트",
+        "사이코키네시스",
+        "기가드레인",
+        "드레인키스"
+      ],
+      "skillslocked": [],
+      "formchange": 2,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "두파팡",
+      "level": 220,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "깜짝헤드",
+        "아스트랄비트",
+        "악의파동",
+        "화염방사"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

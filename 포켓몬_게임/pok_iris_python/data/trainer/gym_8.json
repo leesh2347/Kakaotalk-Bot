@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "엘레이드",
+      "level": 115,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "사이코커터",
+        "인파이트",
+        "스톤샤워",
+        "섀도크루"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "빠르모트",
+      "level": 117,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "전광쌍격",
+        "인파이트",
+        "와일드볼트",
+        "치근거리기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "저승갓숭",
+      "level": 119,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "분노의주먹",
+        "인파이트",
+        "냉동펀치",
+        "기습"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가번치코",
+      "level": 121,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "플레어드라이브",
+        "브레이브버드",
+        "인파이트",
+        "기가임팩트"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 괴력몬",
+      "level": 123,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "크로스촙",
+        "스톤에지",
+        "불릿펀치",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가루카리오",
+      "level": 125,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "신속",
+        "지진",
+        "인파이트",
+        "거대해머"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

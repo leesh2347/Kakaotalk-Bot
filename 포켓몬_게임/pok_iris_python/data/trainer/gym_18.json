@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "누리레느",
+      "level": 240,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "아쿠아제트",
+        "문포스",
+        "파도타기",
+        "냉동빔"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가파비코리",
+      "level": 242,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "용의파동",
+        "폭풍",
+        "매지컬샤인",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "영원의 꽃 플라엣테",
+      "level": 244,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "파멸의빛",
+        "문포스",
+        "꽃잎댄스",
+        "파괴광선"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 마휘핑",
+      "level": 246,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "매지컬샤인",
+        "드레인키스",
+        "미스트버스트",
+        "사이코키네시스"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "자시안",
+      "level": 248,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "거수참",
+        "치근거리기",
+        "성스러운칼",
+        "깨물어부수기"
+      ],
+      "skillslocked": [],
+      "formchange": 1,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "날개치는머리",
+      "level": 250,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "문포스",
+        "아스트랄비트",
+        "화염방사",
+        "10만볼트"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

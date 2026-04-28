@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "모스노우",
+      "level": 160,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "눈보라",
+        "벌레의야단법석",
+        "냉동빔",
+        "폭풍"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "눈설왕",
+      "level": 162,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "우드해머",
+        "눈사태",
+        "냉동빔",
+        "기가드레인"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "맘모꾸리",
+      "level": 164,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "얼음뭉치",
+        "지진",
+        "스톤에지",
+        "고드름떨구기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 라프라스",
+      "level": 166,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "절대영도",
+        "파도타기",
+        "냉동빔",
+        "하이드로펌프"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "큐레무",
+      "level": 168,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "콜드플레어",
+        "크로스플레임",
+        "용의파동",
+        "푸른불꽃"
+      ],
+      "skillslocked": [],
+      "formchange": 2,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+	{
+      "name": "파오젠",
+      "level": 170,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "얼음뭉치",
+        "블리자드랜스",
+        "기습",
+        "성스러운칼"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

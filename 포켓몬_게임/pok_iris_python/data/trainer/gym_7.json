@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "닥트리오",
+      "level": 100,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "땅가르기",
+        "기습",
+        "제비반환",
+        "지진"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "두빅굴",
+      "level": 102,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "땅가르기",
+        "지진",
+        "냉동펀치",
+        "아쿠아브레이크"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "몰드류",
+      "level": 104,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "지진",
+        "아이언헤드",
+        "스톤샤워",
+        "깨트리다"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "랜드로스",
+      "level": 106,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "지진",
+        "스톤에지",
+        "공중날기",
+        "엄청난힘"
+      ],
+      "skillslocked": [],
+      "formchange": 1,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "붉은 달의 다투곰",
+      "level": 108,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "블러드문",
+        "대지의힘",
+        "진공파",
+        "하이퍼보이스"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "원시그란돈",
+      "level": 110,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "단애의칼",
+        "지진",
+        "분화",
+        "번개펀치"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

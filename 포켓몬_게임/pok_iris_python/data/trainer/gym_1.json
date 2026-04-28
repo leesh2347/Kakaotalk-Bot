@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "꼬렛",
+      "level": 10,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "전광석화",
+        "몸통박치기",
+        "물기",
+        "따라가때리기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "픽시",
+      "level": 12,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "불꽃펀치",
+        "이판사판태클",
+        "코멧펀치",
+        "치근거리기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "해피너스",
+      "level": 14,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "사이코키네시스",
+        "파괴광선",
+        "드레인펀치",
+        "이판사판태클"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "게을킹",
+      "level": 16,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "기가임팩트",
+        "지진",
+        "깨트리다",
+        "이판사판태클"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "레지기가스",
+      "level": 18,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "묵사발",
+        "사념의박치기",
+        "기가임팩트",
+        "제비반환"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+	{
+      "name": "거다이맥스 잠만보",
+      "level": 20,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "쑥쑥봄버",
+        "지진",
+        "기가임팩트",
+        "지옥찌르기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

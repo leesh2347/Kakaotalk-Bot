@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "엑스레그",
+      "level": 145,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "만나자마자",
+        "기습",
+        "뛰어오르다",
+        "시저크로스"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가헤라크로스",
+      "level": 147,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "시저크로스",
+        "인파이트",
+        "메가폰",
+        "스톤에지"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 버터플",
+      "level": 149,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "에어슬래시",
+        "벌레의야단법석",
+        "사이코키네시스",
+        "솔라빔"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 다태우지네",
+      "level": 151,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "플레어드라이브",
+        "시저크로스",
+        "깨물어부수기",
+        "흡혈"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "불카모스",
+      "level": 153,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "벌레의야단법석",
+        "불대문자",
+        "10만볼트",
+        "기가드레인"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가핫삼",
+      "level": 155,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "불릿펀치",
+        "시저크로스",
+        "아이언헤드",
+        "기가임팩트"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

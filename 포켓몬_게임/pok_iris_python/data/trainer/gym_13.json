@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "메가독침붕",
+      "level": 190,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "독찌르기",
+        "제비반환",
+        "깜짝베기",
+        "시저크로스"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "염뉴트",
+      "level": 192,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "오버히트",
+        "오물웨이브",
+        "용의파동",
+        "화염방사"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "부르르룸",
+      "level": 194,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "휠스핀",
+        "더스트슈트",
+        "10만마력",
+        "열불내기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "킬라플로르",
+      "level": 196,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "파워젬",
+        "오물웨이브",
+        "에너지볼",
+        "대지의힘"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "거다이맥스 더스트나",
+      "level": 198,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "더스트슈트",
+        "기가임팩트",
+        "오물웨이브",
+        "사이코키네시스"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "아고용",
+      "level": 200,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "용의파동",
+        "오물웨이브",
+        "아머캐논",
+        "악의파동"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 1
+    }
+  ]
+}

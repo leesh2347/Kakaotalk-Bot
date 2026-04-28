@@ -1,0 +1,118 @@
+{
+  "deck": [
+    {
+      "name": "어흥염",
+      "level": 220,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "플레어드라이브",
+        "기습",
+        "DD래리어트",
+        "크로스촙"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "대도각참",
+      "level": 222,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "아이언헤드",
+        "도각참",
+        "제비반환",
+        "기습"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "메가샤크니아",
+      "level": 224,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "아쿠아제트",
+        "지진",
+        "깨물어부수기",
+        "폭포오르기"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "이벨타르",
+      "level": 226,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "데스윙",
+        "오물웨이브",
+        "열풍",
+        "악의파동"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "후파",
+      "level": 228,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "다른차원러시",
+        "사이코키네시스",
+        "섀도볼",
+        "기합구슬"
+      ],
+      "skillslocked": [],
+      "formchange": 1,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    },
+    {
+      "name": "딩루",
+      "level": 230,
+      "hp": 0,
+      "atk": 0,
+      "def": 0,
+      "spd": 0,
+      "skills": [
+        "지진",
+        "헤비봄버",
+        "지옥찌르기",
+        "스톤에지"
+      ],
+      "skillslocked": [],
+      "formchange": 0,
+      "satk": 0,
+      "sdef": 0,
+      "shiny": 0
+    }
+  ]
+}
