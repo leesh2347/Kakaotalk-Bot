@@ -404,6 +404,7 @@ def handle_message(chat):
             f"{CMDS['leave']} - 게임 탈퇴",
             f"{CMDS['help']} - 게임 시스템 설명 보기",
             f"{CMDS['play']} - 야생 포켓몬 탐험",
+            f"{CMDS['explorehelp']} - 야생 탐험 관련 도움말",
             f"{CMDS['ball']} [갯수] - 볼 구매",
             f"{CMDS['rest']} - 휴식 시작/종료",
             f"{CMDS['info']} - 트레이너 정보",
@@ -452,15 +453,62 @@ def handle_message(chat):
 
             reqlev = 0
             if i < 13:
-                reqlev = 20 + i * 15
+                reqlev = 10 + i * 15
             else:
-                reqlev = 210 + (i - 13) * 10
+                reqlev = 200 + (i - 13) * 10
 
             help_arr.append(f"권장 도전 레벨: Lv.{reqlev} 이상")
             help_arr.append("")
 
 
         help_text = "\n".join(help_arr)
+        chat.reply(f"{help_text}")
+        return
+
+    if msg == CMDS['explorehelp']:
+        help_text = "\n".join([
+            "포켓몬 게임 탐험 관련 정보",
+            "\u200b"*500,
+            "[그룹별 등장 포켓몬]",
+            "<일반>",
+            f"{', '.join(POK_ARR['group1'])}",
+            "<고급>",
+            f"{', '.join(POK_ARR['group2'])}",
+            "<레어>",
+            f"{', '.join(POK_ARR['group3'])}",
+            "<⭐전설/환상⭐>",
+            f"{', '.join(POK_ARR['group4'])}",
+            "<🦄울트라비스트🦄>",
+            f"{', '.join(POK_ARR['group5'])}",
+            "<⏳️패러독스⏳️>",
+            f"{', '.join(POK_ARR['group6'])}",
+            "<???>",
+            f"{', '.join(POK_ARR['groupunknown'])}",
+            "",
+            "※<???> 그룹은 계정 스탯 관계없이 1% 확률로 고정 출현하며, 이벤트 등 한정으로 출시하는 포켓몬도 이 그룹에 추가되게 됩니다.",
+            "",
+            "[그룹별 포켓몬 도주(포획 실패) 확률]",
+            f"일반: {SETTING['run'][5]}%",
+            f"고급: {SETTING['run'][4]}%",
+            f"레어: {SETTING['run'][3]}%",
+            f"⭐전설/환상⭐: {SETTING['run'][2]}%",
+            f"🦄울트라비스트🦄: {SETTING['run'][1]}%",
+            f"⏳️패러독스⏳️: {SETTING['run'][0]}%",
+            "???: 90%"
+            "",
+            "[기타 확률 정보]",
+            "골드 발견 확률: 7.5%",
+            "아이템 발견 확률: 7.5%",
+            "-몬스터볼: 6.375%",
+            "-일반 포켓몬 알: 0.75%",
+            "-금왕관: 0.075%",
+            "-⭐전설/환상⭐ 포켓몬의 알: 0.075%",
+            "-🪨알 수 없는 돌(대량의 골드): 0.075%",
+            "",
+            "일반 포켓몬의 알: 레어~??? 등급의 포켓몬 1마리 랜덤 획득",
+            "전설의 포켓몬의 알: 전설~??? 등급의 포켓몬 1마리 랜덤 획득",
+
+        ])
         chat.reply(f"{help_text}")
         return
 
