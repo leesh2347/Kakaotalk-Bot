@@ -18,7 +18,7 @@ from .pok_game_module.battle import handle_battlejoin, handle_battleexit, handle
 from .pok_game_module.pve_battle import handle_gym, handle_battletower
 from .pok_game_module.champion import handle_champ, handle_champinfo
 from .pok_game_module.collection import handle_mycollection, handle_collectioninfo, handle_collectioneffects
-from .pok_game_module.etc import handle_gatcha, handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar
+from .pok_game_module.etc import handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar
 from .pok_game_module.maintenance import toggle_updating, load_updating_state, ADMIN_USER
 
 # Global state imports
@@ -254,9 +254,7 @@ def handle_message(chat):
     # ========================================================================
     # Etc (Gacha, Events, etc.)
     # ========================================================================
-    if msg == CMDS['gatcha']:
-        handle_gatcha(sender, chat)
-        return
+
 
     if msg == CMDS['eventinfo']:
         handle_eventinfo(sender, chat)
@@ -425,7 +423,7 @@ def handle_message(chat):
             "",
             "[배틀 관련]",
             f"{CMDS['battlejoin']} - PVP 매칭 참가. 2명이 매칭에 참가하면 배틀이 시작됩니다.",
-            f"{CMDS['gym']} -체육관 도전. 승리 시마다 뱃지를 획득하며 18번째 뱃지까지 존재.",
+            f"{CMDS['gymhelp']} -체육관 도전 관련 도움말 보기",
             f"{CMDS['champ']} - 챔피언리그 도전. 모든 뱃지 획득해야 도전 가능.",
             "",
             "[컬렉션 관련]",
@@ -438,6 +436,31 @@ def handle_message(chat):
             f"{CMDS['legendegg']} -전설알 사용.(전설 등급 이상 확정권)"
             "",
         ])
+        chat.reply(f"{help_text}")
+        return
+
+    if msg == CMDS['gymhelp']:
+
+        help_arr = [
+            f"{CMDS['gym']} -체육관 도전. 승리 시마다 뱃지를 획득하며 18번째 뱃지까지 존재.",
+            "체육관별 자세한 정보를 보려면 전체보기 클릭",
+            "\u200b"*500
+        ]
+
+        for i in range(0, 18):
+            help_arr.append(f"{i+1}번째 관장 - {TYPE_TEXTS[i+1]}")
+
+            reqlev = 0
+            if i < 13:
+                reqlev = 20 + i * 15
+            else:
+                reqlev = 210 + (i - 13) * 10
+
+            help_arr.append(f"권장 도전 레벨: Lv.{reqlev} 이상")
+            help_arr.append("")
+
+
+        help_text = "\n".join(help_arr)
         chat.reply(f"{help_text}")
         return
 
