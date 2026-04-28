@@ -10,6 +10,11 @@ def handle_ballup(sender, chat):
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
         return
     
+    from .explore import advOn
+    if advOn.get(sender, 0) != 0:
+        chat.reply(f'@{sender}\n먼저 하고 있던 탐험이나 배틀을 끝내 주세요!')
+        return
+
     current_ball = pokUser.get("Ball", BALL_ARR[0])
     current_idx = BALL_ARR.index(current_ball)
     

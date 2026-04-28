@@ -1157,6 +1157,11 @@ def handle_egg(sender, chat):
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
         return
 
+    from .explore import advOn
+    if advOn.get(sender, 0) != 0:
+        chat.reply(f'@{sender}\n먼저 하고 있던 탐험이나 배틀을 끝내 주세요!')
+        return
+
     pokInv = read_json(f"player_{sender}_inv")
     if pokInv is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
@@ -1289,6 +1294,11 @@ def handle_legendegg(sender, chat):
     pokInv = read_json(f"player_{sender}_inv")
     if pokInv is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    from .explore import advOn
+    if advOn.get(sender, 0) != 0:
+        chat.reply(f'@{sender}\n먼저 하고 있던 탐험이나 배틀을 끝내 주세요!')
         return
 
     # Ensure item list exists
