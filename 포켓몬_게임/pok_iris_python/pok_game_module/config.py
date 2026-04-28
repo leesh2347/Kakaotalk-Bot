@@ -42,6 +42,7 @@ CMDS = {
     'giveup': '@배틀기권',
     'eventinfo': '@포켓몬이벤트',
     'gym': '@체육관',
+    'gymhelp': '@체육관정보',
     'gatcha': '@제비뽑기',
     'champ': '@챔피언도전',
     'champinfo': '@챔피언정보',
