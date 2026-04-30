@@ -1,8 +1,9 @@
 # Module 12: Etc (Gacha, Events, Ranking, etc.)
 import random
 import math
-from .config import SETTING, SEASONS
-from .io_helpers import read_json, write_json
+from .config import SETTING, TYPE_TEXTS, SEASONS
+from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink, printskills
+from .shiny_moves import SHINY_POK_SKILLS
 
 gatchaplayers = {}
 
@@ -124,13 +125,72 @@ def handle_seasoninfo(sender, chat):
 
 def handle_leaguechar(sender, chat):
     """Handle league character command (@리그캐릭터)"""
-    pokUser = read_json(f"player_{sender}")
-    if pokUser is None:
-        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
-        return
-    
     league_char = SETTING.get("leaguecharacter", "네크로즈마")
-    chat.reply(f"@{sender}\n리그 캐릭터: {league_char}\n챔피언 달성 시 획득 가능한 특별한 포켓몬입니다!")
+    
+    pokinfo = {
+        'type1':read_json(f"포켓몬/{league_char}", "type1") or 0,
+        'type2':read_json(f"포켓몬/{league_char}", "type2") or 0,
+        'hp':read_json(f"포켓몬/{league_char}", "hp") or 0,
+        'atk':read_json(f"포켓몬/{league_char}", "atk") or 0,
+        'def':read_json(f"포켓몬/{league_char}", "def") or 0,
+        'satk':read_json(f"포켓몬/{league_char}", "satk") or 0,
+        'sdef':read_json(f"포켓몬/{league_char}", "sdef") or 0,
+        'spd':read_json(f"포켓몬/{league_char}", "spd") or 0,
+        'nextup':read_json(f"포켓몬/{league_char}", "nextup") or 'x',
+        'nextlv':read_json(f"포켓몬/{league_char}", "nextlv") or 0,
+        'skills':read_json(f"포켓몬/{league_char}", "skills") or [],
+    }
+    
+    # Build description
+
+    poktype = "챔피언리그 클리어 시 획득 가능한 특별한 포켓몬입니다.\n"
+
+    if pokinfo['type1'] > 0:
+        poktype += " " + TYPE_TEXTS[pokinfo['type1']]
+    if pokinfo['type1'] > 0 and pokinfo['type2'] != pokinfo['type1']:
+        poktype += " " + TYPE_TEXTS[pokinfo['type2']]
+    
+    
+    # Get image via KakaoTalk link
+    try:
+        img = pokimglink(league_char, 0, 0)
+        send_image(None, chat, 58796, {
+            'POKIMG': img,
+            'POKNAME': f"리그 한정 캐릭터: {league_char}",
+            'DESC': poktype,
+            'shiny':0,
+            'LINK': f"ko/wiki/{league_char}_(포켓몬)"
+        })
+    except Exception as e:
+        print(e)
+        chat.reply(f"이미지 전송 오류.\리그 한정 캐릭터: {league_char}\n{poktype}")
+    
+    skills_text = ""
+    skills_text +=f"[{league_char}]\n\n[종족값]\n"
+    skills_text +=f"HP:{pokinfo['hp']} (❻ {math.ceil(pokinfo['hp']*1.6)})\n"
+    skills_text +=f"ATK:{pokinfo['atk']} (❻ {math.ceil(pokinfo['atk']*1.6)})\n"
+    skills_text +=f"DEF:{pokinfo['def']} (❻ {math.ceil(pokinfo['def']*1.6)})\n"
+    skills_text +=f"S.ATK:{pokinfo['satk']} (❻ {math.ceil(pokinfo['satk']*1.6)})\n"
+    skills_text +=f"S.DEF:{pokinfo['sdef']} (❻ {math.ceil(pokinfo['sdef']*1.6)})\n"
+    skills_text +=f"SPD:{pokinfo['spd']} (❻ {math.ceil(pokinfo['spd']*1.6)})\n\n"
+
+    # Skills
+
+    space = "\u200b"*500
+    skills_text += f"{space}\n\n[배우는 기술]\n"
+
+    
+    skills_text += printskills(pokinfo['skills'],[])
+    
+    # Add shiny skills info if exists
+    if league_char in SHINY_POK_SKILLS:
+        shiny_skills = SHINY_POK_SKILLS[league_char]
+        skills_text += f"\n{space}\n\n[배우는 기술(이로치 전용)]\n"
+        skills_text += printskills(shiny_skills, [], shiny_skills)
+    
+    res = f"{skills_text}"
+    
+    chat.reply(res)
 
 def handle_palpark(sender, chat):
     """Handle Pal Park command (@팔파크)"""

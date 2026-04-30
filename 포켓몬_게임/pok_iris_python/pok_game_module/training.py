@@ -549,12 +549,14 @@ def handle_mega(sender, chat, args=None):
     # Determine new name
     oldname = p["name"]
     
-    if p["name"] in ["리자몽", "뮤츠"]:
+    if p["name"] in ["리자몽", "뮤츠", "라이츄"]:
         newname = f"메가{p['name']}{'X' if random.randint(0, 1) == 0 else 'Y'}"
+    elif p["name"] in ["앱솔", "루카리오", "한카리아스"]:
+        newname = f"메가{p['name']}{'' if random.randint(0, 1) == 0 else 'Z'}"
     elif p["name"] in ["그란돈", "가이오가"]:
         newname = f"원시{p['name']}"
     elif p["name"] == "네크로즈마":
-        newname = "울트라네크로즈마"
+        newname = f"울트라{p['name']}"
     else:
         newname = f"메가{p['name']}"
     

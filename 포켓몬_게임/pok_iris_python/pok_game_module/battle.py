@@ -511,7 +511,7 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
         attacker["hp"] = max(1, attacker["hp"] - math.ceil(atk / 4))
         battleres += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 데미지를 입었어요!\n"
     elif addi == 2 and judge != 0:
-        attacker["hp"] = min(attacker.get("maxhp", attacker["hp"]), attacker["hp"] + math.ceil(atk / 4))
+        attacker["hp"] = max(1, attacker["hp"] + math.ceil(atk / 4))
         battleres += f"[{attacker_name}] {attacker['name']}는 공격을 통해 체력을 흡수했어요!\n"
     elif addi == 1 and skill != "솔라빔" and weather != 1:
         if attacker_name == player1:

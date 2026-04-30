@@ -2,8 +2,9 @@
 import random
 import math
 import time
-from .config import SETTING, TRAINER_RAN_POKS, TYPE_TEXTS, WEATHER_TEXTS
+from .config import SETTING, TRAINER_RAN_POKS, TYPE_TEXTS, WEATHER_TEXTS, BALL_ARR
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink
+from .champion import newChampion
 
 # Global battle state for PVE
 isbattle = 0
@@ -678,7 +679,7 @@ def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, 
         attacker["hp"] = max(1, attacker["hp"] - math.ceil(atk / 4))
         battleres += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 데미지를 입었어요!\n"
     elif addi == 2 and judge != 0:
-        attacker["hp"] = min(attacker.get("maxhp", attacker["hp"]), attacker["hp"] + math.ceil(atk / 4))
+        attacker["hp"] = max(1, attacker["hp"] + math.ceil(atk / 4))
         battleres += f"[{attacker_name}] {attacker['name']}는 공격을 통해 체력을 흡수했어요!\n"
     elif addi == 1 and skill != "솔라빔" and weather != 1:
         if attacker_name == player1:
@@ -705,13 +706,16 @@ def end_pve_battle(chat, sender, winner):
             pokUser["gold"] += reward
             pokUser["badge"] = pokUser.get("badge", 0) + 1
             
-            # Update ranking
-            update_ranking(sender, True)
             
             write_json(f"player_{sender}", pokUser)
             
             chat.reply(f"🏆체육관 {gymnum} 클리어!🏆\n\n{reward:,}원을 얻었어요.\n보유금액: {pokUser['gold']:,}원\n현재 뱃지 개수: {pokUser['badge']}개")
         
+        elif isbattle == 3:  # Champion
+            #newChampion
+            newChampion(sender, chat, pokUser)
+
+
         elif isbattle == 4:  # Battle Tower
             level = battletowerlev.get(sender, 50)
             reward = level ** 2 * 10000 * SETTING.get("eventp", {}).get("goldX", 1)
@@ -729,6 +733,8 @@ def end_pve_battle(chat, sender, winner):
         # Player loses
         if isbattle == 2:
             chat.reply(f"체육관 관장과의 배틀에서 패배했어요.\n도전에 실패했어요.\n현재 뱃지 개수: {pokUser.get('badge', 0)}개")
+        elif isbattle == 3:
+            chat.reply(f"챔피언과의 배틀에서 패배했어요.\n도전에 실패했어요.")
         elif isbattle == 4:
             chat.reply(f"배틀타워에서 패배했어요.\n도전에 실패했어요.")
         
