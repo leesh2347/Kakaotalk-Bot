@@ -29,6 +29,11 @@ def handle_champ(sender, chat, args=None):
         chat.reply(f'@{sender}\n휴식 중에는 챔피언에게 도전할 수 없어요!')
         return
     
+    # Check conditions
+    if pokUser.get("badge", 0) < 18:
+        chat.reply(f'@{sender}\n모든 체육관 뱃지를 획득해야 챔피언에게 도전할 수 있어요!')
+        return
+
     if pve_battle.isbattle != 0:
         chat.reply(f'@{sender}\n이미 배틀 중이에요!')
         return
@@ -42,20 +47,6 @@ def handle_champ(sender, chat, args=None):
         chat.reply(f"@{sender}\n덱에 포켓몬이 없어요!")
         return
     
-    # Check if player is eligible
-    current_rank = pokUser.get("rank", "")
-    if current_rank != "포켓몬 마스터":
-        chat.reply(f"@{sender}\n챔피언 도전은 '포켓몬 마스터' 등급만 가능합니다!\n현재 등급: {current_rank}")
-        return
-    
-    # Check attempt limit
-    if sender not in champplayers:
-        champplayers[sender] = 0
-    
-    if champplayers[sender] >= 3:
-        chat.reply(f"@{sender}\n챔피언 도전 횟수를 모두 사용했어요!")
-        return
-    
     
     # Set battle state
     pve_battle.player1 = "챔피언"
@@ -67,7 +58,14 @@ def handle_champ(sender, chat, args=None):
     pokUser["hp"] -= 5
     write_json(f"player_{sender}", pokUser)
     
+
+    
     # Load champion trainer data
+    champ_data = read_json(f"trainer/champion")
+    if champ_data is None:
+        chat.reply(f'@{sender}\n챔피언 데이터를 불러올 수 없어요!')
+        return
+
     trainerInv = champ_data.get("deck", [])
     pve_battle.trainerInv = trainerInv
     pve_battle.trainerpoknum = 0

@@ -228,7 +228,7 @@ def get_prob(sender, pokUser):
     if r <= 1:
         return 99  # ???
     elif r <= g6_rate + 1:
-        return 2  # paradox
+        return 8  # paradox
     elif r <= g6_rate + g5_rate + 1:
         return 3  # Ultra Beast
     elif r <= g6_rate + g5_rate + g4_rate + 1:
@@ -248,7 +248,7 @@ def get_pokemon_name(prob, pokUser):
     
     if prob == 99:
         return random.choice(POK_ARR['groupunknown'])
-    elif prob == 2:
+    elif prob == 8:
         return random.choice(POK_ARR['group6'])
     elif prob == 3:
         return random.choice(POK_ARR['group5'])

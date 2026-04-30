@@ -539,8 +539,7 @@ def handle_mega(sender, chat, args=None):
         chat.reply(f'@{sender}\n메가진화는 레벨 200 이상이어야 해요!')
         return
     
-    # Cost: 2 billion
-    skillcosts = 2000000000
+    skillcosts = SETTING["mega_gold"]
     
     if pokUser.get("gold", 0) < skillcosts:
         chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {skillcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
@@ -646,8 +645,7 @@ def handle_gmax(sender, chat, args=None):
         chat.reply(f'@{sender}\n거다이맥스는 레벨 200 이상이어야 해요!')
         return
     
-    # Cost: 2 billion
-    skillcosts = 2000000000
+    skillcosts = SETTING["mega_gold"]
     
     if pokUser.get("gold", 0) < skillcosts:
         chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {skillcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
