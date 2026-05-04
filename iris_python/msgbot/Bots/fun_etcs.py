@@ -211,43 +211,59 @@ def handle_message(chat):
     msg = chat.message.msg
 
     if msg == "@연애운":
-        chat.reply(random.choice(LOVE_FORTUNE))
+        fortune = random.choice(LOVE_FORTUNE)
+        chat.reply(f"💕 오늘의 연애운 💕\n\n✨ {fortune} ✨\n\n💖 행운이 함께하길! 💖")
 
     elif msg == "@미래 연봉":
-        chat.reply(random.choice(FUTURE_SALARY))
+        salary = random.choice(FUTURE_SALARY)
+        chat.reply(f"💰 미래 연봉 예측 💰\n\n🎉 {salary} 🎉\n\n📈 부자 되세요! 📈")
 
     elif msg == "@술과 안주":
-        chat.reply(f"술: {random.choice(ALCOHOL)}, 안주: {random.choice(ANJU)}")
+        alcohol = random.choice(ALCOHOL)
+        anju = random.choice(ANJU)
+        chat.reply(f"🍺 술과 안주 추천 🍗\n\n🥂 {alcohol}\n🍽️ {anju}\n\n🎉 즐거운 시간 되세요! 🎉")
 
     elif msg == "@나의 전생":
-        chat.reply(f"당신의 전생은 '{random.choice(PAST_LIFE)}' 입니다!")
+        past = random.choice(PAST_LIFE)
+        chat.reply(f"👻 나의 전생 👻\n\n🏛️ 당신의 전생은 '{past}' 입니다! 🏛️\n\n✨ 과거의 기억이 스쳐지나갈지도? ✨")
 
     elif msg == "@동전던지기":
-        chat.reply(random.choice(["앞면", "뒷면"]))
+        result = random.choice(["앞면", "뒷면"])
+        chat.reply(f"🪙 동전 던지기 결과 🪙\n\n🎲 {result} 🎲\n\n🍀 행운을 빌어요! 🍀")
 
     elif msg == "@오늘 흡연량":
-        chat.reply(random.choice(SMOKING_AMOUNT))
+        amount = random.choice(SMOKING_AMOUNT)
+        chat.reply(f"🚬 오늘의 흡연량 추천 🚭\n\n💨 {amount} 💨\n\n⚠️ 건강이 제일! ⚠️")
 
     elif msg == "@커피 추천":
-        chat.reply(f"오늘의 커피는 '{random.choice(COFFEE)}' 어떠세요?")
+        coffee = random.choice(COFFEE)
+        chat.reply(f"☕ 커피 추천 ☕\n\n✨ 오늘의 커피는 '{coffee}' 어떠세요? ✨\n\n🥰 한 잔 하실래요? 🥰")
 
     elif msg == "@과자 추천":
-        chat.reply(f"오늘의 과자는 '{random.choice(SNACK)}' 어떠세요?")
+        snack = random.choice(SNACK)
+        chat.reply(f"🍘 과자 추천 🍘\n\n✨ 오늘의 과자는 '{snack}' 어떠세요? ✨\n\n🎉 간식 타임! 🎉")
 
     elif msg == "@라면 추천":
-        chat.reply(f"오늘의 라면은 '{random.choice(RAMEN)}' 어떠세요?")
+        ramen = random.choice(RAMEN)
+        chat.reply(f"🍜 라면 추천 🍜\n\n✨ 오늘의 라면은 '{ramen}' 어떠세요? ✨\n\n🥵 매운 거 좋아하세요? 🥵")
 
     elif msg == "@음료수 추천":
-        chat.reply(f"오늘의 음료수는 '{random.choice(DRINK)}' 어떠세요?")
+        drink = random.choice(DRINK)
+        chat.reply(f"🥤 음료수 추천 🥤\n\n✨ 오늘의 음료수는 '{drink}' 어떠세요? ✨\n\n🧊 시원하게 들이켜요! 🧊")
 
     elif msg == "@햄버거 추천":
-        chat.reply(f"오늘의 햄버거는 '{random.choice(BURGER)}' 어떠세요?")
+        burger = random.choice(BURGER)
+        chat.reply(f"🍔 햄버거 추천 🍔\n\n✨ 오늘의 햄버거는 '{burger}' 어떠세요? ✨\n\n🍟 감자튀김 곁들이면 최고! 🍟")
 
     elif msg == "@치킨 추천":
-        chat.reply(f"오늘의 치킨은 '{random.choice(CHICKEN)}' 어떠세요?")
+        chicken = random.choice(CHICKEN)
+        chat.reply(f"🍗 치킨 추천 🍗\n\n✨ 오늘의 치킨은 '{chicken}' 어떠세요? ✨\n\n🎉 치맥 타임! 🎉")
 
     elif msg == "@피자 추천":
-        chat.reply(f"오늘의 피자는 '{random.choice(PIZZA)}' 어떠세요?")
+        pizza = random.choice(PIZZA)
+        chat.reply(f"🍕 피자 추천 🍕\n\n✨ 오늘의 피자는 '{pizza}' 어떠세요? ✨\n\n🧀 치즈가 쫄깃해요! 🧀")
 
     elif msg == "@사탕껌 추천":
-        chat.reply(f"사탕: {random.choice(CANDY)}, 껌: {random.choice(GUM)}")
+        candy = random.choice(CANDY)
+        gum = random.choice(GUM)
+        chat.reply(f"🍬 사탕껌 추천 🍬\n\n🍭 사탕: {candy}\n🍬 껌: {gum}\n\n✨ 달콤함 가득! ✨")
