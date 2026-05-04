@@ -150,13 +150,19 @@ def handle_levelup(sender, chat, args=None):
             write_json(f"player_{sender}_collection", pokCol)
     else:
         # Just level up
+
+        if p['formchange'] > 0:
+            pname = p['name']
+        else:
+            pname = f"{p['name']}_{p['formchange']}"
+
         p["level"] += n2
-        p["hp"] = math.ceil((read_json(f"포켓몬/{p['name']}", "hp") or 50) * p["level"] / 50)
-        p["atk"] = math.ceil((read_json(f"포켓몬/{p['name']}", "atk") or 50) * p["level"] / 50)
-        p["def"] = math.ceil((read_json(f"포켓몬/{p['name']}", "def") or 50) * p["level"] / 50)
-        p["spd"] = math.ceil((read_json(f"포켓몬/{p['name']}", "spd") or 50) * p["level"] / 50)
-        p["satk"] = math.ceil((read_json(f"포켓몬/{p['name']}", "satk") or 1) * p["level"] / 50)
-        p["sdef"] = math.ceil((read_json(f"포켓몬/{p['name']}", "sdef") or 1) * p["level"] / 50)
+        p["hp"] = math.ceil((read_json(f"포켓몬/{pname}", "hp") or 50) * p["level"] / 50)
+        p["atk"] = math.ceil((read_json(f"포켓몬/{pname}", "atk") or 50) * p["level"] / 50)
+        p["def"] = math.ceil((read_json(f"포켓몬/{pname}", "def") or 50) * p["level"] / 50)
+        p["spd"] = math.ceil((read_json(f"포켓몬/{pname}", "spd") or 50) * p["level"] / 50)
+        p["satk"] = math.ceil((read_json(f"포켓몬/{pname}", "satk") or 1) * p["level"] / 50)
+        p["sdef"] = math.ceil((read_json(f"포켓몬/{pname}", "sdef") or 1) * p["level"] / 50)
 
         # Apply V bonus
         if p.get("v", 0) > 0:
@@ -535,11 +541,14 @@ def handle_mega(sender, chat, args=None):
     
     
     # Check level
-    if p["level"] < 200:
-        chat.reply(f'@{sender}\n메가진화는 레벨 200 이상이어야 해요!')
+    if p["level"] < SETTING['mega_reqlev']:
+        chat.reply(f'@{sender}\n메가진화는 레벨 {SETTING['mega_reqlev']} 이상이어야 해요!')
         return
     
-    skillcosts = SETTING["mega_gold"]
+    if p["name"] in POK_ARR['group4']:
+        skillcosts = SETTING["mega_legend_gold"]
+    else:
+        skillcosts = SETTING["mega_gold"]
     
     if pokUser.get("gold", 0) < skillcosts:
         chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {skillcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
@@ -639,13 +648,15 @@ def handle_gmax(sender, chat, args=None):
         chat.reply(f'@{sender}\n{p["name"]}은(는) 거다이맥스할 수 없어요!\n\n거다이맥스 가능 포켓몬: {", ".join(GMAX_NAMES)}')
         return
     
-    
     # Check level
-    if p["level"] < 200:
-        chat.reply(f'@{sender}\n거다이맥스는 레벨 200 이상이어야 해요!')
+    if p["level"] < SETTING['mega_reqlev']:
+        chat.reply(f'@{sender}\n거다이맥스는 레벨 {SETTING['mega_reqlev']} 이상이어야 해요!')
         return
     
-    skillcosts = SETTING["mega_gold"]
+    if p["name"] in POK_ARR['group4']:
+        skillcosts = SETTING["mega_legend_gold"]
+    else:
+        skillcosts = SETTING["mega_gold"]
     
     if pokUser.get("gold", 0) < skillcosts:
         chat.reply(f'@{sender}\n골드가 부족해요!\n필요 골드: {skillcosts:,}\n보유 골드: {pokUser.get("gold", 0):,}')
@@ -736,8 +747,12 @@ def handle_formchange(sender, chat, args=None):
         chat.reply(f'@{sender}\n{p["name"]}은(는) 폼체인지할 수 없어요!\n\n폼체인지 가능 포켓몬: {", ".join(FORM_CHANGE_NAMES)}')
         return
     
-    # Cost: 10 million with discount
-    skillcosts = 10000000
+    # Cost
+
+    if p["name"] in POK_ARR['group4'] or p["name"] in POK_ARR['groupunknown'] or p["name"] in GMAX_AFTER_NAMES:
+        skillcosts = SETTING['formchange_legend_gold']
+    else:
+        skillcosts = SETTING['formchange_gold']
     discount = pokUser.get("upgradedc", 0)
     skillcosts = math.ceil(skillcosts * (100 - discount) / 100)
     
@@ -1540,13 +1555,19 @@ def handle_boxlevelup(sender, chat, args=None):
                     break
             write_json(f"player_{sender}_collection", pokCol)
     else:
+        if p['formchange'] > 0:
+            pname = p['name']
+        else:
+            pname = f"{p['name']}_{p['formchange']}"
+
+
         p["level"] += n2
-        p["hp"] = math.ceil((read_json(f"포켓몬/{p['name']}", "hp") or 50) * p["level"] / 50)
-        p["atk"] = math.ceil((read_json(f"포켓몬/{p['name']}", "atk") or 50) * p["level"] / 50)
-        p["def"] = math.ceil((read_json(f"포켓몬/{p['name']}", "def") or 50) * p["level"] / 50)
-        p["spd"] = math.ceil((read_json(f"포켓몬/{p['name']}", "spd") or 50) * p["level"] / 50)
-        p["satk"] = math.ceil((read_json(f"포켓몬/{p['name']}", "satk") or 1) * p["level"] / 50)
-        p["sdef"] = math.ceil((read_json(f"포켓몬/{p['name']}", "sdef") or 1) * p["level"] / 50)
+        p["hp"] = math.ceil((read_json(f"포켓몬/{pname}", "hp") or 50) * p["level"] / 50)
+        p["atk"] = math.ceil((read_json(f"포켓몬/{pname}", "atk") or 50) * p["level"] / 50)
+        p["def"] = math.ceil((read_json(f"포켓몬/{pname}", "def") or 50) * p["level"] / 50)
+        p["spd"] = math.ceil((read_json(f"포켓몬/{pname}", "spd") or 50) * p["level"] / 50)
+        p["satk"] = math.ceil((read_json(f"포켓몬/{pname}", "satk") or 1) * p["level"] / 50)
+        p["sdef"] = math.ceil((read_json(f"포켓몬/{pname}", "sdef") or 1) * p["level"] / 50)
 
         if p.get("v", 0) > 0:
             v_bonus = (10 + p["v"]) / 10

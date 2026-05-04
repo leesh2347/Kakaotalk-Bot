@@ -145,7 +145,7 @@ def handle_explore(sender, room, chat):
     #shiny determine
     shiny = 0
     shr = random.randint(1, 1000)
-    if shr == 1:
+    if shr == 2:
         shiny = 1
 
     # Display message based on rarity

@@ -423,6 +423,17 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
     """Execute a single PvP attack with full mechanics"""
     global battleres, isplayer1bind, isplayer2bind, player1pok, player2pok, weather
     
+    #bind check
+    if attacker_name == player1 and isplayer1bind ==1:
+        isplayer1bind = 0
+        battleres += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 움직일 수 없었어요!\n\n"
+        return
+
+    if attacker_name == player2 and isplayer2bind ==1:
+        isplayer2bind = 0
+        battleres += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 움직일 수 없었어요!\n\n"
+        return
+
     skill_data = read_json(f"기술/{skill}")
     if not skill_data:
         battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n기술 데이터 없음!\n\n"
