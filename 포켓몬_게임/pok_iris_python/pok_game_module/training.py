@@ -151,16 +151,19 @@ def handle_levelup(sender, chat, args=None):
     else:
         # Just level up
 
+
         if p['formchange'] > 0:
-            pname = p['name']
-        else:
             pname = f"{p['name']}_{p['formchange']}"
+            
+        else:
+            pname = p['name']
+            
 
         p["level"] += n2
-        p["hp"] = math.ceil((read_json(f"포켓몬/{pname}", "hp") or 50) * p["level"] / 50)
-        p["atk"] = math.ceil((read_json(f"포켓몬/{pname}", "atk") or 50) * p["level"] / 50)
-        p["def"] = math.ceil((read_json(f"포켓몬/{pname}", "def") or 50) * p["level"] / 50)
-        p["spd"] = math.ceil((read_json(f"포켓몬/{pname}", "spd") or 50) * p["level"] / 50)
+        p["hp"] = math.ceil((read_json(f"포켓몬/{pname}", "hp") or 1) * p["level"] / 50)
+        p["atk"] = math.ceil((read_json(f"포켓몬/{pname}", "atk") or 1) * p["level"] / 50)
+        p["def"] = math.ceil((read_json(f"포켓몬/{pname}", "def") or 1) * p["level"] / 50)
+        p["spd"] = math.ceil((read_json(f"포켓몬/{pname}", "spd") or 1) * p["level"] / 50)
         p["satk"] = math.ceil((read_json(f"포켓몬/{pname}", "satk") or 1) * p["level"] / 50)
         p["sdef"] = math.ceil((read_json(f"포켓몬/{pname}", "sdef") or 1) * p["level"] / 50)
 
@@ -1556,16 +1559,17 @@ def handle_boxlevelup(sender, chat, args=None):
             write_json(f"player_{sender}_collection", pokCol)
     else:
         if p['formchange'] > 0:
-            pname = p['name']
-        else:
             pname = f"{p['name']}_{p['formchange']}"
+            
+        else:
+            pname = p['name']
 
 
         p["level"] += n2
-        p["hp"] = math.ceil((read_json(f"포켓몬/{pname}", "hp") or 50) * p["level"] / 50)
-        p["atk"] = math.ceil((read_json(f"포켓몬/{pname}", "atk") or 50) * p["level"] / 50)
-        p["def"] = math.ceil((read_json(f"포켓몬/{pname}", "def") or 50) * p["level"] / 50)
-        p["spd"] = math.ceil((read_json(f"포켓몬/{pname}", "spd") or 50) * p["level"] / 50)
+        p["hp"] = math.ceil((read_json(f"포켓몬/{pname}", "hp") or 1) * p["level"] / 50)
+        p["atk"] = math.ceil((read_json(f"포켓몬/{pname}", "atk") or 1) * p["level"] / 50)
+        p["def"] = math.ceil((read_json(f"포켓몬/{pname}", "def") or 1) * p["level"] / 50)
+        p["spd"] = math.ceil((read_json(f"포켓몬/{pname}", "spd") or 1) * p["level"] / 50)
         p["satk"] = math.ceil((read_json(f"포켓몬/{pname}", "satk") or 1) * p["level"] / 50)
         p["sdef"] = math.ceil((read_json(f"포켓몬/{pname}", "sdef") or 1) * p["level"] / 50)
 

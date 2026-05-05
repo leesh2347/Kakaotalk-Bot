@@ -21,7 +21,8 @@ def read_json(target, res=None):
         if res:
             return data.get(res)
         return data
-    except (FileNotFoundError, json.JSONDecodeError):
+    except Exception as e:
+        print(e)
         return None
 
 def write_json(target, data):
