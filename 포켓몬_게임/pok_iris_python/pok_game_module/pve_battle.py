@@ -590,7 +590,7 @@ def battle_loop(chat, sender):
 
 def execute_pve_attack(attacker_name, defender_name, attacker, defender, skill, pp_dict):
     """Execute a single PVE attack"""
-    global battleres
+    global battleres, isplayer1bind, isplayer2bind
     
     #bind check
     if attacker_name == player1 and isplayer1bind ==1:

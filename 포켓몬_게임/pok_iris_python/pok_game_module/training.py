@@ -418,13 +418,12 @@ def handle_effort(sender, chat, args=None):
         return
     
     parts = args.split() if args else []
-    if len(parts) < 2:
+    if len(parts) < 1:
         chat.reply(f'@{sender}\n사용법: {CMDS["effort"]} [덱번호] [박스번호]')
         return
     
     try:
         n = int(parts[0])
-        n2 = int(parts[1])
     except:
         chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
         return
@@ -439,14 +438,43 @@ def handle_effort(sender, chat, args=None):
         chat.reply(f'@{sender}\nV가 이미 최대(❻)에요!')
         return
     
-    if n2 < 1 or n2 > len(pokInv.get("box", [])):
-        chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
-        return
+    use_gold_crown = False
+    n2 = None
     
-    material_pok = pokInv["box"][n2 - 1]
-    if material_pok.get("islocked", 0) == 1:
-        chat.reply(f'@{sender}\n잠긴 포켓몬은 소재로 사용할 수 없어요!')
-        return
+    if len(parts) >= 2:
+        try:
+            n2 = int(parts[1])
+        except:
+            chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+            return
+        
+        if n2 < 1 or n2 > len(pokInv.get("box", [])):
+            chat.reply(f'@{sender}\n잘못 입력하셨습니다.')
+            return
+        
+        material_pok = pokInv["box"][n2 - 1]
+        if material_pok.get("islocked", 0) == 1:
+            chat.reply(f'@{sender}\n잠긴 포켓몬은 소재로 사용할 수 없어요!')
+            return
+    else:
+        gold_crown_found = False
+        item_list = pokInv.get("item") or []
+        if "금왕관" in item_list:
+            item_list.remove("금왕관")
+            pokInv["item"] = item_list
+            gold_crown_found = True
+        else:
+            items_dict = pokInv.get("items", {})
+            if items_dict.get("금왕관", 0) > 0:
+                items_dict["금왕관"] = items_dict["금왕관"] - 1
+                pokInv["items"] = items_dict
+                gold_crown_found = True
+        
+        if not gold_crown_found:
+            chat.reply(f'@{sender}\n재료로 사용할 박스의 포켓몬 번호를 같이 입력해 주세요.\n아이템 \'금왕관\' 획득 시 재료 포켓몬 없이 업그레이드가 가능합니다.')
+            return
+        
+        use_gold_crown = True
     
     old_v = p.get("v", 0)
     p["v"] = old_v + 1
@@ -483,13 +511,16 @@ def handle_effort(sender, chat, args=None):
 
     pokInv["deck"][n - 1] = p
 
-    material_name = pokInv["box"][n2 - 1]["name"]
-    pokInv["box"].pop(n2 - 1)
+    if use_gold_crown:
+        material_name = "금왕관"
+    else:
+        material_name = pokInv["box"][n2 - 1]["name"]
+        pokInv["box"].pop(n2 - 1)
 
     write_json(f"player_{sender}_inv", pokInv)
 
     res = f"Lv.{p['level']} {p['name']} ({old_v}V > {p['v']}V)\n"
-    res += f"{material_name} 포켓몬을 소재로 사용했습니다.\n\n"
+    res += f"{material_name}을(를) 소재로 사용했습니다.\n\n"
     res += f"HP:{p['hp']} ATK:{p['atk']} DEF:{p['def']} SPD:{p['spd']} SATK:{p['satk']} SDEF:{p['sdef']}"
 
     chat.reply(f"@{sender}\n{res}")
