@@ -183,107 +183,120 @@ def newChampion(sender, chat, pokUser):
     reward = 2000000000  # Champion reward
             
     pokUser["gold"] += reward
-            
+
+    rewardtext = f"-{reward}골드\n"  
     # Update ranking
 
-    # Update HP and other stats based on new rank
-    try:
-        new_rank_idx = SETTING["rank"]["name"].index("챔피언")
-    except ValueError:
-        new_rank_idx = 0
+    is_new_champion = pokUser["rank"] != "챔피언"
 
-    pokUser["maxHp"] = SETTING["rank"]["maxHp"][new_rank_idx]
-    pokUser["success"] = SETTING["success"] + SETTING["rank"]["success"][new_rank_idx]
-    pokUser["castT"] = SETTING["rank"]["castT"][new_rank_idx]
-    pokUser["hp"] = pokUser.get("hp", 1) - 1  # Decrease HP on catch
+    if is_new_champion:
+        # Update HP and other stats based on new rank
+        try:
+            new_rank_idx = SETTING["rank"]["name"].index("챔피언")
+        except ValueError:
+            new_rank_idx = 0
 
-    # Ensure HP doesn't exceed max
-    if pokUser["hp"] > pokUser.get("maxHp", 0):
-        pokUser["hp"] = pokUser.get("maxHp", 0)
+        pokUser["maxHp"] = SETTING["rank"]["maxHp"][new_rank_idx]
+        pokUser["success"] = SETTING["success"] + SETTING["rank"]["success"][new_rank_idx]
+        pokUser["castT"] = SETTING["rank"]["castT"][new_rank_idx]
+        pokUser["hp"] = pokUser.get("hp", 1) - 1  # Decrease HP on catch
 
-    # Re-read to preserve ball count (balls were already decremented and persisted earlier)
-    current_pokUser = read_json(f"player_{sender}")
-    if current_pokUser:
-        pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
-        pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+        # Ensure HP doesn't exceed max
+        if pokUser["hp"] > pokUser.get("maxHp", 0):
+            pokUser["hp"] = pokUser.get("maxHp", 0)
 
-    pokUser["rank"] = "챔피언"
-            
-    write_json(f"player_{sender}", pokUser)
+        # Re-read to preserve ball count (balls were already decremented and persisted earlier)
+        current_pokUser = read_json(f"player_{sender}")
+        if current_pokUser:
+            pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+            pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+
+        pokUser["rank"] = "챔피언"
+                
+        write_json(f"player_{sender}", pokUser)
 
 
-    #give league pok
 
     pokInv = read_json(f"player_{sender}_inv")
 
     if "item" not in pokInv:
         pokInv["item"] = []
     pokInv["item"].append("전설알")
-    pokInv["item"].append("금왕관")
+    
+    rewardtext+="-전설알 1개\n"
 
-    pokname = SETTING.get("leaguecharacter", "네크로즈마")
-    
-    poklev = 200
-    
-    # Get skills
-    skillsarr = read_json(f"포켓몬/{pokname}", "skills") or []
-    caughtpokskills = []
-    
-    if len(skillsarr) < 5:
-        caughtpokskills = skillsarr[:]
-    else:
-        while len(caughtpokskills) < 4:
-            t = random.choice(skillsarr)
-            t = t.replace("DP", "").replace("Pt", "")
-            if t not in caughtpokskills:
-                caughtpokskills.append(t)
-    
-    # Create Pokemon
-    caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
-    
-    
-    caughtpok = {
-        'name': pokname,
-        'level': poklev,
-        'hp': math.ceil(caughtpokhp * poklev / 50),
-        'atk': math.ceil((read_json(f"포켓몬/{pokname}", "atk") or 50) * poklev / 50),
-        'def': math.ceil((read_json(f"포켓몬/{pokname}", "def") or 50) * poklev / 50),
-        'satk': math.ceil((read_json(f"포켓몬/{pokname}", "satk") or 50) * poklev / 50),
-        'sdef': math.ceil((read_json(f"포켓몬/{pokname}", "sdef") or 50) * poklev / 50),
-        'spd': math.ceil((read_json(f"포켓몬/{pokname}", "spd") or 50) * poklev / 50),
-        'skills': caughtpokskills,
-        'skillslocked': [],
-        'formchange': 0,
-        'shiny':0,
-        'v': 0,
-        'islocked': 1
-    }
-    
-    # Add to box
-    if "box" not in pokInv:
-        pokInv["box"] = []
-    pokInv["box"].append(caughtpok)
-    
-    # Register in collection
-    pokCol = read_json(f"player_{sender}_collection")
-    if pokCol is None:
-        from .config import COLLECTION_NAMES
-        pokCol = {name: [] for name in COLLECTION_NAMES}
-    
-    from .config import COLLECTION_NAMES, COLLECTION_CONTENTS
-    for ii in COLLECTION_NAMES:
-        idx = COLLECTION_NAMES.index(ii)
-        if pokname in COLLECTION_CONTENTS[idx]:
-            if ii not in pokCol:
-                pokCol[ii] = []
-            if pokname not in pokCol[ii]:
-                pokCol[ii].append(pokname)
-                chat.reply(f"@{sender}\n도감의 [{ii}] 에 새로운 포켓몬이 등록되었습니다.")
-            break
+    #give league pok(1회)
+    if is_new_champion:
+
+        pokInv["item"].append("금왕관")
+        rewardtext+="-금왕관 1개(최초 클리어 한정 지급)\n"
+
+        pokname = SETTING.get("leaguecharacter", "네크로즈마")
+        poklev = 200
+
+        rewardtext+=f"-Lv.{poklev} {pokname}(최초 클리어 한정 지급)\n"
+        
+        
+        # Get skills
+        skillsarr = read_json(f"포켓몬/{pokname}", "skills") or []
+        caughtpokskills = []
+        
+        if len(skillsarr) < 5:
+            caughtpokskills = skillsarr[:]
+        else:
+            while len(caughtpokskills) < 4:
+                t = random.choice(skillsarr)
+                t = t.replace("DP", "").replace("Pt", "")
+                if t not in caughtpokskills:
+                    caughtpokskills.append(t)
+        
+        # Create Pokemon
+        caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
+        
+        
+        caughtpok = {
+            'name': pokname,
+            'level': poklev,
+            'hp': math.ceil(caughtpokhp * poklev / 50),
+            'atk': math.ceil((read_json(f"포켓몬/{pokname}", "atk") or 50) * poklev / 50),
+            'def': math.ceil((read_json(f"포켓몬/{pokname}", "def") or 50) * poklev / 50),
+            'satk': math.ceil((read_json(f"포켓몬/{pokname}", "satk") or 50) * poklev / 50),
+            'sdef': math.ceil((read_json(f"포켓몬/{pokname}", "sdef") or 50) * poklev / 50),
+            'spd': math.ceil((read_json(f"포켓몬/{pokname}", "spd") or 50) * poklev / 50),
+            'skills': caughtpokskills,
+            'skillslocked': [],
+            'formchange': 0,
+            'shiny':0,
+            'v': 0,
+            'islocked': 1
+        }
+        
+        # Add to box
+        if "box" not in pokInv:
+            pokInv["box"] = []
+        pokInv["box"].append(caughtpok)
+        
+        # Register in collection
+        pokCol = read_json(f"player_{sender}_collection")
+        if pokCol is None:
+            from .config import COLLECTION_NAMES
+            pokCol = {name: [] for name in COLLECTION_NAMES}
+        
+        from .config import COLLECTION_NAMES, COLLECTION_CONTENTS
+        for ii in COLLECTION_NAMES:
+            idx = COLLECTION_NAMES.index(ii)
+            if pokname in COLLECTION_CONTENTS[idx]:
+                if ii not in pokCol:
+                    pokCol[ii] = []
+                if pokname not in pokCol[ii]:
+                    pokCol[ii].append(pokname)
+                    chat.reply(f"@{sender}\n도감의 [{ii}] 에 새로운 포켓몬이 등록되었습니다.")
+                break
 
     
     write_json(f"player_{sender}_inv", pokInv)
-    write_json(f"player_{sender}_collection", pokCol)
+    if is_new_champion:
+        write_json(f"player_{sender}_collection", pokCol)
             
-    chat.reply(f"{sender}\n⭐축하합니다!⭐\n챔피언이 되었습니다!\n챔피언 클리어 보상이 지급되었습니다." + "\u200b" * 500 + f"\n-{reward}골드\n-전설알 1개\n-금왕관 1개\n-Lv.200 {pokname}")
+    chat.reply(f"{sender}\n⭐축하합니다!⭐\n챔피언이 되었습니다!\n챔피언 클리어 보상이 지급되었습니다." + "\u200b" * 500 + f"\n{rewardtext}")
             

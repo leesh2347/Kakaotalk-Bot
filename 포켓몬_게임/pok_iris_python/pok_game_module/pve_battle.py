@@ -825,6 +825,12 @@ def end_pve_battle(chat, sender, winner):
 
         if winner == sender and sender_idx is not None and opponent_idx is not None:
             ranking_arr[sender_idx], ranking_arr[opponent_idx] = ranking_arr[opponent_idx], ranking_arr[sender_idx]
+            pokInv = read_json(f"player_{sender}_inv")
+            if pokInv and pokInv.get("deck"):
+                deck_copy = []
+                for pok in pokInv["deck"]:
+                    deck_copy.append(pok.copy())
+                ranking_arr[opponent_idx]["deck"] = deck_copy
             file_data["ranking"] = ranking_arr
             write_json("ranking", file_data)
             chat.reply(f'@{sender}\n배틀 승리! 랭킹이 상승하여 {opponent_idx + 1}위가 되었습니다!\n')
