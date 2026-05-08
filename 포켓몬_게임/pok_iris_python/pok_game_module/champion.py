@@ -4,17 +4,14 @@ import math
 import time
 from .config import SETTING, TYPE_TEXTS
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink
+from .explore import advOn
 
 champplayers = {}
 
 def handle_champ(sender, chat, args=None):
-    """Handle champion challenge command (@챔피언도전)"""
     global champplayers
 
-    # Import pve_battle module for battle state
     from . import pve_battle
-
-    # Check maintenance mode
     from .maintenance import check_updating
     if not check_updating(sender, chat):
         return
@@ -23,66 +20,62 @@ def handle_champ(sender, chat, args=None):
     if pokUser is None:
         chat.reply(f'@{sender}\n가입 정보가 없습니다.')
         return
-    
-    # Check conditions
+
     if pokUser.get("restOn", {}).get("on", False):
         chat.reply(f'@{sender}\n휴식 중에는 챔피언에게 도전할 수 없어요!')
         return
-    
-    # Check conditions
+
     if pokUser.get("badge", 0) < 18:
         chat.reply(f'@{sender}\n모든 체육관 뱃지를 획득해야 챔피언에게 도전할 수 있어요!')
         return
 
-    if pve_battle.isbattle != 0:
+    state = pve_battle._get_state(sender)
+    if state['isbattle'] != 0:
         chat.reply(f'@{sender}\n이미 배틀 중이에요!')
         return
-    
+
+    if advOn.get(sender, 0) != 0:
+        chat.reply(f'@{sender}\n이미 탐험 또는 배틀 중이에요!')
+        return
+
     if pokUser.get("hp", 0) < 5:
         chat.reply(f'@{sender}\n체력이 5 이상이어야 챔피언에게 도전할 수 있어요!')
         return
-    
+
     pokInv = read_json(f"player_{sender}_inv")
     if pokInv is None or not pokInv.get("deck"):
         chat.reply(f"@{sender}\n덱에 포켓몬이 없어요!")
         return
-    
-    
-    # Set battle state
-    pve_battle.player1 = "챔피언"
-    pve_battle.player2 = sender
-    pve_battle.isbattle = 3  # Champion battle
-    pve_battle.isnpcbattle = 1
-    
-    # Deduct HP
+
+    advOn[sender] = 3
+    state['player1'] = "챔피언"
+    state['player2'] = sender
+    state['isbattle'] = 3
+    state['isnpcbattle'] = 1
+
     pokUser["hp"] -= 5
     write_json(f"player_{sender}", pokUser)
-    
 
-    
-    # Load champion trainer data
     champ_data = read_json(f"trainer/champion")
     if champ_data is None:
         chat.reply(f'@{sender}\n챔피언 데이터를 불러올 수 없어요!')
+        state['isbattle'] = 0
+        advOn[sender] = 0
         return
 
     trainerInv = champ_data.get("deck", [])
-    pve_battle.trainerInv = trainerInv
-    pve_battle.trainerpoknum = 0
-    
-    # Initialize battle state
-    pve_battle.player1retire = []
-    pve_battle.player2retire = []
-    pve_battle.isplayer1bind = 0
-    pve_battle.isplayer2bind = 0
-    pve_battle.battleres = ""
-    
-    # Load first Pokemon
-    pve_battle.player1pok = trainerInv[0].copy()
-    pve_battle.player2pok = pokInv["deck"][0].copy()
-    
-    # Calculate champion Pokemon stats
-    player1pok = pve_battle.player1pok
+    state['trainerInv'] = trainerInv
+    state['trainerpoknum'] = 0
+    state['player1retire'] = []
+    state['player2retire'] = []
+    state['isplayer1bind'] = 0
+    state['isplayer2bind'] = 0
+    state['battleres'] = ""
+
+    state['player1pok'] = trainerInv[0].copy()
+    state['player2pok'] = pokInv["deck"][0].copy()
+
+    player1pok = state['player1pok']
     level = player1pok["level"]
     if player1pok.get("formchange", 0) > 0:
         player1pok["hp"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "hp") or 50) * level / 50)
@@ -98,9 +91,8 @@ def handle_champ(sender, chat, args=None):
         player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "spd") or 50) * level / 50)
         player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 1) * level / 50)
         player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
-    
-    # Handle Metamong transform
-    player2pok = pve_battle.player2pok
+
+    player2pok = state['player2pok']
     if player2pok["name"] == "메타몽":
         player2pok["name"] = player1pok["name"]
         player2pok["hp"] = player1pok["hp"]
@@ -110,62 +102,56 @@ def handle_champ(sender, chat, args=None):
         player2pok["satk"] = player1pok["satk"]
         player2pok["sdef"] = player1pok["sdef"]
         player2pok["skills"] = player1pok["skills"][:]
-    
-    # Apply collection bonuses
+
     if 8 in pokUser.get("activecollection", []):
         player2pok["spd"] += 8
     if 11 in pokUser.get("activecollection", []):
         player2pok["def"] += 11
-    
-    pve_battle.player1maxhp = player1pok["hp"]
-    pve_battle.player2maxhp = player2pok["hp"]
-    
-    # Initialize PP
-    pve_battle.player1pp = {}
+
+    state['player1maxhp'] = player1pok["hp"]
+    state['player2maxhp'] = player2pok["hp"]
+
+    state['player1pp'] = {}
     for skill in player1pok.get("skills", []):
         skill_data = read_json(f"기술/{skill}")
-        pve_battle.player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
-    
-    pve_battle.player2pp = {}
+        state['player1pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
+
+    state['player2pp'] = {}
     for skill in player2pok.get("skills", []):
         skill_data = read_json(f"기술/{skill}")
-        pve_battle.player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
-    
-    # Random weather (1/3 chance)
+        state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
+
     if random.randint(1, 3) == 1:
-        pve_battle.weather = random.randint(1, 4)
+        state['weather'] = random.randint(1, 4)
     else:
-        pve_battle.weather = 0
-    
-    # Start battle
-    chat.reply(f"⚔️챔피언 도전!⚔️\n\n[{pve_battle.player1}] Lv.{player1pok['level']} {player1pok['name']}\nvs\n[{pve_battle.player2}] Lv.{player2pok['level']} {player2pok['name']}")
-    
-    # Send battle KakaoTalk link
+        state['weather'] = 0
+
+    chat.reply(f"⚔️챔피언 도전!⚔️\n\n[{state['player1']}] Lv.{player1pok['level']} {player1pok['name']}\nvs\n[{state['player2']}] Lv.{player2pok['level']} {player2pok['name']}")
+
     try:
         img1 = pokimglink(player1pok["name"], player1pok.get("formchange", 0), player1pok.get("shiny", 0))
         img2 = pokimglink(player2pok["name"], player2pok.get("formchange", 0), player2pok.get("shiny", 0))
         send_image(None, chat, 67300, {
-            'player1name': pve_battle.player1,
-            'player2name': pve_battle.player2,
+            'player1name': state['player1'],
+            'player2name': state['player2'],
             'player1img': img1,
             'player2img': img2,
             'player1shiny': player1pok.get("shiny", 0),
             'player2shiny': player2pok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
             'player2': f"Lv.{player2pok['level']} {player2pok['name']}",
-            'player1desc': f"[{player1pok['hp']}/{pve_battle.player1maxhp}]",
-            'player2desc': f"[{player2pok['hp']}/{pve_battle.player2maxhp}]"
+            'player1desc': f"[{player1pok['hp']}/{state['player1maxhp']}]",
+            'player2desc': f"[{player2pok['hp']}/{state['player2maxhp']}]"
         })
     except Exception as e:
          print(e)
-    
-    if pve_battle.weather > 0:
+
+    if state['weather'] > 0:
         from .config import WEATHER_TEXTS
-        chat.reply(WEATHER_TEXTS[pve_battle.weather])
-    
+        chat.reply(WEATHER_TEXTS[state['weather']])
+
     time.sleep(5)
-    
-    # Battle loop
+
     pve_battle.battle_loop(chat, sender)
 
 def handle_champinfo(sender, chat):
@@ -220,6 +206,8 @@ def newChampion(sender, chat, pokUser):
     if current_pokUser:
         pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
         pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+
+    pokUser["rank"] = "챔피언"
             
     write_json(f"player_{sender}", pokUser)
 

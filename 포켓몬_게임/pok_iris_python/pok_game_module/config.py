@@ -56,7 +56,9 @@ CMDS = {
     'seasoninfo': '@포켓몬계절',
     'updating': '@점검',
     'gmax': '@거다이맥스',
-    'dic': '@도감'
+    'dic': '@도감',
+    'rankingbattle': '@랭킹배틀',
+    'pokemonranking': '@포켓몬랭킹'
 }
 
 SETTING = {

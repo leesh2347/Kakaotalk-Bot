@@ -921,9 +921,6 @@ def handle_lock(sender, chat, args=None):
             break
     
     p = pokInv["box"][n - 1]
-    if ismegaexists == 1 and p["name"] in MEGA_AFTER_NAMES:
-        chat.reply(f'@{sender}\n이미 덱에 메가진화한 포켓몬이 있어요. 메가진화는 덱에 1마리만 장착 가능해요.')
-        return
     
     # Move from box to deck
     pokInv["box"].pop(n - 1)

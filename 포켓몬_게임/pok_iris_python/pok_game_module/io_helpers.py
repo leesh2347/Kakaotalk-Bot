@@ -13,16 +13,31 @@ def comma_format(number):
     return f"{number:,}"
 
 def read_json(target, res=None):
-    """Read from JSON file"""
+    """Read from JSON file. Handles both standard JSON and bare key:value formats."""
+    file_path = os.path.join(DATA_PATH, f"{target}.json")
     try:
-        file_path = os.path.join(DATA_PATH, f"{target}.json")
         with open(file_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         if res:
             return data.get(res)
         return data
-    except (FileNotFoundError, json.JSONDecodeError):
+    except json.JSONDecodeError:
+        pass
+    except FileNotFoundError:
         return None
+
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            content = f.read().strip()
+        if content and not content.startswith('{') and not content.startswith('['):
+            content = '{' + content + '}'
+            data = json.loads(content)
+            if res:
+                return data.get(res)
+            return data
+    except (json.JSONDecodeError, FileNotFoundError):
+        pass
+    return None
 
 def write_json(target, data):
     """Write to JSON file"""

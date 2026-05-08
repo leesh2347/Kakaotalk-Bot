@@ -91,6 +91,8 @@ def handle_rank(sender, chat):
     ranknum = SETTING.get("ranknum", 30)
     rarr = pokRank[:ranknum]
     
+    space = "\u200b"*500
+
     result = ""
     for i, entry in enumerate(rarr):
         rank = i + 1
@@ -98,7 +100,38 @@ def handle_rank(sender, chat):
         result += f"총 배틀 횟수: {entry.get('battle', {}).get('total', 0)}\n"
         result += f"승리 횟수: {entry.get('battle', {}).get('win', 0)}\n\n"
     
-    chat.reply(f"@{sender} 배틀 랭킹\n\n{result.strip()}")
+    chat.reply(f"@{sender} 배틀 랭킹\n{space}\n\n{result.strip()}")
+
+def handle_pokemon_ranking(sender, chat):
+    raw = read_json("ranking")
+    ranking_arr = []
+    if isinstance(raw, list):
+        ranking_arr = raw
+    elif isinstance(raw, dict):
+        ranking_arr = raw.get("ranking", [])
+    else:
+        ranking_arr = []
+
+    if not ranking_arr:
+        chat.reply(f"@{sender}\n랭킹 배틀에 등록된 유저가 없습니다.")
+        return
+
+    space = "\u200b"*500
+
+    result_lines = ""
+    for i, entry in enumerate(ranking_arr):
+        rank = i + 1
+        name = entry.get("name", "???")
+        deck = entry.get("deck", [])
+
+        result_lines += f"[{rank}위] {name}\n"
+        result_lines += "현재 장착 중인 덱\n"
+        for ii, pok in enumerate(deck[:6]):
+            shiny_text = "✨" if pok.get('shiny', 0) > 0 else ""
+            result_lines += f"{ii+1}. Lv.{pok.get('level', 0)} {pok.get('name', '???')}{shiny_text}\n"
+        result_lines += "\n"
+
+    chat.reply(f"@{sender}\n📊 포켓몬 랭킹\n{space}\n\n{result_lines}")
 
 def handle_seasoninfo(sender, chat):
     """Handle season info command (@포켓몬계절)"""
