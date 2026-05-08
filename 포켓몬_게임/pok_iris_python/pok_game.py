@@ -15,10 +15,10 @@ from .pok_game_module.training import (
 )
 from .pok_game_module.rank_up import handle_ballup, handle_ballinfo, handle_title, handle_ball_purchase
 from .pok_game_module.battle import handle_battlejoin, handle_battleexit, handle_battlenext, handle_giveup
-from .pok_game_module.pve_battle import handle_gym, handle_battletower
+from .pok_game_module.pve_battle import handle_gym, handle_battletower, handle_ranking_battle
 from .pok_game_module.champion import handle_champ, handle_champinfo
 from .pok_game_module.collection import handle_mycollection, handle_collectioninfo, handle_collectioneffects
-from .pok_game_module.etc import handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar
+from .pok_game_module.etc import handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar, handle_pokemon_ranking
 from .pok_game_module.maintenance import toggle_updating, load_updating_state, ADMIN_USER
 
 # Global state imports
@@ -225,6 +225,10 @@ def handle_message(chat):
         handle_battletower(sender, chat)
         return
 
+    if msg == CMDS['rankingbattle']:
+        handle_ranking_battle(sender, chat)
+        return
+
     # ========================================================================
     # Champion League
     # ========================================================================
@@ -266,6 +270,10 @@ def handle_message(chat):
 
     if msg == CMDS['rank']:
         handle_rank(sender, chat)
+        return
+
+    if msg == CMDS['pokemonranking']:
+        handle_pokemon_ranking(sender, chat)
         return
 
     if msg == CMDS['seasoninfo']:
