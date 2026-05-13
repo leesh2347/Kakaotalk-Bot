@@ -20,8 +20,8 @@ def handle_eventinfo(sender, chat):
     if eventp.get("gatcha", 0) > 0:
         res += f"제비뽑기 추가 횟수 +{eventp['gatcha']}회\n"
         has_event = True
-    if eventp.get("battletower", 0) > 0:
-        res += f"배틀타워 추가 횟수 +{eventp['battletower']}회\n"
+    if eventp.get("villain", 0) > 0:
+        res += f"악의조직 추가 횟수 +{eventp['villain']}회\n"
         has_event = True
     if eventp.get("g4", 0) > 0:
         res += f"전설 포켓몬 출현률 +{eventp['g4']}%\n"

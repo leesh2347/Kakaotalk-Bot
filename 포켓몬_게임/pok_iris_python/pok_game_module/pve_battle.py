@@ -10,8 +10,8 @@ from .explore import advOn
 # Per-player battle state dict (similar to advOn[sender])
 # Enables multiple independent battles simultaneously
 battle_states = {}
-battletowerplayers = {}
-battletowerlev = {}
+villainplayers = {}
+villainlev = {}
 
 def _get_state(sender):
     if sender not in battle_states:
@@ -191,7 +191,7 @@ def handle_gym(sender, chat, args=None):
 
     battle_loop(chat, sender)
 
-def handle_battletower(sender, chat, args=None):
+def handle_villain(sender, chat, args=None):
     state = _get_state(sender)
 
     from .maintenance import check_updating
@@ -204,7 +204,7 @@ def handle_battletower(sender, chat, args=None):
         return
 
     if pokUser.get("restOn", {}).get("on", False):
-        chat.reply(f'@{sender}\n휴식 중에는 배틀타워에 도전할 수 없어요!')
+        chat.reply(f'@{sender}\n휴식 중에는 악의 조직에 도전할 수 없어요!')
         return
 
     if state['isbattle'] != 0:
@@ -216,16 +216,22 @@ def handle_battletower(sender, chat, args=None):
         return
 
     if pokUser.get("hp", 0) < 5:
-        chat.reply(f'@{sender}\n체력이 5 이상이어야 배틀타워에 도전할 수 있어요!')
+        chat.reply(f'@{sender}\n체력이 5 이상이어야 악의 조직에 도전할 수 있어요!')
         return
 
-    if sender not in battletowerplayers:
-        battletowerplayers[sender] = 0
+    if sender not in villainplayers:
+        villainplayers[sender] = 0
 
-    max_attempts = SETTING.get("eventp", {}).get("battletower", 0)
-    if battletowerplayers[sender] >= max_attempts:
-        chat.reply(f'@{sender}\n오늘의 배틀타워 횟수를 모두 사용했어요!')
+    '''
+    제한 일단 없는채로 해봄
+    daily_limit = 1 + SETTING.get("eventp", {}).get("villain", 0)
+    if villainplayers[sender] >= daily_limit:
+        if daily_limit > 1:
+            chat.reply(f'@{sender}\n악의 조직은 1회 리로드 당 {daily_limit}회만 클리어 가능합니다.')
+        else:
+            chat.reply(f'@{sender}\n악의 조직은 1회 리로드 당 1회만 클리어 가능합니다.')
         return
+    '''
 
     pokInv = read_json(f"player_{sender}_inv")
     if pokInv is None or not pokInv.get("deck"):
@@ -234,7 +240,6 @@ def handle_battletower(sender, chat, args=None):
 
     advOn[sender] = 3
 
-    state['player1'] = "포켓몬 트레이너"
     state['player2'] = sender
     state['isbattle'] = 4
     state['isnpcbattle'] = 1
@@ -242,53 +247,39 @@ def handle_battletower(sender, chat, args=None):
     pokUser["hp"] -= 5
     write_json(f"player_{sender}", pokUser)
 
-    state['trainerInv'] = []
-    player_level = pokInv["deck"][0]["level"]
-    battletowerlev[sender] = player_level
+    villain_lev = 1
 
-    for i in range(6):
-        aipokname = random.choice(TRAINER_RAN_POKS)
+    if pokUser["badge"] > 15:
+        villain_lev = 4
+    elif pokUser["badge"] > 10:
+        villain_lev = 3
+    elif pokUser["badge"] > 5:
+        villain_lev = 2
+    else:
+        villain_lev = 1
 
-        if player_level > 100:
-            aipoklevel = player_level - random.randint(0, 20)
-        else:
-            aipoklevel = player_level - random.randint(0, 10)
+    villain_num = 0
+    if villain_lev == 4:
+        villain_num = 15
+    elif villain_lev == 3:
+        villain_num = 16
+    else:
+        villain_num = 11
 
-        if aipoklevel < 1:
-            aipoklevel = 1
+    villain_r = random.randint(1, villain_num)
 
-        skillsarr = read_json(f"포켓몬/{aipokname}", "skills") or []
-        caughtpokskills = []
+    villainlev[sender] = villain_lev
 
-        if len(skillsarr) < 5:
-            caughtpokskills = skillsarr[:]
-        else:
-            while len(caughtpokskills) < 4:
-                t = random.choice(skillsarr)
-                t = t.replace("DP", "").replace("Pt", "")
-                if t not in caughtpokskills:
-                    caughtpokskills.append(t)
+    villain_data = read_json(f"trainer/villain/{villain_lev}_{villain_r}")
+    if villain_data is None:
+        chat.reply(f'@{sender}\n악의 조직 트레이너 데이터를 불러올 수 없어요!{villain_data}')
+        state['isbattle'] = 0
+        advOn[sender] = 0
+        return
 
-        aipokhp = read_json(f"포켓몬/{aipokname}", "hp") or 50
-        aipok = {
-            'name': aipokname,
-            'level': aipoklevel,
-            'hp': math.ceil(aipokhp * aipoklevel / 50),
-            'atk': math.ceil((read_json(f"포켓몬/{aipokname}", "atk") or 50) * aipoklevel / 50),
-            'def': math.ceil((read_json(f"포켓몬/{aipokname}", "def") or 50) * aipoklevel / 50),
-            'spd': math.ceil((read_json(f"포켓몬/{aipokname}", "spd") or 50) * aipoklevel / 50),
-            'satk': math.ceil((read_json(f"포켓몬/{aipokname}", "satk") or 1) * aipoklevel / 50),
-            'sdef': math.ceil((read_json(f"포켓몬/{aipokname}", "sdef") or 1) * aipoklevel / 50),
-            'skills': caughtpokskills,
-            'skillslocked': [],
-            'formchange': 0,
-            'v': 0,
-            'shiny':0,
-            'islocked': 0
-        }
+    state['player1'] = villain_data.get("name", [])
 
-        state['trainerInv'].append(aipok)
-
+    state['trainerInv'] = villain_data.get("deck", [])
     state['trainerpoknum'] = 0
     state['player1retire'] = []
     state['player2retire'] = []
@@ -300,7 +291,13 @@ def handle_battletower(sender, chat, args=None):
     state['player2pok'] = pokInv["deck"][0].copy()
 
     state['player1maxhp'] = state['player1pok']["hp"]
-    state['player2maxhp'] = state['player2pok']["hp"]
+    state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
+    state['player2pok']["hp"] = state['player2maxhp']
+
+    if 8 in pokUser.get("activecollection", []):
+        state['player2pok']["spd"] += 8
+    if 11 in pokUser.get("activecollection", []):
+        state['player2pok']["def"] += 11
 
     state['player1pp'] = {}
     for skill in state['player1pok'].get("skills", []):
@@ -317,7 +314,7 @@ def handle_battletower(sender, chat, args=None):
     else:
         state['weather'] = 0
 
-    chat.reply(f"⚔️배틀타워 도전!⚔️\n\n[{state['player1']}] Lv.{state['player1pok']['level']} {state['player1pok']['name']}\nvs\n[{state['player2']}] Lv.{state['player2pok']['level']} {state['player2pok']['name']}")
+    chat.reply(f"⚔️악의 조직 소탕 도전!⚔️\n\n[{state['player1']}] Lv.{state['player1pok']['level']} {state['player1pok']['name']}\nvs\n[{state['player2']}] Lv.{state['player2pok']['level']} {state['player2pok']['name']}")
 
     try:
         img1 = pokimglink(state['player1pok']["name"], state['player1pok'].get("formchange", 0), state['player1pok'].get("shiny", 0))
@@ -860,24 +857,24 @@ def end_pve_battle(chat, sender, winner):
             newChampion(sender, chat, pokUser)
 
         elif state['isbattle'] == 4:
-            level = battletowerlev.get(sender, 50)
+            level = villainlev.get(sender, 1) * 50
             reward = level ** 2 * 10000 * SETTING.get("eventp", {}).get("goldX", 1)
 
             pokUser["gold"] += reward
-            battletowerplayers[sender] = battletowerplayers.get(sender, 0) + 1
+            villainplayers[sender] = villainplayers.get(sender, 0) + 1
 
             update_ranking(sender, True)
 
             write_json(f"player_{sender}", pokUser)
 
-            chat.reply(f"🏆배틀타워 클리어!🏆\n\n{reward:,}원을 얻었어요.\n보유금액: {pokUser['gold']:,}원")
+            chat.reply(f"🏆악의 조직 소탕 성공!🏆\n\n{reward:,}원을 얻었어요.\n보유금액: {pokUser['gold']:,}원")
     else:
         if state['isbattle'] == 2:
             chat.reply(f"체육관 관장과의 배틀에서 패배했어요.\n도전에 실패했어요.\n현재 뱃지 개수: {pokUser.get('badge', 0)}개")
         elif state['isbattle'] == 3:
             chat.reply(f"챔피언과의 배틀에서 패배했어요.\n도전에 실패했어요.")
         elif state['isbattle'] == 4:
-            chat.reply(f"배틀타워에서 패배했어요.\n도전에 실패했어요.")
+            chat.reply(f"악의 조직과의 배틀에서 패배했어요.\n소탕에 실패했어요.")
 
         update_ranking(sender, False)
 

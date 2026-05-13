@@ -26,9 +26,6 @@ isnpcbattle = 0
 nextpokchoose = 0
 player1ball = ""
 player2ball = ""
-battletowerplayers = {}
-battletowerlev = {}
-
 # PvP battle specific state
 player1inv = {}
 player2inv = {}
