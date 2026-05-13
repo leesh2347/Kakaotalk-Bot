@@ -93,15 +93,8 @@ def handle_champ(sender, chat, args=None):
         player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
 
     player2pok = state['player2pok']
-    if player2pok["name"] == "메타몽":
-        player2pok["name"] = player1pok["name"]
-        player2pok["hp"] = player1pok["hp"]
-        player2pok["atk"] = player1pok["atk"]
-        player2pok["def"] = player1pok["def"]
-        player2pok["spd"] = player1pok["spd"]
-        player2pok["satk"] = player1pok["satk"]
-        player2pok["sdef"] = player1pok["sdef"]
-        player2pok["skills"] = player1pok["skills"][:]
+    pve_battle.apply_metamong_transform(player1pok, player2pok)
+    pve_battle.apply_metamong_transform(player2pok, player1pok)
 
     if 8 in pokUser.get("activecollection", []):
         player2pok["spd"] += 8

@@ -7,6 +7,18 @@ from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_ima
 from .champion import newChampion
 from .explore import advOn
 
+def apply_metamong_transform(pok, opponent_pok):
+    """If pok is 메타몽, copy opponent's name, stats, and skills"""
+    if pok["name"] == "메타몽":
+        pok["name"] = opponent_pok["name"]
+        pok["hp"] = opponent_pok["hp"]
+        pok["atk"] = opponent_pok["atk"]
+        pok["def"] = opponent_pok["def"]
+        pok["spd"] = opponent_pok["spd"]
+        pok["satk"] = opponent_pok["satk"]
+        pok["sdef"] = opponent_pok["sdef"]
+        pok["skills"] = opponent_pok["skills"][:]
+
 # Per-player battle state dict (similar to advOn[sender])
 # Enables multiple independent battles simultaneously
 battle_states = {}
@@ -131,15 +143,8 @@ def handle_gym(sender, chat, args=None):
         state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "satk") or 1) * level / 50)
         state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "sdef") or 1) * level / 50)
 
-    if state['player2pok']["name"] == "메타몽":
-        state['player2pok']["name"] = state['player1pok']["name"]
-        state['player2pok']["hp"] = state['player1pok']["hp"]
-        state['player2pok']["atk"] = state['player1pok']["atk"]
-        state['player2pok']["def"] = state['player1pok']["def"]
-        state['player2pok']["spd"] = state['player1pok']["spd"]
-        state['player2pok']["satk"] = state['player1pok']["satk"]
-        state['player2pok']["sdef"] = state['player1pok']["sdef"]
-        state['player2pok']["skills"] = state['player1pok']["skills"][:]
+    apply_metamong_transform(state['player1pok'], state['player2pok'])
+    apply_metamong_transform(state['player2pok'], state['player1pok'])
 
     if 8 in pokUser.get("activecollection", []):
         state['player2pok']["spd"] += 8
@@ -290,6 +295,9 @@ def handle_villain(sender, chat, args=None):
     state['player1pok'] = state['trainerInv'][0].copy()
     state['player2pok'] = pokInv["deck"][0].copy()
 
+    apply_metamong_transform(state['player1pok'], state['player2pok'])
+    apply_metamong_transform(state['player2pok'], state['player1pok'])
+
     state['player1maxhp'] = state['player1pok']["hp"]
     state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
     state['player2pok']["hp"] = state['player2maxhp']
@@ -434,6 +442,9 @@ def handle_ranking_battle(sender, chat):
     state['player1pok'] = state['trainerInv'][0].copy()
     state['player2pok'] = pokInv["deck"][0].copy()
 
+    apply_metamong_transform(state['player1pok'], state['player2pok'])
+    apply_metamong_transform(state['player2pok'], state['player1pok'])
+
     state['player1maxhp'] = state['player1pok'].get("maxhp", state['player1pok']["hp"])
     state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
 
@@ -534,6 +545,8 @@ def battle_loop(chat, sender):
                 state['trainerInv'][state['trainerpoknum']]["hp"] = state['player1pok']["hp"]
                 state['player1maxhp'] = state['player1pok']["hp"]
 
+            apply_metamong_transform(state['player1pok'], state['player2pok'])
+
             state['player1pp'] = {}
             skill_list = state['player1pok'].get("skills", [])
             if state['isrankingbattle']:
@@ -586,6 +599,9 @@ def battle_loop(chat, sender):
             state['player2pok'] = pokInv["deck"][next_pok_idx].copy()
             state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
             state['player2pok']["hp"] = state['player2maxhp']
+
+            apply_metamong_transform(state['player2pok'], state['player1pok'])
+
             state['player2pp'] = {}
             for skill in state['player2pok'].get("skills", []):
                 skill_data = read_json(f"기술/{skill}")

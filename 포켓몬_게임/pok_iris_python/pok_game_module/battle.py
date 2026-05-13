@@ -5,6 +5,7 @@ import time
 from .config import SETTING, BALL_ARR, TYPE_TEXTS
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink
 from .explore import advOn
+from .pve_battle import apply_metamong_transform
 
 # Global battle state
 isbattle = 0
@@ -140,6 +141,9 @@ def start_pvp_battle(chat):
     # Select first pokemon from deck
     player1pok = player1inv["deck"][0].copy()
     player2pok = player2inv["deck"][0].copy()
+
+    apply_metamong_transform(player1pok, player2pok)
+    apply_metamong_transform(player2pok, player1pok)
     
     player1maxhp = player1pok.get("maxhp", player1pok["hp"])
     player2maxhp = player2pok.get("maxhp", player2pok["hp"])
@@ -239,6 +243,9 @@ def pvp_battle_loop(chat):
             for skill in player1skillarr:
                 skill_data = read_json(f"기술/{skill}")
                 player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
+
+            apply_metamong_transform(player1pok, player2pok)
+            player1maxhp = player1pok["hp"]
             
             leftpoks = (next_pok_idx+1)*"●"+(len(player1inv["deck"])-next_pok_idx-1)*"○"
             chat.reply(f"[{player1}] {player1pok['name']} 등장!\n{leftpoks}")
@@ -290,6 +297,9 @@ def pvp_battle_loop(chat):
             for skill in player2skillarr:
                 skill_data = read_json(f"기술/{skill}")
                 player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
+
+            apply_metamong_transform(player2pok, player1pok)
+            player2maxhp = player2pok["hp"]
             
             leftpoks = (next_pok_idx+1)*"●"+(len(player2inv["deck"])-next_pok_idx-1)*"○"
             chat.reply(f"[{player2}] {player2pok['name']} 등장!\n{leftpoks}")
