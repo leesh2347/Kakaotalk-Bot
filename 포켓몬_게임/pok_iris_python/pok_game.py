@@ -15,7 +15,7 @@ from .pok_game_module.training import (
 )
 from .pok_game_module.rank_up import handle_ballup, handle_ballinfo, handle_title, handle_ball_purchase
 from .pok_game_module.battle import handle_battlejoin, handle_battleexit, handle_battlenext, handle_giveup
-from .pok_game_module.pve_battle import handle_gym, handle_battletower, handle_ranking_battle
+from .pok_game_module.pve_battle import handle_gym, handle_villain, handle_ranking_battle
 from .pok_game_module.champion import handle_champ, handle_champinfo
 from .pok_game_module.collection import handle_mycollection, handle_collectioninfo, handle_collectioneffects
 from .pok_game_module.etc import handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar, handle_pokemon_ranking
@@ -221,8 +221,8 @@ def handle_message(chat):
         handle_gym(sender, chat, msg[len(msg_first):].strip())
         return
 
-    if msg == CMDS['battletower']:
-        handle_battletower(sender, chat)
+    if msg == CMDS['villain']:
+        handle_villain(sender, chat)
         return
 
     if msg == CMDS['rankingbattle']:
