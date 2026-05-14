@@ -534,8 +534,8 @@ def handle_ranking_battle(sender, chat):
 def battle_loop(chat, sender):
     state = _get_state(sender)
 
-    max_turns = 50
-    turn = 0
+    match_max_turns = 30
+    match_turn = 0
 
     pokInv = read_json(f"player_{sender}_inv")
 
@@ -544,10 +544,15 @@ def battle_loop(chat, sender):
     for pok in pokInv.get("deck", []):
         pok["hp"] = pok.get("maxhp", pok["hp"])
 
-    while turn < max_turns:
-        turn += 1
+    while True:
+        match_turn += 1
+
+        if match_turn > match_max_turns:
+            state['battleres'] += f"배틀이 너무 길어져서 {state['player2pok']['name']}은(는) 너무 지쳐서 더 이상 싸울 수 없어요!\n\n"
+            state['player2pok']["hp"] = 0
 
         if state['player1pok']["hp"] <= 0:
+            match_turn = 0
             if state['battleres']:
                 space = "\u200b"*500
                 chat.reply(f"배틀 결과\n{space}\n{state['battleres']}")
@@ -625,6 +630,7 @@ def battle_loop(chat, sender):
             time.sleep(5)
 
         if state['player2pok']["hp"] <= 0:
+            match_turn = 0
             if state['battleres']:
                 space = "\u200b"*500
                 chat.reply(f"배틀 결과\n{space}\n{state['battleres']}")
@@ -758,13 +764,7 @@ def battle_loop(chat, sender):
             end_pve_battle(chat, sender, winner=sender)
             return
 
-    if state['battleres']:
-        chat.reply(state['battleres'])
-    chat.reply("배틀이 너무 길어져서 무승부로 처리됩니다.")
-    state['isbattle'] = 0
-    state['isrankingbattle'] = 0
-    advOn[sender] = 0
-    _clear_state(sender)
+
 
 def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, skill, pp_dict):
     if attacker_name == state['player1'] and state['isplayer1bind'] == 1:
@@ -783,7 +783,7 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         return
 
     if skill not in pp_dict or pp_dict[skill] <= 0:
-        state['battleres'] += f"[{attacker_name}] {attacker['name']}는 PP가 부족해요!\n\n"
+        state['battleres'] += f"[{attacker_name}] {attacker['name']}는 PP가 부족해서 {skill}사용에 실패했어요!\n\n"
         return
 
     pp_dict[skill] -= 1
@@ -861,7 +861,8 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         attacker["hp"] = max(1, attacker["hp"] - math.ceil(atk / 4))
         state['battleres'] += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 데미지를 입었어요!\n"
     elif addi == 2 and judge != 0:
-        attacker["hp"] = max(1, attacker["hp"] + math.ceil(atk / 4))
+        max_hp = state['player1maxhp'] if attacker_name == state['player1'] else state['player2maxhp']
+        attacker["hp"] = min(max_hp, attacker["hp"] + math.ceil(atk / 4))
         state['battleres'] += f"[{attacker_name}] {attacker['name']}는 공격을 통해 체력을 흡수했어요!\n"
     elif addi == 1 and skill != "솔라빔" and state['weather'] != 1:
         if attacker_name == state['player1']:

@@ -482,6 +482,19 @@ def weatherjudge(atk, type_val, weather):
         at = at * 2
     return at
 
+def printability(ability):
+    """Format and display Pokemon ability"""
+
+    res = ""
+
+    if ability == 3:
+        res = "특성: [괴짜]\n-배틀에 등장 시 상대 포켓몬으로 변신한다.\n"
+    elif ability == 4:
+        res = "특성: [불가사의부적]\n-효과가 굉장한 공격에만 데미지를 입게 된다.\n"
+
+    return res
+
+
 def printskills(skills, locked, shiny_skills=None):
     """Format and display Pokemon skills"""
     from .config import TYPE_TEXTS

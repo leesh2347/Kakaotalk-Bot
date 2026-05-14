@@ -1,7 +1,7 @@
 # Module 5: Player Info Display
 import math
 from .config import SETTING, BALL_ARR, COLLECTION_NAMES, V_TEXTS, TYPE_TEXTS, BALL_INFO_LIST, TRAINER_RANK_DATA, COLLECTION_EFFECTS_DATA, CMDS
-from .io_helpers import read_json, printskills, pokimglink, send_image
+from .io_helpers import read_json, printskills, pokimglink, send_image, printability
 from .shiny_moves import SHINY_POK_SKILLS
 
 def handle_info(sender, chat, args=None):
@@ -331,12 +331,16 @@ def handle_pokinfo(sender, chat, args=None):
     except:
         chat.reply(f"이미지 전송 오류.\nLv.{p['level']} {p['name']}\n{pokdesc}")
     
+    skills_text = ""
+
+    skills_text += printability(read_json(f"포켓몬/{pok_file_name}", "ability") or 0)
+
     # Skills
     if p["name"] == "메타몽":
-        skills_text = "변신"
+        skills_text += "변신"
     else:
         pok_shiny_skills = SHINY_POK_SKILLS.get(p["name"], []) if p.get("shiny", 0) == 1 else []
-        skills_text = printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
+        skills_text += printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
         
         # Add shiny skills info if shiny value is 1
         if p.get("shiny", 0) == 1 and p["name"] in SHINY_POK_SKILLS:
@@ -400,11 +404,15 @@ def handle_dpokinfo(sender, chat, args=None):
     except:
         chat.reply(f"이미지 전송 오류.\nLv.{p['level']} {p['name']}\n{pokdesc}")
     
+    skills_text = ""
+
+    skills_text += printability(read_json(f"포켓몬/{pok_file_name}", "ability") or 0)
+
     if p["name"] == "메타몽":
-        skills_text = "변신"
+        skills_text += "변신"
     else:
         pok_shiny_skills = SHINY_POK_SKILLS.get(p["name"], []) if p.get("shiny", 0) == 1 else []
-        skills_text = printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
+        skills_text += printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
         
         # Add shiny skills info if shiny value is 1
         if p.get("shiny", 0) == 1 and p["name"] in SHINY_POK_SKILLS:
@@ -443,6 +451,7 @@ def handle_pokdictionary(sender, chat, args=None):
         'nextup':read_json(f"포켓몬/{args}", "nextup") or 'x',
         'nextlv':read_json(f"포켓몬/{args}", "nextlv") or 0,
         'skills':read_json(f"포켓몬/{args}", "skills") or [],
+        'ability':read_json(f"포켓몬/{args}", "ability") or 0
     }
     
     # Build description
@@ -485,12 +494,13 @@ def handle_pokdictionary(sender, chat, args=None):
     # Skills
 
     space = "\u200b"*500
+
+    skills_text += printability(pokinfo['ability'])
+
+
     skills_text += f"{space}\n\n[배우는 기술]\n"
 
-    if args == "메타몽":
-        skills_text += "변신"
-    else:
-        skills_text += printskills(pokinfo['skills'],[])
+    skills_text += printskills(pokinfo['skills'],[])
     
     # Add shiny skills info if exists
     if args in SHINY_POK_SKILLS:
