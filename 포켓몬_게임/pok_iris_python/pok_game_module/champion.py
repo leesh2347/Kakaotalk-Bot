@@ -84,6 +84,7 @@ def handle_champ(sender, chat, args=None):
         player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "spd") or 50) * level / 50)
         player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "satk") or 1) * level / 50)
         player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "sdef") or 1) * level / 50)
+        player1pok["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "ability") or 0
     else:
         player1pok["hp"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "hp") or 50) * level / 50)
         player1pok["atk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "atk") or 50) * level / 50)
@@ -91,8 +92,16 @@ def handle_champ(sender, chat, args=None):
         player1pok["spd"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "spd") or 50) * level / 50)
         player1pok["satk"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "satk") or 1) * level / 50)
         player1pok["sdef"] = math.ceil((read_json(f"포켓몬/{player1pok['name']}", "sdef") or 1) * level / 50)
+        player1pok["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}", "ability") or 0
+
+    if state['player2pok'].get("formchange", 0) > 0:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}_{state['player2pok']['formchange']}", "ability") or 0
+    else:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
     player2pok = state['player2pok']
+
+
     pve_battle.apply_metamong_transform(player1pok, player2pok)
     pve_battle.apply_metamong_transform(player2pok, player1pok)
 

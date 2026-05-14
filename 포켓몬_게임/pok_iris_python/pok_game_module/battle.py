@@ -142,6 +142,16 @@ def start_pvp_battle(chat):
     player1pok = player1inv["deck"][0].copy()
     player2pok = player2inv["deck"][0].copy()
 
+    if player1pok.get("formchange", 0) > 0:
+        player1pok["ability"] = read_json(f"포켓몬/{player1pok['name']}_{player1pok['formchange']}", "ability") or 0
+    else:
+        player1pok["ability"] = read_json(f"포켓몬/{player1pok['name']}", "ability") or 0
+
+    if player2pok.get("formchange", 0) > 0:
+        player2pok["ability"] = read_json(f"포켓몬/{player2pok['name']}_{player2pok['formchange']}", "ability") or 0
+    else:
+        player2pok["ability"] = read_json(f"포켓몬/{player2pok['name']}", "ability") or 0
+
     apply_metamong_transform(player1pok, player2pok)
     apply_metamong_transform(player2pok, player1pok)
     
@@ -459,6 +469,8 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
         battleres += f"[{attacker_name}] {attacker['name']}의 {skill}!\n아쉽게 빗나갔어요!\n\n"
         return
 
+    d_ability = defender["ability"] or 0
+
     # Additional effects
     addi = skill_data.get("addi") or 0    
 
@@ -501,6 +513,10 @@ def execute_pvp_attack(attacker_name, defender_name, attacker, defender, skill, 
     defender_type2 = read_json(f"포켓몬/{defender_pok_file_name}", "type2") or 0
     
     judge = typejudge(skill_type, defender_type1, defender_type2)
+
+    #불가사의부적 구현
+    if d_ability == 4 and judge < 2:
+        judge = 0
 
     if judge == 0 and addi == 7: #무효도 공격
         judge = 1

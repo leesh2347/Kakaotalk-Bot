@@ -9,7 +9,7 @@ from .explore import advOn
 
 def apply_metamong_transform(pok, opponent_pok):
     """If pok is 메타몽, copy opponent's name, stats, and skills"""
-    if pok["name"] == "메타몽":
+    if pok["ability"] == 3:
         pok["name"] = opponent_pok["name"]
         pok["hp"] = opponent_pok["hp"]
         pok["atk"] = opponent_pok["atk"]
@@ -17,6 +17,8 @@ def apply_metamong_transform(pok, opponent_pok):
         pok["spd"] = opponent_pok["spd"]
         pok["satk"] = opponent_pok["satk"]
         pok["sdef"] = opponent_pok["sdef"]
+        pok["formchange"] = opponent_pok["formchange"]
+        pok["ability"] = opponent_pok["ability"]
         pok["skills"] = opponent_pok["skills"][:]
 
 # Per-player battle state dict (similar to advOn[sender])
@@ -135,6 +137,7 @@ def handle_gym(sender, chat, args=None):
         state['player1pok']["spd"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "spd") or 50) * level / 50)
         state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "satk") or 1) * level / 50)
         state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "sdef") or 1) * level / 50)
+        state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "ability") or 0
     else:
         state['player1pok']["hp"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "hp") or 50) * level / 50)
         state['player1pok']["atk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "atk") or 50) * level / 50)
@@ -142,6 +145,12 @@ def handle_gym(sender, chat, args=None):
         state['player1pok']["spd"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "spd") or 50) * level / 50)
         state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "satk") or 1) * level / 50)
         state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "sdef") or 1) * level / 50)
+        state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}", "ability") or 0
+    
+    if state['player2pok'].get("formchange", 0) > 0:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}_{state['player2pok']['formchange']}", "ability") or 0
+    else:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
     apply_metamong_transform(state['player1pok'], state['player2pok'])
     apply_metamong_transform(state['player2pok'], state['player1pok'])
@@ -295,6 +304,28 @@ def handle_villain(sender, chat, args=None):
     state['player1pok'] = state['trainerInv'][0].copy()
     state['player2pok'] = pokInv["deck"][0].copy()
 
+    if state['player1pok'].get("formchange", 0) > 0:
+        state['player1pok']["hp"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "hp") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["atk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "atk") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["def"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "def") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["spd"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "spd") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "satk") or 1) * state['player1pok']["level"] / 50)
+        state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "sdef") or 1) * state['player1pok']["level"] / 50)
+        state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "ability") or 0
+    else:
+        state['player1pok']["hp"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "hp") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["atk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "atk") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["def"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "def") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["spd"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "spd") or 50) * state['player1pok']["level"] / 50)
+        state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "satk") or 1) * state['player1pok']["level"] / 50)
+        state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "sdef") or 1) * state['player1pok']["level"] / 50)
+        state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}", "ability") or 0
+
+    if state['player2pok'].get("formchange", 0) > 0:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}_{state['player2pok']['formchange']}", "ability") or 0
+    else:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
+
     apply_metamong_transform(state['player1pok'], state['player2pok'])
     apply_metamong_transform(state['player2pok'], state['player1pok'])
 
@@ -442,6 +473,16 @@ def handle_ranking_battle(sender, chat):
     state['player1pok'] = state['trainerInv'][0].copy()
     state['player2pok'] = pokInv["deck"][0].copy()
 
+    if state['player1pok'].get("formchange", 0) > 0:
+        state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "ability") or 0
+    else:
+        state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}", "ability") or 0
+
+    if state['player2pok'].get("formchange", 0) > 0:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}_{state['player2pok']['formchange']}", "ability") or 0
+    else:
+        state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
+
     apply_metamong_transform(state['player1pok'], state['player2pok'])
     apply_metamong_transform(state['player2pok'], state['player1pok'])
 
@@ -534,6 +575,7 @@ def battle_loop(chat, sender):
                     state['player1pok']["spd"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "spd") or 50) * level / 50)
                     state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "satk") or 50) * level / 50)
                     state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "sdef") or 50) * level / 50)
+                    state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "ability") or 0
                 else:
                     state['player1pok']["hp"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "hp") or 50) * level / 50)
                     state['player1pok']["atk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "atk") or 50) * level / 50)
@@ -541,9 +583,12 @@ def battle_loop(chat, sender):
                     state['player1pok']["spd"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "spd") or 50) * level / 50)
                     state['player1pok']["satk"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "satk") or 50) * level / 50)
                     state['player1pok']["sdef"] = math.ceil((read_json(f"포켓몬/{state['player1pok']['name']}", "sdef") or 50) * level / 50)
+                    state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}", "ability") or 0
 
                 state['trainerInv'][state['trainerpoknum']]["hp"] = state['player1pok']["hp"]
                 state['player1maxhp'] = state['player1pok']["hp"]
+
+            print(f"player1pok ability {state['player1pok']["ability"]}")
 
             apply_metamong_transform(state['player1pok'], state['player2pok'])
 
@@ -597,17 +642,28 @@ def battle_loop(chat, sender):
                 return
 
             state['player2pok'] = pokInv["deck"][next_pok_idx].copy()
+
+            if state['player2pok'].get("formchange", 0) > 0:
+                state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}_{state['player2pok']['formchange']}", "ability") or 0
+            else:
+                state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
+
+            print(f"player2pok ability {state['player2pok']["ability"]}")
+
+            apply_metamong_transform(state['player2pok'], state['player1pok'])
+
             state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
             state['player2pok']["hp"] = state['player2maxhp']
 
-            apply_metamong_transform(state['player2pok'], state['player1pok'])
+            
+            (state['player2pok'], state['player1pok'])
 
             state['player2pp'] = {}
             for skill in state['player2pok'].get("skills", []):
                 skill_data = read_json(f"기술/{skill}")
                 state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-            leftpoks = (next_pok_idx+1)*"●"+(len(pokInv.get("deck", []))-next_pok_idx-1)*"○"
+            leftpoks = (next_pok_idx)*"●"+(len(pokInv.get("deck", []))-next_pok_idx)*"○"
 
             chat.reply(f"[{state['player2']}] {state['player2pok']['name']} 등장!\n{leftpoks}")
 
@@ -635,9 +691,9 @@ def battle_loop(chat, sender):
         player2skills = [s for s in state['player2pok'].get("skills", []) if s not in state['player2pok'].get("skillslocked", [])]
 
         if not player1skills:
-            player1skills = ["태클"]
+            player1skills = ["몸통박치기"]
         if not player2skills:
-            player2skills = ["태클"]
+            player2skills = ["몸통박치기"]
 
         player1skill = random.choice(player1skills)
         player2skill = random.choice(player2skills)
@@ -737,6 +793,8 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         state['battleres'] += f"[{attacker_name}] {attacker['name']}의 {skill}!\n아쉽게 빗나갔어요!\n\n"
         return
 
+    d_ability = defender["ability"] or 0
+
     addi = skill_data.get("addi") or 0
     atktype = skill_data.get("atktype") or 1
 
@@ -773,6 +831,10 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
     defender_type2 = read_json(f"포켓몬/{defender_pok_file_name}", "type2") or 0
 
     judge = typejudge(skill_type, defender_type1, defender_type2)
+
+    #불가사의부적 구현
+    if d_ability == 4 and judge < 2:
+        judge = 0
 
     if judge == 0 and addi == 7:
         judge = 1
