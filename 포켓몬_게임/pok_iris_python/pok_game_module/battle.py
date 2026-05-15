@@ -340,15 +340,19 @@ def pvp_battle_loop(chat):
         player2skills = [s for s in player2pok.get("skills", []) if s not in player2pok.get("skillslocked", [])]
         
         if not player1skills:
-            player1skills = ["태클"]
+            player1skills = ["몸통박치기"]
         if not player2skills:
-            player2skills = ["태클"]
+            player2skills = ["몸통박치기"]
         
         player1skill = random.choice(player1skills)
         player2skill = random.choice(player2skills)
 
-        player1spd = player1pok["spd"]
-        player2spd = player2pok["spd"]
+        if player1pok["spd"] > player2pok["spd"]:
+            player1spd = 2
+            player2spd = 1
+        else:
+            player1spd = 1
+            player2spd = 2
 
         # Priority
         skill1_data = read_json(f"기술/{player1skill}")

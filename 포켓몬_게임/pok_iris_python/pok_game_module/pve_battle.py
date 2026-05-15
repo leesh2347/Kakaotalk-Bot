@@ -704,8 +704,12 @@ def battle_loop(chat, sender):
         player1skill = random.choice(player1skills)
         player2skill = random.choice(player2skills)
 
-        player1spd = state['player1pok']["spd"]
-        player2spd = state['player2pok']["spd"]
+        if state['player1pok']["spd"] > state['player2pok']["spd"]:
+            player1spd = 2
+            player2spd = 1
+        else:
+            player1spd = 1
+            player2spd = 2
 
         skill1_data = read_json(f"기술/{player1skill}")
         skill2_data = read_json(f"기술/{player2skill}")
