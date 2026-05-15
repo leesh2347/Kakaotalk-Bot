@@ -98,6 +98,8 @@ def get_new_notice():
         recent_notice_id = load_recent_notice()
         notice_list = get_notice_list()
 
+        #print(f"notice list:{notice_list}")
+
         if not notice_list.get('notice') or len(notice_list['notice']) == 0:
             return ""
 
@@ -107,25 +109,38 @@ def get_new_notice():
             save_recent_notice(latest_notice_id)
             notice_detail = get_notice_detail(latest_notice_id)
 
-            raw_content = str(notice_detail)
-            cleaned = clean_notice_content(raw_content)
-
-            # contents 필드 추출
-            if 'contents":"' in cleaned:
-                start_idx = cleaned.find('contents":"') + 11
-                end_idx = cleaned.find('","date')
-                if start_idx > 10 and end_idx > start_idx:
-                    cleaned = cleaned[start_idx:end_idx]
+            #print(f"notice detail:{notice_detail}")
 
             title = notice_list['notice'][0]['title']
-            contentt = json.load(cleaned['contents'])
+            contents = notice_detail.get('contents', '')
             url = notice_list['notice'][0]['url']
             space = "\u200b" * 500
 
-            return f"새로운 공지가 감지되었습니다.\n\n{title}\n\n{space}\n\n{contentt}\n\n공지사항 링크: {url}"
+            return f"새로운 공지가 감지되었습니다.\n\n{title}\n\n{space}\n\n{clean_notice_content(contents)}\n\n공지사항 링크: {url}"
         else:
             return ""
 
+    except Exception as e:
+        print(f"[notice] Error: {e}")
+        return ""
+
+
+def get_latest_notice():
+    """최신 공지 내용을 항상 반환 (새 공지 여부 무관)"""
+    try:
+        notice_list = get_notice_list()
+        if not notice_list.get('notice') or len(notice_list['notice']) == 0:
+            return ""
+
+        latest = notice_list['notice'][0]
+        notice_detail = get_notice_detail(latest['notice_id'])
+
+        title = latest['title']
+        contents = notice_detail.get('contents', '')
+        url = latest['url']
+        space = "\u200b" * 500
+
+        return f"새로운 공지가 감지되었습니다.\n\n{title}\n\n{space}\n\n{clean_notice_content(contents)}\n\n공지사항 링크: {url}"
     except Exception as e:
         print(f"[notice] Error: {e}")
         return ""
@@ -179,3 +194,10 @@ def handle_message(chat):
                     chat.reply(notice_msg, room)
 
         notice_check_counter = 0
+
+
+    if "JOLT_26" in chat.sender.name:
+        if chat.message.msg == "@공지테스트":
+            notice_msg = get_latest_notice()
+            #print(f"notice msg:{notice_msg}")
+            chat.reply(notice_msg)
