@@ -499,9 +499,14 @@ def handle_pokdictionary(sender, chat, args=None):
     # Get image via KakaoTalk link
     try:
         img = pokimglink(pokname, formchange, shiny)
+        imgpokname = ""
+        if formchange != 0:
+            imgpokname = f"도감 보기: {pokname}({FORM_CHANGE_STATUS[pokname][formchange]})"
+        else:
+            imgpokname = f"도감 보기: {pokname}"
         send_image(None, chat, 58796, {
             'POKIMG': img,
-            'POKNAME': f"도감 보기: {pokname}",
+            'POKNAME': imgpokname,
             'DESC': poktype,
             'shiny':shiny,
             'LINK': f"ko/wiki/{pokname}_(포켓몬)"
@@ -511,7 +516,10 @@ def handle_pokdictionary(sender, chat, args=None):
         chat.reply(f"이미지 전송 오류.\n도감: {pokname}\n{poktype}")
     
     skills_text = ""
-    skills_text +=f"[{pokname}]\n\n[종족값]\n"
+    if formchange != 0:
+        skills_text +=f"[{pokname}]({FORM_CHANGE_STATUS[pokname][formchange]})\n\n[종족값]\n"
+    else:
+        skills_text +=f"[{pokname}]\n\n[종족값]\n"
     skills_text +=f"HP:{pokinfo['hp']} (❻ {math.ceil(pokinfo['hp']*1.6)})\n"
     skills_text +=f"ATK:{pokinfo['atk']} (❻ {math.ceil(pokinfo['atk']*1.6)})\n"
     skills_text +=f"DEF:{pokinfo['def']} (❻ {math.ceil(pokinfo['def']*1.6)})\n"
@@ -535,10 +543,18 @@ def handle_pokdictionary(sender, chat, args=None):
     skills_text += printskills(pokinfo['skills'],[])
     
     # Add shiny skills info if exists
-    if pokname in SHINY_POK_SKILLS:
-        shiny_skills = SHINY_POK_SKILLS[pokname]
+    shiny_skills = []
+
+    if formchange != 0:
+        if f"{pokname}_{formchange}" in SHINY_POK_SKILLS:
+            shiny_skills = SHINY_POK_SKILLS[f"{pokname}_{formchange}"]
+    else:
+        if pokname in SHINY_POK_SKILLS:
+            shiny_skills = SHINY_POK_SKILLS[pokname]
+
+    if len(shiny_skills) > 0:
         skills_text += f"\n{space}\n\n[배우는 기술(이로치 전용)]\n"
-        skills_text += printskills(shiny_skills, [], shiny_skills)
+        skills_text += printskills(shiny_skills, [])
     
     #add guides
     skills_text += f"\n이로치 도감 보기: [포켓몬이름]/1"
