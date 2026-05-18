@@ -152,8 +152,16 @@ def start_pvp_battle(chat):
     else:
         player2pok["ability"] = read_json(f"포켓몬/{player2pok['name']}", "ability") or 0
 
-    apply_metamong_transform(player1pok, player2pok,weather)
-    apply_metamong_transform(player2pok, player1pok,weather)
+    # Random weather (1/3 chance)
+    if random.randint(1, 3) == 1:
+        weather = random.randint(1, 8)
+    else:
+        weather = 0
+
+
+    #특성 발동
+    weather = apply_metamong_transform(player1pok, player2pok,weather)
+    weather = apply_metamong_transform(player2pok, player1pok,weather)
     
     player1maxhp = player1pok.get("maxhp", player1pok["hp"])
     player2maxhp = player2pok.get("maxhp", player2pok["hp"])
@@ -176,11 +184,7 @@ def start_pvp_battle(chat):
     player2retire = []
     battleres = ""
     
-    # Random weather (1/3 chance)
-    if random.randint(1, 3) == 1:
-        weather = random.randint(1, 8)
-    else:
-        weather = 0
+
     
     chat.reply(f"⚔️배틀 시작!⚔️\n\n[{player1}] Lv.{player1pok['level']} {player1pok['name']} [{player1pok['hp']}HP]\nvs\n[{player2}] Lv.{player2pok['level']} {player2pok['name']} [{player2pok['hp']}HP]")
     
@@ -255,7 +259,8 @@ def pvp_battle_loop(chat):
                 skill_data = read_json(f"기술/{skill}")
                 player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-            apply_metamong_transform(player1pok, player2pok,weather)
+            #player1 특성 발동
+            weather = apply_metamong_transform(player1pok, player2pok,weather)
             player1maxhp = player1pok["hp"]
             
             leftpoks = (next_pok_idx+1)*"●"+(len(player1inv["deck"])-next_pok_idx-1)*"○"
@@ -310,7 +315,8 @@ def pvp_battle_loop(chat):
                 skill_data = read_json(f"기술/{skill}")
                 player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-            apply_metamong_transform(player2pok, player1pok,weather)
+            #player2 특성 발동
+            weather = apply_metamong_transform(player2pok, player1pok,weather)
             player2maxhp = player2pok["hp"]
             
             leftpoks = (next_pok_idx+1)*"●"+(len(player2inv["deck"])-next_pok_idx-1)*"○"

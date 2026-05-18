@@ -101,9 +101,15 @@ def handle_champ(sender, chat, args=None):
 
     player2pok = state['player2pok']
 
+    #날씨
+    if random.randint(1, 3) == 1:
+        state['weather'] = random.randint(1, 8)
+    else:
+        state['weather'] = 0
 
-    pve_battle.apply_metamong_transform(player1pok, player2pok,state['weather'])
-    pve_battle.apply_metamong_transform(player2pok, player1pok,state['weather'])
+    #특성 발동
+    state['weather'] = pve_battle.apply_metamong_transform(player1pok, player2pok,state['weather'])
+    state['weather'] = pve_battle.apply_metamong_transform(player2pok, player1pok,state['weather'])
 
     if 8 in pokUser.get("activecollection", []):
         player2pok["spd"] += 8
@@ -123,10 +129,7 @@ def handle_champ(sender, chat, args=None):
         skill_data = read_json(f"기술/{skill}")
         state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-    if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 8)
-    else:
-        state['weather'] = 0
+
 
     chat.reply(f"⚔️챔피언 도전!⚔️\n\n[{state['player1']}] Lv.{player1pok['level']} {player1pok['name']}\nvs\n[{state['player2']}] Lv.{player2pok['level']} {player2pok['name']}")
 
