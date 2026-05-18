@@ -1,6 +1,6 @@
 # Module 5: Player Info Display
 import math
-from .config import SETTING, BALL_ARR, COLLECTION_NAMES, V_TEXTS, TYPE_TEXTS, BALL_INFO_LIST, TRAINER_RANK_DATA, COLLECTION_EFFECTS_DATA, CMDS
+from .config import SETTING, BALL_ARR, COLLECTION_NAMES, V_TEXTS, TYPE_TEXTS, BALL_INFO_LIST, TRAINER_RANK_DATA, COLLECTION_EFFECTS_DATA, CMDS, FORM_CHANGE_NAMES, FORM_CHANGE_STATUS
 from .io_helpers import read_json, printskills, pokimglink, send_image, printability
 from .shiny_moves import SHINY_POK_SKILLS
 
@@ -438,21 +438,54 @@ def handle_pokdictionary(sender, chat, args=None):
     if args is None:
         chat.reply(f'@{sender}\n사용법: {CMDS["dic"]} [포켓몬이름]')
         return
+
+    shiny = 0
+
+    pokname = ""
+
+    if len(args.split("/")) > 1:
+        shiny = int(args.split("/")[1])
+        pokname = args.split("/")[0]
+    else:
+        shiny = 0
+        pokname = args
+
+    if len(args.split("_")) > 1:
+        formchange = int(pokname.split("_")[1])
+        pokname = pokname.split("_")[0]
+    else:
+        formchange = 0
     
-    pokinfo = {
-        'type1':read_json(f"포켓몬/{args}", "type1") or 0,
-        'type2':read_json(f"포켓몬/{args}", "type2") or 0,
-        'hp':read_json(f"포켓몬/{args}", "hp") or 0,
-        'atk':read_json(f"포켓몬/{args}", "atk") or 0,
-        'def':read_json(f"포켓몬/{args}", "def") or 0,
-        'satk':read_json(f"포켓몬/{args}", "satk") or 0,
-        'sdef':read_json(f"포켓몬/{args}", "sdef") or 0,
-        'spd':read_json(f"포켓몬/{args}", "spd") or 0,
-        'nextup':read_json(f"포켓몬/{args}", "nextup") or 'x',
-        'nextlv':read_json(f"포켓몬/{args}", "nextlv") or 0,
-        'skills':read_json(f"포켓몬/{args}", "skills") or [],
-        'ability':read_json(f"포켓몬/{args}", "ability") or 0
-    }
+    if formchange != 0:
+        pokinfo = {
+            'type1':read_json(f"포켓몬/{pokname}_{formchange}", "type1") or 0,
+            'type2':read_json(f"포켓몬/{pokname}_{formchange}", "type2") or 0,
+            'hp':read_json(f"포켓몬/{pokname}_{formchange}", "hp") or 0,
+            'atk':read_json(f"포켓몬/{pokname}_{formchange}", "atk") or 0,
+            'def':read_json(f"포켓몬/{pokname}_{formchange}", "def") or 0,
+            'satk':read_json(f"포켓몬/{pokname}_{formchange}", "satk") or 0,
+            'sdef':read_json(f"포켓몬/{pokname}_{formchange}", "sdef") or 0,
+            'spd':read_json(f"포켓몬/{pokname}_{formchange}", "spd") or 0,
+            'nextup':read_json(f"포켓몬/{pokname}_{formchange}", "nextup") or 'x',
+            'nextlv':read_json(f"포켓몬/{pokname}_{formchange}", "nextlv") or 0,
+            'skills':read_json(f"포켓몬/{pokname}_{formchange}", "skills") or [],
+            'ability':read_json(f"포켓몬/{pokname}_{formchange}", "ability") or 0
+        }
+    else:
+        pokinfo = {
+            'type1':read_json(f"포켓몬/{pokname}", "type1") or 0,
+            'type2':read_json(f"포켓몬/{pokname}", "type2") or 0,
+            'hp':read_json(f"포켓몬/{pokname}", "hp") or 0,
+            'atk':read_json(f"포켓몬/{pokname}", "atk") or 0,
+            'def':read_json(f"포켓몬/{pokname}", "def") or 0,
+            'satk':read_json(f"포켓몬/{pokname}", "satk") or 0,
+            'sdef':read_json(f"포켓몬/{pokname}", "sdef") or 0,
+            'spd':read_json(f"포켓몬/{pokname}", "spd") or 0,
+            'nextup':read_json(f"포켓몬/{pokname}", "nextup") or 'x',
+            'nextlv':read_json(f"포켓몬/{pokname}", "nextlv") or 0,
+            'skills':read_json(f"포켓몬/{pokname}", "skills") or [],
+            'ability':read_json(f"포켓몬/{pokname}", "ability") or 0
+        }
     
     # Build description
 
@@ -462,24 +495,23 @@ def handle_pokdictionary(sender, chat, args=None):
         poktype += " " + TYPE_TEXTS[pokinfo['type1']]
     if pokinfo['type1'] > 0 and pokinfo['type2'] != pokinfo['type1']:
         poktype += " " + TYPE_TEXTS[pokinfo['type2']]
-    
-    
+
     # Get image via KakaoTalk link
     try:
-        img = pokimglink(args, 0, 0)
+        img = pokimglink(pokname, formchange, shiny)
         send_image(None, chat, 58796, {
             'POKIMG': img,
-            'POKNAME': f"도감 보기: {args}",
+            'POKNAME': f"도감 보기: {pokname}",
             'DESC': poktype,
-            'shiny':0,
-            'LINK': f"ko/wiki/{args}_(포켓몬)"
+            'shiny':shiny,
+            'LINK': f"ko/wiki/{pokname}_(포켓몬)"
         })
     except Exception as e:
         print(e)
-        chat.reply(f"이미지 전송 오류.\n도감: {args}\n{poktype}")
+        chat.reply(f"이미지 전송 오류.\n도감: {pokname}\n{poktype}")
     
     skills_text = ""
-    skills_text +=f"[{args}]\n\n[종족값]\n"
+    skills_text +=f"[{pokname}]\n\n[종족값]\n"
     skills_text +=f"HP:{pokinfo['hp']} (❻ {math.ceil(pokinfo['hp']*1.6)})\n"
     skills_text +=f"ATK:{pokinfo['atk']} (❻ {math.ceil(pokinfo['atk']*1.6)})\n"
     skills_text +=f"DEF:{pokinfo['def']} (❻ {math.ceil(pokinfo['def']*1.6)})\n"
@@ -503,11 +535,21 @@ def handle_pokdictionary(sender, chat, args=None):
     skills_text += printskills(pokinfo['skills'],[])
     
     # Add shiny skills info if exists
-    if args in SHINY_POK_SKILLS:
-        shiny_skills = SHINY_POK_SKILLS[args]
+    if pokname in SHINY_POK_SKILLS:
+        shiny_skills = SHINY_POK_SKILLS[pokname]
         skills_text += f"\n{space}\n\n[배우는 기술(이로치 전용)]\n"
         skills_text += printskills(shiny_skills, [], shiny_skills)
     
+    #add guides
+    skills_text += f"\n이로치 도감 보기: [포켓몬이름]/1"
+
+    if pokname in FORM_CHANGE_NAMES:
+        skills_text += f"\n폼체인지 도감 보기"
+        for i in range(1, len(FORM_CHANGE_STATUS[pokname])):
+            skills_text += f"\n-{FORM_CHANGE_STATUS[pokname][i]}: [{pokname}]_{i}"
+    skills_text += f"\n※폼체인지 이로치의 경우 폼체인지-이로치 순서대로 입력해 주세요\n예시: 자시안_1/1"
+
+
     res = f"{skills_text}"
-    
+
     chat.reply(res)
