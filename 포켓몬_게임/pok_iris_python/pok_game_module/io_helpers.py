@@ -5,6 +5,7 @@ import io
 import os
 import math
 import requests
+from .config import WEATHER_TEXTS
 
 DATA_PATH = "Devel/Pokemon/Data"
 
@@ -74,6 +75,7 @@ def send_image(room, chat, template_id, template_args):
     """
     try:
         if template_id == 58796:
+            #도감, 야생
             # 1. 새 캔버스 생성 
             canvas = Image.new("RGBA", (500, 650), (255, 255, 255, 255))
 
@@ -111,6 +113,7 @@ def send_image(room, chat, template_id, template_args):
             chat.reply_media(img_bytes)
 
         elif template_id == 67300:
+            #배틀
             # 1. 새 캔버스 생성
             canvas = Image.new("RGBA", (1000, 600), (255, 255, 255, 255))
 
@@ -138,6 +141,11 @@ def send_image(room, chat, template_id, template_args):
                 shiny_icon = Image.open(shiny_icon_url).convert("RGBA")
                 canvas.paste(shiny_icon, (940, 60), shiny_icon)
 
+            #날씨 배경효과 추가
+            if template_args['weather'] > 0:
+                weather_url = f"res/img/pok_game/weather_bg/{template_args['weather']}.png"
+                weather_bg = Image.open(weather_url).convert("RGBA")
+                canvas.paste(weather_bg, (0, 0), weather_bg)
 
 
             # 5. 텍스트 그리기
@@ -472,25 +480,82 @@ def typejudge(skilltype, typea, typeb):
 def weatherjudge(atk, type_val, weather):
     """Apply weather modifiers to attack"""
     at = atk
-    if weather == 1 and type_val == 2:
-        at = at * 2
-    if weather == 1 and type_val == 3:
-        at = at / 2
-    if weather == 2 and type_val == 2:
-        at = at / 2
-    if weather == 2 and type_val == 3:
-        at = at * 2
+    #쾌청
+    if weather == 1:
+        if type_val == 2:
+            at = at * 1.5
+        if type_val == 3:
+            at = at * 0.5
+    #비
+    if weather == 2:
+        if type_val == 3:
+            at = at * 1.5
+        if type_val == 2:
+            at = at * 0.5
+    #사이코필드
+    if weather == 5:
+        if type_val == 14:
+            at = at * 1.5
+    #일렉필드
+    if weather == 6:
+        if type_val == 12:
+            at = at * 1.5
+    #그래스필드
+    if weather == 7:
+        if type_val == 4:
+            at = at * 1.5
+        if type_val == 7:
+            at = at * 0.5
+    #미스트필드
+    if weather == 8:
+        if type_val == 18:
+            at = at * 1.5
+        if type_val == 17:
+            at = at * 0.5
+    #끝의대지
+    if weather == 9:
+        if type_val == 2:
+            at = at * 2
+        if type_val == 3:
+            at = 0
+    #시작의바다
+    if weather == 10:
+        if type_val == 3:
+            at = at * 2
+        if type_val == 2:
+            at = 0
     return at
 
 def printability(ability):
     """Format and display Pokemon ability"""
 
     res = ""
-
-    if ability == 3:
+    if ability == 1:
+        res = f"특성: [가뭄]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[1]}] 상태로 만든다.\n"
+    elif ability == 2:
+        res = f"특성: [잔비]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[2]}] 상태로 만든다.\n"
+    elif ability == 3:
         res = "특성: [괴짜]\n-배틀에 등장 시 상대 포켓몬으로 변신한다.\n"
     elif ability == 4:
         res = "특성: [불가사의부적]\n-효과가 굉장한 공격에만 데미지를 입게 된다.\n"
+    elif ability == 5:
+        res = f"특성: [에어록]\n-배틀에 등장 시 날씨 효과를 없앤다.\n"
+    elif ability == 6:
+        res = f"특성: [끝의대지]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[9]}] 상태로 만든다.\n"
+    elif ability == 7:
+        res = f"특성: [시작의바다]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[10]}] 상태로 만든다.\n"
+    elif ability == 8:
+        res = f"특성: [모래날림]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[3]}] 상태로 만든다.\n"
+    elif ability == 9:
+        res = f"특성: [눈퍼트리기]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[4]}] 상태로 만든다.\n"
+    elif ability == 10:
+        res = f"특성: [사이코메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[5]}] 상태로 만든다.\n"
+    elif ability == 11:
+        res = f"특성: [일렉트릭메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[6]}] 상태로 만든다.\n"
+    elif ability == 12:
+        res = f"특성: [그래스메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[7]}] 상태로 만든다.\n"
+    elif ability == 13:
+        res = f"특성: [미스트메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[8]}] 상태로 만든다.\n"
 
     return res
 

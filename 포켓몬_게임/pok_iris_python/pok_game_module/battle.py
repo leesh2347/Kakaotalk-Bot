@@ -152,8 +152,8 @@ def start_pvp_battle(chat):
     else:
         player2pok["ability"] = read_json(f"포켓몬/{player2pok['name']}", "ability") or 0
 
-    apply_metamong_transform(player1pok, player2pok)
-    apply_metamong_transform(player2pok, player1pok)
+    apply_metamong_transform(player1pok, player2pok,weather)
+    apply_metamong_transform(player2pok, player1pok,weather)
     
     player1maxhp = player1pok.get("maxhp", player1pok["hp"])
     player2maxhp = player2pok.get("maxhp", player2pok["hp"])
@@ -178,7 +178,7 @@ def start_pvp_battle(chat):
     
     # Random weather (1/3 chance)
     if random.randint(1, 3) == 1:
-        weather = random.randint(1, 4)
+        weather = random.randint(1, 8)
     else:
         weather = 0
     
@@ -193,6 +193,7 @@ def start_pvp_battle(chat):
             'player2name': player2,
             'player1img': img1,
             'player2img': img2,
+            'weather': state['weather'],
             'player1shiny': player1pok.get("shiny", 0),
             'player2shiny': player2pok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -254,7 +255,7 @@ def pvp_battle_loop(chat):
                 skill_data = read_json(f"기술/{skill}")
                 player1pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-            apply_metamong_transform(player1pok, player2pok)
+            apply_metamong_transform(player1pok, player2pok,weather)
             player1maxhp = player1pok["hp"]
             
             leftpoks = (next_pok_idx+1)*"●"+(len(player1inv["deck"])-next_pok_idx-1)*"○"
@@ -269,6 +270,7 @@ def pvp_battle_loop(chat):
                     'player2name': player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'weather': state['weather'],
                     'player1shiny': player1pok.get("shiny", 0),
                     'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -308,7 +310,7 @@ def pvp_battle_loop(chat):
                 skill_data = read_json(f"기술/{skill}")
                 player2pp[skill] = (skill_data.get("pp") if skill_data else None) or 10
 
-            apply_metamong_transform(player2pok, player1pok)
+            apply_metamong_transform(player2pok, player1pok,weather)
             player2maxhp = player2pok["hp"]
             
             leftpoks = (next_pok_idx+1)*"●"+(len(player2inv["deck"])-next_pok_idx-1)*"○"
@@ -323,6 +325,7 @@ def pvp_battle_loop(chat):
                     'player2name': player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'weather': state['weather'],
                     'player1shiny': player1pok.get("shiny", 0),
                     'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -420,6 +423,7 @@ def pvp_battle_loop(chat):
                     'player2name': player2,
                     'player1img': img1,
                     'player2img': img2,
+                    'weather': state['weather'],
                     'player1shiny': player1pok.get("shiny", 0),
                     'player2shiny': player2pok.get("shiny", 0),
                     'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
@@ -594,6 +598,7 @@ def end_pvp_battle(chat, winner=None):
             'player2name': player2,
             'player1img': img1,
             'player2img': img2,
+            'weather': state['weather'],
             'player1shiny': winnerpok.get("shiny", 0),
             'player2shiny': loserpok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",

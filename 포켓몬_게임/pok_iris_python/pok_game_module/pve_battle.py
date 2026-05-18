@@ -2,16 +2,25 @@
 import random
 import math
 import time
-from .config import SETTING, TRAINER_RAN_POKS, TYPE_TEXTS, WEATHER_TEXTS, BALL_ARR
+from .config import SETTING, TRAINER_RAN_POKS, TYPE_TEXTS, WEATHER_TEXTS, WEATHER_DESC, BALL_ARR
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink
 from .champion import newChampion
 from .explore import advOn
 
-def apply_metamong_transform(pok, opponent_pok):
-    """If pok is 메타몽, copy opponent's name, stats, and skills"""
+def apply_metamong_transform(pok, opponent_pok, weather):
+    """배틀 시작 시 특성 적용 함수"""
+
+    #가뭄
+    if pok["ability"] == 1:
+        weather = 1
+    
+    #잔비
+    if pok["ability"] == 2:
+        weather = 2
+
+    #특성 괴짜(메타몽)
     if pok["ability"] == 3:
         pok["name"] = opponent_pok["name"]
-        pok["hp"] = opponent_pok["hp"]
         pok["atk"] = opponent_pok["atk"]
         pok["def"] = opponent_pok["def"]
         pok["spd"] = opponent_pok["spd"]
@@ -20,6 +29,42 @@ def apply_metamong_transform(pok, opponent_pok):
         pok["formchange"] = opponent_pok["formchange"]
         pok["ability"] = opponent_pok["ability"]
         pok["skills"] = opponent_pok["skills"][:]
+
+    #에어록(날씨 제거)
+    if pok["ability"] == 5:
+        weather = 0
+
+    #끝의대지
+    if pok["ability"] == 6:
+        weather = 9
+
+    #시작의바다
+    if pok["ability"] == 7:
+        weather = 10
+
+    #모래날림
+    if pok["ability"] == 8:
+        weather = 3
+
+    #눈퍼트리기
+    if pok["ability"] == 9:
+        weather = 4
+
+    #사이코메이커
+    if pok["ability"] == 10:
+        weather = 5
+
+    #일렉트릭메이커
+    if pok["ability"] == 11:
+        weather = 6
+
+    #그래스메이커
+    if pok["ability"] == 12:
+        weather = 7
+
+    #미스트메이커
+    if pok["ability"] == 13:
+        weather = 8
 
 # Per-player battle state dict (similar to advOn[sender])
 # Enables multiple independent battles simultaneously
@@ -152,8 +197,8 @@ def handle_gym(sender, chat, args=None):
     else:
         state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
-    apply_metamong_transform(state['player1pok'], state['player2pok'])
-    apply_metamong_transform(state['player2pok'], state['player1pok'])
+    apply_metamong_transform(state['player1pok'], state['player2pok'],state['weather'])
+    apply_metamong_transform(state['player2pok'], state['player1pok'],state['weather'])
 
     if 8 in pokUser.get("activecollection", []):
         state['player2pok']["spd"] += 8
@@ -174,7 +219,7 @@ def handle_gym(sender, chat, args=None):
         state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
 
     if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 4)
+        state['weather'] = random.randint(1, 8)
     else:
         state['weather'] = 0
 
@@ -188,6 +233,7 @@ def handle_gym(sender, chat, args=None):
             'player2name': state['player2'],
             'player1img': img1,
             'player2img': img2,
+            'weather': state['weather'],
             'player1shiny': state['player1pok'].get("shiny", 0),
             'player2shiny': state['player2pok'].get("shiny", 0),
             'player1': f"Lv.{state['player1pok']['level']} {state['player1pok']['name']}",
@@ -326,8 +372,8 @@ def handle_villain(sender, chat, args=None):
     else:
         state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
-    apply_metamong_transform(state['player1pok'], state['player2pok'])
-    apply_metamong_transform(state['player2pok'], state['player1pok'])
+    apply_metamong_transform(state['player1pok'], state['player2pok'],state['weather'])
+    apply_metamong_transform(state['player2pok'], state['player1pok'],state['weather'])
 
     state['player1maxhp'] = state['player1pok']["hp"]
     state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
@@ -349,7 +395,7 @@ def handle_villain(sender, chat, args=None):
         state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
 
     if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 4)
+        state['weather'] = random.randint(1, 8)
     else:
         state['weather'] = 0
 
@@ -363,6 +409,7 @@ def handle_villain(sender, chat, args=None):
             'player2name': state['player2'],
             'player1img': img1,
             'player2img': img2,
+            'weather': state['weather'],
             'player1shiny': state['player1pok'].get("shiny", 0),
             'player2shiny': state['player2pok'].get("shiny", 0),
             'player1': f"Lv.{state['player1pok']['level']} {state['player1pok']['name']}",
@@ -483,8 +530,8 @@ def handle_ranking_battle(sender, chat):
     else:
         state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
-    apply_metamong_transform(state['player1pok'], state['player2pok'])
-    apply_metamong_transform(state['player2pok'], state['player1pok'])
+    apply_metamong_transform(state['player1pok'], state['player2pok'],state['weather'])
+    apply_metamong_transform(state['player2pok'], state['player1pok'],state['weather'])
 
     state['player1maxhp'] = state['player1pok'].get("maxhp", state['player1pok']["hp"])
     state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
@@ -500,7 +547,7 @@ def handle_ranking_battle(sender, chat):
         state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
 
     if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 4)
+        state['weather'] = random.randint(1, 8)
     else:
         state['weather'] = 0
 
@@ -513,6 +560,7 @@ def handle_ranking_battle(sender, chat):
             'player1name': state['player1'],
             'player2name': state['player2'],
             'player1img': img1,
+            'weather': state['weather'],
             'player2img': img2,
             'player1shiny': state['player1pok'].get("shiny", 0),
             'player2shiny': state['player2pok'].get("shiny", 0),
@@ -595,7 +643,7 @@ def battle_loop(chat, sender):
 
             print(f"player1pok ability {state['player1pok']["ability"]}")
 
-            apply_metamong_transform(state['player1pok'], state['player2pok'])
+            apply_metamong_transform(state['player1pok'], state['player2pok'],state['weather'])
 
             state['player1pp'] = {}
             skill_list = state['player1pok'].get("skills", [])
@@ -617,6 +665,7 @@ def battle_loop(chat, sender):
                     'player2name': state['player2'],
                     'player1img': img1,
                     'player2img': img2,
+                    'weather': state['weather'],
                     'player1shiny': state['player1pok'].get("shiny", 0),
                     'player2shiny': state['player2pok'].get("shiny", 0),
                     'player1': f"Lv.{state['player1pok']['level']} {state['player1pok']['name']}",
@@ -656,7 +705,7 @@ def battle_loop(chat, sender):
 
             print(f"player2pok ability {state['player2pok']["ability"]}")
 
-            apply_metamong_transform(state['player2pok'], state['player1pok'])
+            apply_metamong_transform(state['player2pok'], state['player1pok'],state['weather'])
 
             state['player2maxhp'] = state['player2pok'].get("maxhp", state['player2pok']["hp"])
             state['player2pok']["hp"] = state['player2maxhp']
@@ -681,6 +730,7 @@ def battle_loop(chat, sender):
                     'player2name': state['player2'],
                     'player1img': img1,
                     'player2img': img2,
+                    'weather': state['weather'],
                     'player1shiny': state['player1pok'].get("shiny", 0),
                     'player2shiny': state['player2pok'].get("shiny", 0),
                     'player1': f"Lv.{state['player1pok']['level']} {state['player1pok']['name']}",
@@ -714,10 +764,12 @@ def battle_loop(chat, sender):
         skill1_data = read_json(f"기술/{player1skill}")
         skill2_data = read_json(f"기술/{player2skill}")
 
-        if skill1_data:
-            player1spd += (skill1_data.get("priority") or 0) * 2
-        if skill2_data:
-            player2spd += (skill2_data.get("priority") or 0) * 2
+        #스킬 우선도 적용. 사이코필드 시엔 적용되지 않음
+        if state['weather'] != 5:
+            if skill1_data:
+                player1spd += (skill1_data.get("priority") or 0) * 2
+            if skill2_data:
+                player2spd += (skill2_data.get("priority") or 0) * 2
 
         if player1spd > player2spd:
             execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'])
@@ -728,29 +780,34 @@ def battle_loop(chat, sender):
             if state['player1pok']["hp"] > 0:
                 execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'])
 
+        #날씨
         if state['weather'] > 2:
+            state['battleres'] += f"{WEATHER_DESC[state['weather']]}\n"
+            pok1_file_name = f"{state['player1pok']['name']}_{state['player1pok']['formchange']}" if state['player1pok'].get('formchange', 0) != 0 else state['player1pok']['name']
+            pok2_file_name = f"{state['player2pok']['name']}_{state['player2pok']['formchange']}" if state['player2pok'].get('formchange', 0) != 0 else state['player2pok']['name']
+            type1_1 = read_json(f"포켓몬/{pok1_file_name}", "type1") or 0
+            type2_1 = read_json(f"포켓몬/{pok1_file_name}", "type2") or 0
+            type1_2 = read_json(f"포켓몬/{pok2_file_name}", "type1") or 0
+            type2_2 = read_json(f"포켓몬/{pok2_file_name}", "type2") or 0
             if state['weather'] == 3:
-                pok1_file_name = f"{state['player1pok']['name']}_{state['player1pok']['formchange']}" if state['player1pok'].get('formchange', 0) != 0 else state['player1pok']['name']
-                pok2_file_name = f"{state['player2pok']['name']}_{state['player2pok']['formchange']}" if state['player2pok'].get('formchange', 0) != 0 else state['player2pok']['name']
-                type1_1 = read_json(f"포켓몬/{pok1_file_name}", "type1") or 0
-                type2_1 = read_json(f"포켓몬/{pok1_file_name}", "type2") or 0
-                if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7:
+                if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7 and type1_1 != 9 and type2_1 != 9:
                     state['player1pok']["hp"] = max(0, math.ceil(state['player1pok']["hp"] * 7 / 8))
                     state['battleres'] += f"[{state['player1']}] 모래바람이 {state['player1pok']['name']}(를)을 덮쳤어요!\n"
-
-                type1_2 = read_json(f"포켓몬/{pok2_file_name}", "type1") or 0
-                type2_2 = read_json(f"포켓몬/{pok2_file_name}", "type2") or 0
-                if type1_2 != 6 and type2_2 != 6 and type1_2 != 7 and type2_2 != 7:
+                if type1_2 != 6 and type2_2 != 6 and type1_2 != 7 and type2_2 != 7 and type1_2 != 9 and type2_2 != 9:
                     state['player2pok']["hp"] = max(0, math.ceil(state['player2pok']["hp"] * 7 / 8))
                     state['battleres'] += f"[{state['player2']}] 모래바람이 {state['player2pok']['name']}(를)을 덮쳤어요!\n"
-
             elif state['weather'] == 4:
-                pok2_file_name = f"{state['player2pok']['name']}_{state['player2pok']['formchange']}" if state['player2pok'].get('formchange', 0) != 0 else state['player2pok']['name']
-                type1_2 = read_json(f"포켓몬/{pok2_file_name}", "type1") or 0
-                type2_2 = read_json(f"포켓몬/{pok2_file_name}", "type2") or 0
+                if type1_1 != 11 and type2_1 != 11:
+                    state['player1pok']["hp"] = max(0, math.ceil(state['player1pok']["hp"] * 7 / 8))
+                    state['battleres'] += f"[{state['player1']}] 싸라기눈이 {state['player1pok']['name']}(를)을 덮쳤어요!\n"
                 if type1_2 != 11 and type2_2 != 11:
                     state['player2pok']["hp"] = max(0, math.ceil(state['player2pok']["hp"] * 7 / 8))
                     state['battleres'] += f"[{state['player2']}] 싸라기눈이 {state['player2pok']['name']}(를)을 덮쳤어요!\n"
+            elif state['weather'] == 7:
+                state['player1pok']["hp"] = max(0, math.ceil(state['player1pok']["hp"] * 8 / 7))
+                state['battleres'] += f"[{state['player1']}] {state['player1pok']['name']}의 체력이 회복되었어요!\n"
+                state['player2pok']["hp"] = max(0, math.ceil(state['player2pok']["hp"] * 8 / 7))
+                state['battleres'] += f"[{state['player2']}] {state['player2pok']['name']}의 체력이 회복되었어요!\n"
 
         if state['player2pok']["hp"] <= 0 and len(state['player2retire']) >= len(pokInv.get("deck", [])):
             if state['battleres']:
@@ -856,7 +913,7 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
 
     if judge > 1:
         state['battleres'] += "효과가 굉장했어요!\n"
-    elif judge == 0:
+    elif judge == 0 or atk == 0:
         state['battleres'] += "효과가 없는 듯해요...\n"
     elif judge < 1:
         state['battleres'] += "효과가 별로인 듯해요\n"

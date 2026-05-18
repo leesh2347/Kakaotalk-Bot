@@ -102,8 +102,8 @@ def handle_champ(sender, chat, args=None):
     player2pok = state['player2pok']
 
 
-    pve_battle.apply_metamong_transform(player1pok, player2pok)
-    pve_battle.apply_metamong_transform(player2pok, player1pok)
+    pve_battle.apply_metamong_transform(player1pok, player2pok,state['weather'])
+    pve_battle.apply_metamong_transform(player2pok, player1pok,state['weather'])
 
     if 8 in pokUser.get("activecollection", []):
         player2pok["spd"] += 8
@@ -124,7 +124,7 @@ def handle_champ(sender, chat, args=None):
         state['player2pp'][skill] = (skill_data.get("pp") if skill_data else None) or 10
 
     if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 4)
+        state['weather'] = random.randint(1, 8)
     else:
         state['weather'] = 0
 
@@ -138,6 +138,7 @@ def handle_champ(sender, chat, args=None):
             'player2name': state['player2'],
             'player1img': img1,
             'player2img': img2,
+            'weather':state['weather'],
             'player1shiny': player1pok.get("shiny", 0),
             'player2shiny': player2pok.get("shiny", 0),
             'player1': f"Lv.{player1pok['level']} {player1pok['name']}",
