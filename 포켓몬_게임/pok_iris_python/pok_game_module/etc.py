@@ -1,7 +1,7 @@
 # Module 12: Etc (Gacha, Events, Ranking, etc.)
 import random
 import math
-from .config import SETTING, TYPE_TEXTS, SEASONS
+from .config import SETTING, TYPE_TEXTS, SEASONS, WEATHER_TEXTS
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink, printskills
 from .shiny_moves import SHINY_POK_SKILLS
 
@@ -134,25 +134,50 @@ def handle_pokemon_ranking(sender, chat):
     chat.reply(f"@{sender}\n📊 포켓몬 랭킹\n{space}\n\n{result_lines}")
 
 def handle_seasoninfo(sender, chat):
-    """Handle season info command (@포켓몬계절)"""
-    pokseason = read_json("season")
+    """Handle season info command (@포켓몬날씨)"""
     
-    if pokseason is None:
-        chat.reply("@{sender}\n계절 정보를 불러올 수 없어요!")
-        return
-    
-    month = pokseason.get("month", 1)
-    season_text = {1: "봄", 2: "여름", 3: "가을", 4: "겨울"}[month]
-    
-    res = f"현재 계절: {season_text}\n\n"
-    res += f"{season_text}철에 출현률이 증가하는 포켓몬:\n"
-    
-    season_key = {1: 'spring', 2: 'summer', 3: 'autumn', 4: 'winter'}[month]
-    season_poks = SEASONS[season_key][:15]
-    
-    res += ", ".join(season_poks)
-    if len(SEASONS[season_key]) > 15:
-        res += f" 외 {len(SEASONS[season_key]) - 15}마리"
+    res = "\n".join([
+        "포켓몬게임 날씨 정보",
+        "\u200b"*500,
+        f"{WEATHER_TEXTS[1]}",
+        "불 타입 기술 데미지 X1.5",
+        "물 타입 기술 데미지 X0.5",
+        "",
+        f"{WEATHER_TEXTS[2]}",
+        "물 타입 기술 데미지 X1.5",
+        "불 타입 기술 데미지 X0.5",
+        "",
+        f"{WEATHER_TEXTS[3]}",
+        "바위, 강철, 땅 타입을 제외한 모든 포켓몬 매 턴마다 1/8 지속 데미지",
+        "",
+        f"{WEATHER_TEXTS[4]}",
+        "얼음 타입을 제외한 모든 포켓몬 매 턴마다 1/8 지속 데미지",
+        "",
+        f"{WEATHER_TEXTS[5]}",
+        "에스퍼 타입 기술 데미지 X1.5",
+        "모든 기술의 우선도 무효화",
+        "",
+        f"{WEATHER_TEXTS[6]}",
+        "전기 타입 기술 데미지 X1.5",
+        "",
+        f"{WEATHER_TEXTS[7]}",
+        "풀 타입 기술 데미지 X1.5",
+        "땅 타입 기술 데미지 X0.5",
+        "모든 포켓몬 매 턴마다 1/8의 체력 회복",
+        "",
+        f"{WEATHER_TEXTS[8]}",
+        "페어리 타입 기술 데미지 X1.5",
+        "드래곤 타입 기술 데미지 X0.5",
+        "",
+        f"{WEATHER_TEXTS[9]}",
+        "불 타입 기술 데미지 X2",
+        "물 타입 기술 무효화",
+        "",
+        f"{WEATHER_TEXTS[10]}",
+        "물 타입 기술 데미지 X2",
+        "불 타입 기술 무효화",
+        ""
+    ])
     
     chat.reply(res)
 

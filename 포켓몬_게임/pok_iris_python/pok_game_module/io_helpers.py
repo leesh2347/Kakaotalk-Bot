@@ -556,6 +556,12 @@ def printability(ability):
         res = f"특성: [그래스메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[7]}] 상태로 만든다.\n"
     elif ability == 13:
         res = f"특성: [미스트메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[8]}] 상태로 만든다.\n"
+    elif ability == 14:
+        res = f"특성: [질풍날개]\n-모든 비행 타입 기술이 우선도+1로 판정된다.\n"
+    elif ability == 15:
+        res = f"특성: [변환자재]\n-매 턴마다 자신이 사용하는 기술의 타입으로 변한다.\n"
+    elif ability == 16:
+        res = f"특성: [화학변화가스]\n-배틀에 등장 시 상대의 특성을 없앤다.\n"
 
     return res
 

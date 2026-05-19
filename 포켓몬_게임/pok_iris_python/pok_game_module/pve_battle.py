@@ -65,6 +65,10 @@ def apply_metamong_transform(pok, opponent_pok, weather):
     #미스트메이커
     if pok["ability"] == 13:
         weather = 8
+
+    #화학변화가스
+    if pok["ability"] == 16:
+        opponent_pok["ability"] = 0
     return weather
 
 # Per-player battle state dict (similar to advOn[sender])
@@ -778,8 +782,15 @@ def battle_loop(chat, sender):
         if state['weather'] != 5:
             if skill1_data:
                 player1spd += (skill1_data.get("priority") or 0) * 2
+                #특성 질풍날개
+                if state['player1pok']['ability'] == 14 and (skill1_data.get("type") or 1) == 5:
+                    player1spd += 2
+
             if skill2_data:
                 player2spd += (skill2_data.get("priority") or 0) * 2
+                #특성 질풍날개
+                if state['player2pok']['ability'] == 14 and (skill2_data.get("type") or 1) == 5:
+                    player2spd += 2
 
         if player1spd > player2spd:
             execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'])
