@@ -5,7 +5,18 @@ import time
 from .config import SETTING, TRAINER_RAN_POKS, TYPE_TEXTS, WEATHER_TEXTS, WEATHER_DESC, BALL_ARR
 from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_image, pokimglink
 from .champion import newChampion
-from .explore import advOn
+from .explore import advOn, get_day_or_night
+
+def handle_battle_first_weather:
+    day_or_night = get_day_or_night()
+    if random.randint(1, 3) == 1:
+        if day_or_night == 'day':
+            return random.choice([1,2,6,7])
+        else:
+            return random.choice([3,4,5,8])
+    else:
+        return 0
+
 
 def apply_metamong_transform(pok, opponent_pok, weather):
     """배틀 시작 시 특성 적용 함수"""
@@ -203,10 +214,7 @@ def handle_gym(sender, chat, args=None):
         state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
     #날씨
-    if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 8)
-    else:
-        state['weather'] = 0
+    state['weather'] = handle_battle_first_weather()
 
     #특성 발동
     state['weather'] = apply_metamong_transform(state['player1pok'], state['player2pok'],state['weather'])
@@ -380,10 +388,7 @@ def handle_villain(sender, chat, args=None):
         state['player2pok']["ability"] = read_json(f"포켓몬/{state['player2pok']['name']}", "ability") or 0
 
     #날씨
-    if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 8)
-    else:
-        state['weather'] = 0    
+    state['weather'] = handle_battle_first_weather()
 
     #특성 발동
     state['weather'] = apply_metamong_transform(state['player1pok'], state['player2pok'],state['weather'])

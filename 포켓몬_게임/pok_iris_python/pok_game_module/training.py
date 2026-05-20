@@ -1227,6 +1227,15 @@ def handle_egg(sender, chat):
     # Remove egg
     pokInv["item"].remove("일반알")
     
+    #shiny determine
+    shiny = 0
+
+    shiny_prob = 3 * SETTING['eventp']['shiny']
+
+    shr = random.randint(1, 1000)
+    if shr < shiny_prob:
+        shiny = 1
+
     # Roll for rarity
     rann = random.randint(0, 99)
     
@@ -1281,7 +1290,7 @@ def handle_egg(sender, chat):
         'skills': caughtpokskills,
         'skillslocked': [],
         'formchange': 0,
-        'shiny':0,
+        'shiny':shiny,
         'v': 0,
         'islocked': islocked_val
     }
@@ -1360,7 +1369,16 @@ def handle_legendegg(sender, chat):
     
     # Remove egg
     pokInv["item"].remove("전설알")
-    
+
+    #shiny determine
+    shiny = 0
+
+    shiny_prob = 3 * SETTING['eventp']['shiny']
+
+    shr = random.randint(1, 1000)
+    if shr < shiny_prob:
+        shiny = 1
+
     # Roll for rarity (better rates than regular egg)
     rann = random.randint(0, 99)
     
@@ -1412,7 +1430,7 @@ def handle_legendegg(sender, chat):
         'skills': caughtpokskills,
         'skillslocked': [],
         'formchange': 0,
-        'shiny':0,
+        'shiny':shiny,
         'v': 0,
         'islocked': islocked_val
     }

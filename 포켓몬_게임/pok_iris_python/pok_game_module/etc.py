@@ -18,15 +18,15 @@ def handle_eventinfo(sender, chat):
         res += f"??? 포켓몬 출현률 +{eventp['unknown']}%\n"
         has_event = True
     if eventp.get("shiny", 1) > 1:
-        res += f"색이 다른 포켓몬 출현확률 x{eventp['shiny']}배\n"
+        res += f"✨색이 다른 포켓몬 출현률 x{eventp['shiny']}배\n"
         has_event = True
     if eventp.get("g6", 0) > 0:
-        res += f"패러독스 출현률 +{eventp['g6']}%\n"
+        res += f"⏳️패러독스 출현률 +{eventp['g6']}%\n"
     if eventp.get("g5", 0) > 0:
-        res += f"울트라비스트 출현률 +{eventp['g5']}%\n"
+        res += f"🦄울트라비스트 출현률 +{eventp['g5']}%\n"
         has_event = True
     if eventp.get("g4", 0) > 0:
-        res += f"전설 포켓몬 출현률 +{eventp['g4']}%\n"
+        res += f"⭐전설/환상 포켓몬 출현률 +{eventp['g4']}%\n"
         has_event = True
     if eventp.get("g3", 0) > 0:
         res += f"레어 포켓몬 출현률 +{eventp['g3']}%\n"

@@ -102,10 +102,7 @@ def handle_champ(sender, chat, args=None):
     player2pok = state['player2pok']
 
     #날씨
-    if random.randint(1, 3) == 1:
-        state['weather'] = random.randint(1, 8)
-    else:
-        state['weather'] = 0
+    state['weather'] = pve_battle.handle_battle_first_weather()
 
     #특성 발동
     state['weather'] = pve_battle.apply_metamong_transform(player1pok, player2pok,state['weather'])
