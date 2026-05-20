@@ -4,7 +4,7 @@
 from .pok_game_module.config import *
 from .pok_game_module.io_helpers import *
 from .pok_game_module.join_leave import pokjoin, pokleave
-from .pok_game_module.explore import handle_explore, advOn, pokdelay
+from .pok_game_module.explore import handle_explore, advOn, pokdelay, get_day_or_night
 from .pok_game_module.catch import handle_ballthrow, handle_escape
 from .pok_game_module.player_info import handle_info, handle_box, handle_pokinfo, handle_dpokinfo, handle_pokdictionary
 from .pok_game_module.training import (
@@ -474,30 +474,37 @@ def handle_message(chat):
         return
 
     if msg == CMDS['explorehelp']:
+        day_or_night = get_day_or_night()
+
+        daytext = "낮"
+        if day_or_night == "night":
+            daytext = "밤"
+
         help_text = "\n".join([
             "포켓몬 게임 탐험 관련 정보",
             "\u200b"*500,
             "[그룹별 등장 포켓몬]",
+            f"(현재 시각: {daytext})",
             "<일반>",
-            f"{', '.join(POK_ARR['group1'])}",
+            f"{', '.join(POK_ARR['group1'][day_or_night])}",
             "",
             "<고급>",
-            f"{', '.join(POK_ARR['group2'])}",
+            f"{', '.join(POK_ARR['group2'][day_or_night])}",
             "",
             "<레어>",
-            f"{', '.join(POK_ARR['group3'])}",
+            f"{', '.join(POK_ARR['group3'][day_or_night])}",
             "",
             "<⭐전설/환상⭐>",
-            f"{', '.join(POK_ARR['group4'])}",
+            f"{', '.join(POK_ARR['group4'][day_or_night])}",
             "",
             "<🦄울트라비스트🦄>",
-            f"{', '.join(POK_ARR['group5'])}",
+            f"{', '.join(POK_ARR['group5'][day_or_night])}",
             "",
             "<⏳️패러독스⏳️>",
-            f"{', '.join(POK_ARR['group6'])}",
+            f"{', '.join(POK_ARR['group6'][day_or_night])}",
             "",
             "<???>",
-            f"{', '.join(POK_ARR['groupunknown'])}",
+            f"{', '.join(POK_ARR['groupunknown'][day_or_night])}",
             "",
             "※<???> 그룹은 계정 스탯 관계없이 1% 확률로 고정 출현하며, 이벤트 등 한정으로 출시하는 포켓몬도 이 그룹에 추가되게 됩니다.",
             "",
