@@ -476,9 +476,9 @@ def handle_message(chat):
     if msg == CMDS['explorehelp']:
         day_or_night = get_day_or_night()
 
-        daytext = "낮"
+        daytext = "☀️낮"
         if day_or_night == "night":
-            daytext = "밤"
+            daytext = "🌜밤"
 
         help_text = "\n".join([
             "포켓몬 게임 탐험 관련 정보",
@@ -508,6 +508,10 @@ def handle_message(chat):
             "",
             "※<???> 그룹은 계정 스탯 관계없이 1% 확률로 고정 출현하며, 이벤트 등 한정으로 출시하는 포켓몬도 이 그룹에 추가되게 됩니다.",
             "",
+            "※낮/밤 구분 기준",
+            "☀️낮: 현실 시간 07시~19시",
+            "🌜밤: 현실 시간 19시~07시",
+            "(낮과 밤은 서로 출현 포켓몬 목록이 다릅니다.)",
             "",
             "[그룹별 포켓몬 도주(포획 실패) 확률]",
             f"일반: {SETTING['run'][5]}%",
