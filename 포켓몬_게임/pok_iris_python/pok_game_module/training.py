@@ -579,7 +579,7 @@ def handle_mega(sender, chat, args=None):
         chat.reply(f'@{sender}\n메가진화는 레벨 {SETTING['mega_reqlev']} 이상이어야 해요!')
         return
     
-    if p["name"] in POK_ARR['group4']:
+    if p["name"] in POK_ARR['group4']['day'] or p["name"] in POK_ARR['group4']['night']:
         skillcosts = SETTING["mega_legend_gold"]
     else:
         skillcosts = SETTING["mega_gold"]
@@ -687,7 +687,7 @@ def handle_gmax(sender, chat, args=None):
         chat.reply(f'@{sender}\n거다이맥스는 레벨 {SETTING['mega_reqlev']} 이상이어야 해요!')
         return
     
-    if p["name"] in POK_ARR['group4']:
+    if p["name"] in POK_ARR['group4']['day'] or p["name"] in POK_ARR['group4']['night']:
         skillcosts = SETTING["mega_legend_gold"]
     else:
         skillcosts = SETTING["mega_gold"]
@@ -783,7 +783,7 @@ def handle_formchange(sender, chat, args=None):
     
     # Cost
 
-    if p["name"] in POK_ARR['group4'] or p["name"] in POK_ARR['groupunknown'] or p["name"] in GMAX_AFTER_NAMES:
+    if p["name"] in POK_ARR['group4']['day'] or p["name"] in POK_ARR['group4']['night'] or p["name"] in POK_ARR['groupunknown']['day']or p["name"] in POK_ARR['groupunknown']['night'] or p["name"] in GMAX_AFTER_NAMES:
         skillcosts = SETTING['formchange_legend_gold']
     else:
         skillcosts = SETTING['formchange_gold']
@@ -1026,10 +1026,12 @@ def handle_sell(sender, chat, args=None):
             # This is an unlocked Pokemon in the sell range - sell it!
             pokmoney = 3000 * pok["level"] ** 2
 
-            if pok["name"] in POK_ARR["group4"] or pok["name"] == "다부니":
+            if pok["name"] in POK_ARR["group4"]['day'] or pok["name"] in POK_ARR["group4"]['night'] or pok["name"] == "다부니":
                 pokmoney *= 5
-            elif pok["name"] in MEGA_AFTER_NAMES or pok["name"] in POK_ARR["group5"]:
+            elif pok["name"] in MEGA_AFTER_NAMES or pok["name"] in GMAX_AFTER_NAMES or pok["name"] in POK_ARR["group5"]['day']or pok["name"] in POK_ARR["group5"]['night']:
                 pokmoney *= 10
+            elif pok["name"] in POK_ARR["group6"]['day'] or pok["name"] in POK_ARR["group6"]['night']:
+                pokmoney *= 15
 
             money += pokmoney
 
@@ -1230,19 +1232,19 @@ def handle_egg(sender, chat):
     
     if rann == 1:
         islegend = 3  # Unknown
-        pokname = random.choice(POK_ARR["groupunknown"])
+        pokname = random.choice(POK_ARR["groupunknown"]['day'] + POK_ARR["groupunknown"]['night'])
     elif rann < 2:
         islegend = 4  # paradox
-        pokname = random.choice(POK_ARR["group6"])
+        pokname = random.choice(POK_ARR["group6"]['day'] + POK_ARR["group6"]['night'])
     elif rann < 5:
         islegend = 2  # Ultrabeast
-        pokname = random.choice(POK_ARR["group5"])
+        pokname = random.choice(POK_ARR["group5"]['day'] + POK_ARR["group5"]['night'])
     elif rann < 22:
         islegend = 1  # Legendary
-        pokname = random.choice(POK_ARR["group4"])
+        pokname = random.choice(POK_ARR["group4"]['day'] + POK_ARR["group4"]['night'])
     else:
         islegend = 0  # Rare
-        pokname = random.choice(POK_ARR["group3"])
+        pokname = random.choice(POK_ARR["group3"]['day'] + POK_ARR["group3"]['night'])
     
     # Calculate level
     ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))
@@ -1364,16 +1366,16 @@ def handle_legendegg(sender, chat):
     
     if rann == 1:
         islegend = 3  # Unknown
-        pokname = random.choice(POK_ARR["groupunknown"])
+        pokname = random.choice(POK_ARR["groupunknown"]['day'] + POK_ARR["groupunknown"]['night'])
     elif rann < 2:
         islegend = 4  # paradox
-        pokname = random.choice(POK_ARR["group6"])
+        pokname = random.choice(POK_ARR["group6"]['day'] + POK_ARR["group6"]['night'])
     elif rann < 5:
         islegend = 2  # Ultrabeast
-        pokname = random.choice(POK_ARR["group5"])
+        pokname = random.choice(POK_ARR["group5"]['day'] + POK_ARR["group5"]['night'])
     else:
         islegend = 1  # Legendary (96% chance)
-        pokname = random.choice(POK_ARR["group4"])
+        pokname = random.choice(POK_ARR["group4"]['day'] + POK_ARR["group4"]['night'])
     
     # Calculate level
     ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))

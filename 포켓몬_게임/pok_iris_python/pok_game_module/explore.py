@@ -5,11 +5,21 @@ import math
 from .config import SETTING, POK_ARR, SEASONS, ADV_FAIL, BALL_ARR, CMDS
 from .io_helpers import read_json, write_json, pokimglink, send_image
 
+from datetime import datetime
+
 # Global state for exploration
 ispokfind = []
 battlepokinfo = []
 advOn = {}
 pokdelay = {}
+
+def get_day_or_night():
+    current_hour = datetime.now().hour
+
+    if 7 <= current_hour < 19:
+        return "day"
+    else:
+        return "night"
 
 def handle_explore(sender, room, chat):
     """Handle exploration command (@야생/ㅇㅅ)"""
@@ -144,8 +154,11 @@ def handle_explore(sender, room, chat):
     
     #shiny determine
     shiny = 0
+
+    shiny_prob = 3 * SETTING['eventp']['shiny']
+
     shr = random.randint(1, 1000)
-    if shr < 4:
+    if shr < shiny_prob:
         shiny = 1
 
     # Display message based on rarity
@@ -158,17 +171,17 @@ def handle_explore(sender, room, chat):
 
     particle += '(이)가'
     
-    if pokname in POK_ARR['groupunknown']:
+    if pokname in POK_ARR['groupunknown']['day'] or pokname in POK_ARR['groupunknown']['night']:
         chat.reply(f"@{sender}\n❗ <???> {pokname}{particle} 나타났어요!")
-    elif pokname in POK_ARR['group6']:
+    elif pokname in POK_ARR['group6']['day'] or pokname in POK_ARR['group6']['night']:
         chat.reply(f"@{sender}\n❗ <⏳️패러독스⏳️> {pokname}{particle} 나타났어요!")
-    elif pokname in POK_ARR['group5']:
+    elif pokname in POK_ARR['group5']['day'] or pokname in POK_ARR['group5']['night']:
         chat.reply(f"@{sender}\n❗ <🦄울트라비스트🦄> {pokname}{particle} 나타났어요!")
-    elif pokname in POK_ARR['group4']:
+    elif pokname in POK_ARR['group4']['day'] or pokname in POK_ARR['group4']['night']:
         chat.reply(f"@{sender}\n❗ <⭐전설/환상⭐> {pokname}{particle} 나타났어요!")
-    elif pokname in POK_ARR['group3']:
+    elif pokname in POK_ARR['group3']['day'] or pokname in POK_ARR['group3']['night']:
         chat.reply(f"@{sender}\n❗ [레어] 야생의 {pokname}{particle} 나타났어요!")
-    elif pokname in POK_ARR['group2']:
+    elif pokname in POK_ARR['group2']['day'] or pokname in POK_ARR['group2']['night']:
         chat.reply(f"@{sender}\n❗ [고급] 야생의 {pokname}{particle} 나타났어요!")
     else:
         chat.reply(f"@{sender}\n❗ [일반] 야생의 {pokname}{particle} 튀어나왔어요!")
@@ -219,21 +232,23 @@ def get_prob(sender, pokUser):
     r = random.randint(1, 100)
     ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))
     
+    gunknown_rate = 1 + SETTING["eventp"]['unknown']
+
     # Probability calculation
-    g6_rate = SETTING["p"]["g6"] + SETTING["ballg6"][ball_idx] + pokUser.get("stat", {}).get("g6", 0.1)
-    g5_rate = SETTING["p"]["g5"] + SETTING["ballg5"][ball_idx] + pokUser.get("stat", {}).get("g5", 0.1)
-    g4_rate = SETTING["p"]["g4"] + SETTING["ballg4"][ball_idx] + pokUser.get("stat", {}).get("g4", 0.1)
-    g3_rate = SETTING["p"]["g3"] + SETTING["ballg3"][ball_idx] + pokUser.get("stat", {}).get("g3", 0.1)
+    g6_rate = SETTING["p"]["g6"] + SETTING["ballg6"][ball_idx] + pokUser.get("stat", {}).get("g6", 0.1)+ SETTING["eventp"]['g6']
+    g5_rate = SETTING["p"]["g5"] + SETTING["ballg5"][ball_idx] + pokUser.get("stat", {}).get("g5", 0.1)+ SETTING["eventp"]['g5']
+    g4_rate = SETTING["p"]["g4"] + SETTING["ballg4"][ball_idx] + pokUser.get("stat", {}).get("g4", 0.1)+ SETTING["eventp"]['g4']
+    g3_rate = SETTING["p"]["g3"] + SETTING["ballg3"][ball_idx] + pokUser.get("stat", {}).get("g3", 0.1)+ SETTING["eventp"]['g3']
     
-    if r <= 1:
+    if r <= gunknown_rate:
         return 99  # ???
-    elif r <= g6_rate + 1:
+    elif r <= g6_rate + gunknown_rate:
         return 8  # paradox
-    elif r <= g6_rate + g5_rate + 1:
+    elif r <= g6_rate + g5_rate + gunknown_rate:
         return 3  # Ultra Beast
-    elif r <= g6_rate + g5_rate + g4_rate + 1:
+    elif r <= g6_rate + g5_rate + g4_rate + gunknown_rate:
         return 4  # Legendary
-    elif r <= g6_rate + g5_rate + g4_rate + g3_rate + 1:
+    elif r <= g6_rate + g5_rate + g4_rate + g3_rate + gunknown_rate:
         return 5  # Rare
     elif r <= 50:
         return 6  # Common
@@ -245,18 +260,20 @@ def get_prob(sender, pokUser):
 def get_pokemon_name(prob, pokUser):
     """Get Pokemon name based on probability"""
     from .config import SEASONS
+
+    day_or_night = get_day_or_night()
     
     if prob == 99:
-        return random.choice(POK_ARR['groupunknown'])
+        return random.choice(POK_ARR['groupunknown'][day_or_night])
     elif prob == 8:
-        return random.choice(POK_ARR['group6'])
+        return random.choice(POK_ARR['group6'][day_or_night])
     elif prob == 3:
-        return random.choice(POK_ARR['group5'])
+        return random.choice(POK_ARR['group5'][day_or_night])
     elif prob == 4:
-        return random.choice(POK_ARR['group4'])
+        return random.choice(POK_ARR['group4'][day_or_night])
     elif prob == 5:
-        return random.choice(POK_ARR['group3'])
+        return random.choice(POK_ARR['group3'][day_or_night])
     elif prob == 6:
-        return random.choice(POK_ARR['group2'])
+        return random.choice(POK_ARR['group2'][day_or_night])
     else:
-        return random.choice(POK_ARR['group1'])
+        return random.choice(POK_ARR['group1'][day_or_night])

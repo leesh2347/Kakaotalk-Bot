@@ -61,22 +61,22 @@ def handle_ballthrow(sender, chat):
     ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))
 
     # Determine group for catch rate
-    if pokname in POK_ARR['groupunknown']:
+    if pokname in POK_ARR['groupunknown']['day'] or pokname in POK_ARR['groupunknown']['night']:
         group = 99
         catch_rate = 20  # Unknown group fixed rate
-    elif pokname in POK_ARR['group6']:
+    elif pokname in POK_ARR['group6']['day'] or pokname in POK_ARR['group6']['night']:
         group = 6
         catch_rate = pokUser.get("successcatch", {}).get("g6", 1)
-    elif pokname in POK_ARR['group5']:
+    elif pokname in POK_ARR['group5']['day'] or pokname in POK_ARR['group5']['night']:
         group = 5
         catch_rate = pokUser.get("successcatch", {}).get("g5", 1)
-    elif pokname in POK_ARR['group4']:
+    elif pokname in POK_ARR['group4']['day'] or pokname in POK_ARR['group4']['night']:
         group = 4
         catch_rate = pokUser.get("successcatch", {}).get("g4", 1)
-    elif pokname in POK_ARR['group3']:
+    elif pokname in POK_ARR['group3']['day'] or pokname in POK_ARR['group3']['night']:
         group = 3
         catch_rate = pokUser.get("successcatch", {}).get("g3", 1)
-    elif pokname in POK_ARR['group2']:
+    elif pokname in POK_ARR['group2']['day'] or pokname in POK_ARR['group2']['night']:
         group = 2
         catch_rate = pokUser.get("successcatch", {}).get("g2", 1)
     else:
@@ -212,7 +212,7 @@ def handle_ballthrow(sender, chat):
         pokname = pokinfo['name']
 
         # Determine flee probability based on group
-        if pokname in RUN_POKS or pokname in POK_ARR['groupunknown']:
+        if pokname in RUN_POKS or pokname in POK_ARR['groupunknown']['day'] or POK_ARR['groupunknown']['night']:
             runprob = 90
         else:
             # mapping: group 5→0, 4→1, 3→2, 2→3, 1→4

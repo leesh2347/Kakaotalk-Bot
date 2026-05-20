@@ -17,11 +17,13 @@ def handle_eventinfo(sender, chat):
     if eventp.get("unknown", 0) > 0:
         res += f"??? 포켓몬 출현률 +{eventp['unknown']}%\n"
         has_event = True
-    if eventp.get("gatcha", 0) > 0:
-        res += f"제비뽑기 추가 횟수 +{eventp['gatcha']}회\n"
+    if eventp.get("shiny", 1) > 1:
+        res += f"색이 다른 포켓몬 출현확률 x{eventp['shiny']}배\n"
         has_event = True
-    if eventp.get("villain", 0) > 0:
-        res += f"악의조직 추가 횟수 +{eventp['villain']}회\n"
+    if eventp.get("g6", 0) > 0:
+        res += f"패러독스 출현률 +{eventp['g6']}%\n"
+    if eventp.get("g5", 0) > 0:
+        res += f"울트라비스트 출현률 +{eventp['g5']}%\n"
         has_event = True
     if eventp.get("g4", 0) > 0:
         res += f"전설 포켓몬 출현률 +{eventp['g4']}%\n"
