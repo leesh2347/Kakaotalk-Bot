@@ -252,11 +252,6 @@ def handle_leaguechar(sender, chat):
     
     chat.reply(res)
 
-def handle_palpark(sender, chat):
-    """Handle Pal Park command (@팔파크)"""
-    # TODO: Implement Pal Park
-    chat.reply(f"@{sender}\n팔파크 기능은 준비 중입니다.")
-
 def handle_getzskill(sender, chat):
     """Handle Z-Skill command (@Z기술)"""
     # TODO: Implement Z-Skill

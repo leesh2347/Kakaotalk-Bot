@@ -2,7 +2,7 @@
 import time
 import random
 import math
-from .config import SETTING, POK_ARR, SEASONS, ADV_FAIL, BALL_ARR, CMDS
+from .config import SETTING, POK_ARR, SEASONS, ADV_FAIL, BALL_ARR, CMDS, PALPARK_BANNED_POKS, MEGA_AFTER_NAMES, GMAX_AFTER_NAMES
 from .io_helpers import read_json, write_json, pokimglink, send_image
 
 from datetime import datetime
@@ -277,3 +277,122 @@ def get_pokemon_name(prob, pokUser):
         return random.choice(POK_ARR['group2'][day_or_night])
     else:
         return random.choice(POK_ARR['group1'][day_or_night])
+
+def handle_palpark(sender, room, chat, args=None):
+    """Handle Pal Park command (@팔파크)"""
+
+    if args is None:
+        chat.reply(f'@{sender}\n사용법: {CMDS["palpark"]} [포켓몬이름]')
+        return
+
+    if args in PALPARK_BANNED_POKS or args in MEGA_AFTER_NAMES or args in GMAX_AFTER_NAMES:
+        chat.reply(f'@{sender}\n팔파크는 탐험으로 발견 가능한 포켓몬에만 사용할 수 있어요!')
+        return
+
+    if read_json(f"포켓몬/{args}") is None:
+        chat.reply(f'@{sender}\n팔파크는 탐험으로 발견 가능한 포켓몬에만 사용할 수 있어요!')
+        return
+
+    # Check maintenance mode
+    from .maintenance import check_updating
+    if not check_updating(sender, chat):
+        return
+
+    pokUser = read_json(f"player_{sender}")
+
+    pokInv = read_json(f"player_{sender}_inv")
+
+    if pokUser is None or pokInv is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.\n"{CMDS["join"]}"으로 회원가입부터 진행해 주세요.')
+        return
+    
+    if sender not in advOn:
+        advOn[sender] = 0
+    
+    if advOn[sender] != 0:
+        chat.reply(f'@{sender}\n먼저 진행중이던 탐험이나 배틀을 끝내 주세요!')
+        return
+
+    if pokUser.get("balls", 0) <= 0:
+        chat.reply(f'@{sender} \n볼이 없는 상태에선 팔파크 티켓을 사용할 수 없어요.\n"{CMDS["ball"]}" 을 통해 볼을 구매해 주세요.')
+        return
+    
+    # Ensure item list exists
+    if "item" not in pokInv:
+        pokInv["item"] = []
+        write_json(f"player_{sender}_inv", pokInv)
+
+    if "팔파크티켓" not in pokInv.get("item", []):
+        chat.reply(f'@{sender}\n보유하고 있는 팔파크 티켓이 없어요!')
+        return
+    
+    # Remove ticket
+    pokInv["item"].remove("팔파크티켓")
+
+    lev = SETTING["minlevel"] + (BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0])) + 1) * SETTING["balluplev"]
+    lev = lev + random.randint(1, 10)
+    
+    #shiny determine
+    shiny = 0
+
+    shiny_prob = 3 * SETTING['eventp']['shiny']
+
+    shr = random.randint(1, 1000)
+    if shr < shiny_prob:
+        shiny = 1
+
+    # Display message based on rarity
+    lt = len(args) - 1
+
+    particle = ''
+
+    if shiny > 0:
+        particle += '✨'
+
+    #particle += '(이)가'
+
+    chat.reply(f"@{sender}\n팔파크 티켓 사용.\n{args}{particle} 포획 도전!")
+    
+    pokUser["count"] = pokUser.get("count", {"total": 0, "succ": 0})
+    pokUser["count"]["total"] = pokUser["count"].get("total", 0) + 1
+
+    pokinfo = {'name': args, 'level': lev, 'shiny':shiny}
+    ispokfind.append(sender)
+    battlepokinfo.append(pokinfo)
+    advOn[sender] = 2
+
+    # Save state immediately in case of error
+    try:
+        # Re-read to get current ball count before writing (balls may have been decremented by throws)
+        current_pokUser = read_json(f"player_{sender}")
+        if current_pokUser:
+            pokUser["balls"] = current_pokUser.get("balls", pokUser.get("balls", 0))
+            pokUser["gold"] = current_pokUser.get("gold", pokUser.get("gold", 0))
+        
+        write_json(f"player_{sender}", pokUser)
+        write_json(f"player_{sender}_inv", pokInv)
+    except Exception as e:
+        # Force cleanup on error
+        ispokfind.remove(sender)
+        battlepokinfo.pop(len(battlepokinfo) - 1)
+        advOn[sender] = 0
+        print(f"Error in exploration: {e}")
+        return
+    
+    # Send image via KakaoTalk link
+    try:
+        img = pokimglink(args, 0, pokinfo.get("shiny", 0))
+        poklink = f"ko/wiki/{args}_(포켓몬)"
+        
+        send_image(room, chat, 58796, {
+            'POKIMG': img,
+            'shiny':pokinfo.get("shiny", shiny),
+            'POKNAME': f"Lv.{lev}  {args}",
+            'DESC': f"도감 검색: {CMDS.get('dic', ['@도감'])} [포켓몬이름]\n볼던지기: {','.join(CMDS.get('ballthrow', ['@볼']))}        도망가기: {','.join(CMDS.get('esc', ['@도망']))}",
+            'LINK': poklink
+        })
+    except Exception as e:
+        print(e)
+        chat.reply(f"카카오링크 오류. 리셋 한번 해주세요.\n(볼은 던질수 있음)\n\nLv.{lev}  {args}\n볼던지기: {','.join(CMDS.get('ballthrow', ['@볼']))}\n도망가기: {','.join(CMDS.get('esc', ['@도망']))}")
+
+

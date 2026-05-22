@@ -7,7 +7,7 @@ from .io_helpers import read_json, write_json, typejudge, weatherjudge, send_ima
 from .champion import newChampion
 from .explore import advOn, get_day_or_night
 
-def handle_battle_first_weather:
+def handle_battle_first_weather():
     day_or_night = get_day_or_night()
     if random.randint(1, 3) == 1:
         if day_or_night == 'day':
