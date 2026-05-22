@@ -4,7 +4,7 @@
 from .pok_game_module.config import *
 from .pok_game_module.io_helpers import *
 from .pok_game_module.join_leave import pokjoin, pokleave
-from .pok_game_module.explore import handle_explore, advOn, pokdelay, get_day_or_night
+from .pok_game_module.explore import handle_explore, advOn, pokdelay, get_day_or_night, handle_palpark
 from .pok_game_module.catch import handle_ballthrow, handle_escape
 from .pok_game_module.player_info import handle_info, handle_box, handle_pokinfo, handle_dpokinfo, handle_pokdictionary
 from .pok_game_module.training import (
@@ -282,6 +282,10 @@ def handle_message(chat):
 
     if msg == CMDS['leaguechar']:
         handle_leaguechar(sender, chat)
+        return
+
+    if msg_first == CMDS['palpark']:
+        handle_palpark(sender, room, chat, msg[len(msg_first):].strip())
         return
 
     # ========================================================================
