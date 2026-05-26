@@ -10,12 +10,12 @@ from .pok_game_module.player_info import handle_info, handle_box, handle_pokinfo
 from .pok_game_module.training import (
     handle_levelup, handle_boxlevelup, handle_skillchange, handle_effort, handle_mega, handle_gmax,
     handle_formchange, handle_lock, handle_unlock, handle_sell,
-    handle_swap, handle_rest, handle_egg, handle_legendegg,
+    handle_swap, handle_rest, handle_egg, handle_legendegg, handle_goldenegg,
     handle_boxlock, handle_boxunlock, handle_skilllock, handle_skillunlock
 )
 from .pok_game_module.rank_up import handle_ballup, handle_ballinfo, handle_title, handle_ball_purchase
 from .pok_game_module.battle import handle_battlejoin, handle_battleexit, handle_battlenext, handle_giveup
-from .pok_game_module.pve_battle import handle_gym, handle_villain, handle_ranking_battle
+from .pok_game_module.pve_battle import handle_gym, handle_villain, handle_ranking_battle, handle_ranking_settlement
 from .pok_game_module.champion import handle_champ, handle_champinfo
 from .pok_game_module.collection import handle_mycollection, handle_collectioninfo, handle_collectioneffects
 from .pok_game_module.etc import handle_eventinfo, handle_ribbon, handle_rank, handle_seasoninfo, handle_leaguechar, handle_pokemon_ranking
@@ -172,6 +172,10 @@ def handle_message(chat):
         handle_egg(sender, chat)
         return
 
+    if msg == CMDS['shinyegg']:
+        handle_goldenegg(sender, chat)
+        return
+
     if msg == CMDS['legendegg']:
         handle_legendegg(sender, chat)
         return
@@ -227,6 +231,10 @@ def handle_message(chat):
 
     if msg == CMDS['rankingbattle']:
         handle_ranking_battle(sender, chat)
+        return
+
+    if msg == CMDS['rankingsettle']:
+        handle_ranking_settlement(sender, chat)
         return
 
     # ========================================================================
