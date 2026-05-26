@@ -1,5 +1,5 @@
 # Module 11: Collection (Pokedex)
-from .config import SETTING, COLLECTION_NAMES, COLLECTION_CONTENTS, COLLECTION_EFFECTS_DATA
+from .config import SETTING, COLLECTION_NAMES, COLLECTION_CONTENTS, COLLECTION_EFFECTS_DATA, COLLECTION_TRAINER_CONTENTS
 from .io_helpers import read_json, write_json
 
 def handle_mycollection(sender, chat):
@@ -20,8 +20,9 @@ def handle_mycollection(sender, chat):
         collected = pokCol.get(name, [])
         total = len(COLLECTION_CONTENTS[idx])
         count = len(collected)
-
         res += f"[{name}] {count}/{total}\n"
+
+    res += f"[악의조직] {len(pokCol.get('악의조직', []))}/{len(COLLECTION_TRAINER_CONTENTS[0])}\n"
 
     # Show active collection effects
     activecollection = pokUser.get("activecollection", [])
@@ -59,6 +60,9 @@ def handle_mycollection(sender, chat):
         else:
             res += "아직 등록한 포켓몬이 없어요!\n"
 
+    res += f"\n[악의조직]\n"
+    res += ", ".join(pokCol.get('악의조직', [])) + ",\n"
+
     chat.reply(res)
 
 def handle_collectioninfo(sender, chat):
@@ -79,6 +83,9 @@ def handle_collectioninfo(sender, chat):
             chunk = contents[i:i+10]
             res += ", ".join(chunk) + ",\n"
         res += "\n"
+
+    res += f"[악의조직] {len(COLLECTION_TRAINER_CONTENTS[0])}명\n"
+    res += ", ".join(COLLECTION_TRAINER_CONTENTS[0]) + ",\n"
     
     chat.reply(res)
 

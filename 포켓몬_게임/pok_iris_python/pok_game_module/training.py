@@ -1229,12 +1229,14 @@ def handle_egg(sender, chat):
     
     #shiny determine
     shiny = 0
+    shinymsg = ""
 
     shiny_prob = 3 * SETTING['eventp']['shiny']
 
     shr = random.randint(1, 1000)
     if shr < shiny_prob:
         shiny = 1
+        shinymsg = "✨"
 
     # Roll for rarity
     rann = random.randint(0, 99)
@@ -1331,15 +1333,150 @@ def handle_egg(sender, chat):
     
     # Reply based on rarity
     if islegend == 3:
-        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 4:
-        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 2:
-        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 1:
-        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     else:
-        chat.reply(f"@{sender}\n축하합니다! [레어] {pokname}이(가) 알에서 나왔어요!")
+        chat.reply(f"@{sender}\n축하합니다! [레어] {pokname}{shinymsg}이(가) 알에서 나왔어요!")
+
+def handle_goldenegg(sender, chat):
+    """Handle egg hatch command (@황금알)"""
+    """일반알과 기능 동일, 단 이로치 확정"""
+    pokUser = read_json(f"player_{sender}")
+    if pokUser is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    from .explore import advOn
+    if advOn.get(sender, 0) != 0:
+        chat.reply(f'@{sender}\n먼저 하고 있던 탐험이나 배틀을 끝내 주세요!')
+        return
+
+    pokInv = read_json(f"player_{sender}_inv")
+    if pokInv is None:
+        chat.reply(f'@{sender}\n가입 정보가 없습니다.')
+        return
+
+    # Ensure item list exists
+    if "item" not in pokInv:
+        pokInv["item"] = []
+        write_json(f"player_{sender}_inv", pokInv)
+
+    if "황금알" not in pokInv.get("item", []):
+        chat.reply(f'@{sender}\n가지고 있는 황금알이 없어요!')
+        return
+    
+    # Remove egg
+    pokInv["item"].remove("황금알")
+
+    # Roll for rarity
+    rann = random.randint(0, 99)
+    
+    if rann == 1:
+        islegend = 3  # Unknown
+        pokname = random.choice(POK_ARR["groupunknown"]['day'] + POK_ARR["groupunknown"]['night'])
+    elif rann < 2:
+        islegend = 4  # paradox
+        pokname = random.choice(POK_ARR["group6"]['day'] + POK_ARR["group6"]['night'])
+    elif rann < 5:
+        islegend = 2  # Ultrabeast
+        pokname = random.choice(POK_ARR["group5"]['day'] + POK_ARR["group5"]['night'])
+    elif rann < 22:
+        islegend = 1  # Legendary
+        pokname = random.choice(POK_ARR["group4"]['day'] + POK_ARR["group4"]['night'])
+    else:
+        islegend = 0  # Rare
+        pokname = random.choice(POK_ARR["group3"]['day'] + POK_ARR["group3"]['night'])
+    
+    # Calculate level
+    ball_idx = BALL_ARR.index(pokUser.get("Ball", BALL_ARR[0]))
+    poklev = (ball_idx + 1) * SETTING["balluplev"] + 10
+    
+    # Get skills
+    skillsarr = read_json(f"포켓몬/{pokname}", "skills") or []
+    caughtpokskills = []
+    
+    if len(skillsarr) < 5:
+        caughtpokskills = skillsarr[:]
+    else:
+        while len(caughtpokskills) < 4:
+            t = random.choice(skillsarr)
+            t = t.replace("DP", "").replace("Pt", "")
+            if t not in caughtpokskills:
+                caughtpokskills.append(t)
+    
+    # Create Pokemon
+    caughtpokhp = read_json(f"포켓몬/{pokname}", "hp") or 50
+    
+    # Set islocked based on rarity (group 4+ is locked)
+    islocked_val = 1 if islegend >= 1 else 0
+    
+    caughtpok = {
+        'name': pokname,
+        'level': poklev,
+        'hp': math.ceil(caughtpokhp * poklev / 50),
+        'atk': math.ceil((read_json(f"포켓몬/{pokname}", "atk") or 50) * poklev / 50),
+        'def': math.ceil((read_json(f"포켓몬/{pokname}", "def") or 50) * poklev / 50),
+        'satk': math.ceil((read_json(f"포켓몬/{pokname}", "satk") or 50) * poklev / 50),
+        'sdef': math.ceil((read_json(f"포켓몬/{pokname}", "sdef") or 50) * poklev / 50),
+        'spd': math.ceil((read_json(f"포켓몬/{pokname}", "spd") or 50) * poklev / 50),
+        'skills': caughtpokskills,
+        'skillslocked': [],
+        'formchange': 0,
+        'shiny':1,
+        'v': 0,
+        'islocked': islocked_val
+    }
+    
+    # Add to box
+    if "box" not in pokInv:
+        pokInv["box"] = []
+    pokInv["box"].append(caughtpok)
+    
+    # Register in collection
+    pokCol = read_json(f"player_{sender}_collection")
+    if pokCol is None:
+        from .config import COLLECTION_NAMES
+        pokCol = {name: [] for name in COLLECTION_NAMES}
+    
+    from .config import COLLECTION_NAMES, COLLECTION_CONTENTS
+    for ii in COLLECTION_NAMES:
+        idx = COLLECTION_NAMES.index(ii)
+        if pokname in COLLECTION_CONTENTS[idx]:
+            if ii not in pokCol:
+                pokCol[ii] = []
+            if pokname not in pokCol[ii]:
+                pokCol[ii].append(pokname)
+                chat.reply(f"@{sender}\n도감의 [{ii}] 에 새로운 포켓몬이 등록되었습니다.")
+            break
+    
+    write_json(f"player_{sender}_inv", pokInv)
+    write_json(f"player_{sender}_collection", pokCol)
+    
+    # Check for mega/gmax notification
+    noti_msg = ""
+    if pokname in MEGA_NAMES:
+        noti_msg += f"\n💎 {pokname}은(는) 메가진화 가능합니다 (@메가진화)"
+    if pokname in GMAX_NAMES:
+        noti_msg += f"\n🌟 {pokname}은(는) 거다이맥스 가능합니다 (@거다이맥스)"
+    if pokname in FORM_CHANGE_NAMES:
+        noti_msg += f"\n🔄 {pokname}은(는) 폼체인지 가능합니다 (@폼체인지)"
+    
+    # Reply based on rarity
+    if islegend == 3:
+        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}✨이(가) 알에서 나왔어요!{noti_msg}")
+    elif islegend == 4:
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}✨이(가) 알에서 나왔어요!{noti_msg}")
+    elif islegend == 2:
+        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}✨이(가) 알에서 나왔어요!{noti_msg}")
+    elif islegend == 1:
+        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}✨이(가) 알에서 나왔어요!{noti_msg}")
+    else:
+        chat.reply(f"@{sender}\n축하합니다! [레어] {pokname}✨이(가) 알에서 나왔어요!")
 
 def handle_legendegg(sender, chat):
     """Handle legendary egg hatch command (@전설알)"""
@@ -1372,12 +1509,14 @@ def handle_legendegg(sender, chat):
 
     #shiny determine
     shiny = 0
+    shinymsg = ""
 
     shiny_prob = 3 * SETTING['eventp']['shiny']
 
     shr = random.randint(1, 1000)
     if shr < shiny_prob:
         shiny = 1
+        shinymsg = "✨"
 
     # Roll for rarity (better rates than regular egg)
     rann = random.randint(0, 99)
@@ -1471,13 +1610,13 @@ def handle_legendegg(sender, chat):
     
     # Reply based on rarity
     if islegend == 3:
-        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <???> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 4:
-        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <⏳️패러독스⏳️> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     elif islegend == 2:
-        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <🦄울트라비스트🦄> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
     else:
-        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}이(가) 알에서 나왔어요!{noti_msg}")
+        chat.reply(f"@{sender}\n축하합니다! <⭐전설⭐> {pokname}{shinymsg}이(가) 알에서 나왔어요!{noti_msg}")
 
 def handle_boxlevelup(sender, chat, args=None):
     """Handle box level up command (@박스레벨업)"""

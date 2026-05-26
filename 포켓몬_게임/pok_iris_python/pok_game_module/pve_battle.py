@@ -20,17 +20,18 @@ def handle_battle_first_weather():
 
 def apply_metamong_transform(pok, opponent_pok, weather):
     """배틀 시작 시 특성 적용 함수"""
+    ability = pok.get("ability", 0) or 0
 
     #가뭄
-    if pok["ability"] == 1:
+    if ability == 1:
         weather = 1
     
     #잔비
-    if pok["ability"] == 2:
+    if ability == 2:
         weather = 2
 
     #특성 괴짜(메타몽)
-    if pok["ability"] == 3:
+    if ability == 3:
         pok["name"] = opponent_pok["name"]
         pok["atk"] = opponent_pok["atk"]
         pok["def"] = opponent_pok["def"]
@@ -38,47 +39,47 @@ def apply_metamong_transform(pok, opponent_pok, weather):
         pok["satk"] = opponent_pok["satk"]
         pok["sdef"] = opponent_pok["sdef"]
         pok["formchange"] = opponent_pok["formchange"]
-        pok["ability"] = opponent_pok["ability"]
+        pok["ability"] = opponent_pok.get("ability", 0) or 0
         pok["skills"] = opponent_pok["skills"][:]
 
     #에어록(날씨 제거)
-    if pok["ability"] == 5:
+    if ability == 5:
         weather = 0
 
     #끝의대지
-    if pok["ability"] == 6:
+    if ability == 6:
         weather = 9
 
     #시작의바다
-    if pok["ability"] == 7:
+    if ability == 7:
         weather = 10
 
     #모래날림
-    if pok["ability"] == 8:
+    if ability == 8:
         weather = 3
 
     #눈퍼트리기
-    if pok["ability"] == 9:
+    if ability == 9:
         weather = 4
 
     #사이코메이커
-    if pok["ability"] == 10:
+    if ability == 10:
         weather = 5
 
     #일렉트릭메이커
-    if pok["ability"] == 11:
+    if ability == 11:
         weather = 6
 
     #그래스메이커
-    if pok["ability"] == 12:
+    if ability == 12:
         weather = 7
 
     #미스트메이커
-    if pok["ability"] == 13:
+    if ability == 13:
         weather = 8
 
     #화학변화가스
-    if pok["ability"] == 16:
+    if ability == 16:
         opponent_pok["ability"] = 0
     return weather
 
@@ -596,6 +597,71 @@ def handle_ranking_battle(sender, chat):
 
     battle_loop(chat, sender)
 
+def handle_ranking_settlement(sender, chat):
+    '''랭킹 정산 명령어'''
+    from .maintenance import ADMIN_USER
+    if sender != ADMIN_USER:
+        chat.reply(f"@{sender}\n권한이 없습니다.\n(관리자: {ADMIN_USER})")
+        return
+
+    raw = read_json("ranking")
+    if not isinstance(raw, dict):
+        chat.reply(f'@{sender}\n정산할 랭킹 정보가 없습니다.')
+        return
+
+    ranking_arr = raw.get("ranking", [])
+    if not isinstance(ranking_arr, list) or not ranking_arr:
+        chat.reply(f'@{sender}\n정산할 랭킹 정보가 없습니다.')
+        return
+
+    reward_gold = 300000000
+    settled_names = []
+    skipped_names = []
+
+    for rank_idx, entry in enumerate(ranking_arr[:3]):
+        name = entry.get("name") if isinstance(entry, dict) else None
+        if not name:
+            continue
+
+        pokUser = read_json(f"player_{name}")
+        pokInv = read_json(f"player_{name}_inv")
+        if pokUser is None or pokInv is None:
+            skipped_names.append(name)
+            continue
+
+        pokUser["gold"] = pokUser.get("gold", 0) + reward_gold
+        item_list = pokInv.setdefault("item", [])
+        item_list.append("팔파크티켓")
+        if rank_idx == 0:
+            item_list.append("황금알")
+            item_list.append("금왕관")
+
+        user_saved = write_json(f"player_{name}", pokUser)
+        inv_saved = write_json(f"player_{name}_inv", pokInv)
+        if user_saved and inv_saved:
+            settled_names.append(name)
+        else:
+            skipped_names.append(name)
+
+    write_json("ranking", {})
+
+    if not settled_names:
+        chat.reply(f'@{sender}\n랭킹 정산 완료!\n처리된 대상이 없습니다.')
+        return
+
+    result = "\n".join([f"{idx + 1}. {name}" for idx, name in enumerate(settled_names)])
+    message = (
+        f"랭킹 정산 완료!\n\n"
+        f"대상: {len(settled_names)}명\n"
+        f"보상: {reward_gold:,}원 + 팔파크티켓 1개\n"
+        f"1위 추가 보상: 황금알 1개\n\n"
+        f"1위 추가 보상: 금왕관 1개\n\n"
+        f"{result}"
+    )
+    if skipped_names:
+        message += f"\n\n처리 실패: {', '.join(skipped_names)}"
+    chat.reply(message)
+
 def battle_loop(chat, sender):
     state = _get_state(sender)
 
@@ -635,6 +701,10 @@ def battle_loop(chat, sender):
             if state['isrankingbattle']:
                 state['player1maxhp'] = state['player1pok'].get("maxhp", state['player1pok']["hp"])
                 state['player1pok']["hp"] = state['player1maxhp']
+                if state['player1pok'].get("formchange", 0) > 0:
+                    state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}_{state['player1pok']['formchange']}", "ability") or 0
+                else:
+                    state['player1pok']["ability"] = read_json(f"포켓몬/{state['player1pok']['name']}", "ability") or 0
             else:
                 level = state['player1pok']["level"]
 
@@ -788,13 +858,13 @@ def battle_loop(chat, sender):
             if skill1_data:
                 player1spd += (skill1_data.get("priority") or 0) * 2
                 #특성 질풍날개
-                if state['player1pok']['ability'] == 14 and (skill1_data.get("type") or 1) == 5:
+                if state['player1pok'].get('ability', 0) == 14 and (skill1_data.get("type") or 1) == 5:
                     player1spd += 2
 
             if skill2_data:
                 player2spd += (skill2_data.get("priority") or 0) * 2
                 #특성 질풍날개
-                if state['player2pok']['ability'] == 14 and (skill2_data.get("type") or 1) == 5:
+                if state['player2pok'].get('ability', 0) == 14 and (skill2_data.get("type") or 1) == 5:
                     player2spd += 2
 
         if player1spd > player2spd:
@@ -870,17 +940,21 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         return
 
     if skill not in pp_dict or pp_dict[skill] <= 0:
-        state['battleres'] += f"[{attacker_name}] {attacker['name']}는 PP가 부족해서 {skill}사용에 실패했어요!\n\n"
+        state['battleres'] += f"[{attacker_name}] {attacker['name']}는 PP가 부족해서 {skill} 사용에 실패했어요!\n\n"
         return
 
     pp_dict[skill] -= 1
 
     accr = skill_data.get("accr") or 100
+
+    if state['weather'] == 6:
+        accr = accr * 1.5
+
     if random.randint(1, 100) > accr:
         state['battleres'] += f"[{attacker_name}] {attacker['name']}의 {skill}!\n아쉽게 빗나갔어요!\n\n"
         return
 
-    d_ability = defender["ability"] or 0
+    d_ability = defender.get("ability", 0) or 0
 
     addi = skill_data.get("addi") or 0
     atktype = skill_data.get("atktype") or 1
@@ -1030,6 +1104,22 @@ def end_pve_battle(chat, sender, winner):
             villainplayers[sender] = villainplayers.get(sender, 0) + 1
 
             update_ranking(sender, True)
+
+            villainname = state['player1']
+
+            # Update collection
+            pokCol = read_json(f"player_{sender}_collection")
+            if pokCol:
+                from .config import COLLECTION_TRAINER_CONTENTS
+                for ii in range(0, len(COLLECTION_TRAINER_CONTENTS)):
+                    if villainname in COLLECTION_TRAINER_CONTENTS[ii]:
+                        if '악의조직' not in pokCol:
+                            pokCol['악의조직'] = []
+                        if villainname not in pokCol['악의조직']:
+                            pokCol['악의조직'].append(villainname)
+                            chat.reply(f"@{sender}\n도감의 [악의조직] 에 새로운 트레이너가 등록되었습니다.")
+                        break
+                write_json(f"player_{sender}_collection", pokCol)
 
             write_json(f"player_{sender}", pokUser)
 

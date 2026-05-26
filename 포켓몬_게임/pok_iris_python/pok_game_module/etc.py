@@ -161,6 +161,7 @@ def handle_seasoninfo(sender, chat):
         "",
         f"{WEATHER_TEXTS[6]}",
         "전기 타입 기술 데미지 X1.5",
+        "모든 기술의 명중률 X1.5",
         "",
         f"{WEATHER_TEXTS[7]}",
         "풀 타입 기술 데미지 X1.5",
