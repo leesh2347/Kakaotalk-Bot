@@ -531,9 +531,9 @@ def printability(ability):
 
     res = ""
     if ability == 1:
-        res = f"특성: [가뭄]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[1]}] 상태로 만든다.\n"
+        res = f"특성: [가뭄]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[1]} 상태로 만든다.\n"
     elif ability == 2:
-        res = f"특성: [잔비]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[2]}] 상태로 만든다.\n"
+        res = f"특성: [잔비]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[2]} 상태로 만든다.\n"
     elif ability == 3:
         res = "특성: [괴짜]\n-배틀에 등장 시 상대 포켓몬으로 변신한다.\n"
     elif ability == 4:
@@ -541,21 +541,21 @@ def printability(ability):
     elif ability == 5:
         res = f"특성: [에어록]\n-배틀에 등장 시 날씨 효과를 없앤다.\n"
     elif ability == 6:
-        res = f"특성: [끝의대지]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[9]}] 상태로 만든다.\n"
+        res = f"특성: [끝의대지]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[9]} 상태로 만든다.\n"
     elif ability == 7:
-        res = f"특성: [시작의바다]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[10]}] 상태로 만든다.\n"
+        res = f"특성: [시작의바다]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[10]} 상태로 만든다.\n"
     elif ability == 8:
-        res = f"특성: [모래날림]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[3]}] 상태로 만든다.\n"
+        res = f"특성: [모래날림]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[3]} 상태로 만든다.\n"
     elif ability == 9:
-        res = f"특성: [눈퍼트리기]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[4]}] 상태로 만든다.\n"
+        res = f"특성: [눈퍼트리기]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[4]} 상태로 만든다.\n"
     elif ability == 10:
-        res = f"특성: [사이코메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[5]}] 상태로 만든다.\n"
+        res = f"특성: [사이코메이커]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[5]} 상태로 만든다.\n"
     elif ability == 11:
-        res = f"특성: [일렉트릭메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[6]}] 상태로 만든다.\n"
+        res = f"특성: [일렉트릭메이커]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[6]} 상태로 만든다.\n"
     elif ability == 12:
-        res = f"특성: [그래스메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[7]}] 상태로 만든다.\n"
+        res = f"특성: [그래스메이커]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[7]} 상태로 만든다.\n"
     elif ability == 13:
-        res = f"특성: [미스트메이커]\n-배틀에 등장 시 날씨를 [{WEATHER_TEXTS[8]}] 상태로 만든다.\n"
+        res = f"특성: [미스트메이커]\n-배틀에 등장 시 날씨를 {WEATHER_TEXTS[8]} 상태로 만든다.\n"
     elif ability == 14:
         res = f"특성: [질풍날개]\n-모든 비행 타입 기술이 우선도+1로 판정된다.\n"
     elif ability == 15:

@@ -853,6 +853,25 @@ def battle_loop(chat, sender):
         skill1_data = read_json(f"기술/{player1skill}")
         skill2_data = read_json(f"기술/{player2skill}")
 
+        pok1_file_name = f"{state['player1pok']['name']}_{state['player1pok']['formchange']}" if state['player1pok'].get('formchange', 0) != 0 else state['player1pok']['name']
+        pok2_file_name = f"{state['player2pok']['name']}_{state['player2pok']['formchange']}" if state['player2pok'].get('formchange', 0) != 0 else state['player2pok']['name']
+        type1_1 = read_json(f"포켓몬/{pok1_file_name}", "type1") or 0
+        type2_1 = read_json(f"포켓몬/{pok1_file_name}", "type2") or 0
+        type1_2 = read_json(f"포켓몬/{pok2_file_name}", "type1") or 0
+        type2_2 = read_json(f"포켓몬/{pok2_file_name}", "type2") or 0
+
+        #변환자재 구현
+        if state['player1pok'].get('ability', 0) == 15:
+            type1_1 = skill1_data.get("type") or 1
+            type2_1 = 0
+            state['battleres'] += f"[{state['player1']}] {state['player1pok']['name']}는 {TYPE_TEXTS[type1_1]}타입이 되었어요!\n"
+
+        if state['player2pok'].get('ability', 0) == 15:
+            type1_2 = skill2_data.get("type") or 1
+            type2_2 = 0
+            state['battleres'] += f"[{state['player2']}] {state['player2pok']['name']}는 {TYPE_TEXTS[type1_2]}타입이 되었어요!\n"
+
+
         #스킬 우선도 적용. 사이코필드 시엔 적용되지 않음
         if state['weather'] != 5:
             if skill1_data:
@@ -868,23 +887,17 @@ def battle_loop(chat, sender):
                     player2spd += 2
 
         if player1spd > player2spd:
-            execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'])
+            execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'], skill1_data, type1_1, type2_1, type1_2, type2_2)
             if state['player2pok']["hp"] > 0:
-                execute_pve_attack(state, state['player2'], state['player1'], state['player2pok'], state['player1pok'], player2skill, state['player2pp'])
+                execute_pve_attack(state, state['player2'], state['player1'], state['player2pok'], state['player1pok'], player2skill, state['player2pp'], skill2_data, type1_2, type2_2, type1_1, type2_1)
         else:
-            execute_pve_attack(state, state['player2'], state['player1'], state['player2pok'], state['player1pok'], player2skill, state['player2pp'])
+            execute_pve_attack(state, state['player2'], state['player1'], state['player2pok'], state['player1pok'], player2skill, state['player2pp'], skill2_data, type1_2, type2_2, type1_1, type2_1)
             if state['player1pok']["hp"] > 0:
-                execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'])
+                execute_pve_attack(state, state['player1'], state['player2'], state['player1pok'], state['player2pok'], player1skill, state['player1pp'], skill1_data, type1_1, type2_1, type1_2, type2_2)
 
         #날씨
         if state['weather'] > 2:
             state['battleres'] += f"{WEATHER_DESC[state['weather']]}\n"
-            pok1_file_name = f"{state['player1pok']['name']}_{state['player1pok']['formchange']}" if state['player1pok'].get('formchange', 0) != 0 else state['player1pok']['name']
-            pok2_file_name = f"{state['player2pok']['name']}_{state['player2pok']['formchange']}" if state['player2pok'].get('formchange', 0) != 0 else state['player2pok']['name']
-            type1_1 = read_json(f"포켓몬/{pok1_file_name}", "type1") or 0
-            type2_1 = read_json(f"포켓몬/{pok1_file_name}", "type2") or 0
-            type1_2 = read_json(f"포켓몬/{pok2_file_name}", "type1") or 0
-            type2_2 = read_json(f"포켓몬/{pok2_file_name}", "type2") or 0
             if state['weather'] == 3:
                 if type1_1 != 6 and type2_1 != 6 and type1_1 != 7 and type2_1 != 7 and type1_1 != 9 and type2_1 != 9:
                     state['player1pok']["hp"] = max(0, math.ceil(state['player1pok']["hp"] * 7 / 8))
@@ -923,7 +936,7 @@ def battle_loop(chat, sender):
 
 
 
-def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, skill, pp_dict):
+def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, skill, pp_dict, skill_data, attacker_type1, attacker_type2, defender_type1, defender_type2):
     if attacker_name == state['player1'] and state['isplayer1bind'] == 1:
         state['isplayer1bind'] = 0
         state['battleres'] += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 움직일 수 없었어요!\n\n"
@@ -933,9 +946,7 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         state['isplayer2bind'] = 0
         state['battleres'] += f"[{attacker_name}] {attacker['name']}는 공격의 반동으로 움직일 수 없었어요!\n\n"
         return
-
-    skill_data = read_json(f"기술/{skill}")
-    if not skill_data:
+    if skill_data is None:
         state['battleres'] += f"[{attacker_name}] {attacker['name']}의 {skill}!\n기술 데이터 없음!\n\n"
         return
 
@@ -975,9 +986,6 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
     atk = math.ceil(atk_stat * (skill_data.get("damage") or 40) / 300 * (2000 - def_stat) / 2000)
 
     skill_type = skill_data.get("type") or 1
-    attacker_pok_file_name = f"{attacker['name']}_{attacker['formchange']}" if attacker.get('formchange', 0) != 0 else attacker['name']
-    attacker_type1 = read_json(f"포켓몬/{attacker_pok_file_name}", "type1") or 0
-    attacker_type2 = read_json(f"포켓몬/{attacker_pok_file_name}", "type2") or 0
 
     if addi == 5:
         skill_type = attacker_type1
@@ -986,10 +994,6 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         atk = atk * 1.5
 
     atk = weatherjudge(atk, skill_type, state['weather'])
-
-    defender_pok_file_name = f"{defender['name']}_{defender['formchange']}" if defender.get('formchange', 0) != 0 else defender['name']
-    defender_type1 = read_json(f"포켓몬/{defender_pok_file_name}", "type1") or 0
-    defender_type2 = read_json(f"포켓몬/{defender_pok_file_name}", "type2") or 0
 
     judge = typejudge(skill_type, defender_type1, defender_type2)
 

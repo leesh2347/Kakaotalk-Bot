@@ -408,25 +408,24 @@ def handle_dpokinfo(sender, chat, args=None):
 
     skills_text += printability(read_json(f"포켓몬/{pok_file_name}", "ability") or 0)
 
-    if p["name"] == "메타몽":
-        skills_text += "변신"
-    else:
-        pok_shiny_skills = SHINY_POK_SKILLS.get(p["name"], []) if p.get("shiny", 0) == 1 else []
-        skills_text += printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
-        
-        # Add shiny skills info if shiny value is 1
-        if p.get("shiny", 0) == 1 and p["name"] in SHINY_POK_SKILLS:
-            shiny_skills = SHINY_POK_SKILLS[p["name"]]
-            skills_text += f"\n✨ 획득 가능 이로치 전용 기술: {', '.join(shiny_skills)}\n"
+    skills_text += "\n"
 
-        skills_text+="\u200b"*500
-        skills_text+= f"\n도감보기: {CMDS["dic"]} [포켓몬 이름]\n"
-        skills_text+= f"\n레벨업: {CMDS["levelup"]} [덱번호] [레벨업 횟수]\n"
-        skills_text+= f"스킬뽑기: {CMDS["skillchange"]} [덱번호]\n"
-        skills_text+= f"폼체인지: {CMDS["formchange"]} [덱번호]\n"
-        skills_text+= f"메가진화/원시회귀: {CMDS["mega"]} [덱번호]\n"
-        skills_text+= f"거다이맥스: {CMDS["gmax"]} [덱번호]\n"
-        skills_text+= f"노력치강화(돌파): {CMDS["effort"]} [덱번호] [재료 박스번호]\n"
+    pok_shiny_skills = SHINY_POK_SKILLS.get(p["name"], []) if p.get("shiny", 0) == 1 else []
+    skills_text += printskills(p.get("skills", []), p.get("skillslocked", []), pok_shiny_skills)
+        
+    # Add shiny skills info if shiny value is 1
+    if p.get("shiny", 0) == 1 and p["name"] in SHINY_POK_SKILLS:
+        shiny_skills = SHINY_POK_SKILLS[p["name"]]
+        skills_text += f"\n✨ 획득 가능 이로치 전용 기술: {', '.join(shiny_skills)}\n"
+
+    skills_text+="\u200b"*500
+    skills_text+= f"\n도감보기: {CMDS["dic"]} [포켓몬 이름]\n"
+    skills_text+= f"\n레벨업: {CMDS["levelup"]} [덱번호] [레벨업 횟수]\n"
+    skills_text+= f"스킬뽑기: {CMDS["skillchange"]} [덱번호]\n"
+    skills_text+= f"폼체인지: {CMDS["formchange"]} [덱번호]\n"
+    skills_text+= f"메가진화/원시회귀: {CMDS["mega"]} [덱번호]\n"
+    skills_text+= f"거다이맥스: {CMDS["gmax"]} [덱번호]\n"
+    skills_text+= f"노력치강화(돌파): {CMDS["effort"]} [덱번호] [재료 박스번호]\n"
     
     res = f"@{sender}\n{skills_text}"
     
