@@ -93,9 +93,9 @@ SETTING = {
     'leaguechararr': ['지가르데', '네크로즈마'],
     'leaguecharacter': '지가르데',
     'eventp': {
-        'unknown': 1, 'shiny': 3,
+        'unknown': 1, 'shiny': 5,
         'g5':3,'g6':3,
-        'g4': 0, 'g3': 0, 'g4catch': 0, 'g3catch': 0,
+        'g4': 0, 'g3': 0,'g6catch': 3,'g5catch': 3, 'g4catch': 3, 'g3catch': 0,
         'allcatch': 0, 'goldX': 1
     },
     'rank': {

@@ -31,6 +31,11 @@ def handle_eventinfo(sender, chat):
     if eventp.get("g3", 0) > 0:
         res += f"레어 포켓몬 출현률 +{eventp['g3']}%\n"
         has_event = True
+
+    if eventp.get("g6catch", 0) > 0:
+        res += f"패러독스 포획률 +{eventp['g6catch']}%\n"
+    if eventp.get("g5catch", 0) > 0:
+        res += f"울트라비스트 포획률 +{eventp['g5catch']}%\n"
     if eventp.get("g4catch", 0) > 0:
         res += f"전설 포획률 +{eventp['g4catch']}%\n"
         has_event = True
