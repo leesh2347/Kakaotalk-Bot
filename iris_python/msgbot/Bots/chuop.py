@@ -158,7 +158,7 @@ def armor(msg):
 
 def symbol(start, end):
     total_req = 0
-    total_meso = [0,0,0,0,0,0,0]
+    total_meso = [0,0,0,0,0,0,0,0]
     total_day_se = 0
     total_day = 0
     if np.isnan(start) or np.isnan(end):
