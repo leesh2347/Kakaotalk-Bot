@@ -165,7 +165,9 @@ def symbol(start, end):
         return "어센틱심볼 계산기 사용법: @어센틱 (시작레벨) (끝레벨)\n\n지역별 심볼세 합과 일퀘 일수를 계산해 줍니다."
     elif start >= 1 and end <= 11:
         # 요구 메소 = floor(필요 성장치 * 1.8 * ((지역상수 + 6) - (레벨 - 1)/3)) * 100000
-        # 지역 상수 : 세르 1 호텔 2 오디움 3 도원경 4 아르테리아 5 카르시온 6
+        # 지역 상수 : 세르 1 호텔 2 오디움 3 도원경 4 아르테리아 5 카르시온 6 탈라하트 0 기어드락 0
+        #그랜드 계산식 = 필요 성장치 × 1.8 × {(5×지역상수 +22) - (3×레벨 -1)÷9} * 100000
+        
         for i in range(start, end):
             total_req += 9*i*i + 20*i
             total_meso[0] += (math.floor((9*i*i + 20*i) * 1.8 * (7 - (i - 1)/3)) * 100000)
@@ -174,7 +176,8 @@ def symbol(start, end):
             total_meso[3] += (math.floor((9*i*i + 20*i) * 1.8 * (10 - (i - 1)/3)) * 100000)
             total_meso[4] += (math.floor((9*i*i + 20*i) * 1.8 * (11 - (i - 1)/3)) * 100000)
             total_meso[5] += (math.floor((9*i*i + 20*i) * 1.8 * (12 - (i - 1)/3)) * 100000)
-            total_meso[6] += (math.floor((9*i*i + 20*i) * 1.8 * ((7*2/3)*(7*2/3) - (i - 1)/3)) * 100000)
+            total_meso[6] += (math.floor((9*i*i + 20*i) * 1.8 * ((5 * 0 + 22) - (3 * i - 1)/9)) * 100000)
+            total_meso[7] += (math.floor((9*i*i + 20*i) * 1.8 * ((5 * 1 + 22) - (3 * i - 1)/9)) * 100000)
         
         total_day_se = math.ceil(total_req / 20)
         total_day = math.ceil(total_req / 10)
@@ -189,6 +192,7 @@ def symbol(start, end):
             f"아르테리아: {comma(total_meso[4])}메소",
             f"카르시온: {comma(total_meso[5])}메소",
             f"탈라하트: {comma(total_meso[6])}메소",
+            f"기어드락: {comma(total_meso[7])}메소",
             "\u200b"*500,
             "모든 추가 퀘스트 완료시 필요 기간",
             "",
@@ -198,7 +202,8 @@ def symbol(start, end):
             f"도원경: {total_day}일",
             f"아르테리아: {total_day}일",
             f"카르시온: {total_day}일",
-            f"탈라하트: {total_day}일"
+            f"탈라하트: {total_day}일",
+            f"기어드락: {total_day}일"
         ])
 
     else:
