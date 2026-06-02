@@ -1,4 +1,4 @@
-PREFIX_MAPLEGG = ["@메이플", "!메이플"]
+PREFIX_MAPLEGG = ["@메이플", "!메이플","@정보", "!정보"]
 
 PREFIX_LLM = ["루시", "Lucy," "ルシ"]
 
@@ -18,6 +18,7 @@ PREFIX_STAT = ["@스탯", "!스탯"]
 PREFIX_CODY = ["@코디", "!코디"]
 
 PREFIX_MECHANG = ["@메창", "!메창"]
+PREFIX_MECHANG_COMPARE = ["@대결"]
 
 PREFIX_HEXA = ["@헥사", "!헥사"]
 PREFIX_SIXTH_ALL = ["@6차", "!6차"]
