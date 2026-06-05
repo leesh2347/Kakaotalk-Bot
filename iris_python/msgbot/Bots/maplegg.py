@@ -153,12 +153,13 @@ def maplegg(nick, sender):
         else:
             search2 = search_maple_api_ranking(ocid, 0)
 
+
         per = search1["character_exp_rate"]
         img = search1["character_image"]
 
         job1 = search2["ranking"][0]["class_name"]
         job2 = search2["ranking"][0]["sub_class_name"]
-        lv = int(search2["ranking"][0]["character_level"])
+        lv = int(search1["character_level"])
         pop = search2["ranking"][0]["character_popularity"]
         gu = search1["character_guild_name"]
         ranking_all = int(search2["ranking"][0]["ranking"])
