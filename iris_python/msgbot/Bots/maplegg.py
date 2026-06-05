@@ -160,7 +160,7 @@ def maplegg(nick, sender):
         job2 = search2["ranking"][0]["sub_class_name"]
         lv = int(search2["ranking"][0]["character_level"])
         pop = search2["ranking"][0]["character_popularity"]
-        gu = search2["ranking"][0]["character_guildname"]
+        gu = search1["character_guild_name"]
         ranking_all = int(search2["ranking"][0]["ranking"])
 
         history_db_save(nick, lv, "")
@@ -186,7 +186,7 @@ def maplegg(nick, sender):
             "",
             f"환산 링크: https://maplescouter.com/info?name={parse.quote(nick)}",
             "",
-            f'{search1["liberation_quest_clear"]}',
+            #f'{search1["liberation_quest_clear"]}',
             "Special Thanks 정쿠, Lune"
         ])
 
