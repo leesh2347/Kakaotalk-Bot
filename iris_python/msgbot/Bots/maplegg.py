@@ -148,7 +148,7 @@ def maplegg(nick, sender):
         ocid = search_api_ocid(nick)
         search1 = search_maple_api(ocid)
         server = search1["world_name"]
-        if "리부트" in server:
+        if "에오스" in server or "핼리오스" in server:
             search2 = search_maple_api_ranking(ocid, 1)
         else:
             search2 = search_maple_api_ranking(ocid, 0)
@@ -170,7 +170,7 @@ def maplegg(nick, sender):
         else:
             printjob = f"{job1}/{job1}"
 
-        if "리부트" in server:
+        if "에오스" in server or "핼리오스" in server:
             search3 = search_maple_api_ranking_class(ocid, job1, job2, 1)
         else:
             search3 = search_maple_api_ranking_class(ocid, job1, job2, 0)
