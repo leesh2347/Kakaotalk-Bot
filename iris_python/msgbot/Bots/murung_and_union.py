@@ -1,6 +1,7 @@
 import requests
 import json
 from urllib import parse
+import math
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
 from msgbot.bot_commands.commands_config import PREFIX_MURUNG, PREFIX_UNION, PREFIX_ACHIEVE, PREFIX_ARTIFACT
@@ -59,12 +60,16 @@ def murung(nick, sender):
                 recordnick(sender, nick)
                 ocid = search_api_ocid(nick)
                 t = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/character/dojang?ocid={ocid}")
+                '''
+                {'date': None, 'character_class': '아델', 'world_name': '스카니아', 'dojang_best_floor': 100, 'date_dojang_record': '2026-01-22T00:00+09:00', 'dojang_best_time': 873}
+                '''
                 if t["dojang_best_floor"] is not None:
-                    return f'[{nick}]\n{t["world_name"]}/{t["character_class"]}\n층수: {t["dojang_best_floor"]}층\n시간: {Math.floor(t["dojang_best_time"]/60)}분 {(t["dojang_best_time"]%60)}초'
+                    return f'[{nick}]\n{t["world_name"]}/{t["character_class"]}\n층수: {t["dojang_best_floor"]}층\n시간: {math.floor(t["dojang_best_time"]/60)}분 {(t["dojang_best_time"]%60)}초'
                 else:
                     return f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
             except Exception as e:
                 return f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
+                raise
 
 def union(nick, sender):
     if nick is None or nick == "":
@@ -98,11 +103,14 @@ def achieve(nick, sender):
             recordnick(sender, nick)
 
             ocid = search_api_ocid(nick)
-            answer = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/ranking/achievement?ocid={ocid}")
+            d2 = get_yesterday_date()
+
+            answer = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/ranking/achievement?ocid={ocid}&date={d2}")
             t = answer["ranking"][0]
-            return f'[{nick}]\n{t["trophy_grade"]} 등급\n{comma(t["trophy_score"])}점'
+            return f'[{nick}]\n{t["trophy_grade"]} 등급\n{comma(t["trophy_score"])}점\n랭킹: {comma(t["ranking"])}위'
         except Exception as e:
             return f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
+            
 
 
 def artifact(nick, sender):
@@ -126,7 +134,25 @@ def artifact(nick, sender):
         except Exception as e:
             return f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
 
+def champion(nick, sender):
+    if nick is None or nick == "":
+        return "닉네임을 입력해 주세요"
+    else:
+        try:
+            recordnick(sender, nick)
 
+            ocid = search_api_ocid(nick)
+            answer = search_maple_api(f"https://open.api.nexon.com/maplestory/v1/user/union-champion?ocid={ocid}")
+            t = answer["union_champion"]
+
+            a = ""
+
+            for i in range(0, len(t)):
+                a = a + f'\n{t[i]["champion_name"]}  {t[i]["champion_grade"]} {t[i]["champion_class"]}'
+            space = "\u200b" * 500
+            return f'[{nick}]\n{space}\n----보유중인 효과----{a}'
+        except Exception as e:
+            return f"[{nick}]\n2023.12.21 이후 기록이 없는 캐릭터명 입니다."
 
 def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in PREFIX_MURUNG):
@@ -161,4 +187,13 @@ def handle_message(chat):
         else:
             nick = parts[1]
         res = artifact(nick, chat.sender.name)
+        chat.reply(res)
+
+    if any(prefix in chat.message.msg for prefix in ["!@test"]):
+        parts = chat.message.msg.split(" ")
+        if len(parts) < 2:
+            nick = recommendnick(chat.sender.name)
+        else:
+            nick = parts[1]
+        res = champion(nick, chat.sender.name)
         chat.reply(res)
