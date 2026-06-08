@@ -81,6 +81,10 @@ def apply_metamong_transform(pok, opponent_pok, weather):
     #화학변화가스
     if ability == 16:
         opponent_pok["ability"] = 0
+
+    #트레이스
+    if ability == 18:
+        pok["ability"] = opponent_pok["ability"]
     return weather
 
 # Per-player battle state dict (similar to advOn[sender])
@@ -954,10 +958,23 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
         state['battleres'] += f"[{attacker_name}] {attacker['name']}는 PP가 부족해서 {skill} 사용에 실패했어요!\n\n"
         return
 
+    #pp 차감
     pp_dict[skill] -= 1
 
+    #프레셔 특성
+    if defender.get("ability", 0) == 19:
+        pp_dict[skill] -= 1
+
+    #명중률
     accr = skill_data.get("accr") or 100
 
+    #TODO: 명중률 렙차 패널티
+
+    #노가드 특성
+    if attacker.get("ability", 0) == 17 or defender.get("ability", 0) == 17:
+        accr = 9999
+
+    #일렉트릭필드 명중률 증가
     if state['weather'] == 6:
         accr = accr * 1.5
 
@@ -1015,7 +1032,7 @@ def execute_pve_attack(state, attacker_name, defender_name, attacker, defender, 
 
     state['battleres'] += f"[{attacker_name}] {attacker['name']}의 {skill}!\n"
 
-    if judge > 1:
+    if judge > 1 and atk != 0:
         state['battleres'] += "효과가 굉장했어요!\n"
     elif judge == 0 or atk == 0:
         state['battleres'] += "효과가 없는 듯해요...\n"

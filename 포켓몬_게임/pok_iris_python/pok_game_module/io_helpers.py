@@ -562,6 +562,12 @@ def printability(ability):
         res = f"특성: [변환자재]\n-매 턴마다 자신이 사용하는 기술의 타입으로 변한다.\n"
     elif ability == 16:
         res = f"특성: [화학변화가스]\n-배틀에 등장 시 상대의 특성을 없앤다.\n"
+    elif ability == 17:
+        res = f"특성: [노가드]\n-자신과 상대의 모든 공격이 반드시 명중한다.\n"
+    elif ability == 18:
+        res = f"특성: [트레이스]\n-배틀에 등장 시 상대의 특성을 복사한다.\n"
+    elif ability == 19:
+        res = f"특성: [프레셔]\n-상대방이 기술을 사용할 시 PP가 2씩 줄어들게 된다.\n"
 
     return res
 
