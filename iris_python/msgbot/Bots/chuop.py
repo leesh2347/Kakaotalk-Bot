@@ -85,7 +85,7 @@ def printchuop(series, name):
                 print = print + f"\n\n*{ZERO_CHUOP[i]}"
             return f"제로 무기 추옵\n{space}{print}"
         
-    elif series=="파프":
+    elif series in ["파프","파프니르","카룻","카루타"]:
         if name is not None and name != "":
             name = name.upper()
         if name in WEAPONS:
@@ -96,7 +96,7 @@ def printchuop(series, name):
                 print = print + f"\n\n*{WEAPONS[i]}\n{ROOTABYSS[i]}"
             return f"파프니르 무기 추옵\n{space}{print}"
 
-    elif series=="앱솔":
+    elif series in ["앱솔","앱솔랩스","도전자"]:
         if name is not None and name != "":
             name = name.upper()
         if name in WEAPONS:
@@ -105,9 +105,9 @@ def printchuop(series, name):
             print = ""
             for i in range(0, len(WEAPONS)):
                 print = print + f"\n\n*{WEAPONS[i]}\n{ABSOLABS[i]}"
-            return f"앱솔랩스 무기 추옵\n{space}{print}"
+            return f"앱솔랩스/도전자 무기 추옵\n{space}{print}"
 
-    elif series=="아케인":
+    elif series in ["아케인셰이드","아케인","앜셰"]:
         if name is not None and name != "":
             name = name.upper()
         if name in WEAPONS:
@@ -118,7 +118,7 @@ def printchuop(series, name):
                 print = print + f"\n\n*{WEAPONS[i]}\n{ARCANE[i]}"
             return f"아케인셰이드 무기 추옵\n{space}{print}"
 
-    elif series=="제네":
+    elif series in ["제네시스","제네"]:
         if name is not None and name != "":
             name = name.upper()
         if name in WEAPONS:
