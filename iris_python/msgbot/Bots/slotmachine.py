@@ -346,37 +346,39 @@ def handle_message(chat):
         if np.nan == credit: credit = 1000
         bet = slotUser["bet"]
         if np.nan == bet: bet = 10
-           
 
-        res = ""
+        if credit < bet:
+            chat.reply(f"@{chat.sender.name}\n베팅금은 보유 잔고를 초과하여 걸 수 없어요!\n현재 보유 크레딧: {credit}\n현재 베팅금:{bet}\n@베팅금 (숫자) 명령어를 통해 베팅금을 변경해 주세요!")
+        else:
+            res = ""
 
-        res += f"현재 크레딧 : {credit}\n"
-        res += f"베팅 : {bet}\n\n"
+            res += f"현재 크레딧 : {credit}\n"
+            res += f"베팅 : {bet}\n\n"
 
-        board = spin()
+            board = spin()
 
-        res += print_board(board)
-        res += "\n"
+            res += print_board(board)
+            res += "\n"
 
-        check_result_data = check_result(board, bet)
+            check_result_data = check_result(board, bet)
 
-        credit += check_result_data["profit"]
-        
-        # 게임 오버
-        if credit <= 0:
-            res += "\n\n💀 GAME OVER 💀"
-            res += "\n크레딧을 모두 잃었습니다."
-            res += "\n1000 크레딧으로 자동 재시작합니다!"
+            credit += check_result_data["profit"]
+            
+            # 게임 오버
+            if credit <= 0:
+                res += "\n\n💀 GAME OVER 💀"
+                res += "\n크레딧을 모두 잃었습니다."
+                res += "\n1000 크레딧으로 자동 재시작합니다!"
 
-            credit = 1000
-        
-        slotUser["credit"] = credit
-        write_json(slotData)
-        
-        res += check_result_data["text"]
+                credit = 1000
+            
+            slotUser["credit"] = credit
+            write_json(slotData)
+            
+            res += check_result_data["text"]
 
-        res += f"\n\n현재 보유 크레딧 : {credit}"
+            res += f"\n\n현재 보유 크레딧 : {credit}"
 
-        chat.reply(f"@{chat.sender.name}\n{res}")
+            chat.reply(f"@{chat.sender.name}\n{res}")
 
 
