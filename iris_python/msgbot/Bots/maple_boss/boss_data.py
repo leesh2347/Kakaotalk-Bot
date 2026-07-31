@@ -248,13 +248,9 @@ MAPLE_BOSS_COMMANDS = {
     "발드릭스":"hard_baldrix",
 
     "노말카이":"normal_kai",
-    "노말챌섭보스":"normal_kai",
     "노멀카이":"normal_kai",
-    "노멀챌섭보스":"normal_kai",
     "하드카이":"hard_kai",
-    "하드챌섭보스":"hard_kai",
     "카이":"hard_kai",
-    "챌섭보스":"hard_kai",
 
     "노말흉성":"normal_malefic",
     "노말찬란한흉성":"normal_malefic",
@@ -275,6 +271,11 @@ MAPLE_BOSS_COMMANDS = {
     "노멀유피테르":"normal_jupiter",
     "하드유피테르":"hard_jupiter",
     "유피테르":"hard_jupiter",
+
+    "노말메이린":"normal_maerin",
+    "노멀메이린":"normal_maerin",
+    "하드메이린":"hard_maerin",
+    "메이린":"hard_maerin",
 
     "디벨로이드":"developer",
     "디벨":"developer",
@@ -2520,6 +2521,52 @@ MAPLE_BOSS_DATA = {
         "maxParty":3,
         "arcaneforce" : "",
         "authenticforce" : "810"
+    },
+
+    "normal_maerin" : {
+        "bg_color":"#0f1543",
+        "title_color":"#9ea9da",
+        "content_color":"#ece4ee",
+        "image":"maerin.png",
+        "name" : "노말 메이린",
+        "level" : 270,
+        "HP" : {
+            "1페이즈" : "58,925,000,000,000\n            (58조 9250억)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"blank.png",
+        "bossCrystal" : "5,100,000,000메소",
+        "maxParty":1,
+        "arcaneforce" : "",
+        "authenticforce" : ""
+    },
+
+    "hard_maerin" : {
+        "bg_color":"#0f1543",
+        "title_color":"#9ea9da",
+        "content_color":"#ece4ee",
+        "image":"maerin.png",
+        "name" : "하드 메이린",
+        "level" : 280,
+        "HP" : {
+            "1페이즈" : "290,000,000,000,000\n            (290조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"blank.png",
+        "bossCrystal" : "5,100,000,000메소",
+        "maxParty":1,
+        "arcaneforce" : "",
+        "authenticforce" : ""
     },
 
 	"developer" : {
