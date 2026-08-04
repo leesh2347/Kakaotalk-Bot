@@ -1,8 +1,8 @@
 import requests
 import numpy as np
 import math
-from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER, DATA_NIGHTMARE, DATA_EXP_COUPON, DATA_HIGH_EXP_COUPON, DATA_MONSTERPARK_EXTREME, DATA_EXPRESS_BOOSTER, DATA_MECHA_STRAWBERRY
-from msgbot.bot_commands.commands_config import PREFIX_CHOSUNGBI, PREFIX_GUKSUNGBI, PREFIX_TAESUNGBI, PREFIX_IKSUNGBI, PREFIX_SUNGBI_200, PREFIX_SUNGBI_210, PREFIX_SUNGBI_220, PREFIX_HIGHMOUNTAIN, PREFIX_ANGLER, PREFIX_NIGHTMARE, PREFIX_EXTREME_MONSTERPARK, PREFIX_EXPCOUPON, PREFIX_HIGHEXPCOUPON, PREFIX_EXPRESS_BOOSTER, PREFIX_MECHA_STRAWBERRY, PREFIX_ZUNSUNGBI, PREFIX_DOSUNGBI
+from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100, DATA_HIGHMOUNTAIN, DATA_ANGLER, DATA_NIGHTMARE, DATA_EXP_COUPON, DATA_HIGH_EXP_COUPON, DATA_MONSTERPARK_EXTREME, DATA_EXPRESS_BOOSTER, DATA_MECHA_STRAWBERRY, DATA_BLUEBERRY
+from msgbot.bot_commands.commands_config import PREFIX_CHOSUNGBI, PREFIX_GUKSUNGBI, PREFIX_TAESUNGBI, PREFIX_IKSUNGBI, PREFIX_SUNGBI_200, PREFIX_SUNGBI_210, PREFIX_SUNGBI_220, PREFIX_HIGHMOUNTAIN, PREFIX_ANGLER, PREFIX_NIGHTMARE, PREFIX_EXTREME_MONSTERPARK, PREFIX_EXPCOUPON, PREFIX_HIGHEXPCOUPON, PREFIX_EXPRESS_BOOSTER, PREFIX_MECHA_STRAWBERRY, PREFIX_BLUEBERRY, PREFIX_ZUNSUNGBI, PREFIX_DOSUNGBI
 
 
 SUNGBI = [571115568, 6120258214, 22164317197, 64359295696]
@@ -257,6 +257,22 @@ def mecha_strawberry(index):
 
             return f"{index}레벨에서 메카딸기농장 1 회 입장 시 경험치 획득량 : {round(s, 3)}%\n\n1 레벨업에 필요한 티켓 수: {t} 장"
 
+def blueberry(index):
+    if np.nan == index or index < 1 or index > 299:
+        return "레벨은 1~299 사이 숫자만 입력해 주세요."
+    else:
+        if index < 260:
+            return "블루베리 농장은 260 레벨 이상의 캐릭터만 입장 가능합니다."
+        else:
+            l = DATA_AFTER_210[index - 210]
+            e = DATA_BLUEBERRY[index - 260]
+
+            s = e/l*100
+
+            t = math.ceil(100 / s)
+
+            return f"{index}레벨에서 블루베리농장 1 회 입장 시 경험치 획득량 : {round(s, 3)}%\n\n1 레벨업에 필요한 티켓 수: {t} 장"
+
 def handle_message(chat):
     # 1 단계: 레벨만 인자로 받는 함수들 (접두사 리스트, 함수) 매핑
     single_arg_commands = [
@@ -274,6 +290,7 @@ def handle_message(chat):
         (PREFIX_NIGHTMARE, nightmare),
         (PREFIX_EXTREME_MONSTERPARK, extreme_monsterpark),
         (PREFIX_MECHA_STRAWBERRY, mecha_strawberry),
+        (PREFIX_BLUEBERRY, blueberry),
     ]
     
     for prefixes, func in single_arg_commands:
