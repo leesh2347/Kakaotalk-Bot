@@ -257,11 +257,13 @@ MAPLE_BOSS_COMMANDS = {
     "노멀흉성":"normal_malefic",
     "노멀찬란한흉성":"normal_malefic",
     "노흉성":"normal_malefic",
+    "노흉":"normal_malefic",
     "노말흉통":"normal_malefic",
     "노말찬란한흉통":"normal_malefic",
     "하드흉성":"hard_malefic",
     "하드찬란한흉성":"hard_malefic",
     "하흉성":"hard_malefic",
+    "하흉":"hard_malefic",
     "하드흉통":"hard_malefic",
     "하드찬란한흉통":"hard_malefic",
     "흉성":"hard_malefic",
@@ -276,6 +278,15 @@ MAPLE_BOSS_COMMANDS = {
     "노멀메이린":"normal_maerin",
     "하드메이린":"hard_maerin",
     "메이린":"hard_maerin",
+
+    "이지벨로나":"easy_bellona",
+    "이벨":"easy_bellona",
+    "노멀벨로나":"normal_bellona",
+    "노말벨로나":"normal_bellona",
+    "노벨":"normal_bellona",
+    "하드벨로나":"hard_bellona",
+    "하벨":"hard_bellona",
+    "벨로나":"hard_bellona",
 
     "디벨로이드":"developer",
     "디벨":"developer",
@@ -2567,6 +2578,78 @@ MAPLE_BOSS_DATA = {
         "maxParty":1,
         "arcaneforce" : "",
         "authenticforce" : ""
+    },
+
+    "easy_bellona" : {
+        "bg_color":"#242424",
+        "title_color":"#afafaf",
+        "content_color":"#f1f1f1",
+        "image":"Bellona.png",
+        "name" : "이지 벨로나",
+        "level" : 280,
+        "HP" : {
+            "1페이즈" : "316,000,000,000,000\n            (316조)",
+            "2페이즈" : "463,000,000,000,000\n            (463조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+        "deathCount" : 8,
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"blank.png",
+        "bossCrystal" : "1,700,000,000메소",
+        "maxParty":3,
+        "arcaneforce" : "",
+        "authenticforce" : "400"
+    },
+
+    "normal_bellona" : {
+        "bg_color":"#242424",
+        "title_color":"#afafaf",
+        "content_color":"#f1f1f1",
+        "image":"Bellona.png",
+        "name" : "노말 벨로나",
+        "level" : 280,
+        "HP" : {
+            "1페이즈" : "1,652,000,000,000,000\n            (1652조)",
+            "2페이즈" : "2,470,000,000,000,000\n            (2470조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+        "deathCount" : 8,
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"blank.png",
+        "bossCrystal" : "1,700,000,000메소",
+        "maxParty":3,
+        "arcaneforce" : "",
+        "authenticforce" : "450"
+    },
+
+    "hard_bellona" : {
+        "bg_color":"#242424",
+        "title_color":"#afafaf",
+        "content_color":"#f1f1f1",
+        "image":"Bellona.png",
+        "name" : "하드 벨로나",
+        "level" : 280,
+        "HP" : {
+            "1페이즈" : "5,564,000,000,000,000\n            (5564조)",
+            "2페이즈" : "8,152,000,000,000,000\n            (8152조)"
+        },
+        "defenseRate" : 380,
+        "minLevel" : 280,
+        "deathCount" : 5,
+        "dropItem" : [
+            ""
+        ],
+        "dropItem_image":"blank.png",
+        "bossCrystal" : "1,700,000,000메소",
+        "maxParty":3,
+        "arcaneforce" : "",
+        "authenticforce" : "550"
     },
 
 	"developer" : {
