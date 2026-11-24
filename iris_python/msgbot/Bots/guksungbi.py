@@ -308,9 +308,11 @@ def handle_message(chat):
         (PREFIX_HIGHMOUNTAIN, highmountain),
         (PREFIX_ANGLER, angler),
         (PREFIX_NIGHTMARE, nightmare),
+        (PREFIX_AURUMREGIS, aurumregis),
         (PREFIX_EXTREME_MONSTERPARK, extreme_monsterpark),
         (PREFIX_MECHA_STRAWBERRY, mecha_strawberry),
         (PREFIX_BLUEBERRY, blueberry),
+        (PREFIX_CRIMSON_MECHA_STRAWBERRY, crimson_mecha_strawberry),
     ]
     
     for prefixes, func in single_arg_commands:
