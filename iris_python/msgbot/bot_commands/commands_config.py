@@ -39,13 +39,15 @@ PREFIX_SUNGBI_210 = ["@성비2", "!성비2"]
 PREFIX_SUNGBI_220 = ["@성비3", "!성비3"]
 PREFIX_HIGHMOUNTAIN = ["@하이마운틴", "!하이마운틴", "@높은산", "!높은산", "@안녕산", "!안녕산"]
 PREFIX_ANGLER = ["@앵글러", "!앵글러"]
-PREFIX_NIGHTMARE = ["@악몽선경", "!악몽선경"]
+PREFIX_NIGHTMARE = ["@악몽선경", "!악몽선경", "@악몽", "!악몽"]
+PREFIX_AURUMREGIS = ["@아우룸레기스", "@아우룸", "!아우룸레기스", "!아우룸"]
 PREFIX_EXPCOUPON = ["@exp", "!exp", "@EXP", "!EXP"]
 PREFIX_HIGHEXPCOUPON = ["@상급exp", "!상급exp", "@상급EXP", "!상급EXP"]
 PREFIX_EXTREME_MONSTERPARK = ["@익몬", "!익몬"]
 PREFIX_EXPRESS_BOOSTER = ["@익부", "@부스터", "!익부", "!부스터"]
 PREFIX_MECHA_STRAWBERRY = {"@메카딸기", "@메카딸농", "@메딸", "!메카딸기", "!메카딸농", "!메딸"}
 PREFIX_BLUEBERRY = {"@블루베리", "@블베", "@블베농", "@블농","!블루베리", "!블베", "!블베농", "!블농"}
+PREFIX_CRIMSON_MECHA_STRAWBERRY = {"@크림슨메카딸기", "@크림슨메카딸농", "@크메딸", "@크딸농", "!크림슨메카딸기", "!크림슨메카딸농", "!크메딸", "!크딸농"}
 
 PREFIX_BOSS = ["@보스","!보스"]
 
