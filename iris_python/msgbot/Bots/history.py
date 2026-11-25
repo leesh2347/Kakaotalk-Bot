@@ -299,7 +299,7 @@ def handle_message(chat):
         parts = chat.message.msg.split(" ")
         nick = parts[1] if len(parts) > 1 else None
         if nick is None:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         if nick == "":
             chat.reply("닉네임을 입력해 주세요.")
         else:
@@ -326,7 +326,7 @@ def handle_message(chat):
         parts = chat.message.msg.split(" ")
         nick = ""
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
         print(nick)

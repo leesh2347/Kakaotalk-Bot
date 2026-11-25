@@ -1,4 +1,6 @@
 from msgbot.Bots.room_check.room_module import record_room_info
+from msgbot.Bots.splash_texts.splash_ments_module import TIPS
+import random
 
 message_count = {}
 
@@ -15,4 +17,7 @@ def handle_message(chat):
     if message_count[room_name] > 300:
         message_count[room_name] = 1
         record_room_info(room_id, room_name)
-        chat.reply("[루시] 누적 톡수 300개 누적!\n원활한 봇 작동을 위해 읽음처리됩니다.")
+        r=random.randint(1,len(TIPS))
+        ment = TIPS[r - 1]
+
+        chat.reply(f"[루시] 누적 톡수 300개 누적!\n\n<TIP>\n{ment}")

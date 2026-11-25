@@ -156,7 +156,7 @@ def handle_message(chat):
         nick = ""
         nextlev = ""
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
             if len(parts) < 3:

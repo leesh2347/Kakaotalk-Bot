@@ -203,7 +203,7 @@ def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in PREFIX_MAPLEGG):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
         try:

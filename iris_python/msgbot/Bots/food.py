@@ -65,7 +65,7 @@ def delete_food(new_food, del_type):
             res_text = f'[루시] 등록되어있지 않은 할일입니다: {new_food}\n{space}\n현재 등록된 뭐하지 목록\n{",".join(foods_arr)}'
         return res_text
 
-def choose_food(msg, choose_type):
+def choose_food(msg, sender, choose_type):
     parts = msg.split(" ")
 
     foods_arr = _load_data(DATA_FILE_DIR)[f'{choose_type}']
@@ -79,15 +79,15 @@ def choose_food(msg, choose_type):
                 t = foods_arr[random.randint(1, len(foods_arr))-1]
                 res.append(t)
             if choose_type =="food":
-                return f"{chat.sender.name}님의 추천 메뉴는\n\n{','.join(res)}"
+                return f"{sender}님의 추천 메뉴는\n\n{','.join(res)}"
             else:
-                return f"{chat.sender.name}님의 추천 할일은\n\n{','.join(res)}"
+                return f"{sender}님의 추천 할일은\n\n{','.join(res)}"
     else:
         t = random.randint(1, len(foods_arr))
         if choose_type =="food":
-            return f"선택장애 {chat.sender.name}님!\n메뉴는 [{foods_arr[t-1]}]입니다 ^.^"
+            return f"선택장애 {sender}님!\n메뉴는 [{foods_arr[t-1]}]입니다 ^.^"
         else:
-            return f"심심하신 {chat.sender.name}님!\n[{foods_arr[t-1]}] 추천드립니다 ^.^"
+            return f"심심하신 {sender}님!\n[{foods_arr[t-1]}] 추천드립니다 ^.^"
 
 def handle_message(chat):
     
@@ -139,11 +139,11 @@ def handle_message(chat):
             chat.reply("할일을 입력해 주세요.")
 
     elif any(prefix in chat.message.msg for prefix in PREFIX_FOOD):
-        res = choose_food(chat.message.msg, "food")
+        res = choose_food(chat.message.msg, chat.sender.name, "food")
         chat.reply(res)
 
     elif any(prefix in chat.message.msg for prefix in PREFIX_JOB):
-        res = choose_food(chat.message.msg, "job")
+        res = choose_food(chat.message.msg, chat.sender.name, "job")
         chat.reply(res)
 
 

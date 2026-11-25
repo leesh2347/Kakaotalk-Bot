@@ -66,6 +66,7 @@ def generate_studentid_image(image_url, nick, date):
 
     canvas.paste(bg_img, (0, 0), bg_img)
 
+
     canvas.paste(cropped_img, (220, 500), cropped_img)
 
     # 5. 텍스트 그리기

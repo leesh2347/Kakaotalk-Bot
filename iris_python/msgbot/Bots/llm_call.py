@@ -20,7 +20,7 @@ from msgbot.Bots.chuop import symbol
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))  # msgbot/
 FILTER_FILE = os.path.join(BASE_DIR, "banned_rooms.json")
 
-CMDS_WITH_IMAGE = ["캐릭터", "히스토리"]
+CMDS_WITH_IMAGE = ["캐릭터", "히스토리", "메창"]
 
 # JSON 파일 로드
 with open(FILTER_FILE, "r", encoding="utf-8") as f:
@@ -37,7 +37,8 @@ def call_llm(question):
         "use_tools": "true"
     }
 
-    url = "http://127.0.0.1:8000/ask"
+    #url = "http://127.0.0.1:8000/ask"
+    url = "http://158.180.82.19:8000/ask"
 
     headers = {
         "Content-Type": "application/json; charset=utf-8",
@@ -58,7 +59,7 @@ def process_result(info, args, sender):
     elif info=="유니온":
         return union(args,sender)
     elif info=="업적":
-        return achive(args,sender)
+        return achieve(args,sender)
     elif info=="아티팩트":
         return artifact(args,sender)
     elif info=="메창":

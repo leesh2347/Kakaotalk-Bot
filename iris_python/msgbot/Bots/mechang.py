@@ -9,7 +9,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 from msgbot.Bots.hexa_data.hexa_levdata import MAX_ERDA, MAX_PIECE, JANUS_MAX_ERDA, JANUS_MAX_PIECE, HEXA_DATA, ORIGIN_DATA, MASTER_DATA, SKILL_DATA, GONGYONG_DATA
 from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
-from msgbot.bot_commands.commands_config import PREFIX_MECHANG
+from msgbot.bot_commands.commands_config import PREFIX_MECHANG, PREFIX_MECHANG_COMPARE
 
 RES_TEXT = ["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메이플 평균","메창","메이플 인생 메생이","컨텐츠가 부족한 토끼공듀","넥슨 VVIP 흑우 ㅋㅋ"]
 
@@ -564,8 +564,86 @@ def mechang_help():
         "-펫: 자석펫 1마리 보유당 10점씩 최대 30점까지 추가",
     ])
 
+def _get_arrows(v1, v2):
+    if v1 > v2:
+        return "▲", "▽"
+    elif v2 > v1:
+        return "▽", "▲"
+    return "", ""
+
+
+def generate_compare_text(data1, data2, nick1, nick2):
+    total1 = data1["total"]
+    total2 = data2["total"]
+
+    res = f"⚔️{nick1}  VS  {nick2}\n─────────────────\n"
+
+    items = [
+        ("총 메창점수", total1, total2, lambda v: f"{v}점"),
+        ("레벨", data1["lev_data"], data2["lev_data"], lambda v: f"Lv.{v}"),
+        ("유니온", data1["union_data"], data2["union_data"], lambda v: f"Lv.{comma(v)}"),
+        ("유니온 아티팩트", data1["artifact"], data2["artifact"], lambda v: f"Lv.{v}"),
+        ("전투력", data1["atk_data"], data2["atk_data"], comma),
+        ("어센틱포스", data1["symbol_data"], data2["symbol_data"], str),
+        ("HEXA 매트릭스", data1["hexa"], data2["hexa"], lambda v: f"{v}%"),
+        ("유니온 챔피언", data1["champion_data"], data2["champion_data"], lambda v: f"{v}점"),
+        ("해방 여부", data1["liberation_status"], data2["liberation_status"], lambda v: "제네시스 해방" if "G" in v else "해방 미완료"),
+        ("보너스 점수", (data1["android"], data1["pet"]), (data2["android"], data2["pet"]),
+         lambda v: f"안드로이드 {'보유' if v[0] > 0 else '미보유'}\n자석펫 {v[1]}개 보유"),
+    ]
+
+    for label, v1, v2, formatter in items:
+        if isinstance(v1, tuple):
+            b1, b2 = v1[0] + v1[1], v2[0] + v2[1]
+            s1, s2 = _get_arrows(b1, b2)
+        elif label == "해방 여부":
+            s1, s2 = _get_arrows(1 if v1 else 0, 1 if v2 else 0)
+        else:
+            s1, s2 = _get_arrows(v1, v2)
+        
+        t1 = formatter(v1)
+        t2 = formatter(v2)
+        
+        res += f"🔹{label}\n {s1} {t1}  |  {t2} {s2}\n"
+
+    return res
+
+def mechang_compare(nick1, nick2, sender):
+    if nick1 is None or nick1 == "" or nick2 is None or nick2 == "":
+        return "닉네임을 두개 입력해 주세요"
+    else:
+        try:
+            recordnick(sender, nick1)
+            recordnick(sender, nick2)
+
+            data1 = calc_score(nick1)
+            data2 = calc_score(nick2)
+
+            if data1 == 0 or data2 == 0:
+                return {
+                    "img_bytes": "",
+                    "text_print": "캐릭터 정보를 불러올 수 없습니다.\n잠시后再 시도해 주세요."
+                }
+
+            text_print = generate_compare_text(data1, data2, nick1, nick2)
+
+            return text_print
+
+        except Exception as e:
+            raise
+            return f"오류가 발생했습니다.\n다시 시도해 주세요."
+
 def handle_message(chat):
-    if any(prefix in chat.message.msg for prefix in PREFIX_MECHANG):
+    if any(prefix in chat.message.msg for prefix in PREFIX_MECHANG_COMPARE):
+        parts = chat.message.msg.split(" ")
+        if len(parts) < 3:
+            chat.reply("사용법: @대결 (닉네임1) (닉네임2)")
+        else:
+            nick1 = parts[1]
+            nick2 = parts[2]
+            res = mechang_compare(nick1, nick2, chat.sender.name)
+            chat.reply(res)
+    elif any(prefix in chat.message.msg for prefix in PREFIX_MECHANG):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             chat.reply(mechang_help())

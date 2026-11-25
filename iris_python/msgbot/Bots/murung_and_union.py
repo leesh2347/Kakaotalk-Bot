@@ -158,14 +158,14 @@ def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in PREFIX_MURUNG):
         nick = chat.message.msg[4:]
         if nick is None or nick == "":
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         res = murung(nick, chat.sender.name)
         chat.reply(res)
 
     if any(prefix in chat.message.msg for prefix in PREFIX_UNION):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
         res = union(nick, chat.sender.name)
@@ -174,7 +174,7 @@ def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in PREFIX_ACHIEVE):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
         res = achieve(nick, chat.sender.name)
@@ -183,7 +183,7 @@ def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in PREFIX_ARTIFACT):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
         res = artifact(nick, chat.sender.name)
@@ -192,7 +192,7 @@ def handle_message(chat):
     if any(prefix in chat.message.msg for prefix in ["!@test"]):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
-            nick = recommendnick(chat.sender.name)
+            nick = recommendnick(chat.sender.name, chat.room.name)
         else:
             nick = parts[1]
         res = champion(nick, chat.sender.name)

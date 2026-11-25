@@ -34,7 +34,7 @@ def handle_message(chat):
     여러 명령어를 한 모듈에서 처리할 수 있음
     """
     
-    if chat.room.name == '루시 도배방' or chat.room.name == '구 바다 월드':
+    if chat.room.name == '루시 도배방' or chat.room.name == '구 바다 월드' or chat.room.name == 'JOLT_26' or chat.room.name == '낚시터':
         if chat.message.command == '@봇상태' or chat.message.command == '!봇상태':
             res = get_system_stats(interval=1)
             chat.reply(f"------루시의 현재 상태------\n{res}------------------------")
