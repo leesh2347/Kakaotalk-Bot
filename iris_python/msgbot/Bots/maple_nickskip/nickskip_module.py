@@ -8,10 +8,12 @@ from msgbot.Bots.db_modules.db import get_db
 
 from msgbot.Bots.db_modules.schemas.maple_nick_search_schema import MapleNickSearchSchema, MapleNickSearchCreate
 from msgbot.Bots.db_modules.schemas.maple_history_search_schema import MapleHistorySearchSchema, MapleHistorySearchCreate
+from msgbot.Bots.db_modules.schemas.maple_user_schema import MapleUserSchema, MapleUserCreate
 from msgbot.Bots.db_modules.models.maple_nick_search_entity import MapleNickSearchEntity
 from msgbot.Bots.db_modules.models.maple_history_search_entity import MapleHistorySearchEntity
+from msgbot.Bots.db_modules.models.maple_user_entity import MapleUserEntity
 
-from msgbot.Bots.db_modules.crud import maple_nick_search_dao, maple_history_search_dao
+from msgbot.Bots.db_modules.crud import maple_nick_search_dao, maple_history_search_dao, maple_user_dao
 from msgbot.Bots.db_modules.crud.common import save
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -57,6 +59,129 @@ def _save_data(dirname: str, data: dict) -> None:
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False)
 
+
+def recorduser(sender: str, room: str) -> None:
+    db_gen = get_db()  # get_db()는 generator(yield)라 가정
+    db: Session = next(db_gen)
+
+    try:
+        # DAO 사용
+
+        maple_user_entity = maple_user_dao.get_by_nickname_and_roomname(db, sender, room)
+
+        #user_dict = {}
+
+        if not maple_user_entity:
+            converted_sender = base64.urlsafe_b64encode(sender.encode()).decode().rstrip("=")
+            converted_room = base64.urlsafe_b64encode(room.encode()).decode().rstrip("=")
+            user_key = f"{converted_sender}_{converted_room}"
+
+            h = MapleUserEntity(
+                user_key=user_key,
+                user_nickname=sender,
+                room_name=room,
+                user_apikey=None,
+                user_default_character=None
+            )
+
+            save(db, h)
+            '''
+            user_dict = {
+                "user_key": user_key,
+                "user_nickname": sender,
+                "room_name": room,
+                "user_apikey": None,
+                "user_default_character": None
+            }
+            '''
+
+        '''
+        else:
+            # 4) SQLAlchemy 객체를 그대로 JSON으로 못 내보내니까 dict로 변환
+            user_dict = {
+                "user_key": getattr(maple_user_entity, "user_key", None),
+                "user_nickname": getattr(maple_user_entity, "user_nickname", None),
+                "room_name": getattr(maple_user_entity, "room_name", None),
+                "user_apikey": getattr(maple_user_entity, "user_apikey", None),
+                "user_default_character": getattr(maple_user_entity, "user_default_character", None)
+            }
+
+        h2 = MapleNickSearchEntity(
+            nick_search_key=nick_search_dict["nick_search_key"],
+            sender=nick_search_dict["sender"],
+            nick=nick_search_dict["nick"],
+            count=nick_search_dict["count"]
+        )
+
+        save(db, h2)
+    '''
+    except Exception as e:
+        print(e)
+    finally:
+        db_gen.close()
+
+def record_user_default_nick(sender: str, room: str, nickname: str) -> None:
+    db_gen = get_db()  # get_db()는 generator(yield)라 가정
+    db: Session = next(db_gen)
+
+    try:
+        # DAO 사용
+
+        maple_user_entity = maple_user_dao.get_by_nickname_and_roomname(db, sender, room)
+
+        user_dict = {}
+
+        if not maple_user_entity:
+            converted_sender = base64.urlsafe_b64encode(sender.encode()).decode().rstrip("=")
+            converted_room = base64.urlsafe_b64encode(room.encode()).decode().rstrip("=")
+            user_key = f"{converted_sender}_{converted_room}"
+
+            h = MapleUserEntity(
+                user_key=user_key,
+                user_nickname=sender,
+                room_name=room,
+                user_apikey=None,
+                user_default_character=None
+            )
+
+            save(db, h)
+            
+            user_dict = {
+                "user_key": user_key,
+                "user_nickname": sender,
+                "room_name": room,
+                "user_apikey": None,
+                "user_default_character": None
+            }
+            
+
+        
+        else:
+            # 4) SQLAlchemy 객체를 그대로 JSON으로 못 내보내니까 dict로 변환
+            user_dict = {
+                "user_key": getattr(maple_user_entity, "user_key", None),
+                "user_nickname": getattr(maple_user_entity, "user_nickname", None),
+                "room_name": getattr(maple_user_entity, "room_name", None),
+                "user_apikey": getattr(maple_user_entity, "user_apikey", None),
+                "user_default_character": getattr(maple_user_entity, "user_default_character", None)
+            }
+        
+        user_dict["user_default_character"] = nickname
+
+        h2 = MapleUserEntity(
+            user_key=user_dict["user_key"],
+            user_nickname=user_dict["user_nickname"],
+            room_name=user_dict["room_name"],
+            user_apikey=user_dict["user_apikey"],
+            user_default_character=user_dict["user_default_character"]
+        )
+
+        save(db, h2)
+    
+    except Exception as e:
+        print(e)
+    finally:
+        db_gen.close()
 
 def recordnick(sender: str, nick: str) -> None:
     db_gen = get_db()  # get_db()는 generator(yield)라 가정
@@ -114,28 +239,68 @@ def recordnick(sender: str, nick: str) -> None:
 
 
 
-def recommendnick(sender: str) -> str:
+def recommendnick(sender: str, room: str) -> str:
     db_gen = get_db()  # get_db()는 generator(yield)라 가정
     db: Session = next(db_gen)
 
     try:
+        #수동 닉스킵 등록 확인
+        maple_user_entity = maple_user_dao.get_by_nickname_and_roomname(db, sender, room)
 
-        dict_arr = []
+        user_dict = {}
 
-        nick_search_arr = maple_nick_search_dao.get_by_sender_order_by_count_desc(db, sender)
+        if not maple_user_entity:
+            converted_sender = base64.urlsafe_b64encode(sender.encode()).decode().rstrip("=")
+            converted_room = base64.urlsafe_b64encode(room.encode()).decode().rstrip("=")
+            user_key = f"{converted_sender}_{converted_room}"
 
-        if nick_search_arr:
-            for nick_search_entity in nick_search_arr:
-                nick_search_dict = {
-                    "nick_search_key": getattr(nick_search_entity, "nick_search_key", None),
-                    "sender": getattr(nick_search_entity, "sender", None),
-                    "nick": getattr(nick_search_entity, "nick", None),
-                    "count": getattr(nick_search_entity, "count", None)
-                }
-                dict_arr.append(nick_search_dict)
-            return dict_arr[0]["nick"]
+            h = MapleUserEntity(
+                user_key=user_key,
+                user_nickname=sender,
+                room_name=room,
+                user_apikey=None,
+                user_default_character=None
+            )
+
+            save(db, h)
+            
+            user_dict = {
+                "user_key": user_key,
+                "user_nickname": sender,
+                "room_name": room,
+                "user_apikey": None,
+                "user_default_character": None
+            }
+        
         else:
-            return ""
+            # 4) SQLAlchemy 객체를 그대로 JSON으로 못 내보내니까 dict로 변환
+            user_dict = {
+                "user_key": getattr(maple_user_entity, "user_key", None),
+                "user_nickname": getattr(maple_user_entity, "user_nickname", None),
+                "room_name": getattr(maple_user_entity, "room_name", None),
+                "user_apikey": getattr(maple_user_entity, "user_apikey", None),
+                "user_default_character": getattr(maple_user_entity, "user_default_character", None)
+            }
+        
+        if user_dict["user_default_character"] is not None:
+            return user_dict["user_default_character"]
+        else:
+            dict_arr = []
+
+            nick_search_arr = maple_nick_search_dao.get_by_sender_order_by_count_desc(db, sender)
+
+            if nick_search_arr:
+                for nick_search_entity in nick_search_arr:
+                    nick_search_dict = {
+                        "nick_search_key": getattr(nick_search_entity, "nick_search_key", None),
+                        "sender": getattr(nick_search_entity, "sender", None),
+                        "nick": getattr(nick_search_entity, "nick", None),
+                        "count": getattr(nick_search_entity, "count", None)
+                    }
+                    dict_arr.append(nick_search_dict)
+                return dict_arr[0]["nick"]
+            else:
+                return ""
     except Exception as e:
         print(e)
     finally:
