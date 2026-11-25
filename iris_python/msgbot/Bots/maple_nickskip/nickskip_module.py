@@ -60,7 +60,7 @@ def _save_data(dirname: str, data: dict) -> None:
         json.dump(data, f, ensure_ascii=False)
 
 
-def recorduser(sender: str, room: str) -> None:
+def record_user_info(sender: str, room: str) -> dict:
     db_gen = get_db()  # get_db()는 generator(yield)라 가정
     db: Session = next(db_gen)
 
@@ -69,7 +69,7 @@ def recorduser(sender: str, room: str) -> None:
 
         maple_user_entity = maple_user_dao.get_by_nickname_and_roomname(db, sender, room)
 
-        #user_dict = {}
+        user_dict = {}
 
         if not maple_user_entity:
             converted_sender = base64.urlsafe_b64encode(sender.encode()).decode().rstrip("=")
@@ -85,7 +85,7 @@ def recorduser(sender: str, room: str) -> None:
             )
 
             save(db, h)
-            '''
+            
             user_dict = {
                 "user_key": user_key,
                 "user_nickname": sender,
@@ -93,9 +93,7 @@ def recorduser(sender: str, room: str) -> None:
                 "user_apikey": None,
                 "user_default_character": None
             }
-            '''
-
-        '''
+        
         else:
             # 4) SQLAlchemy 객체를 그대로 JSON으로 못 내보내니까 dict로 변환
             user_dict = {
@@ -106,17 +104,17 @@ def recorduser(sender: str, room: str) -> None:
                 "user_default_character": getattr(maple_user_entity, "user_default_character", None)
             }
 
-        h2 = MapleNickSearchEntity(
-            nick_search_key=nick_search_dict["nick_search_key"],
-            sender=nick_search_dict["sender"],
-            nick=nick_search_dict["nick"],
-            count=nick_search_dict["count"]
-        )
-
-        save(db, h2)
-    '''
+        return user_dict
+    
     except Exception as e:
         print(e)
+        return {
+            "user_key": None,
+            "user_nickname": None,
+            "room_name": None,
+            "user_apikey": None,
+            "user_default_character": None
+        }
     finally:
         db_gen.close()
 
