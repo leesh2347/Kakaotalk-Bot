@@ -5,7 +5,7 @@ import io
 import os
 from urllib import parse
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save, NO_NICK_MENT
 from msgbot.bot_commands.commands_config import PREFIX_MAPLEGG
 
 #api ocid 검색
@@ -141,7 +141,7 @@ def maplegg(nick, sender):
     if nick is None or nick == "":
         return {
             "img_bytes":"",
-            "text_print":"닉네임을 입력해 주세요"
+            "text_print":NO_NICK_MENT
         }
     else:
         recordnick(sender, nick)

@@ -5,7 +5,7 @@ from urllib import parse
 import numpy as np
 from bs4 import BeautifulSoup
 from msgbot.Bots.hexa_data.hexa_levdata import MAX_ERDA, MAX_PIECE, JANUS_MAX_ERDA, JANUS_MAX_PIECE, HEXA_DATA, ORIGIN_DATA, MASTER_DATA, SKILL_DATA, GONGYONG_DATA, JOB_GONGYONG_DATA
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, NO_NICK_MENT
 from msgbot.bot_commands.commands_config import PREFIX_HEXA, PREFIX_SIXTH_ALL, PREFIX_ORIGIN, PREFIX_MASTERY, PREFIX_SKILL_CORE, PREFIX_GONGYONG_CORE, PREFIX_JOB_GONGYONG_CORE
 
 #api ocid 검색
@@ -33,7 +33,7 @@ def search_maple_api(url):
 
 def hexasearch(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)

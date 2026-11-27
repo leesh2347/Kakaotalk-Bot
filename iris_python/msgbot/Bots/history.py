@@ -13,7 +13,7 @@ import math
 import threading  # 락(Lock) 사용을 위해 추가
 import numpy as np
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save, history_db_load
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save, history_db_load, NO_NICK_MENT
 from msgbot.bot_commands.commands_config import PREFIX_HISTORY, PREFIX_LEVEL_HISTORY
 
 def graph(a, a2, d, l):
@@ -183,7 +183,7 @@ def hist_search(nick, datearr, sender):
     if nick is None or nick == "":
         return {
                 "img_bytes":"",
-                "text_print":"닉네임을 입력해 주세요"
+                "text_print":NO_NICK_MENT
             }
     else:
         try:

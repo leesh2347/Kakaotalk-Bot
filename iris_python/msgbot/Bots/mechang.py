@@ -8,7 +8,7 @@ from urllib import parse
 import numpy as np
 from bs4 import BeautifulSoup
 from msgbot.Bots.hexa_data.hexa_levdata import MAX_ERDA, MAX_PIECE, JANUS_MAX_ERDA, JANUS_MAX_PIECE, HEXA_DATA, ORIGIN_DATA, MASTER_DATA, SKILL_DATA, GONGYONG_DATA
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, NO_NICK_MENT
 from msgbot.bot_commands.commands_config import PREFIX_MECHANG, PREFIX_MECHANG_COMPARE
 
 RES_TEXT = ["메린이 응애 나 애기 메린","무자본 평균","경손실 따질 스펙","메이플 평균","메창","메이플 인생 메생이","컨텐츠가 부족한 토끼공듀","넥슨 VVIP 흑우 ㅋㅋ"]
@@ -408,7 +408,7 @@ def mechang(nick, sender):
     if nick is None or nick == "":
         return {
                 "img_bytes":"",
-                "text_print" : "닉네임을 입력해 주세요"
+                "text_print" : NO_NICK_MENT
             }
     else:
         try:

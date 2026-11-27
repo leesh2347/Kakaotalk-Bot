@@ -5,7 +5,7 @@ import numpy as np
 from datetime import date, timedelta
 from urllib import parse
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, NO_NICK_MENT
 from msgbot.Bots.chuop_data.chuop_data_module import WEAPONS, ROOTABYSS, ABSOLABS, ARCANE, GENESIS, WEAPON_ZERO, ZERO_CHUOP
 
 #api ocid 검색

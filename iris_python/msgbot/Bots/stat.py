@@ -3,7 +3,7 @@ import json
 from datetime import date, timedelta
 from urllib import parse
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, NO_NICK_MENT
 from msgbot.bot_commands.commands_config import PREFIX_STAT
 
 #api ocid 검색
@@ -32,7 +32,7 @@ def search_maple_api(url):
 
 def stat(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)

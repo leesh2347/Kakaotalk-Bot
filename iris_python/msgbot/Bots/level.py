@@ -4,7 +4,7 @@ from urllib import parse
 import math
 import numpy as np
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, history_db_save, NO_NICK_MENT
 from msgbot.Bots.guk_data.sungbi_levdata import DATA_AFTER_210, DATA_101_TO_209, DATA_1_TO_100
 from msgbot.bot_commands.commands_config import PREFIX_LEVEL
 
@@ -87,7 +87,7 @@ def search_maple_api(url):
 
 def levelsearch(nick, sender, nextlev, date):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)

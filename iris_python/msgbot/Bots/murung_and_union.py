@@ -3,7 +3,7 @@ import json
 from urllib import parse
 import math
 from bs4 import BeautifulSoup
-from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date
+from msgbot.Bots.maple_nickskip.nickskip_module import recordnick, recommendnick, comma, get_yesterday_date, NO_NICK_MENT
 from msgbot.bot_commands.commands_config import PREFIX_MURUNG, PREFIX_UNION, PREFIX_ACHIEVE, PREFIX_ARTIFACT
 
 #api ocid 검색
@@ -33,7 +33,7 @@ def search_maple_api(url):
 
 def murung(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         if " " in nick:
             #무릉 다수 검색
@@ -73,7 +73,7 @@ def murung(nick, sender):
 
 def union(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)
@@ -97,7 +97,7 @@ def union(nick, sender):
 
 def achieve(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)
@@ -115,7 +115,7 @@ def achieve(nick, sender):
 
 def artifact(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)
@@ -136,7 +136,7 @@ def artifact(nick, sender):
 
 def champion(nick, sender):
     if nick is None or nick == "":
-        return "닉네임을 입력해 주세요"
+        return NO_NICK_MENT
     else:
         try:
             recordnick(sender, nick)
