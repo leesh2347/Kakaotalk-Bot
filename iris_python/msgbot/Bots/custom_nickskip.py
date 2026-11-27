@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from urllib import parse
 from bs4 import BeautifulSoup
 from msgbot.Bots.maple_nickskip.nickskip_module import record_user_default_nick, record_user_info, comma
-from msgbot.bot_commands.commands_config import PREFIX_STAT
+from msgbot.bot_commands.commands_config import PREFIX_NICKSKIP
 
 
 def set_nickskip(nick, sender, room):
@@ -33,7 +33,7 @@ def set_nickskip(nick, sender, room):
 
 
 def handle_message(chat):
-    if any(prefix in chat.message.msg for prefix in ["@닉스킵"]):
+    if any(prefix in chat.message.msg for prefix in PREFIX_NICKSKIP):
         parts = chat.message.msg.split(" ")
         if len(parts) < 2:
             chat.reply("[루시] 등록할 닉네임을 입력해 주세요.")
