@@ -2,6 +2,8 @@ PREFIX_MAPLEGG = ["@메이플", "!메이플","@정보", "!정보"]
 
 PREFIX_LLM = ["루시", "Lucy," "ルシ"]
 
+PREFIX_NICKSKIP = ["@닉스킵","@닉등록","!닉스킵","!닉등록"]
+
 PREFIX_MURUNG = ["@무릉", "!무릉"]
 PREFIX_UNION = ["@유니온", "!유니온"]
 PREFIX_ACHIEVE = ["@업적", "!업적"]
