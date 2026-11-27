@@ -16,9 +16,23 @@ from msgbot.Bots.db_modules.models.maple_user_entity import MapleUserEntity
 from msgbot.Bots.db_modules.crud import maple_nick_search_dao, maple_history_search_dao, maple_user_dao
 from msgbot.Bots.db_modules.crud.common import save
 
+from msgbot.bot_commands.commands_config import PREFIX_NICKSKIP
+
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 MAPLE_LOG_FILE = os.path.join(BASE_DIR, "maplelog.json")
 MAPLE_HISTORY_DB_FILE = os.path.join(BASE_DIR, "db_level.json")
+
+NO_NICK_MENT = "\n".join([
+                "닉네임 입력이 없습니다.",
+                "",
+                "[닉네임 생략 기능 사용 방법]",
+                f"수동 지정: {PREFIX_NICKSKIP[0]} [닉네임]",
+                f"(예시: {PREFIX_NICKSKIP[0]} 홍길동)",
+                "자동 지정: 1번 이상 닉네임 검색 이력이 있을 시, 루시가 가장 검색 기록이 많은 닉네임을 자동으로 분석하여 추천해 줍니다.",
+                "",
+                "우선도: (닉네임 입력) > (수동 닉스킵) > (자동 닉스킵)",
+                "※수동 닉스킵 등록은 방 별로 적용됩니다."
+            ])
 
 def comma(num) -> str:
     try:
