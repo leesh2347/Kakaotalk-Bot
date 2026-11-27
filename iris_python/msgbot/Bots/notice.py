@@ -148,6 +148,7 @@ def get_latest_notice():
 
 def toggle_notice(room_id):
     """방의 공지 상태 토글 (yes ↔ no)"""
+    room_id = str(room_id)
     state = load_notice_state()
     current = state.get(room_id, 'no')
     new_state = 'yes' if current == 'no' else 'no'
@@ -167,7 +168,7 @@ def handle_message(chat):
     global notice_check_counter
 
     msg = chat.message.msg.strip()
-    room_id = chat.room.id
+    room_id = str(chat.room.id)
 
     # @공지등록 또는 !공지등록 - 방 상태 토글
     if any(prefix in msg for prefix in PREFIX_NOTICE):
